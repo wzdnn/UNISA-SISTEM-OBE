@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ak_kurikulum_cplr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ak_kurikulum_cplr_Controller extends Controller
+{
+    //
+    public function index()
+    {
+        // $akKurikulumCplr = ak_kurikulum_cplr::all();
+
+        $akKurikulumCplr = DB::table('ak_kurikulum_cplrs')
+            ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum")
+            ->join(
+                "ak_kurikulum_aspeks",
+                "ak_kurikulum_aspeks.kdaspek",
+                "=",
+                "ak_kurikulum_cplrs.kdaspek"
+            )
+            ->join(
+                "ak_kurikulum_sumbers",
+                "ak_kurikulum_sumbers.kdsumber",
+                "=",
+                "ak_kurikulum_cplrs.kdsumber"
+            )
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cplrs.kdkurikulum"
+            )
+            ->get();
+
+        return view('pages.cplr.index', compact('akKurikulumCplr'));
+    }
+
+    public function create()
+    {
+        $akKurikulumAspek = DB::table('ak_kurikulum_aspeks')
+            ->select(["kdaspek", "aspek"])
+            ->get();
+        $akKurikulumSumber = DB::table('ak_kurikulum_sumbers')
+            ->select(["kdsumber", "sumber"])
+            ->get();
+        $akKurikulum = DB::table('ak_kurikulum')
+            ->select(["kdkurikulum", "kurikulum"])
+            ->get();
+
+
+        return view('pages.cplr.create', compact('akKurikulumAspek', 'akKurikulumSumber', 'akKurikulum'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'kode_cplr',
+            'cplr',
+        ]);
+
+        ak_kurikulum_cplr::create([
+            'kode_cplr' => $request->kode_cplr,
+            'cplr' => $request->cplr,
+            'deskripsi_cplr' => $request->deskripsi_cplr,
+            'kdaspek' => $request->aspek,
+            'kdsumber' => $request->sumber,
+            'kdkurikulum' => $request->unit
+        ]);
+
+        return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Ditambahkan');
+    }
+}

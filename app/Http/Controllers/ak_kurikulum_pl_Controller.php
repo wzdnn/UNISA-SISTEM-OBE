@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ak_kurikulum_pl;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ak_kurikulum_pl_Controller extends Controller
+{
+    //
+
+    public function index()
+    {
+        // $akKurikulumPl = ak_kurikulum_pl::all();
+
+        $akKurikulumPl = DB::table('ak_kurikulum_pls')
+            ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum")
+            ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
+            ->get();
+
+
+        return view('pages.profileLulusan.index', compact('akKurikulumPl'));
+    }
+
+    public function create()
+    {
+        $unit = DB::table('ak_kurikulum')
+            ->select(['kdkurikulum', 'kurikulum'])
+            ->get();
+        return view('pages.profileLulusan.create', compact('unit'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'kode_pl',
+            'profile_lulusan'
+        ]);
+
+        ak_kurikulum_pl::create([
+            'kode_pl' => $request->kode_pl,
+            'profile_lulusan' => $request->profile_lulusan,
+            'deskripsi_profile' => $request->deskripsi_profile,
+            'kdkurikulum' => $request->unit
+        ]);
+
+        return redirect()->route('pl.index')->with('success', 'Profile Lulusan Berhasil Ditambahkan');
+    }
+}
