@@ -20,24 +20,7 @@ class ak_kurikulum_cpmk_controller extends Controller
 
     public function create()
     {
-        $akKurikulumCplCpmk =
-            ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])
-            ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")
-            ->join(
-                "ak_kurikulum_aspeks",
-                "ak_kurikulum_aspeks.kdaspek",
-                "=",
-                "ak_kurikulum_cpls.kdaspek"
-            )
-            ->join(
-                "ak_kurikulum",
-                "ak_kurikulum.kdkurikulum",
-                "=",
-                "ak_kurikulum_cpls.kdkurikulum"
-            )
-            ->get();
-
-        return view('pages.cpmk.create', compact('akKurikulumCplCpmk'));
+        return view('pages.cpmk.create');
     }
 
     public function store(Request $request)
@@ -51,14 +34,5 @@ class ak_kurikulum_cpmk_controller extends Controller
             'kode_cpmk' => $request->kode_cpmk,
             'cpmk' => $request->cpmk
         ]);
-
-        $akKurikulumCpmk->CpltoCpmk()->attach($request->input('kdcpmk'));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $akKurikulumCpmk = ak_kurikulum_cpl::findOrFail($id);
-
-        $akKurikulumCpmk->update($request->all())->CpltoCpmk()->attach($request->input('kdcpmk'));
     }
 }
