@@ -3,20 +3,11 @@
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">CPMK</h1>
-        <div class="flex items-center justify-end py-5 mx-5 space-x-2">
-            <a href="{{ route('cpmk.create') }}">
-                <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah
-                    CPMK
-                </button>
-            </a>
-            <a href="">
-                <button class="bg-green-600 hover:bg-green-800 text-white rounded px-2 text-md font-semibold p-1">Petakan
-                    CPMK
-                </button>
-            </a>
-        </div>
+        <a href="{{ route('list.cpmk') }}">
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">List CPMK
+            </button>
+        </a>
     </div>
-
     <hr />
 
     <div class="relative py-3">
@@ -35,27 +26,21 @@
                     <th scope="col" class="px-6 py-3 ">
                         CPMK
                     </th>
-
                 </tr>
             </thead>
             <tbody>
-                @if ($akKurikulumCpmk->count() > 0)
-                    @foreach ($akKurikulumCpmk as $akKurikulumCpmks)
+                @if ($CPMK->count() > 0)
+                    @foreach ($CPMK as $CPMKs)
                         <tr class="bg-white border-b">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
-                            <td class=" px-6 py-4 ">
-                                {{ $akKurikulumCpmks->kode_cpl }} {{ $akKurikulumCpmks->cpl }}
+                            <td class="px-6 py-4">
+                                {{ $CPMKs->kode_cpl }} {{ $CPMKs->cpl }}
                             </td>
                             <td class="px-6 py-4 ">
-                                @foreach ($akKurikulumCpmks->CpltoCplr as $cplcplr)
-                                    {{ $cplcplr->kode_cplr }}<br />
-                                @endforeach
-                            </td>
-                            <td class=" px-6 py-4 text-left">
-                                @foreach ($akKurikulumCpmks->CpltoCpmk as $cplcpmk)
-                                    {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }} <br />
+                                @foreach ($CPMKs->CpltoCplr as $cplcplr)
+                                    {{ $cplcplr->kode_cplr }} {{ $cplcplr->cplr }}<br />
                                 @endforeach
                             </td>
                         </tr>
