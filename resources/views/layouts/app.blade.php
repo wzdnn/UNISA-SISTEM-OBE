@@ -13,7 +13,7 @@
 <body class="">
     @include('layouts.navbar')
 
-    <div class="px-5 py-5  w-full max-h-screen">
+    <div class="px-5 py-5 w-full max-h-screen">
         @yield('body')
     </div>
 

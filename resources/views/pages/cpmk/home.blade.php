@@ -3,11 +3,24 @@
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">CPMK</h1>
-        <a href="{{ route('list.cpmk') }}">
-            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">List CPMK
-            </button>
-        </a>
+        <div class="flex flex-row space-x-3">
+            <a href="{{ route('list.cpmk') }}">
+                <button
+                    class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">List CPMK
+                </button>
+            </a>
+
+            <a href="{{ route('mapStore.cpmk') }}">
+                <button
+                    class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">Petakan CPMK
+                </button>
+            </a>
+
+        </div>
     </div>
+
     <hr />
 
     <div class="relative py-3">

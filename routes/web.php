@@ -37,6 +37,9 @@ Route::resource('/cplr', ak_kurikulum_cplr_Controller::class);
 
 Route::get('/cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('cpmk');
 Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
+Route::get('/cpmkMapStore', [ak_kurikulum_cpmk_controller::class, 'cpmkMapStore'])->name('mapStore.cpmk');
+Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
+Route::post('/cpmkMapping', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('mapping.cpmk');
 
 // Route::get('/cpmk', [ak_kurikulum_cpl_Controller::class, 'indexCpmk'])->name('Cpmk');
 

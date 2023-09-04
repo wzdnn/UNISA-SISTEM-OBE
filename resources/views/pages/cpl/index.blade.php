@@ -47,9 +47,10 @@
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
-                            <td class="px-6 py-4 text-left">
+                            <td class="px-6 py-4 text-">
                                 @foreach ($akKurikulumCpls->CpltoPl as $cplpl)
-                                    {{ $cplpl->kode_pl }}<br />
+                                    {{ $cplpl->kode_pl }}
+                                    <br />
                                 @endforeach
                             </td>
                             <td class="px-6 py-4">
@@ -61,10 +62,10 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumCpls->deskripsi_cpl }}
                             </td>
-                            <td class=" px-6 py-4 text-left">
+                            <td class=" px-6 py-4 text-">
                                 {{ $akKurikulumCpls->aspek }}
                             </td>
-                            <td class="px-6 py-4 text-left">
+                            <td class="px-6 py-4 text-">
                                 @foreach ($akKurikulumCpls->CpltoCplr as $cplcplr)
                                     {{ $cplcplr->kode_cplr }}<br />
                                 @endforeach
