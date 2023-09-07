@@ -45,6 +45,7 @@ Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->n
 Route::post('/cpmkMapping', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('mapping.cpmk');
 Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
 Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
+Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEdit'])->name('edit.cpmk');
 
 
 // Route::get('/cpmk', [ak_kurikulum_cpl_Controller::class, 'indexCpmk'])->name('Cpmk');

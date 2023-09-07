@@ -10,9 +10,6 @@
                     type="button">List CPMK
                 </button>
             </a>
-
-
-
         </div>
     </div>
 
@@ -21,7 +18,7 @@
     <div class="relative py-3">
         <table class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
+                <tr class="text-left">
                     <th scope="col" class="px-6 py-3 w-[50px]">
                         No.
                     </th>
@@ -41,44 +38,20 @@
             </thead>
             <tbody>
                 @if ($CPMK->count() > 0)
-                    {{-- @foreach ($CPMK as $CPMKs)
-                        <tr class="bg-white border-b">
-                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $CPMKs->kode_cpl }} {{ $CPMKs->cpl }}
-                            </td>
-                            <td class="px-6 py-4 ">
-                                @foreach ($CPMKs->CpltoCplr as $cplcplr)
-                                    {{ $cplcplr->kode_cplr }} {{ $cplcplr->cplr }}<br />
-                                @endforeach
-                            </td>
-                            <td class="px-6 py-4">
-                            </td>
-                            <td class="px-6 py-4 justify-center items-center">
-                                <a href="{{ route('show.cpmk', ['id' => $CPMKs->id]) }}">
-                                    <button type="button"
-                                        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 ">Petakan
-                                        Cpmk</button>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach --}}
                     @foreach ($CPMK as $key => $value)
                         <tr class="bg-white border-b">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $key + 1 }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-left">
                                 {{ $value->kode_cpl }} {{ $value->cpl }}
                             </td>
-                            <td class="px-6 py-4 ">
+                            <td class="px-6 py-4 text-left">
                                 @foreach ($value->CpltoCplr as $cplcplr)
                                     {{ $cplcplr->kode_cplr }} {{ $cplcplr->cplr }}<br />
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-left">
                                 @forelse ($value->ak_kurikulum_cpmk as $item)
                                     @foreach ($cpm as $cpmk)
                                         @if ($cpmk->id == $item)
@@ -89,11 +62,11 @@
                                     <p>-</p>
                                 @endforelse
                             </td>
-                            <td class="px-6 py-4 justify-center items-center">
+                            <td class="px-6 py-4 justify-center items-center text-left">
                                 <a href="{{ route('show.cpmk', ['id' => $value->id]) }}">
                                     <button type="button"
-                                        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 ">Petakan
-                                        Cpmk</button>
+                                        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                            class="fa-solid fa-code-branch"></i></button>
                                 </a>
                             </td>
                         </tr>

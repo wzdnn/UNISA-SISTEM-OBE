@@ -157,4 +157,11 @@ class ak_kurikulum_cpmk_controller extends Controller
         }
         return redirect()->route('cpmk');
     }
+
+    public function cpmkEdit(Request $request, string $id)
+    {
+        $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
+
+        $cpmkEdit->update($request->all());
+    }
 }
