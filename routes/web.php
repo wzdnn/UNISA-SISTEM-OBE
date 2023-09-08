@@ -40,15 +40,12 @@ Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])-
 // CPMK
 Route::get('/cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('cpmk');
 Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
-Route::get('/cpmkMapStore', [ak_kurikulum_cpmk_controller::class, 'cpmkMapStore'])->name('mapStore.cpmk');
 Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
 Route::post('/cpmkMapping', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('mapping.cpmk');
 Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
 Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
-Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEdit'])->name('edit.cpmk');
+Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEdit'])->name('edit.cpmk.post');
 
 
-// Route::get('/cpmk', [ak_kurikulum_cpl_Controller::class, 'indexCpmk'])->name('Cpmk');
-// Route::get('/profilelulusan', [ak_kurikulum_pl_Controller::class, 'index'])->name('index.profilelulusan');
-// Route::get('/create', [ak_kurikulum_pl_Controller::class, 'create'])->name('create.profilelulusan');
-// Route::post('/profilelulusan', [ak_kurikulum_pl_Controller::class, 'post'])->name('post.profilelulusan');
+// MATAKULIAH
+Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'matakuliahMapSBKShow'])->name('show.mkSBK');

@@ -13,7 +13,7 @@
     <div class="relative py-3">
         <table class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
+                <tr class="text-left">
                     <th scope="col" class="px-6 py-3 w-[50px]">
                         No.
                     </th>
@@ -32,12 +32,15 @@
                     <th scope="col" class="px-6 py-3 ">
                         Unit
                     </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 @if ($akKurikulumSubBk->count() > 0)
                     @foreach ($akKurikulumSubBk as $akKurikulumSubBks)
-                        <tr class="bg-white border-b">
+                        <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
@@ -57,11 +60,18 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumSubBks->kurikulum }}
                             </td>
+                            <td class="px-6 py-4 flex flex-col">
+                                <a href="">
+                                    <button type="button"
+                                        class="text-white bg-sky-500 hover:bg-sky-800 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                            class="fa-solid fa-clipboard"></i></button>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="6">Bahan Kajian belum ada</td>
+                        <td class="justify-center text-center" colspan="7">Bahan Kajian belum ada</td>
                     </tr>
                 @endif
             </tbody>

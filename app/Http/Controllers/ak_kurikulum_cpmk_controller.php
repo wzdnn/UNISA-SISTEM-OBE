@@ -60,6 +60,7 @@ class ak_kurikulum_cpmk_controller extends Controller
     public function cpmkList()
     {
         $listCPMK = ak_kurikulum_cpmk::all();
+        // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();
 
         return view('pages.cpmk.list', compact('listCPMK'));
     }
@@ -78,17 +79,6 @@ class ak_kurikulum_cpmk_controller extends Controller
         ]);
 
         return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Ditambahkan');
-    }
-
-    public function cpmkMapStore()
-    {
-        $ak_kurikulum_cpl = DB::table('ak_kurikulum_cpls')
-            ->select(['id', 'kode_cpl', 'cpl'])
-            ->get();
-
-        $ak_kurikulum_cpmk = DB::table('ak_kurikulum_cpmks')->get();
-
-        return view('pages.cpmk.map', compact('ak_kurikulum_cpl', 'ak_kurikulum_cpmk'));
     }
 
     public function cpmkShow(int $id)
@@ -163,5 +153,7 @@ class ak_kurikulum_cpmk_controller extends Controller
         $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
 
         $cpmkEdit->update($request->all());
+
+        return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Diedit');
     }
 }
