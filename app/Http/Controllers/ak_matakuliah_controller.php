@@ -25,7 +25,7 @@ class ak_matakuliah_controller extends Controller
 
     public function matakuliahMapSBKShow(int $id)
     {
-        $subBK = DB::table('ak_kurikulum_sub_bks');
+        $subBK = DB::table('ak_kurikulum_sub_bks')->get();
         return view('pages.matakuliah.showSBK', compact('subBk', 'id'));
     }
 }

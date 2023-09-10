@@ -81,38 +81,25 @@ class ak_kurikulum_cpmk_controller extends Controller
         return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 
+    /**
+     * GET Mapping
+     */
     public function cpmkShow(int $id)
     {
-        $cpmkShow =
-            ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
-            ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")
-            ->join(
-                "ak_kurikulum_aspeks",
-                "ak_kurikulum_aspeks.kdaspek",
-                "=",
-                "ak_kurikulum_cpls.kdaspek"
-            )
-            ->join(
-                "ak_kurikulum",
-                "ak_kurikulum.kdkurikulum",
-                "=",
-                "ak_kurikulum_cpls.kdkurikulum"
-            )
-            ->get();
-
-        // return dd($cpmkShow);
-        // $cpmkL = DB::table('ak_kurikulum_cpls')
-        //     ->select('ak_kurikulum_cpls.id', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpmk')
-        //     ->leftJoin('ak_kurikulum_cpl_ak_kurikulum_cpmk', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.id', '=', 'ak_kurikulum_cpls.id')
-        //     ->get();
-
-        // return dd($cpmkL);
-        // return view('pages.cpmk.home', compact('CPMK'));
-
         $cpmk = DB::table('ak_kurikulum_cpmks')->get();
-        return view('pages.cpmk.show', compact('cpmkShow', 'cpmk', 'id'));
+        $save = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
+            ->select('ak_kurikulum_cpmk')
+            ->where('ak_kurikulum_cpl_id', '=', $id)->first();
+        $save->ak_kurikulum_cpmk = (unserialize($save->ak_kurikulum_cpmk)) ? unserialize($save->ak_kurikulum_cpmk) : null;
+        $save = $save->ak_kurikulum_cpmk;
+
+        // return dd($save);
+        return view('pages.cpmk.show', compact('cpmk', 'id', 'save'));
     }
 
+    /**
+     * POST MAPING 
+     */
     public function cpmkMapping(Request $request, int $cpl)
     {
         // $ak_kurikulum_cpl = ak_kurikulum_cpl::create([]);

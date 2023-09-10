@@ -41,7 +41,6 @@ Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])-
 Route::get('/cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('cpmk');
 Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
 Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
-Route::post('/cpmkMapping', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('mapping.cpmk');
 Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
 Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
 Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEdit'])->name('edit.cpmk.post');
