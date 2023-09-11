@@ -43,13 +43,18 @@
                     @foreach ($ak_matakuliah as $ak_matakuliahs => $value)
                         <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{ $ak_matakuliahs + 1 }}
                             </td>
                             <td class="px-6 py-4 text-left">
-                                {{-- @foreach ($ak_matakuliahs->CpltoPl as $cplpl)
-                                    {{ $cplpl->kode_pl }}
-                                    <br />
-                                @endforeach --}}
+                                @forelse ($value->sub_bk as $item)
+                                    @foreach ($sub_bk as $subbk)
+                                        @if ($subbk->id == $item)
+                                            <p>{{ $subbk->kode_subbk }} {{ $subbk->sub_bk }}</p>
+                                        @endif
+                                    @endforeach
+                                @empty
+                                    <p>-</p>
+                                @endforelse
                             </td>
                             <td class="px-6 py-4">
                                 {{ $value->kodematakuliah }}
@@ -58,13 +63,13 @@
                                 {{ $value->matakuliah }}
                             </td>
                             <td class="px-6 py-4">
-                                {{-- {{ $value->deskripsi_cpl }} --}}
+
                             </td>
                             <td class=" px-6 py-4">
                                 {{ $value->kurikulum }}
                             </td>
                             <td class=" px-6 py-4 flex flex-col">
-                                <a href="">
+                                <a href="{{ route('show.mkSBK', ['id' => $value->kdmatakuliah]) }}">
                                     <button type="button"
                                         class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
                                             class="fa-solid fa-code-branch"></i></button>

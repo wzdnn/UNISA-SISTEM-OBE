@@ -48,9 +48,6 @@ class ak_kurikulum_cpmk_controller extends Controller
             $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
         });
 
-        // foreach ($CPMK as $cpmk) {
-        //     print_r($cpmk->ak_kurikulum_cpmk) . '<br>';
-        // }
         $cpm = DB::table('ak_kurikulum_cpmks')->get();
 
         // return dd($cpm);

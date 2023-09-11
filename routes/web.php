@@ -35,7 +35,7 @@ Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
 Route::resource('/cplr', ak_kurikulum_cplr_Controller::class);
 
 
-Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])->name('home.matakuliah');
+
 
 // CPMK
 Route::get('/cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('cpmk');
@@ -47,4 +47,6 @@ Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEdit'])
 
 
 // MATAKULIAH
-Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'matakuliahMapSBKShow'])->name('show.mkSBK');
+Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])->name('home.matakuliah');
+Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'MapSBKShow'])->name('show.mkSBK');
+Route::post('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'mkSBKMapping'])->name('show.mkSBK.post');

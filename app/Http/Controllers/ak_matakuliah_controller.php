@@ -20,12 +20,57 @@ class ak_matakuliah_controller extends Controller
             )
             ->orderBy("ak_matakuliah.kdmatakuliah")
             ->get();
-        return view('pages.matakuliah.index', compact('ak_matakuliah'));
+
+        $ak_matakuliah->map(function ($ak_matakuliah) {
+            $ak_matakuliah->sub_bk = (unserialize($ak_matakuliah->sub_bk)) ? unserialize($ak_matakuliah->sub_bk) : (object) null;
+        });
+
+        $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
+        return view('pages.matakuliah.index', compact('ak_matakuliah', 'sub_bk'));
     }
 
-    public function matakuliahMapSBKShow(int $id)
+    public function MapSBKShow(int $id)
     {
-        $subBK = DB::table('ak_kurikulum_sub_bks')->get();
-        return view('pages.matakuliah.showSBK', compact('subBk', 'id'));
+        $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
+        $save = DB::table('ak_mk_subbk')
+            ->select('sub_bk')
+            ->where('kdmatakuliah', '=', $id)->first();
+        if ($save->sub_bk != null) {
+            $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : null;
+        }
+
+        $save = $save->sub_bk;
+
+        // return dd($save);
+        return view('pages.matakuliah.showSBK', compact('subBk', 'id', 'save'));
+    }
+
+    public function mkSBKMapping(Request $request, int $mk)
+    {
+        $dataMKSBK = array();
+        if ($request->sub_bk != null) {
+            foreach ($request->sub_bk as $subbk) {
+                $dataMKSBK[] = $subbk;
+            }
+        }
+
+        $check = DB::table('ak_mk_subbk')
+            ->where('kdmatakuliah', '=', $mk)
+            ->first();
+
+        if ($check) {
+            DB::table('ak_mk_subbk')
+                ->where('kdmatakuliah', '=', $mk)
+                ->update([
+                    'sub_bk' => serialize($dataMKSBK)
+                ]);
+        } else {
+            DB::table('ak_mk_subbk')
+                ->where('kdmatakuliah', '=', $mk)
+                ->insert([
+                    'sub_bk' => serialize($dataMKSBK)
+                ]);
+        }
+        return redirect()->route('home.matakuliah');
     }
 }
