@@ -10,6 +10,7 @@ use App\Http\Controllers\ak_matakuliah;
 use App\Http\Controllers\ak_matakuliah_controller;
 use App\Models\ak_kurikulum_bk;
 use App\Models\ak_kurikulum_cpl;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,10 +44,30 @@ Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name
 Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
 Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
 Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
-Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEdit'])->name('edit.cpmk.post');
+Route::get('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditGet'])->name('edit.cpmk');
+Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOST'])->name('edit.cpmk.post');
 
 
 // MATAKULIAH
 Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])->name('home.matakuliah');
 Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'MapSBKShow'])->name('show.mkSBK');
 Route::post('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'mkSBKMapping'])->name('show.mkSBK.post');
+
+/**
+ * TEst route
+ */
+
+Route::get('/test', function () {
+    $cpmk = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
+        ->where('id', '=', '7')
+        ->first();
+    $cpmk->ak_kurikulum_cpmk = unserialize($cpmk->ak_kurikulum_cpmk);
+    // return dd($cpmk->ak_kurikulum_cpmk);
+    $array = $cpmk->ak_kurikulum_cpmk;
+
+    $data = DB::table('ak_kurikulum_cpmks')
+        ->whereIn('id', $array)
+        ->get();
+
+    return dd($data);
+});

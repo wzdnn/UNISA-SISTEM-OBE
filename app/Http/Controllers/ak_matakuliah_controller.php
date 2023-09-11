@@ -37,9 +37,15 @@ class ak_matakuliah_controller extends Controller
         $save = DB::table('ak_mk_subbk')
             ->select('sub_bk')
             ->where('kdmatakuliah', '=', $id)->first();
-        $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : null;
-        $save = $save->sub_bk;
 
+        // return dd($sub_bk);
+        $data = [];
+        if ($save != null) {
+            $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : null;
+            $data = $save->sub_bk;
+        }
+
+        $save = $data;
         // return dd($save);
         return view('pages.matakuliah.showSBK', compact('sub_bk', 'id', 'save'));
     }
@@ -67,6 +73,7 @@ class ak_matakuliah_controller extends Controller
             DB::table('ak_mk_subbk')
                 ->where('kdmatakuliah', '=', $mk)
                 ->insert([
+                    'kdmatakuliah' => $mk,
                     'sub_bk' => serialize($dataMKSBK)
                 ]);
         }

@@ -24,6 +24,7 @@ class ak_kurikulum_cpmk_controller extends Controller
 
         $CPMK->map(function ($CPMK) {
             $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
+            // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
         });
 
         $cpm = DB::table('ak_kurikulum_cpmks')->get();
@@ -65,8 +66,15 @@ class ak_kurikulum_cpmk_controller extends Controller
         $save = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
             ->select('ak_kurikulum_cpmk')
             ->where('ak_kurikulum_cpl_id', '=', $id)->first();
-        $save->ak_kurikulum_cpmk = (unserialize($save->ak_kurikulum_cpmk)) ? unserialize($save->ak_kurikulum_cpmk) : null;
-        $save = $save->ak_kurikulum_cpmk;
+
+        $data = [];
+        if ($save != null) {
+            $save->ak_kurikulum_cpmk = (unserialize($save->ak_kurikulum_cpmk)) ? unserialize($save->ak_kurikulum_cpmk) : null;
+            $data = $save->ak_kurikulum_cpmk;
+        }
+
+        $save = $data;
+        // $save->ak_kurikulum_cpmk = unserialize($save->ak_kurikulum_cpmk);
 
         // return dd($save);
         return view('pages.cpmk.show', compact('cpmk', 'id', 'save'));
@@ -110,7 +118,13 @@ class ak_kurikulum_cpmk_controller extends Controller
         return redirect()->route('cpmk');
     }
 
-    public function cpmkEdit(Request $request, string $id)
+    public function cpmkEditGET(string $id)
+    {
+        $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
+        return view('pages.cpmk.edit', compact('cpmkEdit'));
+    }
+
+    public function cpmkEditPOST(Request $request, string $id)
     {
         $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
 
