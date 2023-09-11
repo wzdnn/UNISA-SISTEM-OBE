@@ -37,11 +37,11 @@ class ak_matakuliah_controller extends Controller
         $save = DB::table('ak_mk_subbk')
             ->select('sub_bk')
             ->where('kdmatakuliah', '=', $id)->first();
-        $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : (object) null;
+        $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : null;
         $save = $save->sub_bk;
 
         // return dd($save);
-        return view('pages.matakuliah.showSBK', compact('subBk', 'id', 'save'));
+        return view('pages.matakuliah.showSBK', compact('sub_bk', 'id', 'save'));
     }
 
     public function mkSBKMapping(Request $request, int $mk)

@@ -14,28 +14,6 @@ class ak_kurikulum_cpmk_controller extends Controller
     //
     public function cpmkIndex()
     {
-        // $CPMK =
-        //     ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
-        //     ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")
-        //     ->join(
-        //         "ak_kurikulum_aspeks",
-        //         "ak_kurikulum_aspeks.kdaspek",
-        //         "=",
-        //         "ak_kurikulum_cpls.kdaspek"
-        //     )
-        //     ->join(
-        //         "ak_kurikulum",
-        //         "ak_kurikulum.kdkurikulum",
-        //         "=",
-        //         "ak_kurikulum_cpls.kdkurikulum"
-        //     )->orderBy('ak_kurikulum_cpls.id')
-        //     ->get();
-
-        // $CPMK = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
-        //     ->select('ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpmk', 'ak_kurikulum_cpls.*')
-        //     ->leftJoin('ak_kurikulum_cpls', 'ak_kurikulum_cpls.id', '=', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpl_id')
-        //     ->get();
-
         // $CPMK = DB::table('ak_kurikulum_cpls')
         $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
             ->select('ak_kurikulum_cpls.*', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpmk')
