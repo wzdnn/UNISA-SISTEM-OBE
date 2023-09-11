@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ak_kurikulum_sub_bk;
 use Illuminate\Support\Facades\DB;
 
 class ak_matakuliah_controller extends Controller
@@ -11,7 +12,8 @@ class ak_matakuliah_controller extends Controller
     public function matakuliahIndex()
     {
         $ak_matakuliah = DB::table('ak_matakuliah')
-            ->select("ak_matakuliah.*", "ak_kurikulum.kurikulum")
+            ->select("ak_matakuliah.*", "ak_kurikulum.kurikulum", "ak_mk_subbk.sub_bk")
+            ->leftJoin('ak_mk_subbk', 'ak_mk_subbk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
             ->join(
                 "ak_kurikulum",
                 "ak_kurikulum.kdkurikulum",
@@ -35,10 +37,7 @@ class ak_matakuliah_controller extends Controller
         $save = DB::table('ak_mk_subbk')
             ->select('sub_bk')
             ->where('kdmatakuliah', '=', $id)->first();
-        if ($save->sub_bk != null) {
-            $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : null;
-        }
-
+        $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : (object) null;
         $save = $save->sub_bk;
 
         // return dd($save);
