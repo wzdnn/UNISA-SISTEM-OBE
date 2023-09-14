@@ -52,6 +52,7 @@ Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOS
 Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])->name('home.matakuliah');
 Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'MapSBKShow'])->name('show.mkSBK');
 Route::post('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'mkSBKMapping'])->name('show.mkSBK.post');
+Route::get('/subBKMK/{id}', [ak_matakuliah_controller::class, 'mkSubBKindex'])->name('show.subBKMK');
 
 /**
  * TEst route

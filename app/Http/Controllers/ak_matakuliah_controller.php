@@ -31,6 +31,34 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.index', compact('ak_matakuliah', 'sub_bk'));
     }
 
+    public function mkSubBKindex(int $id)
+    {
+        // $mkSubBK = DB::table('ak_mk_subbk')
+        //     ->select("ak_mk_subbk.*")
+        //     ->get();
+        // $mkSubBK->map(function ($mkSubBK) {
+        //     $mkSubBK->sub_bk = (unserialize($mkSubBK->sub_bk)) ? unserialize($mkSubBK->sub_bk) : (object) null;
+        // });
+
+        $mkSubBK = DB::table('ak_mk_subbk')
+            ->select('sub_bk')
+            ->where('kdmatakuliah', '=', $id)
+            ->first();
+
+        $data = [];
+        if ($mkSubBK != null) {
+            $mkSubBK->sub_bk = (unserialize($mkSubBK->sub_bk)) ? unserialize($mkSubBK->sub_bk) : null;
+            $data = $mkSubBK->sub_bk;
+        }
+
+        $mkSubBK = $data;
+
+        // return dd($mkSubBK);
+
+        $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
+        return view('pages.matakuliah.subBKMK', compact('mkSubBK', 'sub_bk'));
+    }
+
     public function MapSBKShow(int $id)
     {
         $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
