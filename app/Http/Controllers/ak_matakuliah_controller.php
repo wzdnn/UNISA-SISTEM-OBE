@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\ak_kurikulum_sub_bk;
 use Illuminate\Support\Facades\DB;
 
+use function Laravel\Prompts\select;
+
 class ak_matakuliah_controller extends Controller
 {
     //
@@ -33,13 +35,6 @@ class ak_matakuliah_controller extends Controller
 
     public function mkSubBKindex(int $id)
     {
-        // $mkSubBK = DB::table('ak_mk_subbk')
-        //     ->select("ak_mk_subbk.*")
-        //     ->get();
-        // $mkSubBK->map(function ($mkSubBK) {
-        //     $mkSubBK->sub_bk = (unserialize($mkSubBK->sub_bk)) ? unserialize($mkSubBK->sub_bk) : (object) null;
-        // });
-
         $mkSubBK = DB::table('ak_mk_subbk')
             ->select('sub_bk')
             ->where('kdmatakuliah', '=', $id)
@@ -106,5 +101,36 @@ class ak_matakuliah_controller extends Controller
                 ]);
         }
         return redirect()->route('home.matakuliah');
+    }
+
+    public function mapCPMKSBKshow(int $id)
+    {
+        $cpmk = DB::table('ak_kurikulum_cpmks')->get();
+        $save = DB::table('ak_mk_subbk_cpmk')
+            ->select('cpmk')
+            ->where('kdmksubbk', '=', $id)->first();
+
+        $data = [];
+        if ($save != null) {
+            $save->cpmk = (unserialize($save->cpmk)) ? unserialize($save->cpmk) : null;
+            $data = $save->cpmk;
+        }
+
+        $save = $data;
+        return view('', compact('cpmk', 'id', 'save'));
+    }
+
+    public function mapCPMKSBKstore(Request $request, int $cpmkSBK)
+    {
+        $dataCPMKSBK = array();
+        if ($request->cpmk != null) {
+            foreach ($request->cpmk as $cpmk) {
+                $dataCPMKSBK[] = $cpmk;
+            }
+        }
+
+        $check = DB::table('ak_mk_subbk_cpmk')
+            ->where('kdmksubbk', '=', $cpmkSBK)
+            ->first();
     }
 }

@@ -53,6 +53,9 @@ Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])-
 Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'MapSBKShow'])->name('show.mkSBK');
 Route::post('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'mkSBKMapping'])->name('show.mkSBK.post');
 Route::get('/subBKMK/{id}', [ak_matakuliah_controller::class, 'mkSubBKindex'])->name('show.subBKMK');
+Route::get('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKshow'])->name('show.CPMKSBK');
+Route::post('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKstore'])->name('show.CPMKSBK.post');
+
 
 /**
  * TEst route

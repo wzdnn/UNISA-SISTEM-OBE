@@ -14,13 +14,11 @@ class ak_kurikulum_cpmk_controller extends Controller
     //
     public function cpmkIndex()
     {
-        // $CPMK = DB::table('ak_kurikulum_cpls')
         $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
             ->select('ak_kurikulum_cpls.*', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpmk')
             ->leftJoin('ak_kurikulum_cpl_ak_kurikulum_cpmk', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpl_id', '=', 'ak_kurikulum_cpls.id')
             ->orderBy('ak_kurikulum_cpls.id')
             ->get();
-        // return dd($CPMK);
 
         $CPMK->map(function ($CPMK) {
             $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
