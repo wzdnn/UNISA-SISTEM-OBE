@@ -11,10 +11,6 @@ class ak_kurikulum_cpl_Controller extends Controller
     //
     public function index()
     {
-        // $akKurikulumCpl = ak_kurikulum_cpl::all();
-
-        // $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])->get();
-
         $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
             ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")
             ->join(

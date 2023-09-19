@@ -13,7 +13,7 @@
     <div class="relative py-3">
         <table class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
+                <tr class="text-left">
                     <th scope="col" class="px-6 py-3 w-[50px]">
                         No.
                     </th>
@@ -40,7 +40,7 @@
             <tbody>
                 @if ($akKurikulumCplr->count() > 0)
                     @foreach ($akKurikulumCplr as $akKurikulumCplrs)
-                        <tr class="bg-white border-b">
+                        <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>

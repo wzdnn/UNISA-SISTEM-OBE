@@ -3,17 +3,22 @@
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">CPMK</h1>
-        <a href="{{ route('list.cpmk') }}">
-            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">List CPMK
-            </button>
-        </a>
+        <div class="flex flex-row space-x-3">
+            <a href="{{ route('list.cpmk') }}">
+                <button
+                    class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">List CPMK
+                </button>
+            </a>
+        </div>
     </div>
+
     <hr />
 
     <div class="relative py-3">
         <table class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
+                <tr class="text-left">
                     <th scope="col" class="px-6 py-3 w-[50px]">
                         No.
                     </th>
@@ -26,28 +31,49 @@
                     <th scope="col" class="px-6 py-3 ">
                         CPMK
                     </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 @if ($CPMK->count() > 0)
-                    @foreach ($CPMK as $CPMKs)
+                    @foreach ($CPMK as $key => $value)
                         <tr class="bg-white border-b">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{ $key + 1 }}
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $CPMKs->kode_cpl }} {{ $CPMKs->cpl }}
+                            <td class="px-6 py-4 text-left">
+                                {{ $value->kode_cpl }} {{ $value->cpl }}
                             </td>
-                            <td class="px-6 py-4 ">
-                                @foreach ($CPMKs->CpltoCplr as $cplcplr)
+                            <td class="px-6 py-4 text-left">
+                                @foreach ($value->CpltoCplr as $cplcplr)
                                     {{ $cplcplr->kode_cplr }} {{ $cplcplr->cplr }}<br />
                                 @endforeach
+                            </td>
+                            <td class="px-6 py-4 text-left">
+                                @forelse ($value->ak_kurikulum_cpmk as $item)
+                                    @foreach ($cpm as $cpmk)
+                                        @if ($cpmk->id == $item)
+                                            <p>{{ $cpmk->kode_cpmk }} {{ $cpmk->cpmk }}</p>
+                                        @endif
+                                    @endforeach
+                                @empty
+                                    <p>-</p>
+                                @endforelse
+                            </td>
+                            <td class="px-6 py-4 justify-center items-center text-left">
+                                <a href="{{ route('show.cpmk', ['id' => $value->id]) }}">
+                                    <button type="button"
+                                        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                            class="fa-solid fa-code-branch"></i></button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="8">CPL belum ada</td>
+                        <td class="justify-center text-center" colspan="5">Data belum ada</td>
                     </tr>
                 @endif
             </tbody>
