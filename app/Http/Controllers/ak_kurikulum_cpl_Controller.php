@@ -25,6 +25,7 @@ class ak_kurikulum_cpl_Controller extends Controller
                 "=",
                 "ak_kurikulum_cpls.kdkurikulum"
             )
+            ->orderBy('ak_kurikulum_cpls.id')
             ->get();
 
         // dd(ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])

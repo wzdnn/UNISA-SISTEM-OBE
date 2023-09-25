@@ -13,10 +13,18 @@
 </head>
 
 <body class="">
-    @include('layouts.navbar')
+    @include('layouts.sidenavbar')
 
-    <div class="px-5 py-5 w-full max-h-screen">
+    {{-- <div class="px-5 py-5 w-full max-h-screen">
         @yield('body')
+    </div> --}}
+
+    <div class="main-body mt-20">
+        <div class="sm:ml-64">
+            <div class="p-4 min-height">
+                @yield('body')
+            </div>
+        </div>
     </div>
 
     <script src="resources/js/jquery-3.7.0.min.js"></script>

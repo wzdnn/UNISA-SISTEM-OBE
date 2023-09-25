@@ -17,6 +17,7 @@ class ak_kurikulum_pl_Controller extends Controller
         $akKurikulumPl = DB::table('ak_kurikulum_pls')
             ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum")
             ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
+            ->orderBy(('ak_kurikulum_pls.id'))
             ->get();
 
 
