@@ -8,6 +8,7 @@ use App\Http\Controllers\ak_kurikulum_pl_Controller;
 use App\Http\Controllers\ak_kurikulum_sub_bk_controller;
 use App\Http\Controllers\ak_matakuliah;
 use App\Http\Controllers\ak_matakuliah_controller;
+use App\Http\Controllers\matakuliah;
 use App\Models\ak_kurikulum_bk;
 use App\Models\ak_kurikulum_cpl;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +56,11 @@ Route::post('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'mkSBKMapping'])-
 Route::get('/subBKMK/{id}', [ak_matakuliah_controller::class, 'mkSubBKindex'])->name('show.subBKMK');
 Route::get('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKshow'])->name('show.CPMKSBK');
 Route::post('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKstore'])->name('show.CPMKSBK.post');
+
+// ==========    NEWWWWWW       ============ //
+
+Route::get('/mk', [matakuliah::class, 'indexMK'])->name('index.mk');
+Route::get('/mk/create', [matakuliah::class, 'createMK'])->name('create.mk');
 
 
 /**
