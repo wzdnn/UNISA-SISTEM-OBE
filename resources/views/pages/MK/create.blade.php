@@ -8,11 +8,11 @@
 @if ($errors->any())
 <p style="color: red">{{ $errors->first() }}</p>
 @endif
-<form class="py-3" action="" method="POST">
+<form class="py-3" action="{{ route('store.mk') }}" method="POST">
     @csrf
     <div class="grid md:grid-cols-2 md:gap-6">
         <div class="relative z-0 w-full mb-6 group">
-            <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sub Bahan Kajian</label>
+            <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 ">Sub Bahan Kajian</label>
             <select multiple id="subbk_multiple" name="subbk[]"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                 @foreach ($subBK as $sbbk)
@@ -22,11 +22,18 @@
             
         </div>
         <div class="relative z-0 w-full mb-6 group">
-            {{-- <select id="inputState" name="mk[]" data-live-search="true" class="form-control">
-                @foreach ($matakuliah as $mk)
-                <option value="{{ $mk->kdmatakuliah }}">{{ $mk->kodematakuliah }} {{ $mk->matakuliah }}</option>
-                @endforeach
-            </select> --}}
+            <input type="text" name="kodematakuliah" id="kodematakuliah"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" " required value="{{ old('kodematakuliah') }}" />
+            <label for="kodematakuliah"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode Matakuliah</label>
+        </div>
+        <div class="relative z-0 w-full mb-6 group">
+            <input type="text" name="matakuliah" id="matakuliah"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" " required value="{{ old('matakuliah') }}" />
+            <label for="matakuliah"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Matakuliah</label>
         </div>
         <div class="relative z-0 w-full mb-6 group">
             <input type="text" name="mk_singkat" id="mk_singkat"
@@ -36,8 +43,8 @@
                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK Singkat</label>
         </div>
         <div class="relative z-0 w-full mb-6 group">
-            <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit</label>
-            <select multiple id="inputState" name="unit"
+            <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 ">Unit</label>
+            <select  id="unit" name="unit"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                 @foreach ($unit as $item)
                 <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }}</option>

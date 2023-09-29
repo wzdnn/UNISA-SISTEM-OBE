@@ -10,12 +10,15 @@ class matakuliah extends Model
     use HasFactory;
 
     protected $fillable = [
-        'mk_singkat'
+        'kodematakuliah',
+        'matakuliah',
+        'mk_singkat',
+        'kdkurikulum'
     ];
 
     public function MktoSBK()
     {
 
-        return $this->belongsToMany(ak_kurikulum_sub_bk::class);
+        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'matakuliah_ak_kurikulum_sub_bk', 'matakuliah_id', 'ak_kurikulum_sub_bk_id')->withTimestamps();
     }
 }

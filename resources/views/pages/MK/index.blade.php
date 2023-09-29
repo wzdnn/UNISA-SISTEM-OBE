@@ -43,7 +43,7 @@
             @foreach ($mk as $value)
             <tr class="bg-white border-b text-left">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {{ $value + 1 }}
+                    {{ $loop->iteration }}
                 </td>
                 <td class="px-6 py-4 text-left">
                    

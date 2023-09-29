@@ -48,7 +48,7 @@
                             <td class="px-6 py-4 text-left">
                                 @forelse ($value->sub_bk as $item)
                                     @foreach ($sub_bk as $subbk)
-                                        @if ($subbk->kdsubbk == $item)
+                                        @if ($subbk->id == $item)
                                             <p>{{ $subbk->kode_subbk }} {{ $subbk->sub_bk }}</p>
                                         @endif
                                     @endforeach

@@ -68,7 +68,7 @@
                     @endforelse --}}
                     
                     @foreach ($sub_bk as $subbk)
-                        @if ($subbk->kdsubbk == $value)
+                        @if ($subbk->id == $value)
                         <p>{{ $subbk->kode_subbk }} {{ $subbk->sub_bk }}</p>
                         @endif
                     @endforeach

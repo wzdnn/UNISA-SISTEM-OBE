@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('matakuliahs', function (Blueprint $table) {
+        Schema::create('matakuliah_ak_kurikulum_sub_bk', function (Blueprint $table) {
             $table->id();
-            $table->string('kodematakuliah');
-            $table->string('matakuliah');
-            $table->string('mk_singkat');
-            $table->unsignedInteger('kdkurikulum');
+            $table->unsignedInteger('matakuliah_id');
+            $table->unsignedInteger('ak_kurikulum_sub_bk_id');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('matakuliahs');
+        Schema::dropIfExists('matakuliah_ak_kurikulum_sub_bk');
     }
 };

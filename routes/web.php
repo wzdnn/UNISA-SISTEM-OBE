@@ -61,6 +61,7 @@ Route::post('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKst
 
 Route::get('/mk', [matakuliah::class, 'indexMK'])->name('index.mk');
 Route::get('/mk/create', [matakuliah::class, 'createMK'])->name('create.mk');
+Route::post('/mkStore', [matakuliah::class, 'storeMK'])->name('store.mk');
 
 
 /**

@@ -14,18 +14,12 @@ class matakuliah extends Controller
     {
 
         $mk = ModelsMatakuliah::with(['MKtoSBK'])
-            ->select("matakuliahs.*", "ak_kurikulum.kurikulum", "ak_matakuliah.kodematakuliah", "ak_matakuliah.matakuliah")
+            ->select("matakuliahs.*", "ak_kurikulum.kurikulum",)
             ->join(
                 "ak_kurikulum",
                 "ak_kurikulum.kdkurikulum",
                 "=",
                 "matakuliahs.kdkurikulum"
-            )
-            ->join(
-                "ak_matakuliah",
-                "ak_matakuliah.kdmatakuliah",
-                "=",
-                "matakuliahs.kdmatakuliah"
             )
             ->get();
 
@@ -40,12 +34,27 @@ class matakuliah extends Controller
         $unit = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum'])
             ->get();
-        $matakuliah = DB::table('ak_matakuliah')
-            ->select(['kdmatakuliah', 'kodematakuliah', 'matakuliah'])
-            ->get();
         $subBK = DB::table('ak_kurikulum_sub_bks')
             ->select(['kdsubbk', 'kode_subbk', 'sub_bk'])
             ->get();
-        return view('pages.MK.create', compact('unit', 'matakuliah', 'subBK'));
+        return view('pages.MK.create', compact('unit', 'subBK'));
+    }
+
+    public function storeMK(Request $request)
+    {
+        $request->validate([
+            'mk_singkat'
+        ]);
+
+        $mk_subbk = ModelsMatakuliah::create([
+            'kodematakuliah' => $request->kodematakuliah,
+            'matakuliah' => $request->matakuliah,
+            'mk_singkat' => $request->mk_singkat,
+            'kdkurikulum' => $request->unit
+        ]);
+
+        $mk_subbk->MktoSBK()->attach($request->input('subbk'));
+
+        return redirect()->route('index.mk')->with('success', 'MK berhasil ditambahkan');
     }
 }
