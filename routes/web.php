@@ -32,12 +32,21 @@ Route::get('/', function () {
 
 Route::resource('/bk', ak_kurikulum_bk_controller::class);
 Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
-Route::resource('/pl', ak_kurikulum_pl_Controller::class);
+
 Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
+
+
+
+// PL
+Route::resource('/pl', ak_kurikulum_pl_Controller::class);
+Route::get('/plEdit/{id}', [ak_kurikulum_pl_Controller::class, 'edit'])->name('edit.pl');
+Route::post('/plEdit/{id}', [ak_kurikulum_pl_Controller::class, 'update'])->name('update.pl');
+
+
+//CPLR
 Route::resource('/cplr', ak_kurikulum_cplr_Controller::class);
-
-
-
+Route::get('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'edit'])->name('edit.cplr');
+Route::post('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'update'])->name('update.cplr');
 
 // CPMK
 Route::get('/cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('cpmk');

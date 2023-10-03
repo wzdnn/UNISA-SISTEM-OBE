@@ -83,11 +83,7 @@ class ak_kurikulum_cpmk_controller extends Controller
      */
     public function cpmkMapping(Request $request, int $cpl)
     {
-        // $ak_kurikulum_cpl = ak_kurikulum_cpl::create([]);
 
-        // $ak_kurikulum_cpl->CpltoCpmk()->attach($request->input('kdcpmk'));
-
-        // return redirect()->route('cpmk')->with('success', 'CPMK berhasil dipetakan', compact('ak_kurikulum_cpl'));
 
         $dataCPMK = array();
         if ($request->cpmk != null) {
@@ -116,18 +112,20 @@ class ak_kurikulum_cpmk_controller extends Controller
         return redirect()->route('cpmk');
     }
 
-    public function cpmkEditGET(string $id)
-    {
-        $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
-        return view('pages.cpmk.edit', compact('cpmkEdit'));
-    }
+    // Belom Kepake
 
-    public function cpmkEditPOST(Request $request, string $id)
-    {
-        $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
+    // public function cpmkEditGET(string $id)
+    // {
+    //     $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
+    //     return view('pages.cpmk.edit', compact('cpmkEdit'));
+    // }
 
-        $cpmkEdit->update($request->all());
+    // public function cpmkEditPOST(Request $request, string $id)
+    // {
+    //     $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
 
-        return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Diedit');
-    }
+    //     $cpmkEdit->update($request->all());
+
+    //     return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Diedit');
+    // }
 }

@@ -48,4 +48,22 @@ class ak_kurikulum_pl_Controller extends Controller
 
         return redirect()->route('pl.index')->with('success', 'Profile Lulusan Berhasil Ditambahkan');
     }
+
+    public function edit(int $id)
+    {
+        $plEdit = ak_kurikulum_pl::findOrFail($id);
+        return view('pages.profileLulusan.edit', compact('plEdit'));
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $plEdit = ak_kurikulum_pl::findOrFail($id);
+        $plEdit->update([
+            'kode_pl' => $request->kode_pl,
+            'profile_lulusan' => $request->profile_lulusan,
+            'deskripsi_profile' => $request->deskripsi_profile
+        ]);
+
+        return redirect()->route('pl.index')->with('success', 'Profile Lulusan Berhasil Diedit');
+    }
 }

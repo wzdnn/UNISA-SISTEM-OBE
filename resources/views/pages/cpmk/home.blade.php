@@ -4,12 +4,12 @@
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">CPMK</h1>
         <div class="flex flex-row space-x-3">
-            <a href="{{ route('list.cpmk') }}">
+            {{-- <a href="{{ route('list.cpmk') }}">
                 <button
                     class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">List CPMK
                 </button>
-            </a>
+            </a> --}}
         </div>
     </div>
 
@@ -31,9 +31,9 @@
                     <th scope="col" class="px-6 py-3 ">
                         CPMK
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    {{-- <th scope="col" class="px-6 py-3 ">
                         Action
-                    </th>
+                    </th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -61,14 +61,19 @@
                                 @empty
                                     <p>-</p>
                                 @endforelse
+                                <a href="">
+                                    <button type="button"
+                                        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                            class="fa-solid fa-plus"></i></button>
+                                </a>
                             </td>
-                            <td class="px-6 py-4 justify-center items-center text-left">
+                            {{-- <td class="px-6 py-4 justify-center items-center text-left">
                                 <a href="{{ route('show.cpmk', ['id' => $value->id]) }}">
                                     <button type="button"
                                         class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
                                             class="fa-solid fa-code-branch"></i></button>
                                 </a>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 @else
