@@ -33,8 +33,12 @@ Route::get('/', function () {
 Route::resource('/bk', ak_kurikulum_bk_controller::class);
 Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
 
-Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
 
+// CPL
+
+Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
+Route::get('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'edit'])->name('edit.cpl');
+Route::post('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'update'])->name('update.cpl');
 
 
 // PL

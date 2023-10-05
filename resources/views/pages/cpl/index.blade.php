@@ -38,6 +38,9 @@
                     <th scope="col" class="px-6 py-3 ">
                         Unit
                     </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +50,7 @@
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
-                            <td class="px-6 py-4 text-left flex">
+                            <td class="px-6 py-4 text-left">
                                 @foreach ($akKurikulumCpls->CpltoPl as $cplpl)
                                     {{ $cplpl->kode_pl }} {{ $cplpl->profile_lulusan }}
                                     <br />
@@ -62,16 +65,22 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumCpls->deskripsi_cpl }}
                             </td>
-                            <td class=" px-6 py-4 text-">
+                            <td class=" px-6 py-4 ">
                                 {{ $akKurikulumCpls->aspek }}
                             </td>
-                            <td class="px-6 py-4 text-">
+                            <td class="px-6 py-4 ">
                                 @foreach ($akKurikulumCpls->CpltoCplr as $cplcplr)
                                     {{ $cplcplr->kode_cplr }} {{ $cplcplr->cplr }}<br />
                                 @endforeach
                             </td>
                             <td class=" px-6 py-4 text-left">
                                 {{ $akKurikulumCpls->kurikulum }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('edit.cpl', ['id' => $akKurikulumCpls->id]) }}">
+                                    <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-regular fa-pen-to-square"></i></button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

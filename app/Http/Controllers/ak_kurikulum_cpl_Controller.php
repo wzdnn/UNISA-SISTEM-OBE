@@ -92,4 +92,43 @@ class ak_kurikulum_cpl_Controller extends Controller
 
         return redirect()->route('cpl.index')->with('success', 'CPL berhasil ditambahkan');
     }
+
+    public function edit(int $id)
+    {
+
+        $ak_kurikulum_pl = DB::table('ak_kurikulum_pls')
+            ->select(['id', 'kode_pl', 'profile_lulusan'])
+            ->get();
+
+        $ak_kurikulum_cplr = DB::table('ak_kurikulum_cplrs')
+            ->select(['id', 'kode_cplr', 'cplr'])
+            ->get();
+
+        $ak_kurikulum_aspek = DB::table('ak_kurikulum_aspeks')
+            ->select(['kdaspek', 'aspek'])
+            ->get();
+
+        $cplEdit = ak_kurikulum_cpl::findOrFail($id);
+
+        return view('pages.cpl.edit', compact('cplEdit', 'ak_kurikulum_aspek', 'ak_kurikulum_pl', 'ak_kurikulum_cplr'));
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $cplEdit = ak_kurikulum_cpl::findOrFail($id);
+        $cplEdit->update([
+            'kode_cpl' => $request->kode_cpl,
+            'cpl' => $request->cpl,
+            'deskripsi_cpl' => $request->deskripsi_cpl,
+            'kdaspek' => $request->aspek,
+        ]);
+
+        // Pivot CPL to PL
+        $cplEdit->CpltoPl()->attach($request->input('kdpl'));
+
+        // Pivot CPL to CPLR
+        $cplEdit->CpltoCplr()->attach($request->input('kdcplr'));
+
+        return redirect()->route('cpl.index')->with('success', 'CPL berhasil ditambahkan');
+    }
 }
