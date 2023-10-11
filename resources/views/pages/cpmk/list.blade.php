@@ -39,6 +39,15 @@
                                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CPMK</label>
                             </div>
                         </div>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <select id="inputState" name="kdcpl[]" data-live-search="true" class="form-control">
+                                    @foreach ($ak_kurikulum_cpl as $cpl)
+                                    <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }} {{ $cpl->cpl }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="py-3">
                             <button type="submit"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
@@ -65,6 +74,9 @@
                         CPMK
                     </th>
                     <th scope="col" class="px-6 py-3 text-left ">
+                        CPL
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left ">
                         Action
                     </th>
                 </tr>
@@ -82,19 +94,23 @@
                             <td class="px-6 py-4 ">
                                 {{ $listCPMKs->cpmk }}
                             </td>
+                            <td class="px-6 py-4 text-left">
+                                @foreach ($listCPMKs->CPMKtoCPL as $cpmk)
+                                {{ $cpmk->kode_cpl }} {{ $cpmk->cpl }}<br />
+                                @endforeach
+                            </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('edit.cpmk', ['id' => $listCPMKs->id]) }}">
+                                
+                                <a href="">
                                     <button
-                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                            class="fa-regular fa-pen-to-square"></i></button>
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i class="fa-solid fa-trash"></i></button>
                                 </a>
-
                             </td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="3">CPMK belum ada</td>
+                        <td class="justify-center text-center" colspan="5">CPMK belum ada</td>
                     </tr>
                 @endif
             </tbody>

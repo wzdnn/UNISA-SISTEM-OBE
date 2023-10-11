@@ -31,7 +31,12 @@ Route::get('/', function () {
 
 
 Route::resource('/bk', ak_kurikulum_bk_controller::class);
+
+
+// Sub BK
 Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
+Route::get('/petaSubBK', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
+Route::get('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
 
 
 // CPL
@@ -53,13 +58,20 @@ Route::get('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'edit'])->nam
 Route::post('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'update'])->name('update.cplr');
 
 // CPMK
-Route::get('/cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('cpmk');
+
+// Route::get('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkCreate'])->name('create.cpmk');
+// Route::post('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('create.cpmk.post');
+
+
 Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
+Route::get('/petacpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('peta.cpmk');
+
+
 Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
-Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
-Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
-Route::get('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditGet'])->name('edit.cpmk');
-Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOST'])->name('edit.cpmk.post');
+// Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
+// Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
+// Route::get('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditGet'])->name('edit.cpmk');
+// Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOST'])->name('edit.cpmk.post');
 
 
 // MATAKULIAH

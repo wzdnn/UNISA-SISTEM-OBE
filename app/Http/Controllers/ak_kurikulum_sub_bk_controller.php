@@ -32,6 +32,13 @@ class ak_kurikulum_sub_bk_controller extends Controller
         return view('pages.subBahanKajian.index', compact('akKurikulumSubBk'));
     }
 
+    public function listSubBK()
+    {
+        $SubBk = DB::table('ak_kurikulum_sub_bks')->get();
+
+        return view('pages.subBahanKajian.list', compact('SubBk'));
+    }
+
     public function create()
     {
 
@@ -61,5 +68,27 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
 
         return redirect()->route('subbk.index')->with('success', 'Sub Bahan Kajian berhasil ditambah');
+    }
+
+    public function MapCPMKShow(int $id)
+    {
+        $cpmk = DB::table('ak_kurikulum_cpmks')->get();
+        $save = DB::table('subbk_cpmk')
+            ->select('ak_kurikulum_cpmk')
+            ->where('ak_kurikulum_sub_bk_id', '=', $id)->first();
+
+        // return dd($cpmk);
+
+        $data = [];
+        if ($save != null) {
+            $save->ak_kurikulum_cpmk = (unserialize($save->ak_kurikulum_cpmk)) ? unserialize($save->ak_kurikulum_cpmk) : null;
+            $data = $save->ak_kurikulum_cpmk;
+        }
+
+        $save = $data;
+
+        // return dd($save);
+
+        return view('pages.subBahanKajian.showCPMK', compact('cpmk', 'id', 'save'));
     }
 }
