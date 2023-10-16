@@ -33,6 +33,7 @@ class ak_kurikulum_cplr_Controller extends Controller
                 "=",
                 "ak_kurikulum_cplrs.kdkurikulum"
             )
+            ->orderBy("ak_kurikulum_cplrs.id")
             ->get();
 
         return view('pages.cplr.index', compact('akKurikulumCplr'));
@@ -71,5 +72,32 @@ class ak_kurikulum_cplr_Controller extends Controller
         ]);
 
         return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Ditambahkan');
+    }
+
+    public function edit(int $id)
+    {
+        $akKurikulumAspek = DB::table('ak_kurikulum_aspeks')
+            ->select(["kdaspek", "aspek"])
+            ->get();
+        $akKurikulumSumber = DB::table('ak_kurikulum_sumbers')
+            ->select(["kdsumber", "sumber"])
+            ->get();
+        $cplrEdit = ak_kurikulum_cplr::findOrFail($id);
+
+        return view('pages.cplr.edit', compact('cplrEdit', 'akKurikulumAspek', 'akKurikulumSumber'));
+    }
+
+    public function update(Request $request, int $id)
+    {
+
+        $cplrEdit = ak_kurikulum_cplr::findOrFail($id);
+        $cplrEdit->update([
+            'kode_cplr' => $request->kode_cplr,
+            'cplr' => $request->cplr,
+            'deskripsi_cplr' => $request->deskripsi_cplr,
+            'kdaspek' => $request->aspek,
+            'kdsumber' => $request->sumber,
+        ]);
+        return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Disunting');
     }
 }

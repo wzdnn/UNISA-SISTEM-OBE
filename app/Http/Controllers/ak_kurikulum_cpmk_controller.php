@@ -11,21 +11,20 @@ use function PHPSTORM_META\map;
 
 class ak_kurikulum_cpmk_controller extends Controller
 {
-    //
+
     public function cpmkIndex()
     {
         $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
-            ->select('ak_kurikulum_cpls.*', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpmk')
-            ->leftJoin('ak_kurikulum_cpl_ak_kurikulum_cpmk', 'ak_kurikulum_cpl_ak_kurikulum_cpmk.ak_kurikulum_cpl_id', '=', 'ak_kurikulum_cpls.id')
+            ->select('ak_kurikulum_cpls.*')
             ->orderBy('ak_kurikulum_cpls.id')
             ->get();
 
-        $CPMK->map(function ($CPMK) {
-            $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
-            // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
-        });
+        // $CPMK->map(function ($CPMK) {
+        //     $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
+        //     // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
+        // });
 
-        $cpm = DB::table('ak_kurikulum_cpmks')->get();
+        $cpm = ak_kurikulum_cpmk::all();
 
         // return dd($cpm);
         return view('pages.cpmk.home', compact('CPMK', 'cpm'));
@@ -33,93 +32,46 @@ class ak_kurikulum_cpmk_controller extends Controller
 
     public function cpmkList()
     {
-        $listCPMK = ak_kurikulum_cpmk::all();
+
+        $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
+
+        $ak_kurikulum_cpl = DB::table('ak_kurikulum_cpls')
+            ->select(['id', 'kode_cpl', 'cpl'])
+            ->get();
+
+        $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])->get();
         // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();
 
-        return view('pages.cpmk.list', compact('listCPMK'));
+        return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk'));
     }
-
 
     public function cpmkStore(Request $request)
     {
-        $request->validate([
-            'kode_cpmk',
-            'cpmk'
-        ]);
+        // $request->validate([
+        //     'kode_cpmk',
+        //     'cpmk'
+        // ]);
 
-        ak_kurikulum_cpmk::create([
+        $cpmk = ak_kurikulum_cpmk::create([
             'kode_cpmk' => $request->kode_cpmk,
             'cpmk' => $request->cpmk
         ]);
 
+        $cpmk->CPMKtoCPL()->attach($request->input('kdcpl'));
+
         return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 
-    /**
-     * GET Mapping
-     */
-    public function cpmkShow(int $id)
-    {
-        $cpmk = DB::table('ak_kurikulum_cpmks')->get();
-        $save = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
-            ->select('ak_kurikulum_cpmk')
-            ->where('ak_kurikulum_cpl_id', '=', $id)->first();
-
-        $data = [];
-        if ($save != null) {
-            $save->ak_kurikulum_cpmk = (unserialize($save->ak_kurikulum_cpmk)) ? unserialize($save->ak_kurikulum_cpmk) : null;
-            $data = $save->ak_kurikulum_cpmk;
-        }
-
-        $save = $data;
-        // $save->ak_kurikulum_cpmk = unserialize($save->ak_kurikulum_cpmk);
-
-        // return dd($save);
-        return view('pages.cpmk.show', compact('cpmk', 'id', 'save'));
-    }
-
-    /**
-     * POST MAPING 
-     */
-    public function cpmkMapping(Request $request, int $cpl)
-    {
-        // $ak_kurikulum_cpl = ak_kurikulum_cpl::create([]);
-
-        // $ak_kurikulum_cpl->CpltoCpmk()->attach($request->input('kdcpmk'));
-
-        // return redirect()->route('cpmk')->with('success', 'CPMK berhasil dipetakan', compact('ak_kurikulum_cpl'));
-
-        $dataCPMK = array();
-        if ($request->cpmk != null) {
-            foreach ($request->cpmk as $cpmk) {
-                $dataCPMK[] = $cpmk;
-            }
-        }
-
-        $check = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
-            ->where('ak_kurikulum_cpl_id', '=', $cpl)
-            ->first();
-
-        if ($check) {
-            DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
-                ->where('ak_kurikulum_cpl_id', '=', $cpl)
-                ->update([
-                    'ak_kurikulum_cpmk' => serialize($dataCPMK)
-                ]);
-        } else {
-            DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
-                ->insert([
-                    'ak_kurikulum_cpl_id' => $cpl,
-                    'ak_kurikulum_cpmk' => serialize($dataCPMK)
-                ]);
-        }
-        return redirect()->route('cpmk');
-    }
+    // Belom Kepake
 
     public function cpmkEditGET(string $id)
     {
+        $ak_kurikulum_cpl = DB::table('ak_kurikulum_cpls')
+            ->select(['id', 'kode_cpl', 'cpl'])
+            ->get();
+
         $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
-        return view('pages.cpmk.edit', compact('cpmkEdit'));
+        return view('pages.cpmk.edit', compact('cpmkEdit', 'ak_kurikulum_cpl'));
     }
 
     public function cpmkEditPOST(Request $request, string $id)
@@ -127,6 +79,7 @@ class ak_kurikulum_cpmk_controller extends Controller
         $cpmkEdit = ak_kurikulum_cpmk::findOrFail($id);
 
         $cpmkEdit->update($request->all());
+        // $cpmkEdit->CPMKtoCPL()->attach($request->input('kdcpl'));
 
         return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Diedit');
     }
