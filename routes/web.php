@@ -9,6 +9,7 @@ use App\Http\Controllers\ak_kurikulum_sub_bk_controller;
 use App\Http\Controllers\ak_matakuliah;
 use App\Http\Controllers\ak_matakuliah_controller;
 use App\Http\Controllers\matakuliah;
+use App\Http\Controllers\visimisiController;
 use App\Models\ak_kurikulum_bk;
 use App\Models\ak_kurikulum_cpl;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,8 @@ Route::get('/', function () {
 })->name('welcome');
 
 
+Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VM');
+
 Route::resource('/bk', ak_kurikulum_bk_controller::class);
 
 
@@ -37,6 +40,7 @@ Route::resource('/bk', ak_kurikulum_bk_controller::class);
 Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
 Route::get('/petaSubBK', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
 Route::get('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
+Route::post('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MappingCPMK'])->name('MapCPMKShow.post');
 
 
 // CPL
@@ -75,18 +79,14 @@ Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->n
 
 
 // MATAKULIAH
-Route::get('/matakuliah', [ak_matakuliah_controller::class, 'matakuliahIndex'])->name('home.matakuliah');
-Route::get('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'MapSBKShow'])->name('show.mkSBK');
-Route::post('/mkSubBK/{id}', [ak_matakuliah_controller::class, 'mkSBKMapping'])->name('show.mkSBK.post');
-Route::get('/subBKMK/{id}', [ak_matakuliah_controller::class, 'mkSubBKindex'])->name('show.subBKMK');
-Route::get('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKshow'])->name('show.CPMKSBK');
-Route::post('/mkSubBKCPMK/{id}', [ak_matakuliah_controller::class, 'mapCPMKSBKstore'])->name('show.CPMKSBK.post');
 
-// ==========    NEWWWWWW       ============ //
+Route::get('/matakuliah', [ak_matakuliah_controller::class, 'mkIndex'])->name('index.mk');
+Route::get('/matakuliah/Create', [ak_matakuliah_controller::class, 'mkCreate'])->name('create.mk');
+Route::post('/matakuliah/Create', [ak_matakuliah_controller::class, 'mkStore'])->name('store.mk');
+Route::get('/DetailMK/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk');
+Route::get('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'MapCPMKShow'])->name('CPMKshow.mk');
+Route::post('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'mappingCPMK'])->name('CPMKpost.mk');
 
-Route::get('/mk', [matakuliah::class, 'indexMK'])->name('index.mk');
-Route::get('/mk/create', [matakuliah::class, 'createMK'])->name('create.mk');
-Route::post('/mkStore', [matakuliah::class, 'storeMK'])->name('store.mk');
 
 
 /**

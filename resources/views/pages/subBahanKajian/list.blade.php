@@ -44,7 +44,15 @@
                     {{ $value->kode_subbk }} {{ $value->sub_bk }}
                 </td>
                 <td class="px-6 py-4 text-left">
-                    
+                    @forelse ($value->ak_kurikulum_cpmk as $item)
+                        @foreach ($cpmk as $cpmks)
+                            @if ($cpmks->id == $item)
+                                {{ $cpmks->kode_cpmk }} {{ $cpmks->cpmk }}
+                            @endif
+                        @endforeach
+                    @empty
+                    <p>-</p>
+                    @endforelse
                 </td>
                 <td class="px-6 py-4 text-left">
                     <a href="{{ route('MapCPMKShow', ['id' => $value->id]) }}">
