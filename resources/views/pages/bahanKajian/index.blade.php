@@ -54,7 +54,7 @@
                                 {{ $akKurikulumBks->ak_bidil }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumBks->kurikulum }}
+                                {{ $akKurikulumBks->kurikulum }} {{ $akKurikulumBks->tahun }}
                             </td>
                         </tr>
                     @endforeach

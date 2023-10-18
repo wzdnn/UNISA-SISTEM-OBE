@@ -14,7 +14,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
         // $akKurikulumSubBk = ak_kurikulum_sub_bk::all();
 
         $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
-            ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum")
+            ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
 
             ->join(
                 "ak_kurikulum_bks",
@@ -56,7 +56,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
             ->select(['kdbk', 'kode_bk', 'bahan_kajian'])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
-            ->select(['kdkurikulum', 'kurikulum'])
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->get();
         return view('pages.subBahanKajian.create', compact('akKurikulumBk', 'akKurikulum'));
     }

@@ -15,7 +15,7 @@ class ak_kurikulum_pl_Controller extends Controller
         // $akKurikulumPl = ak_kurikulum_pl::all();
 
         $akKurikulumPl = DB::table('ak_kurikulum_pls')
-            ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum")
+            ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
             ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
             ->orderBy(('ak_kurikulum_pls.id'))
             ->get();
@@ -27,7 +27,7 @@ class ak_kurikulum_pl_Controller extends Controller
     public function create()
     {
         $unit = DB::table('ak_kurikulum')
-            ->select(['kdkurikulum', 'kurikulum'])
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->get();
         return view('pages.profileLulusan.create', compact('unit'));
     }
