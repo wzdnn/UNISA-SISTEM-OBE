@@ -15,6 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('kdmatakuliah');
             $table->unsignedInteger('ak_kurikulum_sub_bk_id');
+            $table->string('pokok_bahasan')->nullable();
+            $table->unsignedTinyInteger('kuliah')->nullable();
+            $table->unsignedTinyInteger('tutorial')->nullable();
+            $table->unsignedTinyInteger('seminar')->nullable();
+            $table->unsignedTinyInteger('praktikum')->nullable();
+            $table->unsignedTinyInteger('skill_lab')->nullable();
+            $table->unsignedTinyInteger('field_lab')->nullable();
+            $table->unsignedTinyInteger('praktik')->nullable();
             $table->timestamps();
         });
     }
