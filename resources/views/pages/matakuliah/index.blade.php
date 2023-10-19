@@ -45,7 +45,7 @@
                     {{ $loop->iteration }}
                 </td>
                 <td class="px-6 py-4 text-left">
-                    @foreach ($value->MKtoSBK as $mksbk)
+                    @foreach ($value->MKtoSBKread as $mksbk)
                     {{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }}<hr/>
                     <br />
                     @endforeach

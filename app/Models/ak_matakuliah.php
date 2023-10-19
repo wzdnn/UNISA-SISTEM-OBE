@@ -20,8 +20,13 @@ class ak_matakuliah extends Model
 
     public $table = 'ak_matakuliah';
 
-    public function MKtoSBK()
+    public function MKtoSBKread()
     {
         return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id', 'kdmatakuliah', 'id')->withTimestamps();
+    }
+
+    public function MKtoSBKinput()
+    {
+        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id')->withTimestamps();
     }
 }

@@ -15,7 +15,7 @@ class ak_matakuliah_controller extends Controller
 
     public function mkIndex()
     {
-        $matakuliah = ak_matakuliah::with(['MKtoSBK'])
+        $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
             ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
             ->join(
                 'ak_kurikulum',
@@ -43,21 +43,6 @@ class ak_matakuliah_controller extends Controller
             ->select(['id', 'kode_subbk', 'sub_bk'])
             ->get();
 
-        // $SBKCPMK = DB::table('subbk_cpmk')
-        //     ->select('subbk_cpmk.*', 'ak_kurikulum_sub_bks.kode_subbk', 'ak_kurikulum_sub_bks.sub_bk')
-        //     ->join(
-        //         'ak_kurikulum_sub_bks',
-        //         'ak_kurikulum_sub_bks.id',
-        //         '=',
-        //         'subbk_cpmk.ak_kurikulum_sub_bk_id'
-        //     )
-        //     ->get();
-
-        // $SBKCPMK->map(function ($SBKCPMK) {
-        //     $SBKCPMK->ak_kurikulum_cpmk = (unserialize($SBKCPMK->ak_kurikulum_cpmk)) ? unserialize($SBKCPMK->ak_kurikulum_cpmk) : (object) null;
-        // });
-
-        // return dd($SBK);
         return view('pages.matakuliah.create', compact('ak_kurikulum', 'SBK'));
     }
 
@@ -65,6 +50,7 @@ class ak_matakuliah_controller extends Controller
     public function mkStore(Request $request)
     {
         $request->validate([
+            'kodematakuliah',
             'mk_singkat',
             'semester'
         ]);
@@ -78,7 +64,10 @@ class ak_matakuliah_controller extends Controller
             'isObe' => $request->isObe
         ]);
 
-        $matakuliah->MKtoSBK()->attach($request->input('kdsubbk'));
+        $matakuliah->MKtoSBKinput()->attach($request->input('kdsubbk'));
+
+        // return dd($matakuliah);
+
 
         return redirect()->route('index.mk')->with('success', 'Matakuliah berhasih ditambahkan');
     }
@@ -89,9 +78,10 @@ class ak_matakuliah_controller extends Controller
         $mkSubBK = DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
             ->select('ak_matakuliah_ak_kurikulum_sub_bk.*', 'subbk_cpmk.ak_kurikulum_cpmk')
             ->leftJoin('subbk_cpmk', 'subbk_cpmk.ak_kurikulum_sub_bk_id', '=', 'ak_matakuliah_ak_kurikulum_sub_bk.ak_kurikulum_sub_bk_id')
-            ->where('kdmatakuliah', '=', $id)
+            ->where('ak_matakuliah_ak_kurikulum_sub_bk.id', '=', $id)
             ->get();
 
+        // return dd($mkSubBK);
         $mkSubBK->map(function ($mkSubBK) {
             $mkSubBK->ak_kurikulum_cpmk = (unserialize($mkSubBK->ak_kurikulum_cpmk)) ? unserialize($mkSubBK->ak_kurikulum_cpmk) : (object) null;
         });
@@ -105,6 +95,56 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.detail', compact('mkSubBK', 'subBK', 'id', 'cpmk'));
     }
 
+    public function subbkEdit(int $id)
+    {
+        $sbkEdit = DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
+            ->where('ak_kurikulum_sub_bk_id', '=', $id)
+            ->get();
+
+        return dd($sbkEdit);
+        return view('', compact('sbkEdit'));
+    }
+
+    public function subbkEditStore(Request $request, int $id)
+    {
+        $check = DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
+            ->where('ak_kurikulum_sub_bk_id', '=', $id)
+            ->first();
+
+        if ($check) {
+            DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
+                ->where('id', '=', $id)
+                ->update([
+                    'pokok_bahasan' => $request->pokok_bahasan,
+                    'kuliah' => $request->kuliah,
+                    'tutorial' => $request->tutorial,
+                    'seminar' => $request->seminar,
+                    'praktikum' => $request->praktikum,
+                    'skill_lab' => $request->skill_lab,
+                    'field_lab' => $request->field_lab,
+                    'praktik' => $request->praktik
+
+                ]);
+        } else {
+            DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
+                ->where('ak_kurikulum_sub_bk_id', '=', $id)
+                ->insert([
+                    'pokok_bahasan' => $request->pokok_bahasan,
+                    'kuliah' => $request->kuliah,
+                    'tutorial' => $request->tutorial,
+                    'seminar' => $request->seminar,
+                    'praktikum' => $request->praktikum,
+                    'skill_lab' => $request->skill_lab,
+                    'field_lab' => $request->field_lab,
+                    'praktik' => $request->praktik
+
+                ]);
+        }
+
+        return redirect()->route('index.mk');
+    }
+
+    // nampilinCPMK
     public function mapCPMKshow(int $id)
     {
         $cpmk = DB::table('ak_kurikulum_cpmks')->get();
@@ -127,6 +167,7 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.showCPMK', compact('cpmk', 'id', 'save'));
     }
 
+    // mappingCPMK
     public function mappingCPMK(Request $request, int $subbk_id)
     {
         $dataSBKCPMK = array();
