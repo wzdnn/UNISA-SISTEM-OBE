@@ -38,7 +38,7 @@
             <div class="relative z-0 w-full mb-6 group">
                 <select id="inputState" name="unit" class="form-control">
                     @foreach ($unit as $item)
-                        <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }}</option>
+                        <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }} {{ $item->tahun }}</option>
                     @endforeach
                 </select>
             </div>

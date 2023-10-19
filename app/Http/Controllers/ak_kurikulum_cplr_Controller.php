@@ -14,7 +14,7 @@ class ak_kurikulum_cplr_Controller extends Controller
         // $akKurikulumCplr = ak_kurikulum_cplr::all();
 
         $akKurikulumCplr = DB::table('ak_kurikulum_cplrs')
-            ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum")
+            ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
             ->join(
                 "ak_kurikulum_aspeks",
                 "ak_kurikulum_aspeks.kdaspek",
@@ -48,7 +48,7 @@ class ak_kurikulum_cplr_Controller extends Controller
             ->select(["kdsumber", "sumber"])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
-            ->select(["kdkurikulum", "kurikulum"])
+            ->select(["kdkurikulum", "kurikulum", "tahun"])
             ->get();
 
 

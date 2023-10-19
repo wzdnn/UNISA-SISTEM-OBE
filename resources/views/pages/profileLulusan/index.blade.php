@@ -51,7 +51,7 @@
                                 {{ $akKurikulumPls->deskripsi_profile }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumPls->kurikulum }}
+                                {{ $akKurikulumPls->kurikulum }} {{ $akKurikulumPls->tahun }}
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('edit.pl', ['id' => $akKurikulumPls->id]) }}">

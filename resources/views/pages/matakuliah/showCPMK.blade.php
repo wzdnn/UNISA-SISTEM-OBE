@@ -6,7 +6,7 @@
 </div>
 <hr />
 
-<form action="{{ route('MapCPMKShow.post', ['id' => $id]) }}" method="post">
+<form action="{{ route('CPMKpost.mk', ['id' => $id]) }}" method="post">
     @csrf
     @forelse ($cpmk as $item)
     <ul class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">

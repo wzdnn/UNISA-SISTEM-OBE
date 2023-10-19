@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ak_mk_subbk', function (Blueprint $table) {
+        Schema::create('ak_matakuliah_ak_kurikulum_sub_bk', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('kdmatakuliah');
-            $table->string('sub_bk');
+            $table->unsignedInteger('ak_kurikulum_sub_bk_id');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ak_mk_subbk');
+        Schema::dropIfExists('ak_matakuliah_ak_kurikulum_sub_bk');
     }
 };
