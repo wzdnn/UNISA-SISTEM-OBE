@@ -62,7 +62,7 @@
                                 {{ $akKurikulumCplrs->ak_sumber }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumCplrs->kurikulum }} {{ $akKurikulumCplrs->tahun }}
+                                {{ $akKurikulumCplrs->kurikulum }} - {{ $akKurikulumCplrs->tahun }}
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('edit.cplr', ['id' => $akKurikulumCplrs->id]) }}">

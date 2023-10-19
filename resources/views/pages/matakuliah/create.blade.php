@@ -2,7 +2,7 @@
 
 @section('body')
 <div class="flex items-center justify-between py-5 px-5 mx-10">
-    <h1 class="font-bold text-2xl mb-0">Tambah CPL</h1>
+    <h1 class="font-bold text-2xl mb-0">Tambah Matakuliah</h1>
 </div>
 <hr />
 @if ($errors->any())

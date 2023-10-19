@@ -75,4 +75,14 @@ class ak_kurikulum_bk_controller extends Controller
 
         return redirect()->route('bk.index')->with('success', 'Bahan Kajian berhasil ditambah');
     }
+
+    public function showBKSBK()
+    {
+        $akKurikulumBk = DB::table('ak_kurikulum_bks')
+            ->select('ak_kurikulum_bks.*', 'ak_kurikulum_sub_bks.*')
+            ->join('ak_kurikulum_sub_bks', 'ak_kurikulum_sub_bks.kdbk', '=', 'ak_kurikulum_bks.kdbk')
+            ->get();
+
+        return view('pages.bahanKajian.showBKSBK', compact('akKurikulumBk'));
+    }
 }

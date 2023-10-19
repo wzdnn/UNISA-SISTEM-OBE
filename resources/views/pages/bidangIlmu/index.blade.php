@@ -2,11 +2,11 @@
 
 @section('body')
 <div class="flex items-center justify-between py-5 px-5 mx-10">
-    <h1 class="font-bold text-2xl mb-0">Aspek</h1>
+    <h1 class="font-bold text-2xl mb-0">Bidang Ilmu</h1>
     <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
         class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button">
-        Tambah Aspek
+        Tambah Bidang Ilmu
     </button>
 
     <!-- Main modal -->
@@ -15,15 +15,16 @@
         <div class="relative w-full max-w-2xl max-h-full">
             <!-- Modal content -->
             <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                <form class="py-3" action="{{ route('store.aspek') }}" method="POST">
+                <form class="py-3" action="{{ route('store.bidil') }}" method="POST">
                     @csrf
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="aspek" id="aspek"
+                            <input type="text" name="bidang_ilmu" id="bidang_ilmu"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " required value="{{ old('aspek') }}" />
-                            <label for="aspek"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Aspek</label>
+                                placeholder=" " required value="{{ old('bidang_ilmu') }}" />
+                            <label for="bidang_ilmu"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Bidang
+                                Ilmu</label>
                         </div>
                     </div>
                     <div class="py-3">
@@ -46,7 +47,7 @@
                     No.
                 </th>
                 <th scope="col" class="px-6 py-3 text-left ">
-                    Aspek
+                    Bidang Ilmu
                 </th>
                 <th scope="col" class="px-6 py-3 text-left ">
                     Action
@@ -54,14 +55,14 @@
             </tr>
         </thead>
         <tbody>
-            @if ($aspek->count() > 0)
-            @foreach ($aspek as $aspeks)
+            @if ($bidil->count() > 0)
+            @foreach ($bidil as $bidils)
             <tr class="bg-white border-b text-left">
                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     {{ $loop->iteration }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ $aspeks->aspek }}
+                    {{ $bidils->bidang_ilmu }}
                 </td>
                 <td class="px-6 py-4">
 
@@ -74,7 +75,7 @@
             @endforeach
             @else
             <tr>
-                <td class="justify-center text-center" colspan="5">CPMK belum ada</td>
+                <td class="justify-center text-center" colspan="5">Bidang Ilmu belum ada</td>
             </tr>
             @endif
         </tbody>

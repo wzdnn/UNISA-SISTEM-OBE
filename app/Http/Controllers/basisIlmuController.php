@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ak_kurikulum_basis_ilmu;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class basisIlmuController extends Controller
+{
+    //
+    public function indexBasisIlmu()
+    {
+        $basil = DB::table('ak_kurikulum_basis_ilmus')
+            ->select('ak_kurikulum_basis_ilmus.*')
+            ->get();
+
+        return view('pages.basisIlmu.index', compact('basil'));
+    }
+
+    public function storeBasisIlmu(Request $request)
+    {
+        $request->validate([
+            'basis_ilmu'
+        ]);
+
+        ak_kurikulum_basis_ilmu::create([
+            'basis_ilmu' => $request->basis_ilmu
+        ]);
+
+        return redirect()->route('index.basil')->with('success', 'Basis Ilmu Berhasil di Tambah');
+    }
+}
