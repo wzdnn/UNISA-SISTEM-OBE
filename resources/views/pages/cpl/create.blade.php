@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<style>
+
+</style>
+@endpush
+
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">Tambah CPL</h1>
@@ -28,7 +36,7 @@
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">cpl</label>
             </div>
             <div class="relative z-0 w-full mb-6 group">
-                <select id="inputState" name="kdpl[]" multiple data-live-search="true" class="form-control">
+                <select id="kode-pl" name="kdpl[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     @foreach ($ak_kurikulum_pl as $pl)
                         <option value="{{ $pl->id }}">{{ $pl->kode_pl }} {{ $pl->profile_lulusan }}</option>
                     @endforeach
