@@ -15,7 +15,7 @@ class ak_matakuliah_controller extends Controller
 
     public function mkIndex()
     {
-        $matakuliah = ak_matakuliah::with(['MKtoSBK'])
+        $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
             ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
             ->join(
                 'ak_kurikulum',
@@ -43,21 +43,6 @@ class ak_matakuliah_controller extends Controller
             ->select(['id', 'kode_subbk', 'sub_bk'])
             ->get();
 
-        // $SBKCPMK = DB::table('subbk_cpmk')
-        //     ->select('subbk_cpmk.*', 'ak_kurikulum_sub_bks.kode_subbk', 'ak_kurikulum_sub_bks.sub_bk')
-        //     ->join(
-        //         'ak_kurikulum_sub_bks',
-        //         'ak_kurikulum_sub_bks.id',
-        //         '=',
-        //         'subbk_cpmk.ak_kurikulum_sub_bk_id'
-        //     )
-        //     ->get();
-
-        // $SBKCPMK->map(function ($SBKCPMK) {
-        //     $SBKCPMK->ak_kurikulum_cpmk = (unserialize($SBKCPMK->ak_kurikulum_cpmk)) ? unserialize($SBKCPMK->ak_kurikulum_cpmk) : (object) null;
-        // });
-
-        // return dd($SBK);
         return view('pages.matakuliah.create', compact('ak_kurikulum', 'SBK'));
     }
 
@@ -65,6 +50,7 @@ class ak_matakuliah_controller extends Controller
     public function mkStore(Request $request)
     {
         $request->validate([
+            'kodematakuliah',
             'mk_singkat',
             'semester'
         ]);
@@ -78,7 +64,10 @@ class ak_matakuliah_controller extends Controller
             'isObe' => $request->isObe
         ]);
 
-        $matakuliah->MKtoSBK()->attach($request->input('kdsubbk'));
+        $matakuliah->MKtoSBKinput()->attach($request->input('kdsubbk'));
+
+        // return dd($matakuliah);
+
 
         return redirect()->route('index.mk')->with('success', 'Matakuliah berhasih ditambahkan');
     }
