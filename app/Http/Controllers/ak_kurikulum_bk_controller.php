@@ -17,7 +17,8 @@ class ak_kurikulum_bk_controller extends Controller
                 "ak_kurikulum_bks.*",
                 "ak_kurikulum_basis_ilmus.basis_ilmu as ak_basil",
                 "ak_kurikulum_bidang_ilmus.bidang_ilmu as ak_bidil",
-                "ak_kurikulum.kurikulum"
+                "ak_kurikulum.kurikulum",
+                "ak_kurikulum.tahun"
             )
             ->join(
                 "ak_kurikulum_basis_ilmus",
@@ -51,7 +52,7 @@ class ak_kurikulum_bk_controller extends Controller
             ->select(['kdbidil', 'bidang_ilmu'])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
-            ->select(['kdkurikulum', 'kurikulum'])
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->get();
         return view('pages.bahanKajian.create', compact('akKurikulumBasil', 'akKurikulumBidil', 'akKurikulum'));
     }

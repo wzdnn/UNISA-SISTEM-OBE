@@ -41,6 +41,9 @@
                                 {{ $value->kode_cpl }} {{ $value->cpl }}
                             </td>
                             <td class="px-6 py-4 text-left">
+                                {{-- @foreach ($value->CPMKtoCPL as $cplcpmk)
+                                    {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
+                                @endforeach --}}
                                 @foreach ($value->CpltoCpmk as $cplcpmk)
                                     {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
                                 @endforeach

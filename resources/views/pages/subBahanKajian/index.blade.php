@@ -58,7 +58,7 @@
                                 {{ $akKurikulumSubBks->ak_bk }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumSubBks->kurikulum }}
+                                {{ $akKurikulumSubBks->kurikulum }} {{ $akKurikulumSubBks->tahun }}
                             </td>
                             <td class="px-6 py-4 flex flex-col">
                                 <a href="">

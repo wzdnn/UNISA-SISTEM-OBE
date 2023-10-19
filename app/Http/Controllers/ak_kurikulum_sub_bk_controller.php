@@ -14,7 +14,8 @@ class ak_kurikulum_sub_bk_controller extends Controller
         // $akKurikulumSubBk = ak_kurikulum_sub_bk::all();
 
         $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
-            ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum")
+            ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+
             ->join(
                 "ak_kurikulum_bks",
                 "ak_kurikulum_bks.kdbk",
@@ -34,9 +35,18 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
     public function listSubBK()
     {
-        $SubBk = DB::table('ak_kurikulum_sub_bks')->get();
+        $SubBk = DB::table('ak_kurikulum_sub_bks')
+            ->select("ak_kurikulum_sub_bks.*", "subbk_cpmk.ak_kurikulum_cpmk")
+            ->leftJoin('subbk_cpmk', 'subbk_cpmk.ak_kurikulum_sub_bk_id', '=', 'ak_kurikulum_sub_bks.id')
+            ->get();
 
-        return view('pages.subBahanKajian.list', compact('SubBk'));
+        $SubBk->map(function ($SubBk) {
+            $SubBk->ak_kurikulum_cpmk = (unserialize($SubBk->ak_kurikulum_cpmk)) ? unserialize($SubBk->ak_kurikulum_cpmk) : (object) null;
+        });
+
+        $cpmk = DB::table('ak_kurikulum_cpmks')->get();
+
+        return view('pages.subBahanKajian.list', compact('SubBk', 'cpmk'));
     }
 
     public function create()
@@ -46,7 +56,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
             ->select(['kdbk', 'kode_bk', 'bahan_kajian'])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
-            ->select(['kdkurikulum', 'kurikulum'])
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->get();
         return view('pages.subBahanKajian.create', compact('akKurikulumBk', 'akKurikulum'));
     }
@@ -90,5 +100,35 @@ class ak_kurikulum_sub_bk_controller extends Controller
         // return dd($save);
 
         return view('pages.subBahanKajian.showCPMK', compact('cpmk', 'id', 'save'));
+    }
+
+    public function MappingCPMK(Request $request, int $subbk)
+    {
+        $dataSBKCPMK = array();
+        if ($request->cpmk != null) {
+            foreach ($request->cpmk as $cpmk) {
+                $dataSBKCPMK[] = $cpmk;
+            }
+        }
+
+        $check = DB::table('subbk_cpmk')
+            ->where('ak_kurikulum_sub_bk_id', '=', $subbk)
+            ->first();
+
+        if ($check) {
+            DB::table('subbk_cpmk')
+                ->where('ak_kurikulum_sub_bk_id', '=', $subbk)
+                ->update([
+                    'ak_kurikulum_cpmk' => serialize($dataSBKCPMK)
+                ]);
+        } else {
+            DB::table('subbk_cpmk')
+                ->where('ak_kurikulum_sub_bk_id', '=', $subbk)
+                ->insert([
+                    'ak_kurikulum_sub_bk_id' => $subbk,
+                    'ak_kurikulum_cpmk' => serialize($dataSBKCPMK)
+                ]);
+        }
+        return redirect()->route('list.subbk');
     }
 }

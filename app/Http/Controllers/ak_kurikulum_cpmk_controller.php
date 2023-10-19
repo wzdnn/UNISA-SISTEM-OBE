@@ -14,6 +14,10 @@ class ak_kurikulum_cpmk_controller extends Controller
 
     public function cpmkIndex()
     {
+        // $CPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+        //     ->select('ak_kurikulum_cpmks.*')
+        //     ->orderBy('ak_kurikulum_cpmks.id')
+        //     ->get();
         $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
             ->select('ak_kurikulum_cpls.*')
             ->orderBy('ak_kurikulum_cpls.id')
@@ -26,7 +30,7 @@ class ak_kurikulum_cpmk_controller extends Controller
 
         $cpm = ak_kurikulum_cpmk::all();
 
-        // return dd($cpm);
+        // return dd($CPMK);
         return view('pages.cpmk.home', compact('CPMK', 'cpm'));
     }
 
@@ -40,6 +44,8 @@ class ak_kurikulum_cpmk_controller extends Controller
             ->get();
 
         $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])->get();
+
+        // return dd($listCPMK);
         // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();
 
         return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk'));

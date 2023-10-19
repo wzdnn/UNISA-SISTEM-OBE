@@ -12,7 +12,7 @@ class ak_kurikulum_cpl_Controller extends Controller
     public function index()
     {
         $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
-            ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")
+            ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
             ->join(
                 "ak_kurikulum_aspeks",
                 "ak_kurikulum_aspeks.kdaspek",
@@ -63,7 +63,7 @@ class ak_kurikulum_cpl_Controller extends Controller
             ->get();
 
         $ak_kurikulum = DB::table('ak_kurikulum')
-            ->select(['kdkurikulum', 'kurikulum'])
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->get();
 
         return view('pages.cpl.create', compact('ak_kurikulum_pl', 'ak_kurikulum_cplr', 'ak_kurikulum_aspek', 'ak_kurikulum'));

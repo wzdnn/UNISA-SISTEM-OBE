@@ -4,8 +4,7 @@
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">Referensi CPL</h1>
         <a href="{{ route('cplr.create') }}">
-            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Profile
-                Lulusan</button>
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Referensi CPL</button>
         </a>
     </div>
     <hr />
@@ -63,7 +62,7 @@
                                 {{ $akKurikulumCplrs->ak_sumber }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumCplrs->kurikulum }}
+                                {{ $akKurikulumCplrs->kurikulum }} {{ $akKurikulumCplrs->tahun }}
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('edit.cplr', ['id' => $akKurikulumCplrs->id]) }}">
