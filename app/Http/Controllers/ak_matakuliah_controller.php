@@ -78,9 +78,10 @@ class ak_matakuliah_controller extends Controller
         $mkSubBK = DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
             ->select('ak_matakuliah_ak_kurikulum_sub_bk.*', 'subbk_cpmk.ak_kurikulum_cpmk')
             ->leftJoin('subbk_cpmk', 'subbk_cpmk.ak_kurikulum_sub_bk_id', '=', 'ak_matakuliah_ak_kurikulum_sub_bk.ak_kurikulum_sub_bk_id')
-            ->where('kdmatakuliah', '=', $id)
+            ->where('ak_matakuliah_ak_kurikulum_sub_bk.id', '=', $id)
             ->get();
 
+        // return dd($mkSubBK);
         $mkSubBK->map(function ($mkSubBK) {
             $mkSubBK->ak_kurikulum_cpmk = (unserialize($mkSubBK->ak_kurikulum_cpmk)) ? unserialize($mkSubBK->ak_kurikulum_cpmk) : (object) null;
         });
