@@ -13,6 +13,7 @@ use App\Http\Controllers\basisIlmuController;
 use App\Http\Controllers\bidangIlmuController;
 use App\Http\Controllers\matakuliah;
 use App\Http\Controllers\sumberController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\visimisiController;
 use App\Models\ak_kurikulum_bk;
 use App\Models\ak_kurikulum_cpl;
@@ -30,102 +31,112 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('pages.visidanmisi.index');
-// })->name('welcome');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', function () {
+        echo "<a href='/postLogin'>LOGIN</a>";
+    })->name('login');
+    Route::get('/postLogin', [UserController::class, 'login']);
+});
 
 
-Route::get('/', [visimisiController::class, 'vmIndex'])->name('welcome');
-
-Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VM');
-
-
-// Aspek
-Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
-Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
-
-//Sumber
-Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
-Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
-
-// Basis Ilmu
-Route::get('/basisIlmu', [basisIlmuController::class, 'indexBasisIlmu'])->name('index.basil');
-Route::post('/postBasisIlmu', [basisIlmuController::class, 'storeBasisIlmu'])->name('store.basil');
-
-// Basis Ilmu
-Route::get('/bidangIlmu', [bidangIlmuController::class, 'indexBidangIlmu'])->name('index.bidil');
-Route::post('/postBidangIlmu', [bidangIlmuController::class, 'storeBidangIlmu'])->name('store.bidil');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [UserController::class, 'test']);
+    Route::get('/logout', [UserController::class, 'logout']);
 
 
-// BK
-Route::resource('/bk', ak_kurikulum_bk_controller::class);
-Route::get('/showBKSBK', [ak_kurikulum_bk_controller::class, 'showBKSBK'])->name('bksbk.show');
+    Route::get('/', [visimisiController::class, 'vmIndex'])->name('welcome');
 
-// Sub BK
-Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
-Route::get('/petaSubBK', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
-Route::get('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
-Route::post('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MappingCPMK'])->name('MapCPMKShow.post');
+    Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VM');
 
 
-// CPL
+    // Aspek
+    Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
+    Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
 
-Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
-Route::get('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'edit'])->name('edit.cpl');
-Route::post('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'update'])->name('update.cpl');
+    //Sumber
+    Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
+    Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
 
+    // Basis Ilmu
+    Route::get('/basisIlmu', [basisIlmuController::class, 'indexBasisIlmu'])->name('index.basil');
+    Route::post('/postBasisIlmu', [basisIlmuController::class, 'storeBasisIlmu'])->name('store.basil');
 
-// PL
-Route::resource('/pl', ak_kurikulum_pl_Controller::class);
-Route::get('/plEdit/{id}', [ak_kurikulum_pl_Controller::class, 'edit'])->name('edit.pl');
-Route::post('/plEdit/{id}', [ak_kurikulum_pl_Controller::class, 'update'])->name('update.pl');
-
-
-//CPLR
-Route::resource('/cplr', ak_kurikulum_cplr_Controller::class);
-Route::get('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'edit'])->name('edit.cplr');
-Route::post('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'update'])->name('update.cplr');
-
-// CPMK
-
-// Route::get('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkCreate'])->name('create.cpmk');
-// Route::post('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('create.cpmk.post');
+    // Basis Ilmu
+    Route::get('/bidangIlmu', [bidangIlmuController::class, 'indexBidangIlmu'])->name('index.bidil');
+    Route::post('/postBidangIlmu', [bidangIlmuController::class, 'storeBidangIlmu'])->name('store.bidil');
 
 
-Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
-Route::get('/petacpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('peta.cpmk');
+    // BK
+    Route::resource('/bk', ak_kurikulum_bk_controller::class);
+    Route::get('/showBKSBK', [ak_kurikulum_bk_controller::class, 'showBKSBK'])->name('bksbk.show');
+
+    // Sub BK
+    Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
+    Route::get('/petaSubBK', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
+    Route::get('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
+    Route::post('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MappingCPMK'])->name('MapCPMKShow.post');
 
 
-Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
-// Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
-// Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
-// Route::get('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditGet'])->name('edit.cpmk');
-// Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOST'])->name('edit.cpmk.post');
+    // CPL
+
+    Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
+    Route::get('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'edit'])->name('edit.cpl');
+    Route::post('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'update'])->name('update.cpl');
 
 
-// MATAKULIAH
-
-Route::get('/matakuliah', [ak_matakuliah_controller::class, 'mkIndex'])->name('index.mk');
-Route::get('/matakuliah/Create', [ak_matakuliah_controller::class, 'mkCreate'])->name('create.mk');
-Route::post('/matakuliah/Store', [ak_matakuliah_controller::class, 'mkStore'])->name('store.mk');
-
-Route::get('/DetailMK/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
-Route::get('/DetailMK/{id}/subbk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
-Route::post('/DetailMK/{id}/subbk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
-
-Route::get('/DetailMK/{id}/cpmk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
-Route::get('/DetailMK/{id}/cpmk/{sub}/kelolaCpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
-Route::post('/DetailMK/{id}/cpmk/{sub}/kelolaCpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+    // PL
+    Route::resource('/pl', ak_kurikulum_pl_Controller::class);
+    Route::get('/plEdit/{id}', [ak_kurikulum_pl_Controller::class, 'edit'])->name('edit.pl');
+    Route::post('/plEdit/{id}', [ak_kurikulum_pl_Controller::class, 'update'])->name('update.pl');
 
 
+    //CPLR
+    Route::resource('/cplr', ak_kurikulum_cplr_Controller::class);
+    Route::get('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'edit'])->name('edit.cplr');
+    Route::post('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'update'])->name('update.cplr');
+
+    // CPMK
+
+    // Route::get('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkCreate'])->name('create.cpmk');
+    // Route::post('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('create.cpmk.post');
+
+
+    Route::get('/listcpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
+    Route::get('/petacpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkIndex'])->name('peta.cpmk');
+
+
+    Route::post('/cpmkStore', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
+    // Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
+    // Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
+    // Route::get('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditGet'])->name('edit.cpmk');
+    // Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOST'])->name('edit.cpmk.post');
+
+
+    // MATAKULIAH
+
+    Route::get('/matakuliah', [ak_matakuliah_controller::class, 'mkIndex'])->name('index.mk');
+    Route::get('/matakuliah/Create', [ak_matakuliah_controller::class, 'mkCreate'])->name('create.mk');
+    Route::post('/matakuliah/Store', [ak_matakuliah_controller::class, 'mkStore'])->name('store.mk');
+
+    Route::get('/DetailMK/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
+    Route::get('/DetailMK/{id}/subbk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
+    Route::post('/DetailMK/{id}/subbk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
+
+    Route::get('/DetailMK/{id}/cpmk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
+    Route::post('/DetailMK/{id}/cpmk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
+    Route::get('/DetailMK/{id}/cpmk/{sub}/kelolaCpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
+    Route::post('/DetailMK/{id}/cpmk/{sub}/kelolaCpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+});
 
 
 
 
-Route::get('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'MapCPMKShow'])->name('CPMKshow.mk');
-Route::post('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'mappingCPMK'])->name('CPMKpost.mk');
-Route::get('/matakuliah/edit/{id}', [ak_matakuliah_controller::class, 'subbkEdit'])->name('edit.mk');
-Route::post('/matakuliah/edit/store/{id}', [ak_matakuliah_controller::class, 'subbkEditStore'])->name('update.mk');
+
+
+// Route::get('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'MapCPMKShow'])->name('CPMKshow.mk');
+// Route::post('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'mappingCPMK'])->name('CPMKpost.mk');
+// Route::get('/matakuliah/edit/{id}', [ak_matakuliah_controller::class, 'subbkEdit'])->name('edit.mk');
+// Route::post('/matakuliah/edit/store/{id}', [ak_matakuliah_controller::class, 'subbkEditStore'])->name('update.mk');
 
 
 

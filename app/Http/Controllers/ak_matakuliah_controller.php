@@ -7,8 +7,11 @@ use App\Models\ak_kurikulum_sub_bk;
 use App\Models\ak_matakuliah;
 use App\Models\gabung_matakuliah_subbk;
 use App\Models\gabung_subbk_cpmk;
+use App\Models\mk_sub_bk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 use function Laravel\Prompts\select;
 
@@ -18,19 +21,24 @@ class ak_matakuliah_controller extends Controller
 
     public function mkIndex()
     {
-        $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
-            ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
-            ->join(
-                'ak_kurikulum',
-                'ak_kurikulum.kdkurikulum',
-                '=',
-                'ak_matakuliah.kdkurikulum'
-            )
-            ->where("isObe", "=", 1)
-            ->orderBy('ak_matakuliah.kdmatakuliah')
-            ->get();
-
+        // $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
+        //     ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
+        //     ->join(
+        //         'ak_kurikulum',
+        //         'ak_kurikulum.kdkurikulum',
+        //         '=',
+        //         'ak_matakuliah.kdkurikulum'
+        //     )
+        //     ->where("isObe", "=", 1)
+        //     ->orderBy('ak_matakuliah.kdmatakuliah')
+        //     ->get();
         // return dd($matakuliah);
+
+        $matakuliah = ak_matakuliah::with('MKtoSub_bk')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+            ->paginate(20);
 
         return view('pages.matakuliah.index', compact('matakuliah'));
     }
@@ -64,7 +72,7 @@ class ak_matakuliah_controller extends Controller
             'mk_singkat' => $request->mk_singkat,
             'kdkurikulum' => $request->unit,
             'semester' => $request->semester,
-            'isObe' => $request->isObe
+            'isObe' => 1
         ]);
 
         $matakuliah->MKtoSBKinput()->attach($request->input('kdsubbk'));
@@ -83,6 +91,7 @@ class ak_matakuliah_controller extends Controller
     public function subbkDetail(int $id)
     {
         $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
+
         // return dd($mkSubBk);
 
         return view('pages.matakuliah.detail2', compact('mkSubBk'));
@@ -90,15 +99,17 @@ class ak_matakuliah_controller extends Controller
 
     public function kelolaSubBK(int $id)
     {
-        $mkSubBk = ak_matakuliah::with('GetAllidSubBK')->findOrFail($id);
+        $mkSubBk = ak_matakuliah::where('kdmatakuliah', '=', $id)->with('GetAllidSubBK')->first();
         $subbk = ak_kurikulum_sub_bk::all();
 
         $subbkSelect = [];
         foreach ($mkSubBk->GetAllidSubBK as $item) {
-            array_push($subbkSelect, $item->id);
+            array_push($subbkSelect, $item->ak_kurikulum_sub_bk_id);
         }
 
-        return view('pages.matakuliah.subbk', compact('subbk', 'subbkSelect'));
+        // return dd($subbkSelect, $subbk);
+
+        return view('pages.matakuliah.subbk', compact('subbk', 'subbkSelect', 'id'));
     }
 
     public function postkelolaSubBK(int $id, Request $request)
@@ -146,17 +157,52 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk'));
     }
 
+    public function postsubbkSKS(int $id, int $sub, Request $request)
+    {
+        $request->validate([
+            'pokok_bahasan' => 'nullable',
+            'kuliah' => ['nullable', 'numeric'],
+            'tutorial' => ['nullable', 'numeric'],
+            'seminar' => ['nullable', 'numeric'],
+            'praktikum' => ['nullable', 'numeric'],
+            'skill_lab' => ['nullable', 'numeric'],
+            'field_lab' => ['nullable', 'numeric'],
+            'praktik' => ['nullable', 'numeric']
+        ]);
+
+        try {
+            $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
+
+            $subbk->pokok_bahasan = $request->input('pokok_bahasan');
+            $subbk->kuliah = $request->input('kuliah');
+            $subbk->tutorial = $request->input('tutorial');
+            $subbk->seminar = $request->input('seminar');
+            $subbk->praktikum = $request->input('praktikum');
+            $subbk->skill_lab = $request->input('skill_lab');
+            $subbk->field_lab = $request->input('field_lab');
+            $subbk->praktik = $request->input('praktik');
+
+            $subbk->save();
+
+            return redirect()->back()->with('success', 'berhasil update SKS');
+        } catch (Throwable $th) {
+
+            return redirect()->back()->with('failed', 'gagal update SKS. Error: ' . $th->getMessage());
+        }
+    }
+
     public function kelolacpmk(int $id, int $sub)
     {
         $subbkCpmk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('cpmks')->first();
         $cpmk = ak_kurikulum_cpmk::all();
+        $subbk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('subbk', 'cpmks')->first();
 
         $cpmkSelected = [];
         foreach ($subbkCpmk->cpmks as $item) {
             array_push($cpmkSelected, $item->id);
         }
 
-        return view('pages.matakuliah.cpmk', compact('id', 'sub', 'cpmk', 'cpmkSelected'));
+        return view('pages.matakuliah.cpmk', compact('id', 'sub', 'cpmk', 'cpmkSelected', 'subbk'));
     }
 
     /**

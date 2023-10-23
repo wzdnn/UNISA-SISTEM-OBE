@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'kdunit'
     ];
 
     /**
@@ -42,4 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function namaKdUnit()
+    {
+        return $this->belongsTo(gabung_user::class, 'kdunit');
+    }
 }
