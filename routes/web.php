@@ -30,10 +30,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.welcome');
-})->name('welcome');
+// Route::get('/', function () {
+//     return view('pages.visidanmisi.index');
+// })->name('welcome');
 
+
+Route::get('/', [visimisiController::class, 'vmIndex'])->name('welcome');
 
 Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VM');
 

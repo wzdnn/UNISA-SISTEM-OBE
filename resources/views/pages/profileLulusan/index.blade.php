@@ -2,7 +2,7 @@
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0">Profile Lulusan</h1>
+        <h1 class="font-bold text-2xl mb-0 text-blue-800">Profile Lulusan</h1>
         <a href="{{ route('pl.create') }}">
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Profile
                 Lulusan</button>

@@ -2,7 +2,7 @@
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0">CPL-CPMK</h1>
+        <h1 class="font-bold text-2xl mb-0 text-blue-800">CPL-CPMK</h1>
         <div class="flex flex-row space-x-3">
             <a href="{{ route('list.cpmk') }}">
                 <button
