@@ -66,4 +66,17 @@ class ak_kurikulum_pl_Controller extends Controller
 
         return redirect()->route('pl.index')->with('success', 'Profile Lulusan Berhasil Diedit');
     }
+
+    public function delete(int $id)
+    {
+        $pl = ak_kurikulum_pl::findOrFail($id);
+        if (!$pl) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $pl->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
 }

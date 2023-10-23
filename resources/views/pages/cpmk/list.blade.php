@@ -43,7 +43,8 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <select id="inputState" name="kdcpl[]" data-live-search="true" class="form-control">
                                     @foreach ($ak_kurikulum_cpl as $cpl)
-                                    <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }} {{ $cpl->cpl }}</option>
+                                        <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }} {{ $cpl->cpl }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -96,14 +97,15 @@
                             </td>
                             <td class="px-6 py-4 text-left">
                                 @foreach ($listCPMKs->CPMKtoCPL as $cpmk)
-                                {{ $cpmk->kode_cpl }} {{ $cpmk->cpl }}<br />
+                                    {{ $cpmk->kode_cpl }} {{ $cpmk->cpl }}<br />
                                 @endforeach
                             </td>
                             <td class="px-6 py-4">
-                                
-                                <a href="">
+
+                                <a href="{{ route('delete.cpmk', ['id' => $listCPMKs->id]) }}">
                                     <button
-                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i class="fa-solid fa-trash"></i></button>
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
                                 </a>
                             </td>
                         </tr>

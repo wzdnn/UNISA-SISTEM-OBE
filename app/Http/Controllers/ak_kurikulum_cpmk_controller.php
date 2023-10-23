@@ -6,6 +6,7 @@ use App\Models\ak_kurikulum_cpl;
 use App\Models\ak_kurikulum_cpmk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 use function PHPSTORM_META\map;
 
@@ -49,6 +50,23 @@ class ak_kurikulum_cpmk_controller extends Controller
         // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();
 
         return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk'));
+    }
+
+
+    public function delete(int $id)
+    {
+        $cpmk = ak_kurikulum_cpmk::where('id', '=', $id)->with('CPMKtoCPL')->first();
+        if (!$cpmk) {
+            return abort(404);
+        }
+
+        try {
+            $cpmk->CPMKtoCPL()->detach();
+            $cpmk->delete();
+            return redirect(url()->previous())->with('success', 'sukses hapus');
+        } catch (Throwable $th) {
+            return redirect(url()->previous())->with('failed', 'gagal hapus. Error : ' . $th->getMessage());
+        }
     }
 
     public function cpmkStore(Request $request)

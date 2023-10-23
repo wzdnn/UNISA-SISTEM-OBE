@@ -38,6 +38,8 @@ class ak_matakuliah_controller extends Controller
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->orderBy('matakuliah', 'asc')
             ->paginate(20);
 
         return view('pages.matakuliah.index', compact('matakuliah'));

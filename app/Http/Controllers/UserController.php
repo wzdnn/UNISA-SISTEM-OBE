@@ -26,7 +26,7 @@ class UserController extends Controller
         // $user = User::where('id', '=', Auth::id())->with('namaKdUnit')->get();
         // return dd($user, Auth::user()->unitkerja);
         // return dd(User::where('id', '=', Auth::id())->namaKdUnit());
-        return dd(auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja);
+        // return dd(auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja);
     }
 
     public function postLogin(Request $request)

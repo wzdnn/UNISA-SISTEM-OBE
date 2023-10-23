@@ -30,7 +30,7 @@
                         Unit
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Edit
+                        Action
                     </th>
                 </tr>
             </thead>
@@ -53,10 +53,17 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumPls->kurikulum }} - {{ $akKurikulumPls->tahun }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 flex flex-row">
                                 <a href="{{ route('edit.pl', ['id' => $akKurikulumPls->id]) }}">
-                                    <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                    <button
+                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                             class="fa-regular fa-pen-to-square"></i></button>
+                                </a>
+
+                                <a href="{{ route('delete.pl', ['id' => $akKurikulumPls->id]) }}">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
                                 </a>
                             </td>
                         </tr>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ak_kurikulum_cpl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class ak_kurikulum_cpl_Controller extends Controller
 {
@@ -25,7 +26,6 @@ class ak_kurikulum_cpl_Controller extends Controller
                 "=",
                 "ak_kurikulum_cpls.kdkurikulum"
             )
-            ->orderBy('ak_kurikulum_cpls.id')
             ->get();
 
         // dd(ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])
@@ -46,6 +46,23 @@ class ak_kurikulum_cpl_Controller extends Controller
 
 
         return view('pages.cpl.index', compact('akKurikulumCpl'));
+    }
+
+    public function delete(int $id)
+    {
+        $cpl = ak_kurikulum_cpl::where('id', '=', $id)->with('CpltoPl', 'CpltoCplr')->first();
+        if (!$cpl) {
+            return abort(404);
+        }
+
+        try {
+            $cpl->CpltoPl()->detach();
+            $cpl->CpltoCplr()->detach();
+            $cpl->delete();
+            return redirect(url()->previous())->with('success', 'sukses hapus');
+        } catch (Throwable $th) {
+            return redirect(url()->previous())->with('failed', 'gagal hapus. Error : ' . $th->getMessage());
+        }
     }
 
     public function create()
@@ -115,20 +132,64 @@ class ak_kurikulum_cpl_Controller extends Controller
 
     public function update(Request $request, int $id)
     {
-        $cplEdit = ak_kurikulum_cpl::findOrFail($id);
-        $cplEdit->update([
-            'kode_cpl' => $request->kode_cpl,
-            'cpl' => $request->cpl,
-            'deskripsi_cpl' => $request->deskripsi_cpl,
-            'kdaspek' => $request->aspek,
-        ]);
 
-        // Pivot CPL to PL
-        $cplEdit->CpltoPl()->attach($request->input('kdpl'));
+        // $cplEdit->update([
+        //     'kode_cpl' => $request->kode_cpl,
+        //     'cpl' => $request->cpl,
+        //     'deskripsi_cpl' => $request->deskripsi_cpl,
+        //     'kdaspek' => $request->aspek,
+        // ]);
 
-        // Pivot CPL to CPLR
-        $cplEdit->CpltoCplr()->attach($request->input('kdcplr'));
+        $plSelect = [];
+        $cplrSelect = [];
 
-        return redirect()->route('cpl.index')->with('success', 'CPL berhasil ditambahkan');
+        if ($request->has('kdpl')) {
+            foreach ($request->input("kdpl") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($plSelect, $value);
+                }
+            }
+        }
+
+        if ($request->has('kdcplr')) {
+            foreach ($request->input("kdcplr") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($cplrSelect, $value);
+                }
+            }
+        }
+
+        try {
+            $cplEdit = ak_kurikulum_cpl::findOrFail($id);
+
+            DB::beginTransaction();
+
+            $cplEdit->kode_cpl = $request->input('kode_cpl');
+            $cplEdit->cpl = $request->input('cpl');
+            $cplEdit->deskripsi_cpl = $request->input('deskripsi_cpl');
+            $cplEdit->kdaspek = $request->input('kdaspek');
+
+            if (count($plSelect) > 0) {
+                $cplEdit->CpltoPl()->sync($plSelect);
+            } else {
+                $cplEdit->CpltoPl()->detach();
+            }
+
+            if (count($cplrSelect) > 0) {
+                $cplEdit->CpltoCplr()->sync($cplrSelect);
+            } else {
+                $cplEdit->CpltoCplr()->detach();
+            }
+
+            DB::commit();
+            return redirect()->route('cpl.index')->with('success', 'CPL berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with("failed", "gagal update Sub BK pada Matkul" . $th->getMessage());
+        }
     }
 }
