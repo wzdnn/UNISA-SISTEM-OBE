@@ -18,7 +18,8 @@ class ak_matakuliah extends Model
         'isObe'
     ];
 
-    public $table = 'ak_matakuliah';
+    protected $table = 'ak_matakuliah';
+    protected $primaryKey = "kdmatakuliah";
 
     public function MKtoSBKread()
     {
@@ -28,5 +29,14 @@ class ak_matakuliah extends Model
     public function MKtoSBKinput()
     {
         return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id')->withTimestamps();
+    }
+
+    // gabungan sub bk dengan matkul
+    public function MKtoSub_bk(){
+        return $this->belongsToMany(ak_kurikulum_sub_bk::class,'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id')->withPivot('id');
+    }
+
+    public function GetAllidSubBK(){
+        return $this->hasMany(gabung_matakuliah_subbk::class, 'kdmatakuliah', 'kdmatakuliah');
     }
 }

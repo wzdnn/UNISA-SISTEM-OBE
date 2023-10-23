@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ak_kurikulum_cpmk;
 use App\Models\ak_kurikulum_sub_bk;
 use App\Models\ak_matakuliah;
+use App\Models\gabung_matakuliah_subbk;
+use App\Models\gabung_subbk_cpmk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,7 +39,7 @@ class ak_matakuliah_controller extends Controller
     public function mkCreate()
     {
         $ak_kurikulum = DB::table('ak_kurikulum')
-            ->select(['kdkurikulum', 'kurikulum'])
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->get();
 
         $SBK = DB::table('ak_kurikulum_sub_bks')
@@ -72,27 +75,123 @@ class ak_matakuliah_controller extends Controller
         return redirect()->route('index.mk')->with('success', 'Matakuliah berhasih ditambahkan');
     }
 
-    // detail subbk
+    /**
+     * New start
+     * 
+     * gabungan matakuliah dengan subbk
+     */
     public function subbkDetail(int $id)
     {
-        $mkSubBK = DB::table('ak_matakuliah_ak_kurikulum_sub_bk')
-            ->select('ak_matakuliah_ak_kurikulum_sub_bk.*', 'subbk_cpmk.ak_kurikulum_cpmk')
-            ->leftJoin('subbk_cpmk', 'subbk_cpmk.ak_kurikulum_sub_bk_id', '=', 'ak_matakuliah_ak_kurikulum_sub_bk.ak_kurikulum_sub_bk_id')
-            ->where('ak_matakuliah_ak_kurikulum_sub_bk.id', '=', $id)
-            ->get();
+        $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
+        // return dd($mkSubBk);
 
-        // return dd($mkSubBK);
-        $mkSubBK->map(function ($mkSubBK) {
-            $mkSubBK->ak_kurikulum_cpmk = (unserialize($mkSubBK->ak_kurikulum_cpmk)) ? unserialize($mkSubBK->ak_kurikulum_cpmk) : (object) null;
-        });
+        return view('pages.matakuliah.detail2', compact('mkSubBk'));
+    }
 
-        $subBK = DB::table('ak_kurikulum_sub_bks')->get();
+    public function kelolaSubBK(int $id)
+    {
+        $mkSubBk = ak_matakuliah::with('GetAllidSubBK')->findOrFail($id);
+        $subbk = ak_kurikulum_sub_bk::all();
 
-        $cpmk = DB::table('ak_kurikulum_cpmks')->get();
+        $subbkSelect = [];
+        foreach ($mkSubBk->GetAllidSubBK as $item) {
+            array_push($subbkSelect, $item->id);
+        }
 
-        // return dd($mkSubBK);
+        return view('pages.matakuliah.subbk', compact('subbk', 'subbkSelect'));
+    }
 
-        return view('pages.matakuliah.detail', compact('mkSubBK', 'subBK', 'id', 'cpmk'));
+    public function postkelolaSubBK(int $id, Request $request)
+    {
+        $subkSelect = [];
+        // validate
+        if ($request->has('subbk')) {
+            foreach ($request->input("subbk") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($subkSelect, $value);
+                }
+            }
+        }
+
+        try {
+            $matkul = ak_matakuliah::where("kdmatakuliah", "=", $id)->with("MKtoSub_bk")->first();
+
+            DB::beginTransaction();
+            if (count($subkSelect) > 0) {
+                $matkul->MKtoSub_bk()->sync($subkSelect);
+            } else {
+                $matkul->MKtoSub_bk()->detach();
+            }
+
+            DB::commit();
+            return redirect()->back()->with("success", "berhasil update Sub BK pada Matkul");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with("failed", "gagal update Sub BK pada Matkul" . $th->getMessage());
+        }
+    }
+
+    // detail sub bk dan cpmk
+    public function subbkCPMK(int $id, int $sub)
+    {
+        $subbk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('subbk', 'cpmks')->first();
+
+        if (!$subbk) {
+            return abort(404);
+        }
+        // return dd($subbk);
+
+        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk'));
+    }
+
+    public function kelolacpmk(int $id, int $sub)
+    {
+        $subbkCpmk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('cpmks')->first();
+        $cpmk = ak_kurikulum_cpmk::all();
+
+        $cpmkSelected = [];
+        foreach ($subbkCpmk->cpmks as $item) {
+            array_push($cpmkSelected, $item->id);
+        }
+
+        return view('pages.matakuliah.cpmk', compact('id', 'sub', 'cpmk', 'cpmkSelected'));
+    }
+
+    /**
+     * New last
+     * 
+     * post CPMK ke SUB BK
+     */
+    public function postkelolacpmk(int $id, int $sub, Request $request)
+    {
+        $cpmkSelect = [];
+        // validate
+        if ($request->has('cpmk')) {
+            foreach ($request->input("cpmk") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($cpmkSelect, $value);
+                }
+            }
+        }
+
+        try {
+            $subbkCpmk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('cpmks')->first();
+            DB::beginTransaction();
+            if (count($cpmkSelect) > 0) {
+                $subbkCpmk->cpmks()->sync($cpmkSelect);
+            } else {
+                $subbkCpmk->cpmks()->detach();
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'sukses update CPMK');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with("failed", "gagal update" . $th->getMessage());
+        }
     }
 
     public function subbkEdit(int $id)
@@ -101,7 +200,7 @@ class ak_matakuliah_controller extends Controller
             ->where('ak_kurikulum_sub_bk_id', '=', $id)
             ->get();
 
-        return dd($sbkEdit);
+        // return dd($sbkEdit);
         return view('', compact('sbkEdit'));
     }
 

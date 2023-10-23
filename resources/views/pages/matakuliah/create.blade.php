@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@push('style')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endpush
+
 @section('body')
 <div class="flex items-center justify-between py-5 px-5 mx-10">
     <h1 class="font-bold text-2xl mb-0">Tambah Matakuliah</h1>
@@ -12,7 +18,7 @@
     @csrf
     <div class="grid md:grid-cols-2 md:gap-6">
         <div class="relative z-0 w-full mb-6 group">
-            <select id="inputState" name="kdsubbk[]" multiple data-live-search="true" class="form-control">
+            <select id="kdsubbk" name="kdsubbk[]" multiple data-live-search="true" class="form-control">
                 @foreach ($SBK as $subbk)
                 <option value="{{ $subbk->id }}">{{ $subbk->kode_subbk }} {{ $subbk->sub_bk }}</option>
                 @endforeach
@@ -54,9 +60,9 @@
                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">isObe</label>
         </div>
         <div class="relative z-0 w-full mb-6 group">
-            <select id="inputState" name="unit" class="form-control">
+            <select id="unit" name="unit" class="form-control">
                 @foreach ($ak_kurikulum as $item)
-                <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }}</option>
+                <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }} {{ $item->tahun }}</option>
                 @endforeach
             </select>
         </div>
@@ -68,3 +74,12 @@
 
 </form>
 @endsection
+
+@push('script')
+<script>
+    $(document).ready(function() {
+            $('#kdsubbk').select2();
+            $('#unit').select2();
+        });
+</script>
+@endpush
