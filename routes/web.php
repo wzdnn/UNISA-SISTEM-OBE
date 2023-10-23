@@ -11,6 +11,7 @@ use App\Http\Controllers\ak_matakuliah_controller;
 use App\Http\Controllers\aspekController;
 use App\Http\Controllers\basisIlmuController;
 use App\Http\Controllers\bidangIlmuController;
+use App\Http\Controllers\loginController;
 use App\Http\Controllers\matakuliah;
 use App\Http\Controllers\sumberController;
 use App\Http\Controllers\visimisiController;
@@ -34,15 +35,29 @@ use Illuminate\Support\Facades\Route;
 //     return view('pages.visidanmisi.index');
 // })->name('welcome');
 
+Route::middleware(['guest'])->group(function() {
+    Route::get('/', [loginController::class, 'index'] )->name('welcome');
+    Route::post('/', [loginController::class, 'login'] )->name('create-login');
+});
 
-Route::get('/', [visimisiController::class, 'vmIndex'])->name('welcome');
 
-Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VM');
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
+    Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->middleware('userAkses:ADMIN')->name('index.VM');
+    Route::get('/logout', [loginController::class, 'logout']);
 
+});
+Route::middleware(['auth'])->group(
+    function () {
+        Route::get('/vmu', [visimisiController::class, 'vmIndexUser'])->middleware('userAkses:USER')->name('index.VMU');
+        Route::get('/aspek', [aspekController::class, 'indexAspek'])->middleware('userAkses:USER')->name('index.aspek');
+        Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
+        Route::get('/logout', [loginController::class, 'logout']);
+    }
+);
 
 // Aspek
-Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
-Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
+// Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
+// Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
 
 //Sumber
 Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
