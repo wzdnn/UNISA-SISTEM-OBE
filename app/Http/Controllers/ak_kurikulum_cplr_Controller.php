@@ -19,13 +19,13 @@ class ak_kurikulum_cplr_Controller extends Controller
                 "ak_kurikulum_aspeks",
                 "ak_kurikulum_aspeks.id",
                 "=",
-                "ak_kurikulum_cplrs.id"
+                "ak_kurikulum_cplrs.kdaspek"
             )
             ->join(
                 "ak_kurikulum_sumbers",
                 "ak_kurikulum_sumbers.id",
                 "=",
-                "ak_kurikulum_cplrs.id"
+                "ak_kurikulum_cplrs.kdsumber"
             )
             ->join(
                 "ak_kurikulum",
@@ -66,8 +66,8 @@ class ak_kurikulum_cplr_Controller extends Controller
             'kode_cplr' => $request->kode_cplr,
             'cplr' => $request->cplr,
             'deskripsi_cplr' => $request->deskripsi_cplr,
-            'id' => $request->aspek,
-            'id' => $request->sumber,
+            'kdaspek' => $request->aspek,
+            'kdsumber' => $request->sumber,
             'kdkurikulum' => $request->unit
         ]);
 
@@ -95,8 +95,8 @@ class ak_kurikulum_cplr_Controller extends Controller
             'kode_cplr' => $request->kode_cplr,
             'cplr' => $request->cplr,
             'deskripsi_cplr' => $request->deskripsi_cplr,
-            'id' => $request->aspek,
-            'id' => $request->sumber,
+            'kdaspek' => $request->aspek,
+            'kdsumber' => $request->sumber,
         ]);
         return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Disunting');
     }

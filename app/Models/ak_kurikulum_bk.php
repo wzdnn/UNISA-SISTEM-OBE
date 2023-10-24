@@ -12,8 +12,8 @@ class ak_kurikulum_bk extends Model
     protected $fillable = [
         'kode_bk',
         'bahan_kajian',
-        'id',
-        'id',
+        'kdbasil',
+        'kdbidil',
         'kdkurikulum'
     ];
 }

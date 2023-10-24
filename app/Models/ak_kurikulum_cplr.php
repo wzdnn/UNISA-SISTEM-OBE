@@ -13,8 +13,8 @@ class ak_kurikulum_cplr extends Model
         'kode_cplr',
         'cplr',
         'deskripsi_cplr',
-        'id',
-        'id',
+        'kdaspek',
+        'kdsumber',
         'kdkurikulum'
     ];
 }

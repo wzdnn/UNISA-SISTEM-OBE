@@ -18,7 +18,7 @@ class ak_kurikulum_cpl_Controller extends Controller
                 "ak_kurikulum_aspeks",
                 "ak_kurikulum_aspeks.id",
                 "=",
-                "ak_kurikulum_cpls.id"
+                "ak_kurikulum_cpls.kdaspek"
             )
             ->join(
                 "ak_kurikulum",
@@ -97,7 +97,7 @@ class ak_kurikulum_cpl_Controller extends Controller
             'kode_cpl' => $request->kode_cpl,
             'cpl' => $request->cpl,
             'deskripsi_cpl' => $request->deskripsi_cpl,
-            'id' => $request->aspek,
+            'kdaspek' => $request->aspek,
             'kdkurikulum' => $request->unit
         ]);
 
@@ -172,7 +172,7 @@ class ak_kurikulum_cpl_Controller extends Controller
                 'kode_cpl' => $request->kode_cpl,
                 'cpl' => $request->cpl,
                 'deskripsi_cpl' => $request->deskripsi_cpl,
-                'id' => $request->aspek,
+                'kdaspek' => $request->aspek,
             ]);
 
             // $cplEdit->kode_cpl = $request->input('kode_cpl');

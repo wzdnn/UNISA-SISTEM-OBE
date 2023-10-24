@@ -72,7 +72,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
             'kode_subbk' => $request->kode_subbk,
             'sub_bk' => $request->sub_bk,
             'referensi' => $request->referensi,
-            'id' => $request->bahan_kajian,
+            'kdbk' => $request->bahan_kajian,
             'kdkurikulum' => $request->unit
         ]);
 

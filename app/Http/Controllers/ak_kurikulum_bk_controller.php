@@ -24,13 +24,13 @@ class ak_kurikulum_bk_controller extends Controller
                 "ak_kurikulum_basis_ilmus",
                 "ak_kurikulum_basis_ilmus.id",
                 "=",
-                "ak_kurikulum_bks.id"
+                "ak_kurikulum_bks.kdbasil"
             )
             ->join(
                 "ak_kurikulum_bidang_ilmus",
                 "ak_kurikulum_bidang_ilmus.id",
                 "=",
-                "ak_kurikulum_bks.id"
+                "ak_kurikulum_bks.kdbidil"
             )
             ->join(
                 "ak_kurikulum",
@@ -67,8 +67,8 @@ class ak_kurikulum_bk_controller extends Controller
         ak_kurikulum_bk::create([
             'kode_bk' => $request->kode_bk,
             'bahan_kajian' => $request->bahan_kajian,
-            'id' => $request->basil,
-            'id' => $request->bidil,
+            'kdbasil' => $request->basil,
+            'kdbidil' => $request->bidil,
             'kdkurikulum' => $request->unit
         ]);
 
