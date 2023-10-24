@@ -32,6 +32,9 @@
                     <th scope="col" class="px-6 py-3 ">
                         Unit
                     </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +58,13 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{ $akKurikulumBks->kurikulum }} {{ $akKurikulumBks->tahun }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('delete.bk', ['id' => $akKurikulumBks->id]) }}">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

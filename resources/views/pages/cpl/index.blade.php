@@ -82,7 +82,9 @@
                                         class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                             class="fa-regular fa-pen-to-square"></i></button>
                                 </a>
-                                <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}">Delete</a>
+                                <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}"
+                                    class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                        class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

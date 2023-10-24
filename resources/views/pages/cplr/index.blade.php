@@ -4,7 +4,8 @@
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0">Referensi CPL</h1>
         <a href="{{ route('cplr.create') }}">
-            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Referensi CPL</button>
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Referensi
+                CPL</button>
         </a>
     </div>
     <hr />
@@ -64,10 +65,16 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumCplrs->kurikulum }} - {{ $akKurikulumCplrs->tahun }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 flex flex-row">
                                 <a href="{{ route('edit.cplr', ['id' => $akKurikulumCplrs->id]) }}">
-                                    <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                    <button
+                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                             class="fa-regular fa-pen-to-square"></i></button>
+                                </a>
+                                <a href="{{ route('delete.cplr', ['id' => $akKurikulumCplrs->id]) }}">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
                                 </a>
                             </td>
                         </tr>

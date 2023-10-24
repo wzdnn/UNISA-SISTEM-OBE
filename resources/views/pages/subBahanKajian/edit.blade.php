@@ -14,13 +14,13 @@
     @if ($errors->any())
         <p style="color: red">{{ $errors->first() }}</p>
     @endif
-    <form class="py-3" action="{{ route('subbk.store') }}" method="POST">
+    <form class="py-3" action="{{ route('update.subbk', ['id' => $subBkEdit->id]) }}" method="POST">
         @csrf
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="kode_subbk" id="kode_subbk"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " required value="{{ old('kode_subbk') }}" />
+                    placeholder=" " required value="{{ $subBkEdit->kode_subbk }}" />
                 <label for="kode_subbk"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
                     Sub BK</label>
@@ -28,7 +28,7 @@
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="sub_bk" id="sub_bk"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " required value="{{ old('sub_bk') }}" />
+                    placeholder=" " required value="{{ $subBkEdit->sub_bk }}" />
                 <label for="sub_bk"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Sub
                     Bahan Kajian</label>
@@ -36,7 +36,7 @@
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="referensi" id="referensi"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " required value="{{ old('referensi') }}" />
+                    placeholder=" " required value="{{ $subBkEdit->referensi }}" />
                 <label for="referensi"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Referensi</label>
             </div>
@@ -47,16 +47,6 @@
                 <select id="bahan_kajian" name="bahan_kajian" class="form-control">
                     @foreach ($akKurikulumBk as $bk)
                         <option value="{{ $bk->id }}">{{ $bk->kode_bk }} {{ $bk->bahan_kajian }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="flex flex-col z-0 w-full mb-6 group">
-                <label for="unit" class="text-sm text-gray-500">
-                    Kurikulum
-                </label>
-                <select id="unit" name="unit" class="form-control">
-                    @foreach ($akKurikulum as $unit)
-                        <option value="{{ $unit->kdkurikulum }}">{{ $unit->kurikulum }} {{ $unit->tahun }}</option>
                     @endforeach
                 </select>
             </div>
@@ -72,7 +62,6 @@
 @push('script')
     <script>
         $(document).ready(function() {
-            $('#unit').select2();
             $('#bahan_kajian').select2();
         });
     </script>

@@ -168,10 +168,17 @@ class ak_kurikulum_cpl_Controller extends Controller
 
             DB::beginTransaction();
 
-            $cplEdit->kode_cpl = $request->input('kode_cpl');
-            $cplEdit->cpl = $request->input('cpl');
-            $cplEdit->deskripsi_cpl = $request->input('deskripsi_cpl');
-            $cplEdit->kdaspek = $request->input('kdaspek');
+            $cplEdit->update([
+                'kode_cpl' => $request->kode_cpl,
+                'cpl' => $request->cpl,
+                'deskripsi_cpl' => $request->deskripsi_cpl,
+                'kdaspek' => $request->aspek,
+            ]);
+
+            // $cplEdit->kode_cpl = $request->input('kode_cpl');
+            // $cplEdit->cpl = $request->input('cpl');
+            // $cplEdit->deskripsi_cpl = $request->input('deskripsi_cpl');
+            // $cplEdit->kdaspek = $request->input('aspek');
 
             if (count($plSelect) > 0) {
                 $cplEdit->CpltoPl()->sync($plSelect);

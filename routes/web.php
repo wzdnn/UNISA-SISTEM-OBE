@@ -68,13 +68,20 @@ Route::middleware(['auth'])->group(function () {
 
     // BK
     Route::resource('/bk', ak_kurikulum_bk_controller::class);
+    Route::get('/bk/{id}/delete', [ak_kurikulum_bk_Controller::class, 'delete'])->name('delete.bk');
     Route::get('/showBKSBK', [ak_kurikulum_bk_controller::class, 'showBKSBK'])->name('bksbk.show');
+
+
 
     // Sub BK
     Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
+    Route::get('/subbk/{id}/delete', [ak_kurikulum_sub_bk_Controller::class, 'delete'])->name('delete.subbk');
     Route::get('/petaSubBK', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
     Route::get('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
     Route::post('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MappingCPMK'])->name('MapCPMKShow.post');
+
+    Route::get('/subbkEdit/{id}', [ak_kurikulum_sub_bk_controller::class, 'edit'])->name('edit.subbk');
+    Route::post('/subbkEdit/{id}', [ak_kurikulum_sub_bk_controller::class, 'update'])->name('update.subbk');
 
 
     // CPL
@@ -97,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/cplr', ak_kurikulum_cplr_Controller::class);
     Route::get('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'edit'])->name('edit.cplr');
     Route::post('/cplrEdit/{id}', [ak_kurikulum_cplr_Controller::class, 'update'])->name('update.cplr');
+    Route::get('/cplr/{id}/delete', [ak_kurikulum_cplr_Controller::class, 'delete'])->name('delete.cplr');
 
     // CPMK
 

@@ -100,4 +100,16 @@ class ak_kurikulum_cplr_Controller extends Controller
         ]);
         return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Disunting');
     }
+    public function delete(int $id)
+    {
+        $cplr = ak_kurikulum_cplr::findOrFail($id);
+        if (!$cplr) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $cplr->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
 }

@@ -76,6 +76,19 @@ class ak_kurikulum_bk_controller extends Controller
         return redirect()->route('bk.index')->with('success', 'Bahan Kajian berhasil ditambah');
     }
 
+    public function delete(int $id)
+    {
+        $bk = ak_kurikulum_bk::findOrFail($id);
+        if (!$bk) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $bk->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
+
     public function showBKSBK()
     {
         $akKurikulumBk = DB::table('ak_kurikulum_bks')

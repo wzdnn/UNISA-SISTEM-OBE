@@ -60,11 +60,16 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumSubBks->kurikulum }} {{ $akKurikulumSubBks->tahun }}
                             </td>
-                            <td class="px-6 py-4 flex flex-col">
-                                <a href="">
-                                    <button type="button"
-                                        class="text-white bg-sky-500 hover:bg-sky-800 focus:outline-none focus:ring-4 focus:ring-sky-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
-                                            class="fa-solid fa-clipboard"></i></button>
+                            <td class="px-6 py-4 flex flex-row space-x-1">
+                                <a href="{{ route('edit.subbk', ['id' => $akKurikulumSubBks->id]) }}">
+                                    <button
+                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-regular fa-pen-to-square"></i></button>
+                                </a>
+                                <a href="{{ route('delete.subbk', ['id' => $akKurikulumSubBks->id]) }}">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
                                 </a>
                             </td>
                         </tr>

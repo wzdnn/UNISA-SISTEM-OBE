@@ -18,7 +18,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
             ->join(
                 "ak_kurikulum_bks",
-                "ak_kurikulum_bks.kdbk",
+                "ak_kurikulum_bks.id",
                 "=",
                 "ak_kurikulum_sub_bks.kdbk"
             )
@@ -53,7 +53,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
     {
 
         $akKurikulumBk = DB::table('ak_kurikulum_bks')
-            ->select(['kdbk', 'kode_bk', 'bahan_kajian'])
+            ->select(['id', 'kode_bk', 'bahan_kajian'])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
@@ -72,12 +72,46 @@ class ak_kurikulum_sub_bk_controller extends Controller
             'kode_subbk' => $request->kode_subbk,
             'sub_bk' => $request->sub_bk,
             'referensi' => $request->referensi,
-            'kdbk' => $request->bahan_kajian,
+            'id' => $request->bahan_kajian,
             'kdkurikulum' => $request->unit
         ]);
 
 
         return redirect()->route('subbk.index')->with('success', 'Sub Bahan Kajian berhasil ditambah');
+    }
+
+    public function edit(int $id)
+    {
+        $akKurikulumBk = DB::table('ak_kurikulum_bks')
+            ->select(['id', 'kode_bk', 'bahan_kajian'])
+            ->get();
+        $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
+        return view('pages.subBahanKajian.edit', compact('subBkEdit', 'akKurikulumBk'));
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
+        $subBkEdit->update([
+            'kode_subbk' => $request->kode_subbk,
+            'sub_bk' => $request->sub_bk,
+            'referensi' => $request->referensi,
+            'id' => $request->bahan_kajian
+        ]);
+        return redirect()->route('subbk.index')->with('success', 'Sub BK Berhasil Disunting');
+    }
+
+    public function delete(int $id)
+    {
+        $subbk = ak_kurikulum_sub_bk::findOrFail($id);
+        if (!$subbk) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $subbk->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
     }
 
     public function MapCPMKShow(int $id)
