@@ -36,6 +36,7 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
+
         // if (Auth::attempt(['email' => $request->input("email"), 'password' => $request->input("password")])) {
         // }
     }
