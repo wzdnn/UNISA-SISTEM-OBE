@@ -45,7 +45,7 @@
                 </label>
                 <select id="aspek" name="aspek" class="form-control">
                     @foreach ($akKurikulumAspek as $aspek)
-                        <option value="{{ $aspek->kdaspek }}">{{ $aspek->aspek }}</option>
+                        <option value="{{ $aspek->id }}">{{ $aspek->aspek }}</option>
                     @endforeach
                 </select>
             </div>
@@ -55,7 +55,7 @@
                 </label>
                 <select id="sumber" name="sumber" class="form-control">
                     @foreach ($akKurikulumSumber as $sumber)
-                        <option value="{{ $sumber->kdsumber }}">{{ $sumber->sumber }}</option>
+                        <option value="{{ $sumber->id }}">{{ $sumber->sumber }}</option>
                     @endforeach
                 </select>
             </div>

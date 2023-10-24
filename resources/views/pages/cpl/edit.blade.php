@@ -57,7 +57,7 @@
                 </label>
                 <select id="aspek" name="aspek" class="form-control">
                     @foreach ($ak_kurikulum_aspek as $aspek)
-                        <option value="{{ $aspek->kdaspek }}">{{ $aspek->aspek }}</option>
+                        <option value="{{ $aspek->id }}">{{ $aspek->aspek }}</option>
                     @endforeach
                 </select>
             </div>

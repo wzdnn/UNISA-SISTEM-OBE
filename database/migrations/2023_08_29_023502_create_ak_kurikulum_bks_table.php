@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('kdbk');
             $table->string('kode_bk', 15);
             $table->string('bahan_kajian', 50);
-            $table->unsignedSmallInteger('kdbasil');
-            $table->unsignedSmallInteger('kdbidil');
+            $table->unsignedSmallInteger('id');
+            $table->unsignedSmallInteger('id');
             $table->unsignedSmallInteger('kdkurikulum');
             $table->timestamps();
         });

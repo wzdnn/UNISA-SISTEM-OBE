@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('kode_cplr', 15);
             $table->string('cplr', 50);
             $table->text('deskripsi_cplr');
-            $table->unsignedSmallInteger('kdaspek');
-            $table->unsignedSmallInteger('kdsumber');
+            $table->unsignedSmallInteger('id');
+            $table->unsignedSmallInteger('id');
             $table->unsignedSmallInteger('kdkurikulum');
             $table->timestamps();
         });

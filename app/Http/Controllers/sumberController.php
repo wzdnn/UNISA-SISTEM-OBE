@@ -30,4 +30,17 @@ class sumberController extends Controller
 
         return redirect()->route('index.sumber')->with('success', 'sumber Berhasil di Tambah');
     }
+
+    public function delete(int $id)
+    {
+        $sumber = ak_kurikulum_sumber::findOrFail($id);
+        if (!$sumber) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $sumber->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
 }

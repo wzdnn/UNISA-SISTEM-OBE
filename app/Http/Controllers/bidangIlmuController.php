@@ -30,4 +30,16 @@ class bidangIlmuController extends Controller
 
         return redirect()->route('index.bidil')->with('success', 'Bidang Ilmu Berhasil di Tambah');
     }
+    public function delete(int $id)
+    {
+        $bidil = ak_kurikulum_bidang_ilmu::findOrFail($id);
+        if (!$bidil) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $bidil->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
 }

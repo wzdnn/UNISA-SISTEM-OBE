@@ -30,4 +30,16 @@ class basisIlmuController extends Controller
 
         return redirect()->route('index.basil')->with('success', 'Basis Ilmu Berhasil di Tambah');
     }
+    public function delete(int $id)
+    {
+        $basil = ak_kurikulum_basis_ilmu::findOrFail($id);
+        if (!$basil) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $basil->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
 }

@@ -30,4 +30,16 @@ class aspekController extends Controller
 
         return redirect()->route('index.aspek')->with('success', 'Aspek Berhasil di Tambah');
     }
+    public function delete(int $id)
+    {
+        $aspek = ak_kurikulum_aspek::findOrFail($id);
+        if (!$aspek) {
+            return abort(404);
+        }
+
+        // return dd($pl);
+
+        $aspek->delete();
+        return redirect(url()->previous())->with('success', 'sukses hapus');
+    }
 }

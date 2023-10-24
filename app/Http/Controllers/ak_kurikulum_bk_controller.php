@@ -22,15 +22,15 @@ class ak_kurikulum_bk_controller extends Controller
             )
             ->join(
                 "ak_kurikulum_basis_ilmus",
-                "ak_kurikulum_basis_ilmus.kdbasil",
+                "ak_kurikulum_basis_ilmus.id",
                 "=",
-                "ak_kurikulum_bks.kdbasil"
+                "ak_kurikulum_bks.id"
             )
             ->join(
                 "ak_kurikulum_bidang_ilmus",
-                "ak_kurikulum_bidang_ilmus.kdbidil",
+                "ak_kurikulum_bidang_ilmus.id",
                 "=",
-                "ak_kurikulum_bks.kdbidil"
+                "ak_kurikulum_bks.id"
             )
             ->join(
                 "ak_kurikulum",
@@ -46,10 +46,10 @@ class ak_kurikulum_bk_controller extends Controller
     public function create()
     {
         $akKurikulumBasil = DB::table('ak_kurikulum_basis_ilmus')
-            ->select(['kdbasil', 'basis_ilmu'])
+            ->select(['id', 'basis_ilmu'])
             ->get();
         $akKurikulumBidil = DB::table('ak_kurikulum_bidang_ilmus')
-            ->select(['kdbidil', 'bidang_ilmu'])
+            ->select(['id', 'bidang_ilmu'])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
@@ -67,8 +67,8 @@ class ak_kurikulum_bk_controller extends Controller
         ak_kurikulum_bk::create([
             'kode_bk' => $request->kode_bk,
             'bahan_kajian' => $request->bahan_kajian,
-            'kdbasil' => $request->basil,
-            'kdbidil' => $request->bidil,
+            'id' => $request->basil,
+            'id' => $request->bidil,
             'kdkurikulum' => $request->unit
         ]);
 

@@ -52,18 +52,22 @@ Route::middleware(['auth'])->group(function () {
     // Aspek
     Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
     Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
+    Route::get('/aspek/{id}', [aspekController::class, 'delete'])->name('delete.aspek');
 
     //Sumber
     Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
     Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
+    Route::get('/sumber/{id}', [sumberController::class, 'delete'])->name('delete.sumber');
 
     // Basis Ilmu
     Route::get('/basisIlmu', [basisIlmuController::class, 'indexBasisIlmu'])->name('index.basil');
     Route::post('/postBasisIlmu', [basisIlmuController::class, 'storeBasisIlmu'])->name('store.basil');
+    Route::get('/basisIlmu/{id}', [basisIlmuController::class, 'delete'])->name('delete.basil');
 
-    // Basis Ilmu
+    // Bidang Ilmu
     Route::get('/bidangIlmu', [bidangIlmuController::class, 'indexBidangIlmu'])->name('index.bidil');
     Route::post('/postBidangIlmu', [bidangIlmuController::class, 'storeBidangIlmu'])->name('store.bidil');
+    Route::get('/bidangIlmu/{id}', [bidangIlmuController::class, 'delete'])->name('delete.bidil');
 
 
     // BK

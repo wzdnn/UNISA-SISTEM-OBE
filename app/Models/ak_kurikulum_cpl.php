@@ -13,7 +13,7 @@ class ak_kurikulum_cpl extends Model
         'kode_cpl',
         'cpl',
         'deskripsi_cpl',
-        'kdaspek',
+        'id',
         'kdkurikulum'
     ];
 

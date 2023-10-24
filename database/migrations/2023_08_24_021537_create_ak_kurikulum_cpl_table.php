@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('kode_cpl', 15);
             $table->string('cpl', 100);
             $table->text('deskripsi_cpl');
-            $table->unsignedInteger('kdaspek');
+            $table->unsignedInteger('id');
             $table->unsignedInteger('kdkurikulum');
             $table->timestamps();
         });

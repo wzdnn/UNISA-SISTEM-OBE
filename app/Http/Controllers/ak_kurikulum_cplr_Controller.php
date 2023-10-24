@@ -17,15 +17,15 @@ class ak_kurikulum_cplr_Controller extends Controller
             ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
             ->join(
                 "ak_kurikulum_aspeks",
-                "ak_kurikulum_aspeks.kdaspek",
+                "ak_kurikulum_aspeks.id",
                 "=",
-                "ak_kurikulum_cplrs.kdaspek"
+                "ak_kurikulum_cplrs.id"
             )
             ->join(
                 "ak_kurikulum_sumbers",
-                "ak_kurikulum_sumbers.kdsumber",
+                "ak_kurikulum_sumbers.id",
                 "=",
-                "ak_kurikulum_cplrs.kdsumber"
+                "ak_kurikulum_cplrs.id"
             )
             ->join(
                 "ak_kurikulum",
@@ -42,10 +42,10 @@ class ak_kurikulum_cplr_Controller extends Controller
     public function create()
     {
         $akKurikulumAspek = DB::table('ak_kurikulum_aspeks')
-            ->select(["kdaspek", "aspek"])
+            ->select(["id", "aspek"])
             ->get();
         $akKurikulumSumber = DB::table('ak_kurikulum_sumbers')
-            ->select(["kdsumber", "sumber"])
+            ->select(["id", "sumber"])
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
             ->select(["kdkurikulum", "kurikulum", "tahun"])
@@ -66,8 +66,8 @@ class ak_kurikulum_cplr_Controller extends Controller
             'kode_cplr' => $request->kode_cplr,
             'cplr' => $request->cplr,
             'deskripsi_cplr' => $request->deskripsi_cplr,
-            'kdaspek' => $request->aspek,
-            'kdsumber' => $request->sumber,
+            'id' => $request->aspek,
+            'id' => $request->sumber,
             'kdkurikulum' => $request->unit
         ]);
 
@@ -77,10 +77,10 @@ class ak_kurikulum_cplr_Controller extends Controller
     public function edit(int $id)
     {
         $akKurikulumAspek = DB::table('ak_kurikulum_aspeks')
-            ->select(["kdaspek", "aspek"])
+            ->select(["id", "aspek"])
             ->get();
         $akKurikulumSumber = DB::table('ak_kurikulum_sumbers')
-            ->select(["kdsumber", "sumber"])
+            ->select(["id", "sumber"])
             ->get();
         $cplrEdit = ak_kurikulum_cplr::findOrFail($id);
 
@@ -95,8 +95,8 @@ class ak_kurikulum_cplr_Controller extends Controller
             'kode_cplr' => $request->kode_cplr,
             'cplr' => $request->cplr,
             'deskripsi_cplr' => $request->deskripsi_cplr,
-            'kdaspek' => $request->aspek,
-            'kdsumber' => $request->sumber,
+            'id' => $request->aspek,
+            'id' => $request->sumber,
         ]);
         return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Disunting');
     }

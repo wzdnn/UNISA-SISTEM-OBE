@@ -141,11 +141,11 @@ DROP TABLE IF EXISTS `ak_kurikulum_aspeks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ak_kurikulum_aspeks` (
-  `kdaspek` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `aspek` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`kdaspek`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -167,11 +167,11 @@ DROP TABLE IF EXISTS `ak_kurikulum_basis_ilmus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ak_kurikulum_basis_ilmus` (
-  `kdbasil` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `basis_ilmu` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`kdbasil`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -193,11 +193,11 @@ DROP TABLE IF EXISTS `ak_kurikulum_bidang_ilmus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ak_kurikulum_bidang_ilmus` (
-  `kdbidil` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `bidang_ilmu` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`kdbidil`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -222,8 +222,8 @@ CREATE TABLE `ak_kurikulum_bks` (
   `kdbk` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `kode_bk` varchar(15) NOT NULL,
   `bahan_kajian` varchar(50) NOT NULL,
-  `kdbasil` smallint(5) unsigned NOT NULL,
-  `kdbidil` smallint(5) unsigned NOT NULL,
+  `id` smallint(5) unsigned NOT NULL,
+  `id` smallint(5) unsigned NOT NULL,
   `kdkurikulum` smallint(5) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -334,8 +334,8 @@ CREATE TABLE `ak_kurikulum_cplrs` (
   `kode_cplr` varchar(15) NOT NULL,
   `cplr` varchar(50) NOT NULL,
   `deskripsi_cplr` text NOT NULL,
-  `kdaspek` smallint(5) unsigned NOT NULL,
-  `kdsumber` smallint(5) unsigned NOT NULL,
+  `id` smallint(5) unsigned NOT NULL,
+  `id` smallint(5) unsigned NOT NULL,
   `kdkurikulum` smallint(5) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -365,7 +365,7 @@ CREATE TABLE `ak_kurikulum_cpls` (
   `kode_cpl` varchar(15) NOT NULL,
   `cpl` varchar(100) NOT NULL,
   `deskripsi_cpl` text NOT NULL,
-  `kdaspek` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `kdkurikulum` int(10) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -477,11 +477,11 @@ DROP TABLE IF EXISTS `ak_kurikulum_sumbers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ak_kurikulum_sumbers` (
-  `kdsumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sumber` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`kdsumber`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

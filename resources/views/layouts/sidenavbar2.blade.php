@@ -84,7 +84,7 @@
     <div class="py-4 overflow-y-auto">
         <br />
         <hr />
-        <ul class="space-y-2 font-medium">
+        <ul class="space-y-2 py-3 font-medium">
             {{-- <li>
                 <a href="{{ route('welcome') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
