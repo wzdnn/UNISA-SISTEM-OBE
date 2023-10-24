@@ -75,7 +75,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="5">CPMK belum ada</td>
+                        <td class="justify-center text-center" colspan="5">Aspek belum ada</td>
                     </tr>
                 @endif
             </tbody>
