@@ -72,8 +72,11 @@ Route::middleware(['auth'])->group(function () {
 
     // BK
     Route::resource('/bk', ak_kurikulum_bk_controller::class);
+    Route::get('/bkEdit/{id}', [ak_kurikulum_bk_Controller::class, 'edit'])->name('edit.bk');
+    Route::post('/bkEdit/{id}', [ak_kurikulum_bk_Controller::class, 'update'])->name('update.bk');
     Route::get('/bk/{id}/delete', [ak_kurikulum_bk_Controller::class, 'delete'])->name('delete.bk');
     Route::get('/showBKSBK', [ak_kurikulum_bk_controller::class, 'showBKSBK'])->name('bksbk.show');
+
 
 
 

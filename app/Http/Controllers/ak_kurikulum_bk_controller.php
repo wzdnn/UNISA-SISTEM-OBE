@@ -89,13 +89,40 @@ class ak_kurikulum_bk_controller extends Controller
         return redirect(url()->previous())->with('success', 'sukses hapus');
     }
 
-    public function showBKSBK()
+    public function edit(int $id)
     {
-        $akKurikulumBk = DB::table('ak_kurikulum_bks')
-            ->select('ak_kurikulum_bks.*', 'ak_kurikulum_sub_bks.*')
-            ->join('ak_kurikulum_sub_bks', 'ak_kurikulum_sub_bks.kdbk', '=', 'ak_kurikulum_bks.kdbk')
+        $akKurikulumBasil = DB::table('ak_kurikulum_basis_ilmus')
+            ->select(['id', 'basis_ilmu'])
+            ->get();
+        $akKurikulumBidil = DB::table('ak_kurikulum_bidang_ilmus')
+            ->select(['id', 'bidang_ilmu'])
             ->get();
 
-        return view('pages.bahanKajian.showBKSBK', compact('akKurikulumBk'));
+        $bkEdit = ak_kurikulum_bk::findOrFail($id);
+
+        return view('pages.bahanKajian.edit', compact('bkEdit', 'akKurikulumBasil', 'akKurikulumBidil'));
     }
+
+    public function update(Request $request, int $id)
+    {
+        $bkEdit = ak_kurikulum_bk::findOrFail($id);
+        $bkEdit->update([
+            'kode_bk' => $request->kode_bk,
+            'bahan_kajian' => $request->bahan_kajian,
+            'kdbasil' => $request->basil,
+            'kdbidil' => $request->bidil
+        ]);
+
+        return redirect()->route('bk.index')->with('success', 'Bahan Kajian Berhasil Disunting');
+    }
+
+    // public function showBKSBK()
+    // {
+    //     $akKurikulumBk = DB::table('ak_kurikulum_bks')
+    //         ->select('ak_kurikulum_bks.*', 'ak_kurikulum_sub_bks.*')
+    //         ->join('ak_kurikulum_sub_bks', 'ak_kurikulum_sub_bks.kdbk', '=', 'ak_kurikulum_bks.kdbk')
+    //         ->get();
+
+    //     return view('pages.bahanKajian.showBKSBK', compact('akKurikulumBk'));
+    // }
 }
