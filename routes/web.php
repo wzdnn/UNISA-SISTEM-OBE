@@ -56,6 +56,25 @@ Route::middleware(['auth','cek.role:universitas'])->group(function() {
         Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VNM');
 });
 
+ // CPL
+
+ Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
+ Route::get('/cpl/{id}/delete', [ak_kurikulum_cpl_Controller::class, 'delete'])->name('cpl.delete');
+ Route::get('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'edit'])->name('edit.cpl');
+ Route::post('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'update'])->name('update.cpl');
+
+// BK
+Route::resource('/bk', ak_kurikulum_bk_controller::class);
+Route::get('/bkEdit/{id}', [ak_kurikulum_bk_Controller::class, 'edit'])->name('edit.bk');
+Route::post('/bkEdit/{id}', [ak_kurikulum_bk_Controller::class, 'update'])->name('update.bk');
+Route::get('/bk/{id}/delete', [ak_kurikulum_bk_Controller::class, 'delete'])->name('delete.bk');
+Route::get('/showBKSBK', [ak_kurikulum_bk_controller::class, 'showBKSBK'])->name('bksbk.show');
+
+// Aspek
+Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
+Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
+Route::get('/aspek/{id}', [aspekController::class, 'delete'])->name('delete.aspek');
+
 
 // Basis Ilmu
 Route::get('/basisIlmu', [basisIlmuController::class, 'indexBasisIlmu'])->name('index.basil');
@@ -66,22 +85,12 @@ Route::get('/bidangIlmu', [bidangIlmuController::class, 'indexBidangIlmu'])->nam
 Route::post('/postBidangIlmu', [bidangIlmuController::class, 'storeBidangIlmu'])->name('store.bidil');
 
 
-// BK
-Route::resource('/bk', ak_kurikulum_bk_controller::class);
-Route::get('/showBKSBK', [ak_kurikulum_bk_controller::class, 'showBKSBK'])->name('bksbk.show');
 
 // Sub BK
 Route::resource('/subbk', ak_kurikulum_sub_bk_controller::class);
 Route::get('/petaSubBK', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
 Route::get('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
 Route::post('/petaCPMKSHOW/{id}', [ak_kurikulum_sub_bk_controller::class, 'MappingCPMK'])->name('MapCPMKShow.post');
-
-
-// CPL
-
-Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
-Route::get('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'edit'])->name('edit.cpl');
-Route::post('/cplEdit/{id}', [ak_kurikulum_cpl_Controller::class, 'update'])->name('update.cpl');
 
 
 // PL
