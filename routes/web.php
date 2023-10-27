@@ -41,10 +41,11 @@ Route::middleware(['guest'])->group(function() {
 });
 
 
+Route::get('/logout', [loginController::class, 'logout']);
 
 // Role = Admin
 Route::middleware(['auth','cek.role:admin'])->group(function() {
-    Route::get('/logout', [loginController::class, 'logout']);
+    // Route::get('/logout', [loginController::class, 'logout']);
         Route::get('/dashboard', [visimisiController::class, 'vmIndex'])->name('dashboard');
         // Route::get('/', function () {
         //     return redirect('/dashboard');
@@ -55,7 +56,7 @@ Route::middleware(['auth','cek.role:admin'])->group(function() {
 });
 
 Route::middleware(['auth','cek.role:universitas'])->group(function() {
-    Route::get('/logout', [loginController::class, 'logout']);
+    // Route::get('/logout', [loginController::class, 'logout']);
 
         Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VNM');
 });
