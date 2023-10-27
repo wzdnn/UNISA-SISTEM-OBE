@@ -38,6 +38,10 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/postLogin', [UserController::class, 'login']);
 });
 
+Route::get('/testlogin', function () {
+    return view('pages.login');
+});
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UserController::class, 'test']);
