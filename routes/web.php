@@ -39,20 +39,24 @@ Route::middleware(['guest'])->group(function() {
     Route::get('/', [loginController::class, 'index'] )->name('welcome');
     Route::post('/', [loginController::class, 'login'] )->name('create-login');
 });
-Route::get('/logout', [loginController::class, 'logout']);
+
+
 
 // Role = Admin
 Route::middleware(['auth','cek.role:admin'])->group(function() {
+    Route::get('/logout', [loginController::class, 'logout']);
         Route::get('/dashboard', [visimisiController::class, 'vmIndex'])->name('dashboard');
-        Route::get('/', function () {
-            return redirect('/dashboard');
-        });
+        // Route::get('/', function () {
+        //     return redirect('/dashboard');
+        // });
         //Sumber
         Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
         Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
 });
 
 Route::middleware(['auth','cek.role:universitas'])->group(function() {
+    Route::get('/logout', [loginController::class, 'logout']);
+
         Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VNM');
 });
 
