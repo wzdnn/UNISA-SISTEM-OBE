@@ -45,23 +45,24 @@ Route::get('/logout', [loginController::class, 'logout']);
 
 // Role = Admin
 Route::middleware(['auth','cek.role:admin'])->group(function() {
-    // Route::get('/logout', [loginController::class, 'logout']);
-        Route::get('/dashboard', [visimisiController::class, 'vmIndex'])->name('dashboard');
-        // Route::get('/', function () {
-        //     return redirect('/dashboard');
-        // });
-        //Sumber
-        Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
-        Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
+    Route::get('/dashboard', [visimisiController::class, 'vmIndex'])->name('dashboard');
 });
 
+// Role = Universitas
 Route::middleware(['auth','cek.role:universitas'])->group(function() {
-    // Route::get('/logout', [loginController::class, 'logout']);
-
-        Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->name('index.VNM');
+    Route::get('/universitas', [visimisiController::class, 'vmIndex'])->name('universitas');
 });
 
- // CPL
+// Role = Prodi
+Route::middleware(['auth','cek.role:prodi'])->group(function() {
+    Route::get('/prodi', [visimisiController::class, 'vmIndex'])->name('prodi');
+});
+
+//Sumber
+Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
+Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
+
+// CPL
 
  Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
  Route::get('/cpl/{id}/delete', [ak_kurikulum_cpl_Controller::class, 'delete'])->name('cpl.delete');

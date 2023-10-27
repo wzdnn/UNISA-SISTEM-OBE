@@ -21,7 +21,7 @@ class UserAkses
         // }
         if(auth()->check()) {
             $user = auth()->user();
-            if ($user->role === $role) {
+            if ($user->role == $role) {
                 return $next($request);
         }
     }

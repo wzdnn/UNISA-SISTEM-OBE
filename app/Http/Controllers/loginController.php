@@ -32,11 +32,9 @@ class loginController extends Controller
                 // echo "sukses";
                 // exit();
             } elseif (Auth::user()->role == 'universitas'){
-                return redirect()->route('index.VNM');
+                return redirect('universitas');
             } elseif (Auth::user()->role == 'prodi'){
-                // return redirect()->route('index.VMU');
-                echo "sukses";
-                exit();
+                return redirect('prodi');
             }
 
 
