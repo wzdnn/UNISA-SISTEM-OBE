@@ -41,25 +41,12 @@ Route::middleware(['guest'])->group(function() {
 });
 
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
-    Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->middleware('userAkses:ADMIN')->name('index.VM');
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+    
+    Route::get('/VisiMisi', [visimisiController::class, 'vmIndex'])->middleware('userAkses:superAdmin')->name('index.VM');
     Route::get('/logout', [loginController::class, 'logout']);
 
-});
-Route::middleware(['auth'])->group(
-    function () {
-        Route::get('/vmu', [visimisiController::class, 'vmIndexUser'])->middleware('userAkses:USER')->name('index.VMU');
-        Route::get('/aspek', [aspekController::class, 'indexAspek'])->middleware('userAkses:USER')->name('index.aspek');
-        Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
-        Route::get('/logout', [loginController::class, 'logout']);
-    }
-);
-
-// Aspek
-// Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
-// Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
-
-//Sumber
+    //Sumber
 Route::get('/sumber', [sumberController::class, 'indexSumber'])->name('index.sumber');
 Route::post('/storeSumber', [sumberController::class, 'storeSumber'])->name('store.sumber');
 
@@ -141,6 +128,33 @@ Route::get('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'MapCPMKShow'
 Route::post('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'mappingCPMK'])->name('CPMKpost.mk');
 Route::get('/matakuliah/edit/{id}', [ak_matakuliah_controller::class, 'subbkEdit'])->name('edit.mk');
 Route::post('/matakuliah/edit/store/{id}', [ak_matakuliah_controller::class, 'subbkEditStore'])->name('update.mk');
+
+});
+
+
+Route::group(['prefix' => 'universitas', 'middleware' => ['auth']], function () {
+    Route::get('/VNM', [visimisiController::class, 'vmIndex'])->middleware('userAkses:universitas')->name('index.VNM');
+    // admin
+    Route::get('/home', function () {
+    return redirect('/admin');
+});
+    Route::get('/logout', [loginController::class, 'logout']);
+
+});
+Route::group(['prefix' => 'prodi', 'middleware' => ['auth']],
+    function () {
+        Route::get('/visimisi', [visimisiController::class, 'vmIndexUser'])->middleware('userAkses:prodi')->name('index.VMU');
+        Route::get('/aspek', [aspekController::class, 'indexAspek'])->middleware('userAkses:USER')->name('index.aspek');
+        Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
+        Route::get('/logout', [loginController::class, 'logout']);
+    }
+);
+
+// Aspek
+// Route::get('/aspek', [aspekController::class, 'indexAspek'])->name('index.aspek');
+// Route::post('/storeAspek', [aspekController::class, 'storeAspek'])->name('store.aspek');
+
+
 
 
 

@@ -27,12 +27,16 @@ class loginController extends Controller
 
 
         if(Auth::attempt($infologin)){
-            if(Auth::user()->role == 'ADMIN'){
+            if(Auth::user()->role == 'superAdmin'){
                 return redirect()->route('index.VM');
                 // echo "sukses";
                 // exit();
-            } elseif (Auth::user()->role == 'USER'){
-                return redirect()->route('index.VMU');
+            } elseif (Auth::user()->role == 'universitas'){
+                return redirect()->route('index.VNM');
+            } elseif (Auth::user()->role == 'prodi'){
+                // return redirect()->route('index.VMU');
+                echo "sukses";
+                exit();
             }
 
 

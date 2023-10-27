@@ -185,7 +185,7 @@
         <br />
         <hr />
         <hr />
-        @if(Auth::user()->role == 'ADMIN')
+        @if(Auth::user()->role == 'superAdmin')
         <ul class="space-y-2 py-3 font-medium">
             <li>
                 <a href="{{ route('index.aspek') }}"
