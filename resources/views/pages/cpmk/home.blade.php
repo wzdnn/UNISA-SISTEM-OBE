@@ -45,10 +45,10 @@
                                     {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
                                 @endforeach --}}
                                 @foreach ($value->CpltoCpmk as $cplcpmk)
-                                    {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
+                                    &#x2022; {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
                                 @endforeach
                             </td>
-                        
+
                         </tr>
                     @endforeach
                 @else
