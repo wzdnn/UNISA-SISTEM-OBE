@@ -12,7 +12,7 @@
                         </path>
                     </svg>
                 </button>
-                <a href="{{ route('welcome') }}" class="flex ml-2 md:mr-24">
+                <a href="{{ route('dashboard') }}" class="flex ml-2 md:mr-24">
                     <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
                         class="h-8 mr-3" alt="Logo Unisa" />
                     <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
@@ -89,7 +89,7 @@
                 </a>
             </li> --}}
             <li>
-                <a href="{{ route('index.VM') }}"
+                <a href="{{ route('index.VNM') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
 
                     <span class="ml-3">Visi dan Misi</span>
@@ -185,7 +185,7 @@
         <br />
         <hr />
         <hr />
-        @if(Auth::user()->role == 'superAdmin')
+        @if(Auth::user()->role == 'admin')
         <ul class="space-y-2 py-3 font-medium">
             <li>
                 <a href="{{ route('index.aspek') }}"

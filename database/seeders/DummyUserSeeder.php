@@ -15,7 +15,7 @@ class DummyUserSeeder extends Seeder
             [
                 'name'=>'Mas Admin',
                 'email'=>'admin@gmail.com',
-                'role'=>'superAdmin',
+                'role'=>'admin',
                 'password'=>bcrypt('123456')
             ],
             [

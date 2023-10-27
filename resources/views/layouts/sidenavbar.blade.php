@@ -17,7 +17,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('index.VM') }}" class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group">
+                <a href="{{ route('index.VNM') }}" class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group">
                     <svg class="w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 " aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                         <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
@@ -115,8 +115,8 @@
                             class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Peta CPL-CPMK</a>
                     </li>
                 </ul>
-            </li>          
-            
+            </li>
+
             <li>
                 <a href="{{ route('index.mk') }}" class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group">
                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 "
@@ -181,7 +181,7 @@
             </li>
         </ul>
     </div>
-    
-    
+
+
 
 </aside>

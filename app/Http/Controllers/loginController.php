@@ -27,8 +27,8 @@ class loginController extends Controller
 
 
         if(Auth::attempt($infologin)){
-            if(Auth::user()->role == 'superAdmin'){
-                return redirect()->route('index.VM');
+            if(Auth::user()->role == 'admin'){
+                return redirect('dashboard');
                 // echo "sukses";
                 // exit();
             } elseif (Auth::user()->role == 'universitas'){
