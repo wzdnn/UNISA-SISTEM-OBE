@@ -15,11 +15,17 @@ class UserAkses
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if(auth()->user()->role == $role) {
-            return $next($request);
+        // if(auth()->user()->role == $role) {
+        //     return $next($request);
 
+        // }
+        if(auth()->check()) {
+            $user = auth()->user();
+            if ($user->role == $role) {
+                return $next($request);
         }
+    }
 
-        return redirect('');
+        return redirect('dashboard');
     }
 }

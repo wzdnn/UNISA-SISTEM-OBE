@@ -4,12 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
-    @stack('style')
 
     <title>SISTEM OBE | UNIVERSITAS 'AISYIYAH YOGYAKARTA</title>
 </head>
@@ -22,60 +18,102 @@
 
                 <!-- component -->
                 <!-- component -->
-<div class="min-h-screen flex justify-center items-center bg-white">
-    <div class="p-10 border-[1px] -mt-10 border-slate-200 rounded-md flex flex-col items-center space-y-3">
-        <div class="py-8">
+                {{-- <a href="#" class="app-logo">
+                    <img width="70" class="" src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png" />
+                    SISTEM OBE UNISA
+                </a> --}}
+<!-- component -->
+<!-- component -->
+<div class="min-h-screen bg-gray-100 flex flex-col justify sm:py-12">
+    <div class="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
+        <h1 class="font-bold text-center text-2xl mb-5" src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png">SISTEM OBE UNISA
+
+      </h1>
+
+      <div class="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
+        <div class="px-5 py-12">
+
 
             <form action="" method="POST">
-                @csrf
-                        <img width="70" class="-mt-10" src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png" />
-                    </div>
-                        <input class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="E-Mail" type="email" value="{{ old('email') }}" name="email" class="form-control"/>
-                    <div class="flex flex-col space-y-1">
-                        <input class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="Password" type="password" name="password" class="form-control"/>
-                        {{-- <p class="font-bold text-[#0070ba]">Forgot password?</p> --}}
-                    </div>
-                    <div class="flex flex-col space-y-5 w-full">
-                        <button name="submit" type="submit"  class="w-full bg-[#0070ba] rounded-3xl p-3 text-white font-bold transition duration-200 hover:bg-[#003087]">Log in</button>
-                        <div class="flex items-center justify-center border-t-[1px] border-t-slate-300 w-full relative">
-                          <div class="-mt-1 font-bod bg-white px-5 absolute">Or</div>
-                        </div>
-                        <button class="w-full border-blue-900 hover:border-[#003087] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#0070ba] font-bold transition duration-200">Sign Up</button>
-                      </div>
+               @csrf
 
+               <label class="font-semibold text-sm text-gray-600 pb-1 block" >E-mail</label>
+               <input type="email" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full form-control" value="{{ old('email') }}" name="email"/>
+               <label class="font-semibold text-sm text-gray-600 pb-1 block">Password</label>
+               <input type="password" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full form-control" placeholder="Password" name="password"/>
+               <button name="submit" type="submit"  class="transition duration-200 dark:bg-gray-800 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">Log in
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+                </button>
 
+               {{-- <button name="submit" type="button"  class="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+                   <span class="inline-block mr-2">Login</span>
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                   </svg>
+               </button> --}}
             </form>
-            @if($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach($errors->all() as $item)
-                                        <li>
-                                            {{ $item }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+        </div>
 
-                        @endif
-            <div class="flex space-x-1 p-20 text-sm">
-                <p class="hover:underline cursor-pointer">German</p>
-                <div class="border-r-[1px] border-r-slate-300"></div>
-                <p class="font-bold hover:underline cursor-pointer">English</p>
-              </div>
+        @if ($errors->any())
+            <div class="px-5 py-12 bg-red-500">
+                <div class="red-alert" role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div class=" text-white">
+                        @foreach ($errors->all() as $item)
 
-    </div>
-
-    <div class="absolute bottom-0 w-full p-3 bg-[#F7F9FA] flex justify-center items-center space-x-3 text-[14px] font-medium text-[#666]">
-      <a href="https://www.paypal.com/us/smarthelp/contact-us" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Contact Us</a>
-      <a href="https://www.paypal.com/de/webapps/mpp/ua/privacy-full" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Privacy</a>
-      <a href="https://www.paypal.com/de/webapps/mpp/ua/legalhub-full" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Legal</a>
-      <a href="https://www.paypal.com/de/webapps/mpp/ua/upcoming-policies-full" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Policy </a>
-      <a href="https://www.paypal.com/de/webapps/mpp/country-worldwide" target="_blank" class="hover:underline underline-offset-1 cursor-pointer">Worldwide </a>
-    </div>
+                        <span class="font-medium text-white">Perhatian!</span> {{ $item }}
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
   </div>
 
 
-<svg class="absolute bottom-0 left-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,0L40,42.7C80,85,160,171,240,197.3C320,224,400,192,480,154.7C560,117,640,75,720,74.7C800,75,880,117,960,154.7C1040,192,1120,224,1200,213.3C1280,203,1360,149,1400,122.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path></svg>
+
+
+    {{-- <form action="" method="POST">
+        @csrf
+            </div>
+                <input class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="E-Mail" type="email" value="{{ old('email') }}" name="email" class="form-control"/>
+            <div class="flex flex-col space-y-1">
+                <input class="p-3 border-[1px] border-slate-500 rounded-sm w-80" placeholder="Password" type="password" name="password" class="form-control"/>
+                <p class="font-bold text-[#0070ba]">Forgot password?</p>
+            </div>
+            <div class="flex flex-col space-y-5 w-full">
+                <button name="submit" type="submit"  class="w-full bg-[#0070ba] rounded-3xl p-3 text-white font-bold transition duration-200 hover:bg-[#003087]">Log in</button>
+                <div class="flex items-center justify-center border-t-[1px] border-t-slate-300 w-full relative">
+                  <div class="-mt-1 font-bod bg-white px-5 absolute">Or</div>
+                </div>
+                <button class="w-full border-blue-900 hover:border-[#003087] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#0070ba] font-bold transition duration-200">Sign Up</button>
+              </div>
+
+
+              @if($errors->any())
+                  <div class="alert alert-danger">
+                      <ul>
+                          @foreach($errors->all() as $item)
+                              <li>
+                                  {{ $item }}
+                              </li>
+                          @endforeach
+                      </ul>
+                  </div>
+
+              @endif
+    </form>
+        <div class="flex space-x-1 p-20 text-sm">
+            <p class="hover:underline cursor-pointer">German</p>
+            <div class="border-r-[1px] border-r-slate-300"></div>
+            <p class="font-bold hover:underline cursor-pointer">English</p>
+        </div> --}}
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
 
 

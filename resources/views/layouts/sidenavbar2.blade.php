@@ -12,12 +12,30 @@
                         </path>
                     </svg>
                 </button>
-                <a href="{{ route('welcome') }}" class="flex ml-2 md:mr-24">
-                    <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
-                        class="h-8 mr-3" alt="Logo Unisa" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
-                        OBE UNISA</span>
-                </a>
+                @if(Auth::user()->role == 'admin')
+                    <a href="{{ route('dashboard') }}" class="flex ml-2 md:mr-24">
+                        <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
+                            class="h-8 mr-3" alt="Logo Unisa" />
+                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
+                            OBE UNISA</span>
+                    </a>
+                @endif
+                @if(Auth::user()->role == 'universitas')
+                    <a href="{{ route('universitas') }}" class="flex ml-2 md:mr-24">
+                        <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
+                            class="h-8 mr-3" alt="Logo Unisa" />
+                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
+                            OBE UNISA</span>
+                    </a>
+                @endif
+                @if(Auth::user()->role == 'prodi')
+                    <a href="{{ route('prodi') }}" class="flex ml-2 md:mr-24">
+                        <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
+                            class="h-8 mr-3" alt="Logo Unisa" />
+                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
+                            OBE UNISA</span>
+                    </a>
+                @endif
             </div>
             <div class="flex items-center">
                 <div class="flex items-center ml-3">
@@ -38,7 +56,6 @@
                             </p>
                             <p class="text-sm font-medium text-gray-900  dark:hover:text-gray-500 truncate dark:text-gray-300" role="none">
                                 {{ Auth::user()->email }}
-
                             </p>
                         </div>
                         <ul class="py-1" role="none">
@@ -88,13 +105,34 @@
                     <span class="ml-3">Dashboard</span>
                 </a>
             </li> --}}
-            <li>
-                <a href="{{ route('index.VM') }}"
-                    class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+            @if(Auth::user()->role == 'admin')
 
-                    <span class="ml-3">Visi dan Misi</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('dashboard') }}"
+                        class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+
+                        <span class="ml-3">Visi dan Misi</span>
+                    </a>
+                </li>
+            @endif
+            @if (Auth::user()->role == 'universitas')
+                <li>
+                    <a href="{{ route('universitas') }}"
+                        class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+
+                        <span class="ml-3">Visi dan Misi</span>
+                    </a>
+                </li>
+            @endif
+            @if (Auth::user()->role == 'prodi')
+                <li>
+                    <a href="{{ route('prodi') }}"
+                        class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+
+                        <span class="ml-3">Visi dan Misi</span>
+                    </a>
+                </li>
+            @endif
             <li>
                 <button type="button"
                     class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100"
@@ -185,7 +223,6 @@
         <br />
         <hr />
         <hr />
-        @if(Auth::user()->role == 'ADMIN')
         <ul class="space-y-2 py-3 font-medium">
             <li>
                 <a href="{{ route('index.aspek') }}"
@@ -216,7 +253,5 @@
                 </a>
             </li>
         </ul>
-
-        @endif
     </div>
 </div>

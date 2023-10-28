@@ -27,12 +27,14 @@ class loginController extends Controller
 
 
         if(Auth::attempt($infologin)){
-            if(Auth::user()->role == 'ADMIN'){
-                return redirect()->route('index.VM');
+            if(Auth::user()->role == 'admin'){
+                return redirect('dashboard');
                 // echo "sukses";
                 // exit();
-            } elseif (Auth::user()->role == 'USER'){
-                return redirect()->route('index.VMU');
+            } elseif (Auth::user()->role == 'universitas'){
+                return redirect('universitas');
+            } elseif (Auth::user()->role == 'prodi'){
+                return redirect('prodi');
             }
 
 
@@ -45,7 +47,7 @@ class loginController extends Controller
 
     function logout() {
         Auth::logout();
-        return redirect('');
+        return redirect('/');
     }
 }
 
