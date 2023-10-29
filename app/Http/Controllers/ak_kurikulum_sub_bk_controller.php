@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ak_kurikulum_sub_bk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_sub_bk_controller extends Controller
@@ -15,7 +16,8 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
         $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
             ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
-
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
             ->join(
                 "ak_kurikulum_bks",
                 "ak_kurikulum_bks.id",
@@ -54,9 +56,18 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
         $akKurikulumBk = DB::table('ak_kurikulum_bks')
             ->select(['id', 'kode_bk', 'bahan_kajian'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_bks.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
         return view('pages.subBahanKajian.create', compact('akKurikulumBk', 'akKurikulum'));
     }

@@ -14,10 +14,10 @@ class DummyUser extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'unisa',
-            'email' => 'unisa@yogya.ac.id',
-            'password' => bcrypt(123456),
-            'kdunit' => 100
+            'name' => 'Teknologi Informasi',
+            'email' => 'ti@unisayogya.ac.id',
+            'password' => bcrypt("unisa"),
+            'kdunit' => 41
         ]);
     }
 }
