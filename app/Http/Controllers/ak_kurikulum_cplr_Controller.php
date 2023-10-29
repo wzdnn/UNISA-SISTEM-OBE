@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ak_kurikulum_cplr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_cplr_Controller extends Controller
@@ -33,6 +34,8 @@ class ak_kurikulum_cplr_Controller extends Controller
                 "=",
                 "ak_kurikulum_cplrs.kdkurikulum"
             )
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
             ->orderBy("ak_kurikulum_cplrs.id")
             ->get();
 
@@ -49,6 +52,8 @@ class ak_kurikulum_cplr_Controller extends Controller
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
             ->select(["kdkurikulum", "kurikulum", "tahun"])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
 
 

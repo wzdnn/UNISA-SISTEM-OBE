@@ -40,7 +40,10 @@
                             </div>
                         </div>
                         <div class="grid md:grid-cols-2 md:gap-6">
-                            <div class="relative z-0 w-full mb-6 group">
+                            <div class="flex flex-col z-0 w-full mb-6 group">
+                                <label for="kdcpl" class="text-sm text-gray-500">
+                                    Capaian Pembelajaran Lulusan
+                                </label>
                                 <select id="inputState" name="kdcpl[]" data-live-search="true" class="form-control">
                                     @foreach ($ak_kurikulum_cpl as $cpl)
                                         <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }} {{ $cpl->cpl }}
@@ -51,6 +54,9 @@
                         </div>
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
+                                <label for="unit" class="text-sm text-gray-500">
+                                    Kurikulum
+                                </label>
                                 <select id="inputState" name="unit" data-live-search="true" class="form-control">
                                     @foreach ($akKurikulum as $unit)
                                         <option value="{{ $unit->kdkurikulum }}">{{ $unit->kurikulum }} {{ $unit->tahun }}

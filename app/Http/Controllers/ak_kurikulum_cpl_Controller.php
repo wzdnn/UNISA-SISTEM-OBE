@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ak_kurikulum_cpl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -26,6 +27,8 @@ class ak_kurikulum_cpl_Controller extends Controller
                 "=",
                 "ak_kurikulum_cpls.kdkurikulum"
             )
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
             ->get();
 
         // dd(ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])
@@ -69,10 +72,24 @@ class ak_kurikulum_cpl_Controller extends Controller
     {
         $ak_kurikulum_pl = DB::table('ak_kurikulum_pls')
             ->select(['id', 'kode_pl', 'profile_lulusan'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_pls.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
         $ak_kurikulum_cplr = DB::table('ak_kurikulum_cplrs')
             ->select(['id', 'kode_cplr', 'cplr'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cplrs.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
         $ak_kurikulum_aspek = DB::table('ak_kurikulum_aspeks')
@@ -81,6 +98,8 @@ class ak_kurikulum_cpl_Controller extends Controller
 
         $ak_kurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
 
         return view('pages.cpl.create', compact('ak_kurikulum_pl', 'ak_kurikulum_cplr', 'ak_kurikulum_aspek', 'ak_kurikulum'));

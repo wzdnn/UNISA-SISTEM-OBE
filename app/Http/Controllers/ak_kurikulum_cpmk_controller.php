@@ -14,6 +14,35 @@ use function PHPSTORM_META\map;
 class ak_kurikulum_cpmk_controller extends Controller
 {
 
+    public function cpmkIndex()
+    {
+        // $CPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+        //     ->select('ak_kurikulum_cpmks.*')
+        //     ->orderBy('ak_kurikulum_cpmks.id')
+        //     ->get();
+        $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+            ->select('ak_kurikulum_cpls.*')
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpls.kdkurikulum"
+            )
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->orderBy('ak_kurikulum_cpls.id')
+            ->get();
+
+        // $CPMK->map(function ($CPMK) {
+        //     $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
+        //     // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
+        // });
+
+        $cpm = ak_kurikulum_cpmk::all();
+
+        // return dd($CPMK);
+        return view('pages.cpmk.home', compact('CPMK', 'cpm'));
+    }
 
     public function cpmkList()
     {
