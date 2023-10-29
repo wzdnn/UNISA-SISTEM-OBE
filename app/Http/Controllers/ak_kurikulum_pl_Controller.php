@@ -31,6 +31,8 @@ class ak_kurikulum_pl_Controller extends Controller
     {
         $unit = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
         return view('pages.profileLulusan.create', compact('unit'));
     }

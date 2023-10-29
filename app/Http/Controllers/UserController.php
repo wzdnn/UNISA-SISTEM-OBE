@@ -11,13 +11,21 @@ class UserController extends Controller
 {
     public function login()
     {
-        if (Auth::attempt(['email' => 'ti@gmail.com', 'password' => '123456'])) {
-            // return dd('login sukses', Auth::user(), Auth::check());
+        return view('pages.login');
+    }
+
+
+    public function postLogin(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => 'required'
+        ]);
+
+
+        if (Auth::attempt(['email' => $request->input("email"), 'password' => $request->input("password")])) {
             return redirect('/');
         }
-
-        return dd('login gagal');
-        // return view();
     }
 
     public function test()
@@ -29,17 +37,6 @@ class UserController extends Controller
         // return dd(auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja);
     }
 
-    public function postLogin(Request $request)
-    {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => 'required'
-        ]);
-
-
-        // if (Auth::attempt(['email' => $request->input("email"), 'password' => $request->input("password")])) {
-        // }
-    }
 
     public function logout()
     {

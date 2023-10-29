@@ -32,15 +32,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/login', function () {
-        echo "<a href='/postLogin'>LOGIN</a>";
-    })->name('login');
-    Route::get('/postLogin', [UserController::class, 'login']);
+    Route::get('/login', [UserController::class, 'login'])->name('login');
+    Route::post('/postLogin', [UserController::class, 'postLogin'])->name('postLogin');
 });
 
-Route::get('/testlogin', function () {
-    return view('pages.login');
-});
+// Route::get('/testlogin', function () {
+//     return view('pages.login');
+// });
 
 
 Route::middleware(['auth'])->group(function () {
