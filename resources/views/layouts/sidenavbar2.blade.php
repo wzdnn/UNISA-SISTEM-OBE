@@ -14,12 +14,33 @@
                         </path>
                     </svg>
                 </button>
-                <a href="{{ route('welcome') }}" class="flex ml-2 md:mr-24">
-                    <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
-                        class="h-8 mr-3" alt="Logo Unisa" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
-                        OBE UNISA</span>
-                </a>
+                @if (Auth::user()->role == 'admin')
+                    <a href="{{ route('dashboard') }}" class="flex ml-2 md:mr-24">
+                        <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
+                            class="h-8 mr-3" alt="Logo Unisa" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
+                            OBE UNISA</span>
+                    </a>
+                @endif
+                @if (Auth::user()->role == 'universitas')
+                    <a href="{{ route('universitas') }}" class="flex ml-2 md:mr-24">
+                        <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
+                            class="h-8 mr-3" alt="Logo Unisa" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
+                            OBE UNISA</span>
+                    </a>
+                @endif
+                @if (Auth::user()->role == 'prodi')
+                    <a href="{{ route('prodi') }}" class="flex ml-2 md:mr-24">
+                        <img src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png"
+                            class="h-8 mr-3" alt="Logo Unisa" />
+                        <span
+                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">SISTEM
+                            OBE UNISA</span>
+                    </a>
+                @endif
             </div>
             <div class="flex items-center">
                 <div class="flex items-center ml-3">
@@ -88,106 +109,135 @@
             {{-- <li>
                 <a href="{{ route('welcome') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
-                    
+
                     <span class="ml-3">Dashboard</span>
                 </a>
             </li> --}}
-            <li>
+            <<<<<<< HEAD <li>
                 <a href="{{ route('index.VM') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
 
                     <span class="ml-3">Visi dan Misi</span>
                 </a>
-            </li>
-            <li>
-                <button type="button"
-                    class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100"
-                    aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                </li>
+                =======
+                @if (Auth::user()->role == 'admin')
+                    <li>
+                        <a href="{{ route('dashboard') }}"
+                            class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
 
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Bahan Penilaian Lulusan</span>
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-                <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                    <li>
-                        <a href="{{ route('pl.index') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Profile
-                            Lulusan</a>
+                            <span class="ml-3">Visi dan Misi</span>
+                        </a>
                     </li>
+                @endif
+                @if (Auth::user()->role == 'universitas')
                     <li>
-                        <a href="{{ route('cplr.index') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Referensi
-                            Capaian Lulusan</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('cpl.index') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Capaian
-                            Pembelajaran
-                            Lulusan</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button type="button"
-                    class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100  "
-                    aria-controls="dropdown-list-user" data-collapse-toggle="dropdown-list-user">
+                        <a href="{{ route('universitas') }}"
+                            class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
 
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Bahan Kajian</span>
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-                <ul id="dropdown-list-user" class="hidden py-2 space-y-2">
-                    <li>
-                        <a href="{{ route('bk.index') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100  ">Bahan
-                            Kajian</a>
+                            <span class="ml-3">Visi dan Misi</span>
+                        </a>
                     </li>
+                @endif
+                @if (Auth::user()->role == 'prodi')
                     <li>
-                        <a href="{{ route('subbk.index') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100  ">Sub-Bahan
-                            Kajian</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button type="button"
-                    class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100"
-                    aria-controls="dropdown-list-cpmk" data-collapse-toggle="dropdown-list-cpmk">
+                        <a href="{{ route('prodi') }}"
+                            class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
 
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">CPMK</span>
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-                <ul id="dropdown-list-cpmk" class="hidden py-2 space-y-2">
-                    <li>
-                        <a href="{{ route('list.cpmk') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">List
-                            CPMK</a>
+                            <span class="ml-3">Visi dan Misi</span>
+                        </a>
                     </li>
-                    <li>
-                        <a href="{{ route('peta.cpmk') }}"
-                            class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Peta
-                            CPL-CPMK</a>
-                    </li>
-                </ul>
-            </li>
+                @endif
+                >>>>>>> b864182a51146fc7b3bcf270350bccc39cc81da8
+                <li>
+                    <button type="button"
+                        class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100"
+                        aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
 
-            <li>
-                <a href="{{ route('index.mk') }}"
-                    class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Bahan Penilaian Lulusan</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                        <li>
+                            <a href="{{ route('pl.index') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Profile
+                                Lulusan</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('cplr.index') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Referensi
+                                Capaian Lulusan</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('cpl.index') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Capaian
+                                Pembelajaran
+                                Lulusan</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <button type="button"
+                        class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100  "
+                        aria-controls="dropdown-list-user" data-collapse-toggle="dropdown-list-user">
 
-                    <span class="flex-1 ml-3 whitespace-nowrap">Matakuliah</span>
-                </a>
-            </li>
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Bahan Kajian</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul id="dropdown-list-user" class="hidden py-2 space-y-2">
+                        <li>
+                            <a href="{{ route('bk.index') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100  ">Bahan
+                                Kajian</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('subbk.index') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100  ">Sub-Bahan
+                                Kajian</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <button type="button"
+                        class="flex items-center w-full p-2 text-base text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100"
+                        aria-controls="dropdown-list-cpmk" data-collapse-toggle="dropdown-list-cpmk">
+
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">CPMK</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul id="dropdown-list-cpmk" class="hidden py-2 space-y-2">
+                        <li>
+                            <a href="{{ route('list.cpmk') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">List
+                                CPMK</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('peta.cpmk') }}"
+                                class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Peta
+                                CPL-CPMK</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{ route('index.mk') }}"
+                        class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+
+                        <span class="flex-1 ml-3 whitespace-nowrap">Matakuliah</span>
+                    </a>
+                </li>
         </ul>
         <br />
         <hr />
