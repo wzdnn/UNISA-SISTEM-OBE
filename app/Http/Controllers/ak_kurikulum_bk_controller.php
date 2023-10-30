@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ak_kurikulum_bk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_bk_controller extends Controller
@@ -38,6 +39,8 @@ class ak_kurikulum_bk_controller extends Controller
                 "=",
                 "ak_kurikulum_bks.kdkurikulum"
             )
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
             ->get();
 
         return view('pages.bahanKajian.index', compact('akKurikulumBk'));
@@ -53,6 +56,8 @@ class ak_kurikulum_bk_controller extends Controller
             ->get();
         $akKurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
         return view('pages.bahanKajian.create', compact('akKurikulumBasil', 'akKurikulumBidil', 'akKurikulum'));
     }

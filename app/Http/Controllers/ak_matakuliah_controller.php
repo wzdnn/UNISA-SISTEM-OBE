@@ -54,6 +54,13 @@ class ak_matakuliah_controller extends Controller
 
         $SBK = DB::table('ak_kurikulum_sub_bks')
             ->select(['id', 'kode_subbk', 'sub_bk'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_sub_bks.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
         return view('pages.matakuliah.create', compact('ak_kurikulum', 'SBK'));
@@ -102,7 +109,17 @@ class ak_matakuliah_controller extends Controller
     public function kelolaSubBK(int $id)
     {
         $mkSubBk = ak_matakuliah::where('kdmatakuliah', '=', $id)->with('GetAllidSubBK')->first();
-        $subbk = ak_kurikulum_sub_bk::all();
+        // $subbk = ak_kurikulum_sub_bk::all();
+
+        $subbk = ak_kurikulum_sub_bk::with('SBKtoMK')
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_sub_bks.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->get();
 
         $subbkSelect = [];
         foreach ($mkSubBk->GetAllidSubBK as $item) {
@@ -196,7 +213,18 @@ class ak_matakuliah_controller extends Controller
     public function kelolacpmk(int $id, int $sub)
     {
         $subbkCpmk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('cpmks')->first();
+
         $cpmk = ak_kurikulum_cpmk::all();
+        $cpmk = ak_kurikulum_cpmk::with('CPMKtoCPL')
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpmks.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->get();
+
         $subbk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('subbk', 'cpmks')->first();
 
         $cpmkSelected = [];

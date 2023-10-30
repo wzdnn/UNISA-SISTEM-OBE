@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ak_kurikulum_cpl;
 use App\Models\ak_kurikulum_cpmk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -21,6 +22,14 @@ class ak_kurikulum_cpmk_controller extends Controller
         //     ->get();
         $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
             ->select('ak_kurikulum_cpls.*')
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpls.kdkurikulum"
+            )
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
             ->orderBy('ak_kurikulum_cpls.id')
             ->get();
 
@@ -40,16 +49,38 @@ class ak_kurikulum_cpmk_controller extends Controller
 
         $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
 
-        $ak_kurikulum_cpl = DB::table('ak_kurikulum_cpls')
-            ->select(['id', 'kode_cpl', 'cpl'])
+        $akKurikulum = DB::table('ak_kurikulum')
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
 
-        $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])->get();
+        $ak_kurikulum_cpl = DB::table('ak_kurikulum_cpls')
+            ->select(['id', 'kode_cpl', 'cpl'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpls.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->get();
+
+        $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpmks.kdkurikulum"
+            )
+            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->get();
 
         // return dd($listCPMK);
         // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();
 
-        return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk'));
+        return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk', 'akKurikulum'));
     }
 
 
@@ -78,7 +109,8 @@ class ak_kurikulum_cpmk_controller extends Controller
 
         $cpmk = ak_kurikulum_cpmk::create([
             'kode_cpmk' => $request->kode_cpmk,
-            'cpmk' => $request->cpmk
+            'cpmk' => $request->cpmk,
+            'kdunit' => $request->unit
         ]);
 
         $cpmk->CPMKtoCPL()->attach($request->input('kdcpl'));
