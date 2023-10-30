@@ -11,7 +11,8 @@ class ak_kurikulum_cpmk extends Model
 
     protected $fillable = [
         'kode_cpmk',
-        'cpmk'
+        'cpmk',
+        'kdkurikulum'
     ];
 
     public function CPMKtoCPL()
