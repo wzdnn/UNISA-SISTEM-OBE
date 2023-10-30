@@ -18,8 +18,10 @@ class ak_kurikulum_pl_Controller extends Controller
         $akKurikulumPl = DB::table('ak_kurikulum_pls')
             ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
             ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
             ->orderBy(('ak_kurikulum_pls.id'))
             ->get();
 

@@ -28,8 +28,10 @@ class ak_kurikulum_cpmk_controller extends Controller
                 "=",
                 "ak_kurikulum_cpls.kdkurikulum"
             )
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
             ->orderBy('ak_kurikulum_cpls.id')
             ->get();
 
@@ -110,7 +112,8 @@ class ak_kurikulum_cpmk_controller extends Controller
         $cpmk = ak_kurikulum_cpmk::create([
             'kode_cpmk' => $request->kode_cpmk,
             'cpmk' => $request->cpmk,
-            'kdunit' => $request->unit
+            'kdkurikulum' => $request->unit
+
         ]);
 
         $cpmk->CPMKtoCPL()->attach($request->input('kdcpl'));

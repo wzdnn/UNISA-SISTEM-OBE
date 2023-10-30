@@ -34,13 +34,30 @@ class ak_matakuliah_controller extends Controller
         //     ->get();
         // return dd($matakuliah);
 
+        //asli
         $matakuliah = ak_matakuliah::with('MKtoSub_bk')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            // ->leftJoin('ak_matakuliah_ak_kurikulum_sub_bk', 'ak_matakuliah_ak_kurikulum_sub_bk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
             ->orderBy('matakuliah', 'asc')
             ->paginate(20);
+
+        // dd(ak_matakuliah::with('MKtoSub_bk')
+        //     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        //     ->where("ak_kurikulum.isObe", '=', 1)
+        //     ->where(function ($query) {
+        //         $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+        //             ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+        //     })
+        //     ->orderBy('matakuliah', 'asc')
+        //     ->toSql());
+
+
+        // return dd($matakuliah);
 
         return view('pages.matakuliah.index', compact('matakuliah'));
     }
@@ -50,6 +67,8 @@ class ak_matakuliah_controller extends Controller
     {
         $ak_kurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
             ->get();
 
         $SBK = DB::table('ak_kurikulum_sub_bks')
@@ -322,7 +341,15 @@ class ak_matakuliah_controller extends Controller
     // nampilinCPMK
     public function mapCPMKshow(int $id)
     {
-        $cpmk = DB::table('ak_kurikulum_cpmks')->get();
+        $cpmk = DB::table('ak_kurikulum_cpmks')
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpmks.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->get();
         $save = DB::table('subbk_cpmk')
             ->select('ak_kurikulum_cpmk')
             ->where('ak_kurikulum_sub_bk_id', '=', $id)->first();

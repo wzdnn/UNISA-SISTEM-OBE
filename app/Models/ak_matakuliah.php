@@ -23,7 +23,7 @@ class ak_matakuliah extends Model
 
     public function MKtoSBKread()
     {
-        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id', 'kdmatakuliah', 'id')->withTimestamps();
+        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id', 'kdmatakuliah', 'id')->withPivot(['pokok_bahasan', 'kuliah', 'tutorial', 'seminar', 'praktikum', 'skill_lab', 'field_lab', 'praktik'])->withTimestamps();
     }
 
     public function MKtoSBKinput()
@@ -32,11 +32,13 @@ class ak_matakuliah extends Model
     }
 
     // gabungan sub bk dengan matkul
-    public function MKtoSub_bk(){
-        return $this->belongsToMany(ak_kurikulum_sub_bk::class,'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id')->withPivot('id');
+    public function MKtoSub_bk()
+    {
+        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id')->withPivot('id');
     }
 
-    public function GetAllidSubBK(){
+    public function GetAllidSubBK()
+    {
         return $this->hasMany(gabung_matakuliah_subbk::class, 'kdmatakuliah', 'kdmatakuliah');
     }
 }

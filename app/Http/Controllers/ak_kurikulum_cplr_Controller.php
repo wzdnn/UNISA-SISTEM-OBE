@@ -34,8 +34,10 @@ class ak_kurikulum_cplr_Controller extends Controller
                 "=",
                 "ak_kurikulum_cplrs.kdkurikulum"
             )
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
             ->orderBy("ak_kurikulum_cplrs.id")
             ->get();
 

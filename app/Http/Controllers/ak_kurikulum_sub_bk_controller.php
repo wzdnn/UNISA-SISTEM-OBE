@@ -16,8 +16,10 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
         $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
             ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
             ->join(
                 "ak_kurikulum_bks",
                 "ak_kurikulum_bks.id",

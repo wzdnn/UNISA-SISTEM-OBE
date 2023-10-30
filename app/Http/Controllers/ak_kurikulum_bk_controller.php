@@ -39,8 +39,10 @@ class ak_kurikulum_bk_controller extends Controller
                 "=",
                 "ak_kurikulum_bks.kdkurikulum"
             )
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
             ->get();
 
         return view('pages.bahanKajian.index', compact('akKurikulumBk'));
