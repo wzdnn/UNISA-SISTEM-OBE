@@ -5,15 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
+    <title>Login | SISTEM OBE</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon"
+        href="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <section class="bg-cover" style="background-image: url('.././images/Unisa.jpg')">
+<body class="bg-cover bg-center"
+    style="background-image: url('https://img.harianjogja.com/posts/2023/07/07/1141040/whatsapp-image-2023-07-07-at-14.15.251.jpg')">
+    <section class="bg-cover" style="">
         <div class="flex flex-col items-center justify-center h-screen px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <div class=" w-full bg-gray-50 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+            <div class=" w-full bg-gray-50 rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0">
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1
                         class="text-xl font-bold leading-tight tracking-tight text-center text-emerald-700 md:text-2xl mb-5">

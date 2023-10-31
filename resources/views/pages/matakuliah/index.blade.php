@@ -87,6 +87,10 @@
                                     Tooltip content
                                     <div class="tooltip-arrow" data-popper-arrow></div>
                                 </div> --}}
+                                {{-- <pre><?php $x = $value->GetAllidSubBK->firstWhere('id', 1);
+                                // print_r($x);
+                                //
+                                ?></pre> --}}
 
                                 @foreach ($value->GetAllidSubBK as $mksbk)
                                     @foreach ($mksbk->cpmks as $item)

@@ -9,6 +9,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
+    <link rel="icon" type="image/x-icon"
+        href="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png" />
+
     @stack('style')
 
     <title>SISTEM OBE | UNIVERSITAS 'AISYIYAH YOGYAKARTA</title>
