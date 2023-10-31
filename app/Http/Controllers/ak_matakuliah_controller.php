@@ -35,27 +35,28 @@ class ak_matakuliah_controller extends Controller
         // return dd($matakuliah);
 
         //asli
-        $matakuliah = ak_matakuliah::with('MKtoSub_bk')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-            // ->leftJoin('ak_matakuliah_ak_kurikulum_sub_bk', 'ak_matakuliah_ak_kurikulum_sub_bk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
-            ->where("ak_kurikulum.isObe", '=', 1)
-            ->where(function ($query) {
-                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-            })
-            ->orderBy('matakuliah', 'asc')
-            ->paginate(20);
-
-        // dd(ak_matakuliah::with('MKtoSub_bk')
+        // $matakuliah = ak_matakuliah::with('MKtoSub_bk')
         //     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        //     // ->leftJoin('ak_matakuliah_ak_kurikulum_sub_bk', 'ak_matakuliah_ak_kurikulum_sub_bk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
         //     ->where("ak_kurikulum.isObe", '=', 1)
         //     ->where(function ($query) {
         //         $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
         //             ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
         //     })
         //     ->orderBy('matakuliah', 'asc')
-        //     ->toSql());
+        //     ->paginate(20);
 
+        // $subbk = gabung_matakuliah_subbk::with('subbk', 'cpmks')->first();
+
+        $matakuliah = ak_matakuliah::with('GetAllidSubBK.cpmks')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('matakuliah', 'asc')
+            ->paginate(10);
 
         // return dd($matakuliah);
 

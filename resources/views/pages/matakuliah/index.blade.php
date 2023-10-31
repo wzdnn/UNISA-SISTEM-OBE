@@ -20,6 +20,33 @@
                     <th scope="col" class="px-6 py-3 ">
                         SUB BK
                     </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        CPMK
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Pokok Bahasan
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        K
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        T
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        S
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        Pm
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        SL
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        FL
+                    </th>
+                    <th scope="col" class="w-5 ">
+                        P
+                    </th>
                     {{-- <th scope="col" class="px-6 py-3 ">
                         Kode Matakuliah
                     </th> --}}
@@ -47,60 +74,60 @@
                             <td class="px-6 py-4 text-left">
                                 @foreach ($value->MKtoSBKread as $mksbk)
                                     {{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }} <br />
+                                    <hr />
                                 @endforeach
-                                {{-- <table>
-                                    
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <th scope="col" class="w-screen">
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            PB
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            K
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            T
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            S
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            Pm
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            SL
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            FL
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            P
-                                        </th>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($value->MKtoSBKread as $mksbk)
-                                            <tr>
-
-                                                <td>{{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }} </td>
-                                                <td>{{ $mksbk->pivot->pokok_bahasan }}</td>
-                                                <td>{{ $mksbk->pivot->kuliah }}</td>
-                                                <td>{{ $mksbk->pivot->tutorial }}</td>
-                                                <td>{{ $mksbk->pivot->seminar }}</td>
-                                                <td>{{ $mksbk->pivot->praktikum }}</td>
-                                                <td>{{ $mksbk->pivot->skill_lab }}</td>
-                                                <td>{{ $mksbk->pivot->field_lab }}</td>
-                                                <td>{{ $mksbk->pivot->praktik }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table> --}}
-                                </>
-                                {{-- <td class="px-6 py-4">
-                                {{ $value->kodematakuliah }}
-                            </td> --}}
+                            </td>
                             <td class="px-6 py-4">
-                                {{ $value->kodematakuliah }} {{ $value->matakuliah }}
+                                @foreach ($value->GetAllidSubBK as $mksbk)
+                                    @foreach ($mksbk->cpmks as $item)
+                                        {{ $item->kode_cpmk }}
+                                        <hr />
+                                    @endforeach
+                                @endforeach
+                                <br />
+                            </td>
+                            <td class="px-6 py-4 ">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->pokok_bahasan }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5 ">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->kuliah }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->tutorial }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->seminar }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->praktikum }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->skill_lab }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->field_lab }} <br />
+                                @endforeach
+                            </td>
+                            <td class="w-5">
+                                @foreach ($value->MKtoSBKread as $mksbk)
+                                    {{ $mksbk->pivot->praktik }} <br />
+                                @endforeach
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
                             </td>
                             {{-- <td class="px-6 py-4">
                                 {{ $value->mk_singkat }}

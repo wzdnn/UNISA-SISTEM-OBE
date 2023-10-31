@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <section class="bg-cover" style="background-image: url('/image/login.png');">
+    <section class="bg-cover" style="background-image: url('.././images/Unisa.jpg')">
         <div class="flex flex-col items-center justify-center h-screen px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div class=" w-full bg-gray-50 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
