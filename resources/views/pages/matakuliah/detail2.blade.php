@@ -7,6 +7,7 @@
 @endpush
 
 @section('body')
+    @include('include.flash-massage')
     <!-- Breadcrumb -->
     <nav class="flex px-5 py-3 bg-white border shadow-md rounded-lg mb-3" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">

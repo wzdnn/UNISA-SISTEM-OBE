@@ -75,11 +75,12 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="6">Bahan Kajian belum ada</td>
+                        <td class="justify-center text-center" colspan="7">Bahan Kajian belum ada</td>
                     </tr>
                 @endif
             </tbody>
         </table>
+        {{ $akKurikulumBk->links() }}
         <hr />
     </div>
 @endsection

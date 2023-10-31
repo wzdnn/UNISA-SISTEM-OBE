@@ -36,8 +36,8 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/postLogin', [UserController::class, 'postLogin'])->name('postLogin');
 });
 
-// Route::get('/testlogin', function () {
-//     return view('pages.login');
+// Route::get('/tampilan', function () {
+//     return view('pages.matkul');
 // });
 
 

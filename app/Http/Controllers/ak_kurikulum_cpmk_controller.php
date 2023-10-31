@@ -20,27 +20,50 @@ class ak_kurikulum_cpmk_controller extends Controller
         //     ->select('ak_kurikulum_cpmks.*')
         //     ->orderBy('ak_kurikulum_cpmks.id')
         //     ->get();
-        $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
-            ->select('ak_kurikulum_cpls.*')
-            ->join(
-                "ak_kurikulum",
-                "ak_kurikulum.kdkurikulum",
-                "=",
-                "ak_kurikulum_cpls.kdkurikulum"
-            )
-            ->where(function ($query) {
-                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-            })
-            ->orderBy('ak_kurikulum_cpls.id')
-            ->get();
 
-        // $CPMK->map(function ($CPMK) {
-        //     $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
-        //     // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
-        // });
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select('ak_kurikulum_cpls.*')
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->orderBy('ak_kurikulum_cpls.id')
+                ->paginate(10);
 
-        $cpm = ak_kurikulum_cpmk::all();
+            // $CPMK->map(function ($CPMK) {
+            //     $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
+            //     // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
+            // });
+
+            $cpm = ak_kurikulum_cpmk::all();
+        } else {
+            $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select('ak_kurikulum_cpls.*')
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->orderBy('ak_kurikulum_cpls.id')
+                ->paginate(10);
+
+            // $CPMK->map(function ($CPMK) {
+            //     $CPMK->ak_kurikulum_cpmk = (unserialize($CPMK->ak_kurikulum_cpmk)) ? unserialize($CPMK->ak_kurikulum_cpmk) : (object) null;
+            //     // $CPMK->ak_kurikulum_cpmk = unserialize($CPMK->ak_kurikulum_cpmk);
+            // });
+
+            $cpm = ak_kurikulum_cpmk::all();
+        }
+
+
 
         // return dd($CPMK);
         return view('pages.cpmk.home', compact('CPMK', 'cpm'));
@@ -68,16 +91,28 @@ class ak_kurikulum_cpmk_controller extends Controller
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
-        $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
-            ->join(
-                "ak_kurikulum",
-                "ak_kurikulum.kdkurikulum",
-                "=",
-                "ak_kurikulum_cpmks.kdkurikulum"
-            )
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
-            ->get();
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpmks.kdkurikulum"
+                )
+                ->paginate(10);
+        } else {
+            $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpmks.kdkurikulum"
+                )
+                ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
+                ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+                ->paginate(10);
+        }
+
 
         // return dd($listCPMK);
         // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();

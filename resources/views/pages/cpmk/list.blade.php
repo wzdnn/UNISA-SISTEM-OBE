@@ -143,6 +143,7 @@
                 @endif
             </tbody>
         </table>
+        {{ $listCPMK->links() }}
         <hr />
     </div>
 @endsection

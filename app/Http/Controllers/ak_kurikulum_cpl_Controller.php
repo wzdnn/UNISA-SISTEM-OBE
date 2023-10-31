@@ -13,23 +13,45 @@ class ak_kurikulum_cpl_Controller extends Controller
     //
     public function index()
     {
-        $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
-            ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
-            ->join(
-                "ak_kurikulum_aspeks",
-                "ak_kurikulum_aspeks.id",
-                "=",
-                "ak_kurikulum_cpls.kdaspek"
-            )
-            ->join(
-                "ak_kurikulum",
-                "ak_kurikulum.kdkurikulum",
-                "=",
-                "ak_kurikulum_cpls.kdkurikulum"
-            )
-            ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
-            ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
-            ->get();
+
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->join(
+                    "ak_kurikulum_aspeks",
+                    "ak_kurikulum_aspeks.id",
+                    "=",
+                    "ak_kurikulum_cpls.kdaspek"
+                )
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->paginate(10);
+        } else {
+            $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->join(
+                    "ak_kurikulum_aspeks",
+                    "ak_kurikulum_aspeks.id",
+                    "=",
+                    "ak_kurikulum_cpls.kdaspek"
+                )
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->paginate(10);
+        }
+
 
         // dd(ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])
         //     ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")

@@ -81,6 +81,7 @@
                 @endif
             </tbody>
         </table>
+        {{ $akKurikulumSubBk->links() }}
         <hr />
     </div>
 @endsection

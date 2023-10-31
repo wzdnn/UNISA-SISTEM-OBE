@@ -81,11 +81,12 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="7">Sumber Referensi CPL belum ada</td>
+                        <td class="justify-center text-center" colspan="8">Sumber Referensi CPL belum ada</td>
                     </tr>
                 @endif
             </tbody>
         </table>
+        {{ $akKurikulumCplr->links() }}
         <hr />
     </div>
 @endsection

@@ -17,7 +17,6 @@ use function Laravel\Prompts\select;
 
 class ak_matakuliah_controller extends Controller
 {
-    //home page 
 
     public function mkIndex()
     {
@@ -48,16 +47,25 @@ class ak_matakuliah_controller extends Controller
 
         // $subbk = gabung_matakuliah_subbk::with('subbk', 'cpmks')->first();
 
-        $matakuliah = ak_matakuliah::with('GetAllidSubBK.cpmks')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-            ->where("ak_kurikulum.isObe", '=', 1)
-            ->where(function ($query) {
-                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-            })
-            ->orderBy('matakuliah', 'asc')
-            ->paginate(10);
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK')
+                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                ->where("ak_kurikulum.isObe", '=', 1)
+                ->orderBy('kdmatakuliah', 'asc')
+                ->paginate(10);
+        } else {
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK')
+                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                ->where("ak_kurikulum.isObe", '=', 1)
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->orderBy('kdmatakuliah', 'asc')
+                ->paginate(10);
+        }
 
+        // $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK');
         // return dd($matakuliah);
 
         return view('pages.matakuliah.index', compact('matakuliah'));
@@ -139,7 +147,7 @@ class ak_matakuliah_controller extends Controller
 
             $mkSubBk->kodematakuliah = $request->input('kodematakuliah');
             $mkSubBk->matakuliah = $request->input('matakuliah');
-            $mkSubBk->mk_singkat = $request->input('tutorial');
+            $mkSubBk->mk_singkat = $request->input('mk_singkat');
 
             $mkSubBk->save();
 

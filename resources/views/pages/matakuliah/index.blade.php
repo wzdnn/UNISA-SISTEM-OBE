@@ -2,7 +2,7 @@
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-blue-800">Matakuliah</h1>
+        <h1 class="font-bold text-2xl mb-0 text-gray-700">Matakuliah</h1>
         <a href="{{ route('create.mk') }}">
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Matakuliah
             </button>
@@ -11,6 +11,7 @@
     <hr />
 
     <div class="relative py-3">
+
         <table class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr class="text-left">
@@ -72,8 +73,13 @@
                                 {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4">
+                                {{-- Sub BK --}}
                                 @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }} <br />
+                                    <p>{{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }}</p>
+                                    {{-- @foreach ($mksbk->SBKtoidCPMK as $item)
+                                        <p style="text-indent: 0.5in;">{{ $item->kode_cpmk }}</p>
+                                    @endforeach --}}
+
                                     <hr />
                                 @endforeach
                             </td>
@@ -88,8 +94,8 @@
                                     <div class="tooltip-arrow" data-popper-arrow></div>
                                 </div> --}}
                                 {{-- <pre><?php $x = $value->GetAllidSubBK->firstWhere('id', 1);
-                                // print_r($x);
-                                //
+                                print_r($x);
+                                
                                 ?></pre> --}}
 
                                 @foreach ($value->GetAllidSubBK as $mksbk)
@@ -161,7 +167,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="7">Data belum ada</td>
+                        <td class="justify-center text-center" colspan="14">Data belum ada</td>
                     </tr>
                 @endif
             </tbody>

@@ -58,6 +58,7 @@
                 @endif
             </tbody>
         </table>
+        {{ $CPMK->links() }}
         <hr />
     </div>
 @endsection

@@ -15,15 +15,23 @@ class ak_kurikulum_pl_Controller extends Controller
     {
         // $akKurikulumPl = ak_kurikulum_pl::all();
 
-        $akKurikulumPl = DB::table('ak_kurikulum_pls')
-            ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
-            ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
-            ->where(function ($query) {
-                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-            })
-            ->orderBy(('ak_kurikulum_pls.id'))
-            ->get();
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $akKurikulumPl = DB::table('ak_kurikulum_pls')
+                ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
+                ->orderBy(('ak_kurikulum_pls.id'))
+                ->paginate(10);
+        } else {
+            $akKurikulumPl = DB::table('ak_kurikulum_pls')
+                ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->orderBy(('ak_kurikulum_pls.id'))
+                ->paginate(10);
+        }
 
 
         return view('pages.profileLulusan.index', compact('akKurikulumPl'));

@@ -70,11 +70,13 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="5">Profile Lulusan belum ada</td>
+                        <td class="justify-center text-center" colspan="6">Profile Lulusan belum ada</td>
                     </tr>
                 @endif
             </tbody>
         </table>
+        {{ $akKurikulumPl->links() }}
         <hr />
+
     </div>
 @endsection

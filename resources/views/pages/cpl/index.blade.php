@@ -92,11 +92,12 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="8">CPL belum ada</td>
+                        <td class="justify-center text-center" colspan="9">CPL belum ada</td>
                     </tr>
                 @endif
             </tbody>
         </table>
+        {{ $akKurikulumCpl->links() }}
         <hr />
     </div>
 @endsection
