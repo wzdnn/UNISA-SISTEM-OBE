@@ -100,7 +100,6 @@
                 </thead>
             </table>
             <div class="my-3">
-
                 <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-2"
                     type="submit">UPDATE</button>
             </div>

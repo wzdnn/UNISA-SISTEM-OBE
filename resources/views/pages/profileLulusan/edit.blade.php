@@ -30,7 +30,7 @@
 
 
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0">Edit Profile Lulusan {{ $plEdit->kode_pl }}</h1>
+        <h1 class="font-bold text-2xl mb-0 text-gray-700">Edit Profile Lulusan {{ $plEdit->kode_pl }}</h1>
     </div>
     <hr />
     @if ($errors->any())

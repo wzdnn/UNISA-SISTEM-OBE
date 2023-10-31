@@ -2,7 +2,7 @@
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-blue-800">Bidang Ilmu</h1>
+        <h1 class="font-bold text-2xl mb-0 text-gray-700">Bidang Ilmu</h1>
         <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
             class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button">

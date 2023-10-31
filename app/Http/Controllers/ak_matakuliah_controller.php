@@ -126,6 +126,11 @@ class ak_matakuliah_controller extends Controller
 
     public function postsubbkDetail(int $id, Request $request)
     {
+        $request->validate([
+            'kodematakuliah' => 'nullable',
+            'matakuliah' => 'nullable',
+            'mk_singkat'
+        ]);
 
         try {
             // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();

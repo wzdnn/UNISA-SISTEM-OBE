@@ -2,14 +2,15 @@
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-blue-800">Visi dan Misi Universitas 'Aisyiyah Yogyakarta</h1>
+        <h1 class="font-bold text-2xl mb-0 text-gray-700">Visi dan Misi Universitas 'Aisyiyah Yogyakarta
+        </h1>
     </div>
     <hr />
 
 
     <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-white">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3">
 

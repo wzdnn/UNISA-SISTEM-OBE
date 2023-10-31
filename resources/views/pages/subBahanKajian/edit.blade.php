@@ -35,7 +35,7 @@
     </nav>
 
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-blue-800">Tambah Sub Bahan Kajian</h1>
+        <h1 class="font-bold text-2xl mb-0 text-gray-700">Tambah Sub Bahan Kajian</h1>
     </div>
     <hr />
     @if ($errors->any())
