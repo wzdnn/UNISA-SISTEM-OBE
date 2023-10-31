@@ -90,8 +90,6 @@ class ak_matakuliah_controller extends Controller
     public function mkStore(Request $request)
     {
         $request->validate([
-            'kodematakuliah',
-            'mk_singkat',
             'semester'
         ]);
 
@@ -124,6 +122,27 @@ class ak_matakuliah_controller extends Controller
         // return dd($mkSubBk);
 
         return view('pages.matakuliah.detail2', compact('mkSubBk'));
+    }
+
+    public function postsubbkDetail(int $id, Request $request)
+    {
+
+        try {
+            // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
+
+            $mkSubBk = ak_matakuliah::where('kdmatakuliah', '=', $id)->first();
+
+            $mkSubBk->kodematakuliah = $request->input('kodematakuliah');
+            $mkSubBk->matakuliah = $request->input('matakuliah');
+            $mkSubBk->mk_singkat = $request->input('tutorial');
+
+            $mkSubBk->save();
+
+            return redirect()->back()->with('success', 'berhasil update SKS');
+        } catch (Throwable $th) {
+
+            return redirect()->back()->with('failed', 'gagal update SKS. Error: ' . $th->getMessage());
+        }
     }
 
     public function kelolaSubBK(int $id)

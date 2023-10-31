@@ -6,73 +6,106 @@
     </div>
     <hr />
 
-    <div class="relative py-3">
-        <div id="accordion-color" data-accordion="collapse"
-            data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-800 dark:text-white">
-            <h2 id="accordion-color-heading-1">
-                <button type="button"
-                    class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700  hover:bg-blue-100 dark:hover:bg-gray-800"
-                    data-accordion-target="#accordion-color-body-1" aria-expanded="true"
-                    aria-controls="accordion-color-body-1">
-                    <span>Visi</span>
-                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
-            </h2>
-            <div id="accordion-color-body-1" class="hidden" aria-labelledby="accordion-color-heading-1">
-                <div class="p-5 border border-b-0 border-gray-200 ">
-                    @foreach ($vm as $visi)
-                        <p class="mb-2 font-bold text-gray-700 ">
-                            &#x2022; {{ $visi->Visi }}
-                        </p>
-                    @endforeach
-                </div>
-            </div>
-            <h2 id="accordion-color-heading-2">
-                <button type="button"
-                    class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700  hover:bg-blue-100 dark:hover:bg-gray-800"
-                    data-accordion-target="#accordion-color-body-2" aria-expanded="false"
-                    aria-controls="accordion-color-body-2">
-                    <span>Misi</span>
-                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
-            </h2>
-            <div id="accordion-color-body-2" class="hidden" aria-labelledby="accordion-color-heading-2">
-                <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
-                    @foreach ($misi as $misi)
-                        <p class="mb-2 font-bold text-gray-700  text-justify">&#x2022; {{ $misi->Misi }}</p>
-                    @endforeach
-                </div>
-            </div>
-            <h2 id="accordion-color-heading-3">
-                <button type="button"
-                    class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700  hover:bg-blue-100 dark:hover:bg-gray-800"
-                    data-accordion-target="#accordion-color-body-3" aria-expanded="false"
-                    aria-controls="accordion-color-body-3">
-                    <span>Tujuan</span>
-                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
-            </h2>
-            <div id="accordion-color-body-3" class="hidden" aria-labelledby="accordion-color-heading-3">
-                <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
-                    <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
-                        @foreach ($tujuan as $tujuan)
-                            <p class="mb-2 font-bold text-gray-700  text-justify">&#x2022; {{ $tujuan->Tujuan }}</p>
+
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Universitas
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Fakultas
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Prodi
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-left">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Visi
+                    </th>
+                    <td class="px-6 py-4">
+                        @foreach ($visiU as $visiUniv)
+                            <p class="mb-2 font-bold  ">
+                                &#x2022; {{ $visiUniv->Visi }}
+                            </p>
                         @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach ($visiF as $visiFakultas)
+                            <p class="mb-2 font-bold  ">
+                                &#x2022; {{ $visiFakultas->Visi }}
+                            </p>
+                        @endforeach
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach ($visiP as $visiProdi)
+                            <p class="mb-2 font-bold  ">
+                                &#x2022; {{ $visiProdi->Visi }}
+                            </p>
+                        @endforeach
+                    </td>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Misi
+                    </th>
+                    <td class="px-6 py-4">
+                        @foreach ($misiU as $misiUniv)
+                            <p class="mb-2 font-bold  ">
+                                &#x2022; {{ $misiUniv->Misi }}
+                            </p>
+                        @endforeach
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach ($misiF as $misiFakultas)
+                            <p class="mb-2 font-bold  ">
+                                &#x2022; {{ $misiFakultas->Misi }}
+                            </p>
+                        @endforeach
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach ($misiP as $misiProdi)
+                            <p class="mb-2 font-bold  ">
+                                &#x2022; {{ $misiProdi->Misi }}
+                            </p>
+                        @endforeach
+                    </td>
+                </tr>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th scope="row"
+                        class="px-6 py-4 font-medium text-gray-900 dark:bg-gray-300 whitespace-nowrap dark:text-white">
+                        Tujuan
+                    </th>
+                    <td class="px-6 py-4">
+                        @foreach ($tujuanU as $tujuanUniv)
+                            <p class="mb-2 font-bold ">
+                                &#x2022; {{ $tujuanUniv->Tujuan }}
+                            </p>
+                        @endforeach
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach ($tujuanF as $tujuanFakultas)
+                            <p class="mb-2 font-bold ">
+                                &#x2022; {{ $tujuanFakultas->Tujuan }}
+                            </p>
+                        @endforeach
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach ($tujuanP as $tujuanProdi)
+                            <p class="mb-2 font-bold ">
+                                &#x2022; {{ $tujuanProdi->Tujuan }}
+                            </p>
+                        @endforeach
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 @endsection

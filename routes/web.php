@@ -140,6 +140,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/matakuliah/Store', [ak_matakuliah_controller::class, 'mkStore'])->name('store.mk');
 
     Route::get('/DetailMK/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
+    Route::post('/DetailMK/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
     Route::get('/DetailMK/{id}/subbk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
     Route::post('/DetailMK/{id}/subbk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
 

@@ -57,7 +57,7 @@
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="kodematakuliah" id="kodematakuliah"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " required value="{{ old('kodematakuliah') }}" />
+                    placeholder=" " value="{{ old('kodematakuliah') }}" />
                 <label for="kodematakuliah"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
                     Matakuliah</label>
@@ -65,7 +65,7 @@
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="matakuliah" id="matakuliah"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " required value="{{ old('matakuliah') }}" />
+                    placeholder=" " value="{{ old('matakuliah') }}" />
                 <label for="matakuliah"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                     Matakuliah</label>
@@ -73,7 +73,7 @@
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="mk_singkat" id="mk_singkat"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " required value="{{ old('mk_singkat') }}" />
+                    placeholder=" " value="{{ old('mk_singkat') }}" />
                 <label for="mk_singkat"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
                     Singkat</label>

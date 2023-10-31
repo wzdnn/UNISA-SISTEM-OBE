@@ -45,33 +45,67 @@
     <div class="my-3">
         {{-- <h2 class="text-lg">Kode : {{ $mkSubBk->kdmatakuliah }}</h2>
     <h2 class="text-lg">Mata Kuliah : {{ $mkSubBk->matakuliah }}</h2> --}}
+        <form action="{{ route('post.detail.mk', ['id' => $mkSubBk->kdmatakuliah]) }}" method="post">
+            @csrf
+            <table class="w-[40vh] text-sm  text-gray-500 ">
+                <thead class="text-lg text-gray-700 uppercase">
+                    <tr class="text-left">
+                        <th scope="col">
+                            Kode
+                        </th>
+                        <th scope="col">
+                            :
+                        </th>
+                        <th scope="col">
+                            <input type="text" name="kodematakuliah" id="kodematakuliah"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('kodematakuliah') ?? $mkSubBk->kodematakuliah }}" />
+                            <label for="kodematakuliah"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
+                                Matakuliah</label>
+                        </th>
+                    </tr>
+                    <tr class="text-left">
+                        <th>
+                            Matakuliah
+                        </th>
+                        <th class="">
+                            :
+                        </th>
+                        <th>
+                            <input type="text" name="matakuliah" id="matakuliah"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('matakuliah') ?? $mkSubBk->matakuliah }}" />
+                            <label for="matakuliah"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Matakuliah</label>
+                        </th>
+                    </tr>
+                    <tr class="text-left">
+                        <th>
+                            MK Singkat
+                        </th>
+                        <th class="">
+                            :
+                        </th>
+                        <th class="ml-3">
+                            <input type="text" name="mk_singkat" id="mk_singkat"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('mk_singkat') ?? $mkSubBk->mk_singkat }}" />
+                            <label for="mk_singkat"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
+                                Singkat</label>
+                        </th>
 
-        <table class="w-[40vh] text-sm  text-gray-500 ">
-            <thead class="text-lg text-gray-700 uppercase">
-                <tr class="text-left">
-                    <th scope="col">
-                        Kode
-                    </th>
-                    <th scope="col">
-                        :
-                    </th>
-                    <th scope="col">
-                        {{ $mkSubBk->kdmatakuliah }}
-                    </th>
-                </tr>
-                <tr class="text-left">
-                    <th>
-                        Matakuliah
-                    </th>
-                    <th class="">
-                        :
-                    </th>
-                    <th>
-                        {{ $mkSubBk->matakuliah }}
-                    </th>
-                </tr>
-            </thead>
-        </table>
+                    </tr>
+                </thead>
+            </table>
+            <div class="my-3">
+
+                <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-2"
+                    type="submit">UPDATE</button>
+            </div>
+        </form>
+
         <br />
         <hr />
     </div>
