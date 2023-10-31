@@ -23,7 +23,7 @@
                     <th scope="col" class="px-6 py-3 ">
                         CPMK
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-4">
                         Pokok Bahasan
                     </th>
                     <th scope="col" class="w-5 ">
@@ -50,13 +50,13 @@
                     {{-- <th scope="col" class="px-6 py-3 ">
                         Kode Matakuliah
                     </th> --}}
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-3 py-1 ">
                         Matakuliah
                     </th>
                     {{-- <th scope="col" class="px-6 py-3 ">
                         MK Singkat
                     </th> --}}
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="w-10 ">
                         Unit
                     </th>
                     <th scope="col" class="px-6 py-3 ">
@@ -95,9 +95,10 @@
                                     <hr />
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4 ">
+                            <td class="px-6 py-4">
                                 @foreach ($value->MKtoSBKread as $mksbk)
                                     {{ $mksbk->pivot->pokok_bahasan }} <br />
+                                    <hr />
                                 @endforeach
                             </td>
                             <td class="w-5 ">
@@ -135,13 +136,13 @@
                                     {{ $mksbk->pivot->praktik }} <br />
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-3 py-1">
                                 {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
                             </td>
                             {{-- <td class="px-6 py-4">
                                 {{ $value->mk_singkat }}
                             </td> --}}
-                            <td class=" px-6 py-4 ">
+                            <td class=" w-10">
                                 {{ $value->kurikulum }} {{ $value->tahun }}
                             </td>
                             <td class=" px-6 py-4">
