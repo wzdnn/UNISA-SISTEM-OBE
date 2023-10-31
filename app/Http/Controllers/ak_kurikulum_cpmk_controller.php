@@ -57,6 +57,13 @@ class ak_kurikulum_cpmk_controller extends Controller
 
         $ak_kurikulum_cpl = DB::table('ak_kurikulum_cpls')
             ->select(['id', 'kode_cpl', 'cpl'])
+            ->join(
+                "ak_kurikulum",
+                "ak_kurikulum.kdkurikulum",
+                "=",
+                "ak_kurikulum_cpls.kdkurikulum"
+            )
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
         $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
