@@ -12,7 +12,7 @@
 
     <div class="relative py-3">
 
-        <table class="w-full text-sm text-center  text-gray-500">
+        <table class="w-full text-sm text-center  text-gray-500" id="mytable" name="mytable" style="border: 1 !important">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr class="text-left">
                     <th scope="col" class="px-6 py-3 w-[50px]">
@@ -48,15 +48,9 @@
                     <th scope="col" class="w-5 ">
                         P
                     </th>
-                    {{-- <th scope="col" class="px-6 py-3 ">
-                        Kode Matakuliah
-                    </th> --}}
                     <th scope="col" class="px-3 py-1 ">
                         Matakuliah
                     </th>
-                    {{-- <th scope="col" class="px-6 py-3 ">
-                        MK Singkat
-                    </th> --}}
                     <th scope="col" class="w-10 ">
                         Unit
                     </th>
@@ -68,105 +62,163 @@
             <tbody>
                 @if ($matakuliah->count() > 0)
                     @foreach ($matakuliah as $key => $value)
-                        <tr class="bg-white border-b text-left">
-                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{-- Sub BK --}}
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    <p>{{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }}</p>
+                        {{-- Sub BK --}}
 
-                                    {{-- ver 1 --}}
+                        <?php
+                        $cpmk_sbk = [];
+                        foreach ($value->GetAllidSubBK as $item0) {
+                            if (count($item0->cpmks) > 0) {
+                                foreach ($item0->cpmks as $item) {
+                                    $arr = $item->toArray();
+                                    $cpmk_sbk[$arr['pivot']['id_gabung_subbk']][] = $arr['kode_cpmk'];
+                                }
+                            }
+                        }
+                        $subbkexist = isset($value->MKtoSBKread);
+                        ?>
 
-                                    {{-- @foreach ($mksbk->SBKtoidCPMK as $item)
-                                        <p style="text-indent: 0.5in;">{{ $item->kode_cpmk }}</p>
-                                    @endforeach --}}
+                        @if ($value->MKtoSBKread->count() > 0)
+                            @foreach ($value->MKtoSBKread as $mksbk)
+                                <tr class="bg-white border-b text-left">
+                                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p>{{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }}</p>
+                                    </td>
 
-                                    {{-- ver 2 --}}
+                                    <td class="px-6 py-4">
 
-                                    {{-- @foreach ($mksbk->getSBKtoidCPMK as $item)
-                                        @foreach ($item->cpmks as $cpmk)
-                                            &#x2022; {{ $cpmk->kode_cpmk }}
-                                        @endforeach
-                                    @endforeach --}}
+                                        <?php
+                                        if (isset($cpmk_sbk)) {
+                                            foreach ($cpmk_sbk[$mksbk->pivot->id] as $item) {
+                                                echo $item;
+                                            }
+                                        }
+                                        ?>
 
-                                    {{-- ver 3 --}}
+                                        {{-- @foreach ($value->GetAllidSubBK as $mksbks)
+                                            @foreach ($mksbks->cpmks as $items)
+                                                &#x2022; {{ $items->kode_cpmk }}
+                                            @endforeach
+                                            <hr />
+                                        @endforeach --}}
 
-                                    {{-- @foreach ($mksbk->GetAllidSubBK as $cpmk)
-                                        @foreach ($cpmk->cpmks as $hasil)
-                                            {{ $hasil->kode_cpmk }}
-                                        @endforeach
-                                    @endforeach --}}
-                                @endforeach
-                            </td>
-                            <td class="px-6 py-4">
-                                @foreach ($value->GetAllidSubBK as $mksbk)
-                                    @foreach ($mksbk->cpmks as $item)
-                                        &#x2022; {{ $item->kode_cpmk }}
-                                    @endforeach
-                                    <hr />
-                                @endforeach
-                            </td>
-                            <td class="px-6 py-4">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->pokok_bahasan }} <br />
-                                    <hr />
-                                @endforeach
-                            </td>
-                            <td class="w-5 ">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->kuliah }} <br />
-                                @endforeach
-                            </td>
-                            <td class="w-5">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->tutorial }} <br />
-                                @endforeach
-                            </td>
-                            <td class="w-5">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->seminar }} <br />
-                                @endforeach
-                            </td>
-                            <td class="w-5">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->praktikum }} <br />
-                                @endforeach
-                            </td>
-                            <td class="w-5">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->skill_lab }} <br />
-                                @endforeach
-                            </td>
-                            <td class="w-5">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->field_lab }} <br />
-                                @endforeach
-                            </td>
-                            <td class="w-5">
-                                @foreach ($value->MKtoSBKread as $mksbk)
-                                    {{ $mksbk->pivot->praktik }} <br />
-                                @endforeach
-                            </td>
-                            <td class="px-3 py-1">
-                                {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
-                            </td>
-                            {{-- <td class="px-6 py-4">
-                                {{ $value->mk_singkat }}
-                            </td> --}}
-                            <td class=" w-10">
-                                {{ $value->kurikulum }} {{ $value->tahun }}
-                            </td>
-                            <td class=" px-6 py-4">
-                                <a href="{{ route('detail.mk', ['id' => $value->kdmatakuliah]) }}">
-                                    <button type="button"
-                                        class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
-                                            class="fa-solid fa-circle-info"></i></button>
-                                </a>
-                            </td>
 
-                        </tr>
+                                    </td>
+                                    <td class="px-6 py-4">
+
+                                        {{ $mksbk->pivot->pokok_bahasan }} <br />
+
+                                    </td>
+                                    <td class="w-5 ">
+
+                                        {{ $mksbk->pivot->kuliah }} <br />
+
+                                    </td>
+                                    <td class="w-5">
+
+                                        {{ $mksbk->pivot->tutorial }} <br />
+
+                                    </td>
+                                    <td class="w-5">
+
+                                        {{ $mksbk->pivot->seminar }} <br />
+
+                                    </td>
+                                    <td class="w-5">
+
+                                        {{ $mksbk->pivot->praktikum }} <br />
+
+                                    </td>
+                                    <td class="w-5">
+
+                                        {{ $mksbk->pivot->skill_lab }} <br />
+
+                                    </td>
+                                    <td class="w-5">
+
+                                        {{ $mksbk->pivot->field_lab }} <br />
+
+                                    </td>
+                                    <td class="w-5">
+
+                                        {{ $mksbk->pivot->praktik }} <br />
+
+                                    </td>
+                                    <td class="px-3 py-1">
+                                        {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
+                                    </td>
+                                    <td class=" w-10">
+                                        {{ $value->kurikulum }} {{ $value->tahun }}
+                                    </td>
+                                    <td class=" px-6 py-4">
+                                        <a href="{{ route('detail.mk', ['id' => $value->kdmatakuliah]) }}">
+                                            <button type="button"
+                                                class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                                    class="fa-solid fa-circle-info"></i></button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr class="bg-white border-b text-left">
+                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
+                                </td>
+                                <td class="px-6 py-4">
+
+                                </td>
+
+                                <td class="px-6 py-4">
+
+                                </td>
+                                <td class="px-6 py-4">
+
+
+                                </td>
+                                <td class="w-5 ">
+
+
+                                </td>
+                                <td class="w-5">
+
+
+                                </td>
+                                <td class="w-5">
+
+
+                                </td>
+                                <td class="w-5">
+
+
+                                </td>
+                                <td class="w-5">
+
+
+                                </td>
+                                <td class="w-5">
+
+
+                                </td>
+                                <td class="w-5">
+
+                                </td>
+                                <td class="px-3 py-1">
+                                    {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
+                                </td>
+                                <td class=" w-10">
+                                    {{ $value->kurikulum }} {{ $value->tahun }}
+                                </td>
+                                <td class=" px-6 py-4">
+                                    <a href="{{ route('detail.mk', ['id' => $value->kdmatakuliah]) }}">
+                                        <button type="button"
+                                            class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                                class="fa-solid fa-circle-info"></i></button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                 @else
                     <tr>
@@ -178,4 +230,63 @@
         {{ $matakuliah->links() }}
         <hr />
     </div>
+    <script>
+        //on load
+        $(function() {
+            // MergeGridCells('#mytable', 1, false);
+            MergeGridCells('#mytable', 12, false);
+            MergeGridCells('#mytable', 1, false);
+
+        });
+
+        function MergeGridCells(table_id, dimension_col, is_alternate_color) {
+            let i = 0;
+            // first_instance holds the first instance of identical td
+            // first_instance menyimpan kata yang sama
+            let first_instance = null;
+            // how many identical td?
+            // berapa baris yang sama?
+            let rowspan = 1;
+            // iterate through rows
+            // loop untuk setiap baris
+            $(table_id + ' > tbody > tr').each(function() {
+
+                // find the td of the correct column (determined by the dimension_col set above)
+                // ambil teks (sesuai dengan kolom ke-dimension_col)
+                let dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+
+                if (first_instance == null) {
+                    // must be the first row
+                    // baris pertama
+                    first_instance = dimension_td;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                } else if (dimension_td.text() == first_instance.text()) {
+                    // the current td is identical to the previous
+                    // baris ini sama dengan baris sebelumnya
+                    // remove the current td
+                    // delete baris ini
+                    dimension_td.remove();
+                    ++rowspan;
+                    // increment the rowspan attribute of the first instance
+                    // baris ini di merge dengan sebelumnya dengan cara menaikkan rowspan baris pertama yang sama sampai dengan baris ini
+                    first_instance.attr('rowspan', rowspan);
+                    painting(is_alternate_color, first_instance, i);
+                } else {
+                    // this cell is different from the last, stop previous rowspan
+                    // baris ini berbeda dengan yang sebelumnya, hentikan proses merger sebelumnya
+                    first_instance = dimension_td;
+                    rowspan = 1;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                }
+
+            });
+        }
+
+        function painting(is_alternate_color, instance, i) {
+            if (is_alternate_color)
+                instance.attr('style', 'background-color: ' + ((i % 2 == 0) ? '#FFFFB6' : '#ff9da4'));
+        }
+    </script>
 @endsection

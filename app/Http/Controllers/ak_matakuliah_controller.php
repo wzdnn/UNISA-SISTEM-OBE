@@ -64,8 +64,6 @@ class ak_matakuliah_controller extends Controller
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
         }
-
-        // $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK');
         // return dd($matakuliah);
 
         return view('pages.matakuliah.index', compact('matakuliah'));

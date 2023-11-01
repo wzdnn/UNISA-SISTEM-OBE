@@ -23,7 +23,7 @@ class ak_matakuliah extends Model
 
     public function MKtoSBKread()
     {
-        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id', 'kdmatakuliah', 'id')->withPivot(['pokok_bahasan', 'kuliah', 'tutorial', 'seminar', 'praktikum', 'skill_lab', 'field_lab', 'praktik'])->withTimestamps();
+        return $this->belongsToMany(ak_kurikulum_sub_bk::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id', 'kdmatakuliah', 'id')->withPivot(['id', 'pokok_bahasan', 'kuliah', 'tutorial', 'seminar', 'praktikum', 'skill_lab', 'field_lab', 'praktik'])->withTimestamps();
     }
 
     public function MKtoSBKinput()

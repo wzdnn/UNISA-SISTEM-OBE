@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon"
         href="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 </head>
 
 <body class="bg-cover bg-center" style="background-image: url('')">
@@ -58,13 +58,13 @@
         <tr>
             <td>4</td>
             <td>Yellow</td>
-            <td>Purple</td>
+            <td>Orange</td>
             <td>January</td>
         </tr>
         <tr>
             <td>5</td>
             <td>Blue</td>
-            <td>Purple</td>
+            <td>Orange</td>
             <td>February</td>
         </tr>
         <tr>
@@ -141,7 +141,6 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 </body>
 
