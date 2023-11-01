@@ -21,6 +21,9 @@
                         SUB BK
                     </th>
                     <th scope="col" class="px-6 py-3 ">
+                        CPMK
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
                         Pokok Bahasan
                     </th>
                     <th scope="col" class="px-6 py-3 ">
@@ -72,59 +75,22 @@
                                 {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4 text-left">
-                                @foreach ($value->MKtoSBKread as $mksbk)
+                                {{-- @foreach ($value->MKtoSBKread as $mksbk)
                                     {{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }} <br />
                                     <hr />
-                                @endforeach
-                                {{-- <table>
-                                    
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <th scope="col" class="w-screen">
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            PB
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            K
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            T
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            S
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            Pm
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            SL
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            FL
-                                        </th>
-                                        <th scope="col" class="w-screen">
-                                            P
-                                        </th>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($value->MKtoSBKread as $mksbk)
-                                            <tr>
+                                @endforeach --}}
 
-                                                <td>{{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }} </td>
-                                                <td>{{ $mksbk->pivot->pokok_bahasan }}</td>
-                                                <td>{{ $mksbk->pivot->kuliah }}</td>
-                                                <td>{{ $mksbk->pivot->tutorial }}</td>
-                                                <td>{{ $mksbk->pivot->seminar }}</td>
-                                                <td>{{ $mksbk->pivot->praktikum }}</td>
-                                                <td>{{ $mksbk->pivot->skill_lab }}</td>
-                                                <td>{{ $mksbk->pivot->field_lab }}</td>
-                                                <td>{{ $mksbk->pivot->praktik }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <td class="px-6 py-4">
-                                {{ $value->kodematakuliah }} --}}
+                                @foreach ($value->GetAllidSubBK as $item)
+                                    {{ $item->subbk->kode_subbk }}
+                                @endforeach
+                            </td>
+                            <td class="px-6 py-4 ">
+                                @foreach ($value->GetAllidSubBK as $item)
+                                    @foreach ($item->cpmks as $item)
+                                        {{ $item->kode_cpmk }}
+                                    @endforeach
+                                    <hr>
+                                @endforeach
                             </td>
                             <td class="px-6 py-4 ">
                                 @foreach ($value->MKtoSBKread as $mksbk)
@@ -178,7 +144,7 @@
                                 {{-- CPMK --}}
                                 @foreach ($value->GetAllidSubBK as $mksbk)
                                     @foreach ($mksbk->cpmks as $item)
-                                        {{ $item->kode_cpmk }} - {{ $item->cpmk }}
+                                        {{ $item->kode_cpmk }}
                                     @endforeach
                                     <hr />
                                 @endforeach

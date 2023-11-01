@@ -34,7 +34,7 @@ class ak_matakuliah_controller extends Controller
         //     ->get();
         // return dd($matakuliah);
 
-        $matakuliah = ak_matakuliah::with('GetAllidSubBK.cpmks')
+        $matakuliah = ak_matakuliah::with('GetAllidSubBK.cpmks', 'GetAllidSubBK.subbk')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -43,9 +43,8 @@ class ak_matakuliah_controller extends Controller
             ->paginate(10);
 
         // $matakuliah = ak_matakuliah::with('MKtoSub_bk')->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)->orderBy('matakuliah', 'asc')->limit(5)->get();
-
+        // return dd($matakuliah);
         return view('pages.matakuliah.index', compact('matakuliah'));
-        return dd($matakuliah);
     }
 
     // tambah data
