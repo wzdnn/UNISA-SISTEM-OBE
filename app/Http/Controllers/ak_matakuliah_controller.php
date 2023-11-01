@@ -137,7 +137,8 @@ class ak_matakuliah_controller extends Controller
         $request->validate([
             'kodematakuliah' => 'nullable',
             'matakuliah' => 'nullable',
-            'mk_singkat'
+            'mk_singkat',
+            'semester'
         ]);
 
         try {
@@ -148,13 +149,14 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->kodematakuliah = $request->input('kodematakuliah');
             $mkSubBk->matakuliah = $request->input('matakuliah');
             $mkSubBk->mk_singkat = $request->input('mk_singkat');
+            $mkSubBk->semester = $request->input('semester');
 
             $mkSubBk->save();
 
-            return redirect()->back()->with('success', 'berhasil update SKS');
+            return redirect()->back()->with('success', 'berhasil update data Matakuliah');
         } catch (Throwable $th) {
 
-            return redirect()->back()->with('failed', 'gagal update SKS. Error: ' . $th->getMessage());
+            return redirect()->back()->with('failed', 'gagal update data Matakuliah. Error: ' . $th->getMessage());
         }
     }
 
