@@ -76,28 +76,31 @@
                                 {{-- Sub BK --}}
                                 @foreach ($value->MKtoSBKread as $mksbk)
                                     <p>{{ $mksbk->kode_subbk }} {{ $mksbk->sub_bk }}</p>
+
+                                    {{-- ver 1 --}}
+
                                     {{-- @foreach ($mksbk->SBKtoidCPMK as $item)
                                         <p style="text-indent: 0.5in;">{{ $item->kode_cpmk }}</p>
                                     @endforeach --}}
 
-                                    <hr />
+                                    {{-- ver 2 --}}
+
+                                    {{-- @foreach ($mksbk->getSBKtoidCPMK as $item)
+                                        @foreach ($item->cpmks as $cpmk)
+                                            &#x2022; {{ $cpmk->kode_cpmk }}
+                                        @endforeach
+                                    @endforeach --}}
+
+                                    {{-- ver 3 --}}
+
+                                    {{-- @foreach ($mksbk->GetAllidSubBK as $cpmk)
+                                        @foreach ($cpmk->cpmks as $hasil)
+                                            {{ $hasil->kode_cpmk }}
+                                        @endforeach
+                                    @endforeach --}}
                                 @endforeach
                             </td>
                             <td class="px-6 py-4">
-
-                                {{-- <button data-tooltip-target="tooltip-default" type="button"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Default
-                                    tooltip</button>
-                                <div id="tooltip-default" role="tooltip"
-                                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                    Tooltip content
-                                    <div class="tooltip-arrow" data-popper-arrow></div>
-                                </div> --}}
-                                {{-- <pre><?php $x = $value->GetAllidSubBK->firstWhere('id', 1);
-                                print_r($x);
-                                
-                                ?></pre> --}}
-
                                 @foreach ($value->GetAllidSubBK as $mksbk)
                                     @foreach ($mksbk->cpmks as $item)
                                         &#x2022; {{ $item->kode_cpmk }}

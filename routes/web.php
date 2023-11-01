@@ -36,9 +36,9 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/postLogin', [UserController::class, 'postLogin'])->name('postLogin');
 });
 
-// Route::get('/tampilan', function () {
-//     return view('pages.matkul');
-// });
+Route::get('/tampilan', function () {
+    return view('pages.matkul');
+});
 
 
 Route::middleware(['auth'])->group(function () {

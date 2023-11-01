@@ -48,13 +48,13 @@ class ak_matakuliah_controller extends Controller
         // $subbk = gabung_matakuliah_subbk::with('subbk', 'cpmks')->first();
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
-            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK')
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
         } else {
-            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK')
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->where(function ($query) {
