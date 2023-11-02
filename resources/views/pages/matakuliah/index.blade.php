@@ -249,21 +249,24 @@
             // how many identical td?
             // berapa baris yang sama?
             let rowspan = 1;
+            let first_text = '';
             // iterate through rows
             // loop untuk setiap baris
-            $(table_id + ' > tbody > tr').each(function() {
+            $(table_id + ' > tbody  > tr').each(function() {
 
                 // find the td of the correct column (determined by the dimension_col set above)
                 // ambil teks (sesuai dengan kolom ke-dimension_col)
                 let dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+                let text = btoa(dimension_td[0].innerHTML.trim());
 
                 if (first_instance == null) {
                     // must be the first row
                     // baris pertama
                     first_instance = dimension_td;
+                    first_text = text;
                     i++;
                     painting(is_alternate_color, first_instance, i);
-                } else if (dimension_td.text() == first_instance.text()) {
+                } else if (text == first_text) {
                     // the current td is identical to the previous
                     // baris ini sama dengan baris sebelumnya
                     // remove the current td
@@ -278,6 +281,7 @@
                     // this cell is different from the last, stop previous rowspan
                     // baris ini berbeda dengan yang sebelumnya, hentikan proses merger sebelumnya
                     first_instance = dimension_td;
+                    first_text = text;
                     rowspan = 1;
                     i++;
                     painting(is_alternate_color, first_instance, i);
