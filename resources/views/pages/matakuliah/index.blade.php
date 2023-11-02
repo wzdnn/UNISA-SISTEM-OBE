@@ -234,6 +234,8 @@
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
+            MergeGridCells('#mytable', 14, false);
+            MergeGridCells('#mytable', 13, false);
             MergeGridCells('#mytable', 12, false);
             MergeGridCells('#mytable', 1, false);
 
