@@ -90,9 +90,10 @@
                                     <td class="px-6 py-4">
 
                                         <?php
-                                        if (isset($cpmk_sbk)) {
+                                        if (isset($cpmk_sbk) && array_key_exists($mksbk->pivot->id, $cpmk_sbk)) {
                                             foreach ($cpmk_sbk[$mksbk->pivot->id] as $item) {
-                                                echo $item;
+                                                echo '&#8226; ', $item;
+                                                echo '</br>';
                                             }
                                         }
                                         ?>
