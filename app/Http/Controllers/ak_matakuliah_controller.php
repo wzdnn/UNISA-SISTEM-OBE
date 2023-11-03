@@ -104,7 +104,6 @@ class ak_matakuliah_controller extends Controller
             'matakuliah' => $request->matakuliah,
             'mk_singkat' => $request->mk_singkat,
             'kdkurikulum' => $request->unit,
-            'semester' => $request->semester,
             'isObe' => 1
         ]);
 
@@ -136,7 +135,6 @@ class ak_matakuliah_controller extends Controller
             'kodematakuliah' => 'nullable',
             'matakuliah' => 'nullable',
             'mk_singkat',
-            'semester'
         ]);
 
         try {
@@ -147,7 +145,6 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->kodematakuliah = $request->input('kodematakuliah');
             $mkSubBk->matakuliah = $request->input('matakuliah');
             $mkSubBk->mk_singkat = $request->input('mk_singkat');
-            $mkSubBk->semester = $request->input('semester');
 
             $mkSubBk->save();
 
