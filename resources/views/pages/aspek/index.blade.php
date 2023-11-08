@@ -3,11 +3,13 @@
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Aspek</h1>
-        <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button">
-            Tambah Aspek
-        </button>
+        @if (Auth::user()->role == 'admin')
+            <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button">
+                Tambah Aspek
+            </button>
+        @endif
 
         <!-- Main modal -->
         <div id="defaultModal" tabindex="-1" aria-hidden="true"
@@ -48,34 +50,39 @@
                     <th scope="col" class="px-6 py-3 text-left ">
                         Aspek
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left ">
-                        Action
-                    </th>
+                    @if (Auth::user()->role == 'admin')
+                        <th scope="col" class="px-6 py-3 text-left ">
+                            Action
+                        </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
                 @if ($aspek->count() > 0)
-                    @foreach ($aspek as $aspeks)
+                    @foreach ($aspek as $key => $aspeks)
                         <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{-- {{ $loop->iteration }} --}}
+                                {{ ($aspek->currentPage() - 1) * $aspek->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $aspeks->aspek }}
                             </td>
-                            <td class="px-6 py-4">
+                            @if (Auth::user()->role == 'admin')
+                                <td class="px-6 py-4">
 
-                                <a href="{{ route('delete.aspek', ['id' => $aspeks->id]) }}">
-                                    <button
-                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                            class="fa-solid fa-trash"></i></button>
-                                </a>
-                            </td>
+                                    <a href="{{ route('delete.aspek', ['id' => $aspeks->id]) }}">
+                                        <button
+                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="5">Aspek belum ada</td>
+                        <td class="justify-center text-center" colspan="3">Aspek belum ada</td>
                     </tr>
                 @endif
             </tbody>

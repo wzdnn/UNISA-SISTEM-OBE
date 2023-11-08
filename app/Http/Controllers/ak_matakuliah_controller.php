@@ -105,7 +105,6 @@ class ak_matakuliah_controller extends Controller
             'matakuliah' => $request->matakuliah,
             'mk_singkat' => $request->mk_singkat,
             'kdkurikulum' => $request->unit,
-            'sks' => $request->sks,
             'isObe' => 1
         ]);
 

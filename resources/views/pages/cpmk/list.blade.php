@@ -15,12 +15,13 @@
                     type="button">Peta CPL-CPMK
                 </button>
             </a>
-
-            <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button">
-                Tambah CPMK
-            </button>
+            @if (Auth::user()->role == 'admin')
+                <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                    class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">
+                    Tambah CPMK
+                </button>
+            @endif
         </div>
 
 
@@ -103,17 +104,20 @@
                     <th scope="col" class="px-6 py-3 text-left ">
                         CPL
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left ">
-                        Action
-                    </th>
+                    @if (Auth::user()->role == 'admin')
+                        <th scope="col" class="px-6 py-3 text-left ">
+                            Action
+                        </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
                 @if ($listCPMK->count() > 0)
-                    @foreach ($listCPMK as $listCPMKs)
+                    @foreach ($listCPMK as $key => $listCPMKs)
                         <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{-- {{ $loop->iteration }} --}}
+                                {{ ($listCPMK->currentPage() - 1) * $listCPMK->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $listCPMKs->kode_cpmk }}
@@ -126,14 +130,16 @@
                                     {{ $cpmk->kode_cpl }} {{ $cpmk->cpl }}<br />
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4">
+                            @if (Auth::user()->role == 'admin')
+                                <td class="px-6 py-4">
 
-                                <a href="{{ route('delete.cpmk', ['id' => $listCPMKs->id]) }}">
-                                    <button
-                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                            class="fa-solid fa-trash"></i></button>
-                                </a>
-                            </td>
+                                    <a href="{{ route('delete.cpmk', ['id' => $listCPMKs->id]) }}">
+                                        <button
+                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 @else

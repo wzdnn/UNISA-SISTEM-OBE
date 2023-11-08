@@ -13,7 +13,7 @@ class aspekController extends Controller
     {
         $aspek = DB::table('ak_kurikulum_aspeks')
             ->select('ak_kurikulum_aspeks.*')
-            ->get();
+            ->paginate(10);
 
         return view('pages.aspek.index', compact('aspek'));
     }

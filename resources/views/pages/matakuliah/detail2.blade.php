@@ -112,7 +112,7 @@
                             <label for=""
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
                         </th>
-                        <th class="text-xs px-3">
+                        {{-- <th class="text-xs px-3">
                             Rekomendasi SKS
                         </th>
                         <th class="">
@@ -120,14 +120,10 @@
                         </th>
                         <th class="ml-3">
 
-                            <?php
-                            
-                            ?>
-
                             <input type="text"
                                 class="block py-2.5 px-2  text-sm text-gray-900 bg-transparent  border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " disabled value="{{ $rekomendasiSKS->rekomendasi_sks }}" />
-                        </th>
+                                placeholder=" " disabled value="{{ $rekomendasiSKS->rekomendasi_sks ?? '' }}" />
+                        </th> --}}
                     </tr>
                 </thead>
             </table>

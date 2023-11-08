@@ -13,7 +13,7 @@ class basisIlmuController extends Controller
     {
         $basil = DB::table('ak_kurikulum_basis_ilmus')
             ->select('ak_kurikulum_basis_ilmus.*')
-            ->get();
+            ->paginate(10);
 
         return view('pages.basisIlmu.index', compact('basil'));
     }

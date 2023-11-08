@@ -13,7 +13,7 @@ class bidangIlmuController extends Controller
     {
         $bidil = DB::table('ak_kurikulum_bidang_ilmus')
             ->select('ak_kurikulum_bidang_ilmus.*')
-            ->get();
+            ->paginate(10);
 
         return view('pages.bidangIlmu.index', compact('bidil'));
     }

@@ -13,7 +13,7 @@ class sumberController extends Controller
     {
         $sumber = DB::table('ak_kurikulum_sumbers')
             ->select('ak_kurikulum_sumbers.*')
-            ->get();
+            ->paginate(10);
 
         return view('pages.sumber.index', compact('sumber'));
     }

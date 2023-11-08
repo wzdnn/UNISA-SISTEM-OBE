@@ -45,6 +45,9 @@
                             <p class="text-sm font-medium text-gray-900  truncate dark:text-gray-300" role="none">
                                 {{ auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja }}
                             </p>
+                            <p class="text-sm font-medium text-gray-900  truncate dark:text-gray-300" role="none">
+                                {{ Auth::user()->role }}
+                            </p>
                         </div>
                         <ul class="py-1" role="none">
                             {{-- <li>
