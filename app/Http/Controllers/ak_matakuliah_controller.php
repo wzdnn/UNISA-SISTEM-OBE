@@ -8,6 +8,7 @@ use App\Models\ak_matakuliah;
 use App\Models\gabung_matakuliah_subbk;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\mk_sub_bk;
+use App\Models\rekomendasisks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,21 @@ use function Laravel\Prompts\select;
 class ak_matakuliah_controller extends Controller
 {
 
-    public function mkIndex()
+    public function getRekomendasiSKS()
+    {
+        $rekomendasiSKS = DB::select('call rekomendasi_sks(?,144)', [Auth::user()->kdunit]);
+
+        return view('pages.matakuliah.detail2', compact('rekomendasiSKS'));
+    }
+
+    public function copyMatakuliah(Throwable $th)
+    {
+        DB::select('call sistem_obe.copy_matkul_univ(?)', [Auth::user()->kdunit]);
+
+        return redirect()->back()->with('failed', 'gagal update data Matakuliah. Error: ' . $th->getMessage());
+    }
+
+    public function mkIndex(Request $request)
     {
         // $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
         //     ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
@@ -47,12 +62,34 @@ class ak_matakuliah_controller extends Controller
 
         // $subbk = gabung_matakuliah_subbk::with('subbk', 'cpmks')->first();
 
+
+
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
+            if ($request->has("key") && $request->has("search")) {
+                switch ($request->key) {
+                    case 'kode':
+                        $matakuliah = ak_matakuliah::where("kodematakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
+                            'key' => $request->key,
+                            'search' => $request->search,
+                        ]);
+                        break;
+
+                    case "nama":
+                        $matakuliah = ak_matakuliah::where("matakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
+                            'key' => $request->key,
+                            'search' => $request->search,
+                        ]);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         } else {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
@@ -63,10 +100,30 @@ class ak_matakuliah_controller extends Controller
                 })
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
+            if ($request->has("key") && $request->has("search")) {
+                switch ($request->key) {
+                    case 'kode':
+                        $matakuliah = ak_matakuliah::where("kodematakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
+                            'key' => $request->key,
+                            'search' => $request->search,
+                        ]);
+                        break;
+
+                    case "nama":
+                        $matakuliah = ak_matakuliah::where("matakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
+                            'key' => $request->key,
+                            'search' => $request->search,
+                        ]);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
         // return dd($matakuliah);
 
-        return view('pages.matakuliah.index', compact('matakuliah'));
+        return view('pages.matakuliah.index', compact('matakuliah',));
     }
 
     // tambah data
@@ -104,7 +161,7 @@ class ak_matakuliah_controller extends Controller
             'matakuliah' => $request->matakuliah,
             'mk_singkat' => $request->mk_singkat,
             'kdkurikulum' => $request->unit,
-            'semester' => $request->semester,
+            'sks' => $request->sks,
             'isObe' => 1
         ]);
 
@@ -123,11 +180,15 @@ class ak_matakuliah_controller extends Controller
      */
     public function subbkDetail(int $id)
     {
+
+
+
         $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
+        $rekomendasiSKS = DB::select('call sistem_obe.rekomendasi_sks(?, 144, ?)', [Auth::user()->kdunit, $id]);
 
-        // return dd($mkSubBk);
+        // return dd($mkSubBk, $rekomendasiSKS);
 
-        return view('pages.matakuliah.detail2', compact('mkSubBk'));
+        return view('pages.matakuliah.detail2', compact('mkSubBk', 'rekomendasiSKS'));
     }
 
     public function postsubbkDetail(int $id, Request $request)
@@ -136,7 +197,6 @@ class ak_matakuliah_controller extends Controller
             'kodematakuliah' => 'nullable',
             'matakuliah' => 'nullable',
             'mk_singkat',
-            'semester'
         ]);
 
         try {
@@ -147,7 +207,7 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->kodematakuliah = $request->input('kodematakuliah');
             $mkSubBk->matakuliah = $request->input('matakuliah');
             $mkSubBk->mk_singkat = $request->input('mk_singkat');
-            $mkSubBk->semester = $request->input('semester');
+            $mkSubBk->sks = $request->input('sks');
 
             $mkSubBk->save();
 
@@ -432,133 +492,122 @@ class ak_matakuliah_controller extends Controller
         }
         return redirect()->route('index.mk');
     }
+
+
+
+    // ============================================ Organisasi Matakuliah Dimulai dari Sini ============================================ 
+
+
+    // View Page Organisasi Matakuliah
+    public function orgMKShow(Request $request)
+    {
+
+        //kurikulum
+        $ak_kurikulum = DB::table('ak_kurikulum')
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->where("isObe", '=', 1)
+            ->get();
+
+
+
+        // Semester 8
+        $semester8_0 = DB::table('ak_matakuliah')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_matakuliah.semester", '=', 8)
+            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('kdmatakuliah', 'asc')
+            ->get();
+        $semester8_1 = DB::table('ak_matakuliah')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_matakuliah.semester", '=', 8)
+            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('kdmatakuliah', 'asc')
+            ->get();
+        $semester8_2 = DB::table('ak_matakuliah')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_matakuliah.semester", '=', 8)
+            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('kdmatakuliah', 'asc')
+            ->get();
+
+
+        // Semester 7
+        $semester7_0 = DB::table('ak_matakuliah')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_matakuliah.semester", '=', 7)
+            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('kdmatakuliah', 'asc')
+            ->get();
+        $semester7_1 = DB::table('ak_matakuliah')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_matakuliah.semester", '=', 7)
+            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('kdmatakuliah', 'asc')
+            ->get();
+        $semester7_2 = DB::table('ak_matakuliah')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->where("ak_matakuliah.semester", '=', 7)
+            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->orderBy('kdmatakuliah', 'asc')
+            ->get();
+
+
+        // if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        //     $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+        //         ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        //         ->where(function ($query) {
+        //             $query->where("ak_kurikulum.isObe", '=', 1)
+        //                 ->orWhere("ak_matakuliah.semester", '=', NULL)
+        //                 ->orWhere("ak_matakuliah.semester", '=', 0);
+        //         })
+        //         ->orderBy('kdmatakuliah', 'asc')
+        //         ->paginate(8);
+        // } else {
+        //     $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+        //         ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        //         ->where("ak_kurikulum.isObe", '=', 1)
+        //         ->where(function ($query) {
+        //             $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+        //                 ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
+        //                 ->orWhere("ak_matakuliah.semester", '=', NULL)
+        //                 ->orWhere("ak_matakuliah.semester", '=', 0);
+        //         })
+        //         ->orderBy('kdmatakuliah', 'asc')
+        //         ->paginate(8);
+        // }
+
+
+        return view('pages.matakuliah.organisasiMK', compact('semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum'));
+    }
 }
-
-
-
-
-
-// BELUM BERGUNA
-//
-    // public function matakuliahIndex()
-    // {
-    //     $ak_matakuliah = DB::table('ak_matakuliah')
-    //         ->select("ak_matakuliah.*", "ak_kurikulum.kurikulum", "ak_mk_subbk.sub_bk")
-    //         ->leftJoin('ak_mk_subbk', 'ak_mk_subbk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
-    //         ->join(
-    //             "ak_kurikulum",
-    //             "ak_kurikulum.kdkurikulum",
-    //             "=",
-    //             "ak_matakuliah.kdkurikulum"
-    //         )
-    //         ->orderBy("ak_matakuliah.kdmatakuliah")
-    //         ->get();
-
-    //     $ak_matakuliah->map(function ($ak_matakuliah) {
-    //         $ak_matakuliah->sub_bk = (unserialize($ak_matakuliah->sub_bk)) ? unserialize($ak_matakuliah->sub_bk) : (object) null;
-    //     });
-
-    //     $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
-    //     return view('pages.matakuliah.index', compact('ak_matakuliah', 'sub_bk'));
-    // }
-
-    // public function mkSubBKindex(int $id)
-    // {
-    //     $mkSubBK = DB::table('ak_mk_subbk')
-    //         ->select('sub_bk')
-    //         ->where('kdmatakuliah', '=', $id)
-    //         ->first();
-
-    //     $data = [];
-    //     if ($mkSubBK != null) {
-    //         $mkSubBK->sub_bk = (unserialize($mkSubBK->sub_bk)) ? unserialize($mkSubBK->sub_bk) : null;
-    //         $data = $mkSubBK->sub_bk;
-    //     }
-
-    //     $mkSubBK = $data;
-
-    //     // return dd($mkSubBK);
-
-    //     $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
-    //     return view('pages.matakuliah.subBKMK', compact('mkSubBK', 'sub_bk'));
-    // }
-
-    // public function MapSBKShow(int $id)
-    // {
-    //     $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
-    //     $save = DB::table('ak_mk_subbk')
-    //         ->select('sub_bk')
-    //         ->where('kdmatakuliah', '=', $id)->first();
-
-    //     // return dd($sub_bk);
-    //     $data = [];
-    //     if ($save != null) {
-    //         $save->sub_bk = (unserialize($save->sub_bk)) ? unserialize($save->sub_bk) : null;
-    //         $data = $save->sub_bk;
-    //     }
-
-    //     $save = $data;
-    //     // return dd($save);
-    //     return view('pages.matakuliah.showSBK', compact('sub_bk', 'id', 'save'));
-    // }
-
-    // public function mkSBKMapping(Request $request, int $mk)
-    // {
-    //     $dataMKSBK = array();
-    //     if ($request->sub_bk != null) {
-    //         foreach ($request->sub_bk as $subbk) {
-    //             $dataMKSBK[] = $subbk;
-    //         }
-    //     }
-
-    //     $check = DB::table('ak_mk_subbk')
-    //         ->where('kdmatakuliah', '=', $mk)
-    //         ->first();
-
-    //     if ($check) {
-    //         DB::table('ak_mk_subbk')
-    //             ->where('kdmatakuliah', '=', $mk)
-    //             ->update([
-    //                 'sub_bk' => serialize($dataMKSBK)
-    //             ]);
-    //     } else {
-    //         DB::table('ak_mk_subbk')
-    //             ->where('kdmatakuliah', '=', $mk)
-    //             ->insert([
-    //                 'kdmatakuliah' => $mk,
-    //                 'sub_bk' => serialize($dataMKSBK)
-    //             ]);
-    //     }
-    //     return redirect()->route('home.matakuliah');
-    // }
-
-    // public function mapCPMKSBKshow(int $id)
-    // {
-    //     $cpmk = DB::table('ak_kurikulum_cpmks')->get();
-    //     $save = DB::table('ak_mk_subbk_cpmk')
-    //         ->select('cpmk')
-    //         ->where('kdmksubbk', '=', $id)->first();
-
-    //     $data = [];
-    //     if ($save != null) {
-    //         $save->cpmk = (unserialize($save->cpmk)) ? unserialize($save->cpmk) : null;
-    //         $data = $save->cpmk;
-    //     }
-
-    //     $save = $data;
-    //     return view('', compact('cpmk', 'id', 'save'));
-    // }
-
-    // public function mapCPMKSBKstore(Request $request, int $cpmkSBK)
-    // {
-    //     $dataCPMKSBK = array();
-    //     if ($request->cpmk != null) {
-    //         foreach ($request->cpmk as $cpmk) {
-    //             $dataCPMKSBK[] = $cpmk;
-    //         }
-    //     }
-
-    //     $check = DB::table('ak_mk_subbk_cpmk')
-    //         ->where('kdmksubbk', '=', $cpmkSBK)
-    //         ->first();
-    // }

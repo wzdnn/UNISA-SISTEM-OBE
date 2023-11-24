@@ -13,8 +13,8 @@ class ak_matakuliah extends Model
         'kodematakuliah',
         'matakuliah',
         'kdkurikulum',
-        'semester',
         'mk_singkat',
+        'sks',
         'isObe'
     ];
 

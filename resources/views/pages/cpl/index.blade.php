@@ -38,9 +38,11 @@
                     <th scope="col" class="px-6 py-3 ">
                         Unit
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
-                        Action
-                    </th>
+                    @if (Auth::user()->role == 'admin')
+                        <th scope="col" class="px-6 py-3 ">
+                            Action
+                        </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -76,18 +78,20 @@
                             <td class=" px-6 py-4 text-left">
                                 {{ $akKurikulumCpls->kurikulum }} - {{ $akKurikulumCpls->tahun }}
                             </td>
-                            <td class="px-6 py-4">
-                                <a href="{{ route('edit.cpl', ['id' => $akKurikulumCpls->id]) }}">
-                                    <button
-                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                            class="fa-regular fa-pen-to-square"></i></button>
-                                </a>
-                                <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}">
-                                    <button
-                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                            class="fa-solid fa-trash"></i></button>
-                                </a>
-                            </td>
+                            @if (Auth::user()->role == 'admin')
+                                <td class="px-6 py-4">
+                                    <a href="{{ route('edit.cpl', ['id' => $akKurikulumCpls->id]) }}">
+                                        <button
+                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-regular fa-pen-to-square"></i></button>
+                                    </a>
+                                    <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}">
+                                        <button
+                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 @else

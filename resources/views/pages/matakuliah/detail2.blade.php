@@ -100,19 +100,29 @@
                     </tr>
                     <tr class="text-left">
                         <th>
-                            Semester
+                            SKS
                         </th>
                         <th class="">
                             :
                         </th>
                         <th class="ml-3">
-                            <input type="text" name="semester" id="semester"
+                            <input type="text" name="sks" id="sks"
                                 class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " value="{{ old('semester') ?? $mkSubBk->semester }}" />
-                            <label for="semester"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Semester</label>
+                                placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
+                            <label for=""
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
                         </th>
-
+                        <th class="text-xs px-3">
+                            Rekomendasi SKS
+                        </th>
+                        <th class="">
+                            :
+                        </th>
+                        <th class="ml-3">
+                            <input type="text"
+                                class="block py-2.5 px-2  text-sm text-gray-900 bg-transparent  border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam }}" />
+                        </th>
                     </tr>
                 </thead>
             </table>

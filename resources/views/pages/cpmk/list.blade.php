@@ -110,10 +110,11 @@
             </thead>
             <tbody>
                 @if ($listCPMK->count() > 0)
-                    @foreach ($listCPMK as $listCPMKs)
+                    @foreach ($listCPMK as $key => $listCPMKs)
                         <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{-- {{ $loop->iteration }} --}}
+                                {{ ($listCPMK->currentPage() - 1) * $listCPMK->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $listCPMKs->kode_cpmk }}

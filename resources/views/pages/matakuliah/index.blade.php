@@ -1,17 +1,33 @@
 @extends('layouts.app')
 
 @section('body')
-    <div class="flex items-center justify-between py-5 px-5 mx-10">
+    <div class="flex items-center justify-between py-5">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Matakuliah</h1>
         <a href="{{ route('create.mk') }}">
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah Matakuliah
             </button>
         </a>
     </div>
-    <hr />
+    <div class="flex flex-col">
+        <form method="GET" class="rounded">
+            <select name="key" id="" class="rounded">
+                <option value="kode" selected>kode matakuliah</option>
+                <option value="nama">nama matakuliah</option>
+            </select>
+            <input type="text" name="search" class=" rounded">
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                type="submit">Cari</button>
+        </form>
+
+        @if (request()->search != null && request()->key != null)
+            <div class="my-3">
+                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+            </div>
+        @endif
+    </div>
+
 
     <div class="relative py-3">
-
         <table class="w-full text-sm text-center  text-gray-500" id="mytable" name="mytable" style="border: 1 !important">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr class="text-left">
@@ -90,9 +106,11 @@
                                     <td class="px-6 py-4">
 
                                         <?php
-                                        if (isset($cpmk_sbk)) {
+                                        if (isset($cpmk_sbk) && array_key_exists($mksbk->pivot->id, $cpmk_sbk)) {
                                             foreach ($cpmk_sbk[$mksbk->pivot->id] as $item) {
-                                                echo $item;
+                                                echo '&#8226; ', $item;
+                                                echo '</br>';
+                                                echo '';
                                             }
                                         }
                                         ?>
@@ -234,6 +252,8 @@
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
+            MergeGridCells('#mytable', 14, false);
+            MergeGridCells('#mytable', 13, false);
             MergeGridCells('#mytable', 12, false);
             MergeGridCells('#mytable', 1, false);
 
@@ -247,21 +267,24 @@
             // how many identical td?
             // berapa baris yang sama?
             let rowspan = 1;
+            let first_text = '';
             // iterate through rows
             // loop untuk setiap baris
-            $(table_id + ' > tbody > tr').each(function() {
+            $(table_id + ' > tbody  > tr').each(function() {
 
                 // find the td of the correct column (determined by the dimension_col set above)
                 // ambil teks (sesuai dengan kolom ke-dimension_col)
                 let dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+                let text = btoa(dimension_td[0].innerHTML.trim());
 
                 if (first_instance == null) {
                     // must be the first row
                     // baris pertama
                     first_instance = dimension_td;
+                    first_text = text;
                     i++;
                     painting(is_alternate_color, first_instance, i);
-                } else if (dimension_td.text() == first_instance.text()) {
+                } else if (text == first_text) {
                     // the current td is identical to the previous
                     // baris ini sama dengan baris sebelumnya
                     // remove the current td
@@ -276,6 +299,7 @@
                     // this cell is different from the last, stop previous rowspan
                     // baris ini berbeda dengan yang sebelumnya, hentikan proses merger sebelumnya
                     first_instance = dimension_td;
+                    first_text = text;
                     rowspan = 1;
                     i++;
                     painting(is_alternate_color, first_instance, i);
