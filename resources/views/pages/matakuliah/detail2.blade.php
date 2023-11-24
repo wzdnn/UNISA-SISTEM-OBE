@@ -121,7 +121,7 @@
                         <th class="ml-3">
                             <input type="text"
                                 class="block py-2.5 px-2  text-sm text-gray-900 bg-transparent  border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam }}" />
+                                placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}" />
                         </th>
                     </tr>
                 </thead>
