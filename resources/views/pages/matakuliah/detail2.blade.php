@@ -106,7 +106,7 @@
                             :
                         </th>
                         <th class="ml-3">
-                            <input type="text" name="sks" id="sks"
+                            <input type="text" name="semester" id="semester"
                                 class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
                             <label for=""
