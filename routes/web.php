@@ -160,6 +160,7 @@ Route::middleware(['auth'])->group(function () {
     // Organisasi Matakuliah
 
     Route::get('/organisasiMatakuliah', [ak_matakuliah_controller::class, 'orgMKShow'])->name('organisasi.mk');
+    Route::post('/temaSTORE', [ak_matakuliah_controller::class, 'temaSTORE'])->name('store.tema');
 });
 
 

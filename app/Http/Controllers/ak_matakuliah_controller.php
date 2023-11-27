@@ -9,6 +9,7 @@ use App\Models\gabung_matakuliah_subbk;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\mk_sub_bk;
 use App\Models\rekomendasisks;
+use App\Models\tema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -509,7 +510,70 @@ class ak_matakuliah_controller extends Controller
             ->where("isObe", '=', 1)
             ->get();
 
-
+        $tema8 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 8)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema7 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 7)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema6 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 6)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema5 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 5)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema4 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 4)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema3 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 3)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema2 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 2)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
+        $tema1 = DB::table('temas')
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->where("temas.semester", '=', 1)
+            ->where(function ($query) {
+                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            })
+            ->get();
 
         // Semester 8
         $semester8_0 = DB::table('ak_matakuliah')
@@ -820,6 +884,17 @@ class ak_matakuliah_controller extends Controller
         // }
 
 
-        return view('pages.matakuliah.organisasiMK', compact('semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum'));
+        return view('pages.matakuliah.organisasiMK', compact('tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum'));
+    }
+
+    public function temaSTORE(Request $request)
+    {
+        tema::create([
+            'tema' => $request->tema,
+            'semester' => $request->semester,
+            'kdkurikulum' => $request->unit
+        ]);
+
+        return redirect()->route('organisasi.mk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 }
