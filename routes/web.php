@@ -12,6 +12,7 @@ use App\Http\Controllers\aspekController;
 use App\Http\Controllers\basisIlmuController;
 use App\Http\Controllers\bidangIlmuController;
 use App\Http\Controllers\matakuliah;
+use App\Http\Controllers\organisasiMkController;
 use App\Http\Controllers\sumberController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\visimisiController;
@@ -159,8 +160,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Organisasi Matakuliah
 
-    Route::get('/organisasiMatakuliah', [ak_matakuliah_controller::class, 'orgMKShow'])->name('organisasi.mk');
-    Route::post('/temaSTORE', [ak_matakuliah_controller::class, 'temaSTORE'])->name('store.tema');
+    Route::get('/organisasiMatakuliah', [organisasiMkController::class, 'orgMKShow'])->name('organisasi.mk');
+    Route::post('/organisasiMatakuliah', [organisasiMkController::class, 'kelolaMKWPOST']);
+    Route::post('/temaSTORE', [organisasiMkController::class, 'temaSTORE'])->name('store.tema');
+
+    Route::get('/organisasiMatakuliah/mkwajib', [organisasiMkController::class, 'kelolaMKW'])->name('mkw.OrgMK');
 });
 
 

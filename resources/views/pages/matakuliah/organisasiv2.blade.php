@@ -120,7 +120,7 @@
                         @endforeach
 
                         <!-- Modal toggle -->
-                        <button data-modal-target="modal-sem-8" data-modal-toggle="modal-sem-8"
+                        <button data-modal-target="mkwajib" data-modal-toggle="mkwajib"
                             class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             type="button">
                             <i class="fa fa-plus"></i>
@@ -128,7 +128,7 @@
 
 
                         <!-- Main modal -->
-                        <div id="modal-sem-8" tabindex="-1" aria-hidden="true"
+                        <div id="mkwajib" tabindex="-1" aria-hidden="true"
                             class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative w-full max-w-2xl max-h-full">
                                 <!-- Modal content -->
@@ -138,7 +138,7 @@
                                     <form class="py-3" action="" method="POST">
                                         @csrf
                                         <input type="hidden" name="semester" value="8">
-                                        <select class="w-[41vw]" id="mkselect8" name="mkselect[]" multiple="multiple">
+                                        <select class="w-[41vw]" id="mkselect" name="mkselect[]" multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">
                                                     {{ $item->kodematakuliah }} {{ $item->matakuliah }}
@@ -170,41 +170,11 @@
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
                             <br />
                         @endforeach
-                        <!-- Modal toggle -->
-                        <button data-modal-target="modal-sem-8-2" data-modal-toggle="modal-sem-8-2"
-                            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">
-                            <i class="fa fa-plus"></i>
-                        </button>
-
-
-                        <!-- Main modal -->
-                        <div id="modal-sem-8-2" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative w-full max-w-2xl max-h-full">
-                                <!-- Modal content -->
-                                <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Pemetaan Matakuliah
-                                        Semester
-                                        8</h1>
-                                    <form class="py-3" action="" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="semester" value="8">
-                                        <input type="hidden" name="ispilihan" value="2">
-                                        <select class="w-[41vw]" id="mkselect8-2" name="mkselect[]" multiple="multiple">
-                                            @foreach ($matakuliah as $item)
-                                                <option value="{{ $item->kdmatakuliah }}">
-                                                    {{ $item->kodematakuliah }} {{ $item->matakuliah }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <button
-                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 my-3"
-                                            type="submit">UPDATE</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="">
+                            <button
+                                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i
+                                    class="fa fa-plus"></i></button>
+                        </a>
                     </td>
                     <td class=" px-6 py-4 ">
 
@@ -225,67 +195,6 @@
                             &#x2022; {{ $value->tema }}
                             <br />
                         @endforeach
-
-                        <!-- Modal toggle -->
-                        <button data-modal-target="defaultModal7" data-modal-toggle="defaultModal7"
-                            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">
-                            <i class="fa fa-plus"></i>
-                        </button>
-
-
-                        <!-- Main modal -->
-                        <div id="defaultModal7" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative w-full max-w-2xl max-h-full">
-                                <!-- Modal content -->
-                                <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                                    <form class="py-3" action="{{ route('store.tema') }}" method="POST">
-                                        @csrf
-                                        <div class="grid md:gap-6">
-                                            <div class="relative z-0 w-full mb-6 group">
-                                                <input type="text" name="tema" id="tema"
-                                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                    placeholder=" " required value="{{ old('tema') }}" />
-                                                <label for="tema"
-                                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tema</label>
-                                            </div>
-                                        </div>
-                                        <div class="grid md:grid-cols-2 md:gap-6">
-                                            <div class="flex flex-col z-0 w-full mb-6 group">
-                                                <label for="unit" class="text-sm text-gray-500">
-                                                    Kurikulum
-                                                </label>
-                                                <select id="inputState" name="unit" data-live-search="true"
-                                                    class="form-control border">
-                                                    @foreach ($ak_kurikulum as $unit)
-                                                        <option value="{{ $unit->kdkurikulum }}">{{ $unit->kurikulum }}
-                                                            {{ $unit->tahun }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="hidden md:gap-6">
-                                            <div class="relative z-0 w-[10vw] mb-6 group">
-                                                <input type="text" name="semester" id="semester"
-                                                    class=" block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                    placeholder=" " required value="7" />
-                                                <label for="semester"
-                                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Semester</label>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="py-3">
-                                            <button type="submit"
-                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
                     </td>
                     <td class="w-[30vw]">
                         @foreach ($semester7_0 as $value)
@@ -293,40 +202,11 @@
                             <br />
                         @endforeach
 
-                        <!-- Modal toggle -->
-                        <button data-modal-target="modal-sem-7" data-modal-toggle="modal-sem-7"
-                            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">
-                            <i class="fa fa-plus"></i>
-                        </button>
-
-
-                        <!-- Main modal -->
-                        <div id="modal-sem-7" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative w-full max-w-2xl max-h-full">
-                                <!-- Modal content -->
-                                <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Pemetaan Matakuliah
-                                        Semester
-                                        7</h1>
-                                    <form class="py-3" action="" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="semester" value="7">
-                                        <select class="w-[41vw]" id="mkselect7" name="mkselect[]" multiple="multiple">
-                                            @foreach ($matakuliah as $item)
-                                                <option value="{{ $item->kdmatakuliah }}">
-                                                    {{ $item->kodematakuliah }} {{ $item->matakuliah }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <button
-                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 my-3"
-                                            type="submit">UPDATE</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="">
+                            <button
+                                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i
+                                    class="fa fa-plus"></i></button>
+                        </a>
 
                     </td>
                     <td class="px-6 py-4">
@@ -345,40 +225,11 @@
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
                             <br />
                         @endforeach
-                        <button data-modal-target="modal-sem-7-2" data-modal-toggle="modal-sem-7-2"
-                            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">
-                            <i class="fa fa-plus"></i>
-                        </button>
-
-
-                        <!-- Main modal -->
-                        <div id="modal-sem-7-2" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative w-full max-w-2xl max-h-full">
-                                <!-- Modal content -->
-                                <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Pemetaan Matakuliah
-                                        Semester
-                                        7</h1>
-                                    <form class="py-3" action="" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="semester" value="7">
-                                        <input type="hidden" name="ispilihan" value="2">
-                                        <select class="w-[41vw]" id="mkselect7-2" name="mkselect[]" multiple="multiple">
-                                            @foreach ($matakuliah as $item)
-                                                <option value="{{ $item->kdmatakuliah }}">
-                                                    {{ $item->kodematakuliah }} {{ $item->matakuliah }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <button
-                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 my-3"
-                                            type="submit">UPDATE</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="">
+                            <button
+                                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i
+                                    class="fa fa-plus"></i></button>
+                        </a>
                     </td>
                     <td class=" px-6 py-4 ">
 
@@ -399,68 +250,6 @@
                             &#x2022; {{ $value->tema }}
                             <br />
                         @endforeach
-
-                        <!-- Modal toggle -->
-                        <button data-modal-target="defaultModal6" data-modal-toggle="defaultModal6"
-                            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">
-                            <i class="fa fa-plus"></i>
-                        </button>
-
-
-                        <!-- Main modal -->
-                        <div id="defaultModal6" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative w-full max-w-2xl max-h-full">
-                                <!-- Modal content -->
-                                <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                                    <form class="py-3" action="{{ route('store.tema') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="semester" value="6">
-                                        <div class="grid md:gap-6">
-                                            <div class="relative z-0 w-full mb-6 group">
-                                                <input type="text" name="tema" id="tema"
-                                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                    placeholder=" " required value="{{ old('tema') }}" />
-                                                <label for="tema"
-                                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tema</label>
-                                            </div>
-                                        </div>
-                                        <div class="grid md:grid-cols-2 md:gap-6">
-                                            <div class="flex flex-col z-0 w-full mb-6 group">
-                                                <label for="unit" class="text-sm text-gray-500">
-                                                    Kurikulum
-                                                </label>
-                                                <select id="inputState" name="unit" data-live-search="true"
-                                                    class="form-control border">
-                                                    @foreach ($ak_kurikulum as $unit)
-                                                        <option value="{{ $unit->kdkurikulum }}">{{ $unit->kurikulum }}
-                                                            {{ $unit->tahun }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="hidden md:gap-6">
-                                            <div class="relative z-0 w-[10vw] mb-6 group">
-                                                <input type="text" name="semester" id="semester"
-                                                    class=" block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                    placeholder=" " required value="6" />
-                                                <label for="semester"
-                                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Semester</label>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="py-3">
-                                            <button type="submit"
-                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
                     </td>
                     <td class="w-[30vw]">
                         @foreach ($semester6_0 as $value)
@@ -1098,12 +887,7 @@
 @push('script')
     <script>
         $(document).ready(function() {
-            $('#mkselect8').select2();
-            $('#mkselect8-2').select2();
-            $('#mkselect7').select2();
-            $('#mkselect7-2').select2();
-            $('#mkselect6').select2();
-            $('#mkselect5').select2();
+            $('#mkselect').select2();
         });
     </script>
 @endpush
