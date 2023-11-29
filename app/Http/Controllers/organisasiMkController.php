@@ -433,30 +433,6 @@ class organisasiMkController extends Controller
         return redirect()->route('organisasi.mk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 
-    // public function kelolaMKW(int $id)
-    // {
-    //     $matakuliah = ak_matakuliah::where('semester', '=', 0)
-    //         ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-    //         ->where("ak_kurikulum.isObe", '=', 1)
-    //         ->where("ak_matakuliah.semester", '=', null)
-    //         ->where(function ($query) {
-    //             $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-    //                 ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-    //         })
-    //         ->orderBy('kdmatakuliah', 'asc')
-    //         ->get();
-
-
-    //     $mkSelect = [];
-    //     foreach ($matakuliah as $item) {
-    //         array_push($mkSelect, $item);
-    //     }
-
-    //     return dd($matakuliah);
-
-    //     return view('pages.matakuliah.organisasiMK', compact('matakuliah', 'id', 'mkSelect'));
-    // }
-
     public function kelolaMKWPOST(Request $request)
     {
         $request->validate([
