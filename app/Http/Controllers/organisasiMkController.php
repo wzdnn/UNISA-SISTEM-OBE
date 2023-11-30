@@ -394,31 +394,6 @@ class organisasiMkController extends Controller
             ->get();
 
 
-        // if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
-        //     $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-        //         ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-        //         ->where(function ($query) {
-        //             $query->where("ak_kurikulum.isObe", '=', 1)
-        //                 ->orWhere("ak_matakuliah.semester", '=', NULL)
-        //                 ->orWhere("ak_matakuliah.semester", '=', 0);
-        //         })
-        //         ->orderBy('kdmatakuliah', 'asc')
-        //         ->paginate(8);
-        // } else {
-        //     $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-        //         ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-        //         ->where("ak_kurikulum.isObe", '=', 1)
-        //         ->where(function ($query) {
-        //             $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-        //                 ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
-        //                 ->orWhere("ak_matakuliah.semester", '=', NULL)
-        //                 ->orWhere("ak_matakuliah.semester", '=', 0);
-        //         })
-        //         ->orderBy('kdmatakuliah', 'asc')
-        //         ->paginate(8);
-        // }
-
-
         return view('pages.matakuliah.organisasiMK', compact('tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum', 'matakuliah', 'mkSelect'));
     }
 
@@ -432,6 +407,39 @@ class organisasiMkController extends Controller
 
         return redirect()->route('organisasi.mk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
+
+
+    public function semesterOrigin(int $id)
+    {
+
+        try {
+            $matkul = ak_matakuliah::where('kdmatakuliah', '=', $id);
+
+            DB::beginTransaction();
+            $matkul->update([
+                'semester' => null,
+                'ispilihan' => null
+            ]);
+            DB::commit();
+
+            // return dd("suskes");
+            return redirect()->back()->with("success", "Berhasil Update");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("Gagal Update Semester Matakuliah", [
+                "user" => Auth::user()->email,
+                "method" => "POST",
+                "class" => "organisasiMKController",
+                "function" => "semesterOrigin",
+                "error" => $th->getMessage()
+            ]);
+
+            // return dd("gagal", $th->getMessage());
+            return redirect()->back()->with("error", "Gagal Update");
+        }
+    }
+
+
 
     public function kelolaMKWPOST(Request $request)
     {
@@ -455,7 +463,7 @@ class organisasiMkController extends Controller
             return redirect()->back()->with("success", "Berhasil update");
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error("Gagal Update Semeseter matkul", [
+            Log::error("Gagal Update Semester Matakuliah", [
                 "user" => Auth::user()->email,
                 "method" => "POST",
                 "class" => "organisasiMKController",

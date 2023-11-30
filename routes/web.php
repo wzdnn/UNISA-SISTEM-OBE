@@ -162,7 +162,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/organisasiMatakuliah', [organisasiMkController::class, 'orgMKShow'])->name('organisasi.mk');
     Route::post('/organisasiMatakuliah', [organisasiMkController::class, 'kelolaMKWPOST']);
+
+
     Route::post('/temaSTORE', [organisasiMkController::class, 'temaSTORE'])->name('store.tema');
+
+    Route::get('/reset/{id}', [organisasiMkController::class, 'semesterOrigin'])->name('reset.mk');
 });
 
 

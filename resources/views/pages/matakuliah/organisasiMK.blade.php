@@ -116,6 +116,9 @@
 
                         @foreach ($semester8_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -157,6 +160,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester8_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -195,9 +201,12 @@
                             </div>
                         </div>
                     </td>
-                    <td class="w-[30vw]">
+                    <td class="w-[35vw]">
                         @foreach ($semester8_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -320,6 +329,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester7_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -362,6 +374,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester7_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -403,6 +418,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester7_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <button data-modal-target="modal-sem-7-2" data-modal-toggle="modal-sem-7-2"
@@ -525,6 +543,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester6_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -568,6 +589,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester6_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -609,6 +633,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester6_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -731,6 +758,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester5_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -774,6 +804,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester5_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -817,6 +850,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester5_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -939,6 +975,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester4_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -982,6 +1021,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester4_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1023,6 +1065,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester4_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1145,6 +1190,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester3_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1188,6 +1236,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester3_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1229,6 +1280,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester3_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1351,6 +1405,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester2_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1375,7 +1432,8 @@
                                         @csrf
                                         <input type="hidden" name="semester" value="2">
                                         <input type="hidden" name="ispilihan" value="0">
-                                        <select class="w-[41vw]" id="mkselect2" name="mkselect[]" multiple="multiple">
+                                        <select class="w-[41vw]" id="mkselect2" name="mkselect[]"
+                                            multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">
                                                     {{ $item->kodematakuliah }} {{ $item->matakuliah }}
@@ -1394,6 +1452,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester2_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1417,7 +1478,8 @@
                                         @csrf
                                         <input type="hidden" name="semester" value="2">
                                         <input type="hidden" name="ispilihan" value="1">
-                                        <select class="w-[41vw]" id="mkselect2-2" name="mkselect[]" multiple="multiple">
+                                        <select class="w-[41vw]" id="mkselect2-2" name="mkselect[]"
+                                            multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">
                                                     {{ $item->kodematakuliah }} {{ $item->matakuliah }}
@@ -1435,6 +1497,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester2_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1458,7 +1523,8 @@
                                         @csrf
                                         <input type="hidden" name="semester" value="2">
                                         <input type="hidden" name="ispilihan" value="2">
-                                        <select class="w-[41vw]" id="mkselect2-2" name="mkselect[]" multiple="multiple">
+                                        <select class="w-[41vw]" id="mkselect2-2" name="mkselect[]"
+                                            multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">
                                                     {{ $item->kodematakuliah }} {{ $item->matakuliah }}
@@ -1558,6 +1624,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester1_0 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1602,6 +1671,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester1_1 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
@@ -1644,6 +1716,9 @@
                     <td class="w-[30vw]">
                         @foreach ($semester1_2 as $value)
                             &#x2022; {{ $value->kodematakuliah }}-{{ $value->matakuliah }}
+                            <a href="{{ route('reset.mk', ['id' => $value->kdmatakuliah]) }}">
+                                <button class="rounded p-1"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </a>
                             <br />
                         @endforeach
                         <!-- Modal toggle -->
