@@ -6,17 +6,14 @@ use App\Http\Controllers\ak_kurikulum_cplr_Controller;
 use App\Http\Controllers\ak_kurikulum_cpmk_controller;
 use App\Http\Controllers\ak_kurikulum_pl_Controller;
 use App\Http\Controllers\ak_kurikulum_sub_bk_controller;
-use App\Http\Controllers\ak_matakuliah;
 use App\Http\Controllers\ak_matakuliah_controller;
 use App\Http\Controllers\aspekController;
 use App\Http\Controllers\basisIlmuController;
 use App\Http\Controllers\bidangIlmuController;
-use App\Http\Controllers\matakuliah;
+use App\Http\Controllers\organisasiMKController;
 use App\Http\Controllers\sumberController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\visimisiController;
-use App\Models\ak_kurikulum_bk;
-use App\Models\ak_kurikulum_cpl;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -185,6 +182,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/DetailMK/{id}/cpmk/{sub}/kelolaCpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
         Route::post('/DetailMK/{id}/cpmk/{sub}/kelolaCpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
     });
+
+    // Organisasi Matakuliah
+
+    Route::get('/organisasiMatakuliah', [organisasiMKController::class, 'orgMKShow'])->name('organisasi.mk');
+    Route::post('/organisasiMatakuliah', [organisasiMKController::class, 'kelolaMKWPOST']);
+
+    Route::post('/temaStore', [organisasiMKController::class, 'temaSTORE'])->name('store.tema');
+
+    Route::get('/reset/{id}', [organisasiMKController::class, 'semesterOrigin'])->name('reset.mk');
 });
 
 

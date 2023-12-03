@@ -123,7 +123,7 @@ class ak_matakuliah_controller extends Controller
      */
     public function subbkDetail(int $id)
     {
-        $rekomendasiSKS = rekomendasisks::where('kdmatakuliah', '=', $id)->first();
+        $rekomendasiSKS = DB::select('call sistem_obe.rekomendasi_sks(?, 144, ?)', [Auth::user()->kdunit, $id]);
 
         $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
 
