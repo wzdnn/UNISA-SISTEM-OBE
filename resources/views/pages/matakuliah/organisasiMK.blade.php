@@ -246,13 +246,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_8_sks as $value8)
+                            {{ $value8->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_8_sks as $value8)
+                            {{ $value8->sks_pilihan }}
+                        @endforeach
                     </td>
-                    <td class=" px-6 py-4 text-left">
-
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_8_sks as $value8)
+                            {{ $value8->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_8_sks as $value8)
+                            {{ $value8->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -459,13 +470,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_7_sks as $value7)
+                            {{ $value7->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_7_sks as $value7)
+                            {{ $value7->sks_pilihan }}
+                        @endforeach
                     </td>
-                    <td class=" px-6 py-4 text-left">
-
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_7_sks as $value7)
+                            {{ $value7->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_7_sks as $value7)
+                            {{ $value7->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -675,13 +697,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_6_sks as $value6)
+                            {{ $value6->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_6_sks as $value6)
+                            {{ $value6->sks_pilihan }}
+                        @endforeach
                     </td>
-                    <td class=" px-6 py-4 text-left">
-
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_6_sks as $value6)
+                            {{ $value6->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_6_sks as $value6)
+                            {{ $value6->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -892,13 +925,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_5_sks as $value5)
+                            {{ $value5->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_5_sks as $value5)
+                            {{ $value5->sks_pilihan }}
+                        @endforeach
                     </td>
-                    <td class=" px-6 py-4 text-left">
-
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_5_sks as $value5)
+                            {{ $value5->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_5_sks as $value5)
+                            {{ $value5->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -1107,13 +1151,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_4_sks as $value4)
+                            {{ $value4->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_4_sks as $value4)
+                            {{ $value4->sks_pilihan }}
+                        @endforeach
                     </td>
-                    <td class=" px-6 py-4 text-left">
-
+                    <td class=" px-6 py-4t">
+                        @foreach ($semester_4_sks as $value4)
+                            {{ $value4->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4t">
+                        @foreach ($semester_4_sks as $value4)
+                            {{ $value4->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -1322,13 +1377,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_3_sks as $value3)
+                            {{ $value3->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_3_sks as $value3)
+                            {{ $value3->sks_pilihan }}
+                        @endforeach
                     </td>
-                    <td class=" px-6 py-4 text-left">
-
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_3_sks as $value3)
+                            {{ $value3->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4">
+                        @foreach ($semester_3_sks as $value3)
+                            {{ $value3->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -1540,13 +1606,24 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_2_sks as $value2)
+                            {{ $value2->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
-
+                        @foreach ($semester_2_sks as $value2)
+                            {{ $value2->sks_pilihan }}
+                        @endforeach
                     </td>
                     <td class=" px-6 py-4 text-left">
-
+                        @foreach ($semester_2_sks as $value2)
+                            {{ $value2->jumlah_mk_non_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4 text-left">
+                        @foreach ($semester_2_sks as $value2)
+                            {{ $value2->jumlah_mk_pilihan }}
+                        @endforeach
                     </td>
                 </tr>
                 <tr class="bg-white border-b text-left">
@@ -1759,12 +1836,27 @@
                         </div>
                     </td>
                     <td class=" px-6 py-4 ">
-
+                        @foreach ($semester_1_sks as $value1)
+                            {{ $value1->sks_non_pilihan }}
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 ">
+                        @foreach ($semester_1_sks as $value1)
+                            {{ $value1->sks_pilihan }}
+                        @endforeach
+                    </td>
+                    <td class=" px-6 py-4">
+
+                        @foreach ($semester_1_sks as $value1)
+                            {{ $value1->jumlah_mk_non_pilihan }}
+                        @endforeach
 
                     </td>
-                    <td class=" px-6 py-4 text-left">
+                    <td class=" px-6 py-4">
+
+                        @foreach ($semester_1_sks as $value1)
+                            {{ $value1->jumlah_mk_pilihan }}
+                        @endforeach
 
                     </td>
                 </tr>

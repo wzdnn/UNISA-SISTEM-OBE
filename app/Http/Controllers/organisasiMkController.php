@@ -18,6 +18,19 @@ class organisasiMkController extends Controller
     public function orgMKShow(Request $request)
     {
 
+        // call prosedur sks & jumlah mk
+
+        $semester_8_sks = DB::select('call sistem_obe.organisasi_mk(8,?)', [Auth::user()->kdunit]);
+        $semester_7_sks = DB::select('call sistem_obe.organisasi_mk(7,?)', [Auth::user()->kdunit]);
+        $semester_6_sks = DB::select('call sistem_obe.organisasi_mk(6,?)', [Auth::user()->kdunit]);
+        $semester_5_sks = DB::select('call sistem_obe.organisasi_mk(5,?)', [Auth::user()->kdunit]);
+        $semester_4_sks = DB::select('call sistem_obe.organisasi_mk(4,?)', [Auth::user()->kdunit]);
+        $semester_3_sks = DB::select('call sistem_obe.organisasi_mk(3,?)', [Auth::user()->kdunit]);
+        $semester_2_sks = DB::select('call sistem_obe.organisasi_mk(2,?)', [Auth::user()->kdunit]);
+        $semester_1_sks = DB::select('call sistem_obe.organisasi_mk(1,?)', [Auth::user()->kdunit]);
+
+        // return dd($semester_2_sks);
+
         //matakuliah
         $matakuliah = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
@@ -394,7 +407,7 @@ class organisasiMkController extends Controller
             ->get();
 
 
-        return view('pages.matakuliah.organisasiMK', compact('tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum', 'matakuliah', 'mkSelect'));
+        return view('pages.matakuliah.organisasiMK', compact('semester_8_sks', 'semester_7_sks', 'semester_6_sks', 'semester_5_sks', 'semester_4_sks', 'semester_3_sks', 'semester_2_sks', 'semester_1_sks', 'tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum', 'matakuliah', 'mkSelect'));
     }
 
     public function temaSTORE(Request $request)
