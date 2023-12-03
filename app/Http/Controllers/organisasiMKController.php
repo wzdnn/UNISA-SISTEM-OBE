@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class organisasiMKController extends Controller
+class organisasiMkController extends Controller
 {
     // ============================================ Organisasi Matakuliah Dimulai dari Sini ============================================ 
 
@@ -43,11 +43,16 @@ class organisasiMKController extends Controller
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
 
-
+        // return dd($matakuliah);
         $mkSelect = [];
         foreach ($matakuliah as $item) {
             array_push($mkSelect, $item);
         }
+
+
+        // $test = DB::table('ak_matakuliah')->get();
+
+        // return dd($test);
 
         // return dd($matakuliah);
 
@@ -406,6 +411,7 @@ class organisasiMKController extends Controller
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
 
+        // return dd($matakuliah);
 
         return view('pages.matakuliah.organisasiMK', compact('semester_8_sks', 'semester_7_sks', 'semester_6_sks', 'semester_5_sks', 'semester_4_sks', 'semester_3_sks', 'semester_2_sks', 'semester_1_sks', 'tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum', 'matakuliah', 'mkSelect'));
     }
