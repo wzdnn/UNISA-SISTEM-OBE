@@ -167,7 +167,7 @@
                     <td scope="row" class="px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap">
                         8
                     </td>
-                    <td class="w-[50vh] text-left">
+                    <td class="w-full text-left">
                         @foreach ($tema8 as $value)
                             &#x2022; {{ $value->tema }}
                             <br />
@@ -263,6 +263,7 @@
                                     <form class="py-3" action="" method="POST">
                                         @csrf
                                         <input type="hidden" name="semester" value="8">
+                                        <input type="hidden" name="ispilihan" value="0">
                                         <select class="w-[41vw]" id="mkselect8" name="mkselect[]" multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">
@@ -488,6 +489,7 @@
                                     <form class="py-3" action="" method="POST">
                                         @csrf
                                         <input type="hidden" name="semester" value="7">
+                                        <input type="hidden" name="ispilihan" value="0">
                                         <select class="w-[41vw]" id="mkselect7" name="mkselect[]" multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">

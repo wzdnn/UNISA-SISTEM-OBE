@@ -25,7 +25,7 @@
                     <th scope="col" class="px-6 py-3 ">
                         Kode CPL
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 hidden">
                         CPL
                     </th>
                     <th scope="col" class="px-6 py-3 ">
@@ -70,7 +70,7 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumCpls->kode_cpl }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 hidden">
                                 {{ $akKurikulumCpls->cpl }}
                             </td>
                             <td class="px-6 py-4">
