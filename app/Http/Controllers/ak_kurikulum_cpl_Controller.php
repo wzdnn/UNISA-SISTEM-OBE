@@ -131,7 +131,6 @@ class ak_kurikulum_cpl_Controller extends Controller
     {
         $request->validate([
             'kode_cpl',
-            'cpl'
         ]);
 
         $cpl = ak_kurikulum_cpl::create([

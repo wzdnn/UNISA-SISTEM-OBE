@@ -15,13 +15,12 @@
                     type="button">Peta CPL-CPMK
                 </button>
             </a>
-            @if (Auth::user()->role == 'admin')
-                <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-                    class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    Tambah CPMK
-                </button>
-            @endif
+
+            <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button">
+                Tambah CPMK
+            </button>
         </div>
 
 
@@ -104,11 +103,9 @@
                     <th scope="col" class="px-6 py-3 text-left ">
                         CPL
                     </th>
-                    @if (Auth::user()->role == 'admin')
-                        <th scope="col" class="px-6 py-3 text-left ">
-                            Action
-                        </th>
-                    @endif
+                    <th scope="col" class="px-6 py-3 text-left ">
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -130,16 +127,18 @@
                                     {{ $cpmk->kode_cpl }} {{ $cpmk->cpl }}<br />
                                 @endforeach
                             </td>
-                            @if (Auth::user()->role == 'admin')
-                                <td class="px-6 py-4">
-
-                                    <a href="{{ route('delete.cpmk', ['id' => $listCPMKs->id]) }}">
-                                        <button
-                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                                class="fa-solid fa-trash"></i></button>
-                                    </a>
-                                </td>
-                            @endif
+                            <td class="px-6 py-4">
+                                <a href="{{ route('edit.cpmk', ['id' => $listCPMKs->id]) }}">
+                                    <button
+                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-regular fa-pen-to-square"></i></button>
+                                </a>
+                                <a href="{{ route('delete.cpmk', ['id' => $listCPMKs->id]) }}">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 @else

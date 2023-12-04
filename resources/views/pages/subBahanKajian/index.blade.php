@@ -44,10 +44,10 @@
             </thead>
             <tbody>
                 @if ($akKurikulumSubBk->count() > 0)
-                    @foreach ($akKurikulumSubBk as $akKurikulumSubBks)
+                    @foreach ($akKurikulumSubBk as $key => $akKurikulumSubBks)
                         <tr class="bg-white border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{ ($akKurikulumSubBk->currentPage() - 1) * $akKurikulumSubBk->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $akKurikulumSubBks->kode_subbk }}
