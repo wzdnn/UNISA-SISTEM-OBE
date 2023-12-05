@@ -11,7 +11,7 @@ use Throwable;
 class ak_kurikulum_cpl_Controller extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
@@ -30,6 +30,10 @@ class ak_kurikulum_cpl_Controller extends Controller
                     "ak_kurikulum_cpls.kdkurikulum"
                 )
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
@@ -50,27 +54,50 @@ class ak_kurikulum_cpl_Controller extends Controller
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
         }
 
 
-        // dd(ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr'])
-        //     ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum")
-        //     ->join(
-        //         "ak_kurikulum_aspeks",
-        //         "ak_kurikulum_aspeks.id",
-        //         "=",
-        //         "ak_kurikulum_cpls.id"
-        //     )
-        //     ->join(
-        //         "ak_kurikulum",
-        //         "ak_kurikulum.kdkurikulum",
-        //         "=",
-        //         "ak_kurikulum_cpls.kdkurikulum"
-        //     )->toSql());
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
 
 
 
-        return view('pages.cpl.index', compact('akKurikulumCpl'));
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                    ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                    ->join(
+                        "ak_kurikulum_aspeks",
+                        "ak_kurikulum_aspeks.id",
+                        "=",
+                        "ak_kurikulum_cpls.kdaspek"
+                    )
+                    ->join(
+                        "ak_kurikulum",
+                        "ak_kurikulum.kdkurikulum",
+                        "=",
+                        "ak_kurikulum_cpls.kdkurikulum"
+                    )
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+
+        return view('pages.cpl.index', compact('akKurikulumCpl', 'kdkurikulum'));
     }
 
     public function delete(int $id)

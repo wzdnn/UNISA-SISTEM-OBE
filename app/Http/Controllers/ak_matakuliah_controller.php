@@ -19,34 +19,8 @@ use function Laravel\Prompts\select;
 class ak_matakuliah_controller extends Controller
 {
 
-    public function mkIndex()
+    public function mkIndex(Request $request)
     {
-        // $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
-        //     ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
-        //     ->join(
-        //         'ak_kurikulum',
-        //         'ak_kurikulum.kdkurikulum',
-        //         '=',
-        //         'ak_matakuliah.kdkurikulum'
-        //     )
-        //     ->where("isObe", "=", 1)
-        //     ->orderBy('ak_matakuliah.kdmatakuliah')
-        //     ->get();
-        // return dd($matakuliah);
-
-        //asli
-        // $matakuliah = ak_matakuliah::with('MKtoSub_bk')
-        //     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-        //     // ->leftJoin('ak_matakuliah_ak_kurikulum_sub_bk', 'ak_matakuliah_ak_kurikulum_sub_bk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
-        //     ->where("ak_kurikulum.isObe", '=', 1)
-        //     ->where(function ($query) {
-        //         $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-        //             ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-        //     })
-        //     ->orderBy('matakuliah', 'asc')
-        //     ->paginate(20);
-
-        // $subbk = gabung_matakuliah_subbk::with('subbk', 'cpmks')->first();
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
@@ -54,6 +28,10 @@ class ak_matakuliah_controller extends Controller
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
@@ -64,10 +42,40 @@ class ak_matakuliah_controller extends Controller
                 })
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
         }
+
+
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('kdmatakuliah', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+
         // return dd($matakuliah);
 
-        return view('pages.matakuliah.index', compact('matakuliah'));
+        return view('pages.matakuliah.index', compact('matakuliah', 'kdkurikulum'));
     }
 
     // tambah data

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class ak_kurikulum_bk_controller extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         // $akKurikulumBk = ak_kurikulum_bk::all();
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
@@ -41,6 +41,10 @@ class ak_kurikulum_bk_controller extends Controller
                     "ak_kurikulum_bks.kdkurikulum"
                 )
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $akKurikulumBk = DB::table('ak_kurikulum_bks')
                 ->select(
@@ -73,10 +77,61 @@ class ak_kurikulum_bk_controller extends Controller
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
         }
 
 
-        return view('pages.bahanKajian.index', compact('akKurikulumBk'));
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $akKurikulumBk = DB::table('ak_kurikulum_bks')
+                    ->select(
+                        "ak_kurikulum_bks.*",
+                        "ak_kurikulum_basis_ilmus.basis_ilmu as ak_basil",
+                        "ak_kurikulum_bidang_ilmus.bidang_ilmu as ak_bidil",
+                        "ak_kurikulum.kurikulum",
+                        "ak_kurikulum.tahun"
+                    )
+                    ->join(
+                        "ak_kurikulum_basis_ilmus",
+                        "ak_kurikulum_basis_ilmus.id",
+                        "=",
+                        "ak_kurikulum_bks.kdbasil"
+                    )
+                    ->join(
+                        "ak_kurikulum_bidang_ilmus",
+                        "ak_kurikulum_bidang_ilmus.id",
+                        "=",
+                        "ak_kurikulum_bks.kdbidil"
+                    )
+                    ->join(
+                        "ak_kurikulum",
+                        "ak_kurikulum.kdkurikulum",
+                        "=",
+                        "ak_kurikulum_bks.kdkurikulum"
+                    )
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+
+        return view('pages.bahanKajian.index', compact('akKurikulumBk', 'kdkurikulum'));
     }
 
     public function create()

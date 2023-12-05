@@ -85,10 +85,30 @@
         </div>
 
     </div>
+    <div class="flex flex-col">
+        <form method="GET" class="rounded">
+            {{-- @csrf --}}
+            <select name="filter" id="" class="rounded">
+                <option value="null">null</option>
+                @foreach ($kdkurikulum as $item)
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                @endforeach
+            </select>
+            {{-- <input type="text" name="search" class=" rounded"> --}}
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                type="submit">Filter</button>
+        </form>
+
+        @if (request()->search != null && request()->key != null)
+            <div class="my-3">
+                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+            </div>
+        @endif
+    </div>
     <hr />
 
     <div class="relative py-3">
-        <table class="w-full text-sm text-center  text-gray-500">
+        <table id="mytable" class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3 w-[50px]">
@@ -102,6 +122,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3 text-left ">
                         CPL
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left ">
+                        Unit
                     </th>
                     <th scope="col" class="px-6 py-3 text-left ">
                         Action
@@ -127,6 +150,9 @@
                                     {{ $cpmk->kode_cpl }} {{ $cpmk->cpl }}<br />
                                 @endforeach
                             </td>
+                            <td class="px-6 py-4 text-left">
+                                {{ $listCPMKs->kurikulum }}-{{ $listCPMKs->tahun }}
+                            </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('edit.cpmk', ['id' => $listCPMKs->id]) }}">
                                     <button
@@ -148,7 +174,70 @@
                 @endif
             </tbody>
         </table>
-        {{ $listCPMK->links() }}
+        {{ $listCPMK->withQueryString()->links() ?? '' }}
         <hr />
     </div>
+
+    <script>
+        //on load
+        $(function() {
+            // MergeGridCells('#mytable', 1, false);
+            MergeGridCells('#mytable', 5, false);
+
+        });
+
+        function MergeGridCells(table_id, dimension_col, is_alternate_color) {
+            let i = 0;
+            // first_instance holds the first instance of identical td
+            // first_instance menyimpan kata yang sama
+            let first_instance = null;
+            // how many identical td?
+            // berapa baris yang sama?
+            let rowspan = 1;
+            let first_text = '';
+            // iterate through rows
+            // loop untuk setiap baris
+            $(table_id + ' > tbody  > tr').each(function() {
+
+                // find the td of the correct column (determined by the dimension_col set above)
+                // ambil teks (sesuai dengan kolom ke-dimension_col)
+                let dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+                let text = btoa(dimension_td[0].innerHTML.trim());
+
+                if (first_instance == null) {
+                    // must be the first row
+                    // baris pertama
+                    first_instance = dimension_td;
+                    first_text = text;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                } else if (text == first_text) {
+                    // the current td is identical to the previous
+                    // baris ini sama dengan baris sebelumnya
+                    // remove the current td
+                    // delete baris ini
+                    dimension_td.remove();
+                    ++rowspan;
+                    // increment the rowspan attribute of the first instance
+                    // baris ini di merge dengan sebelumnya dengan cara menaikkan rowspan baris pertama yang sama sampai dengan baris ini
+                    first_instance.attr('rowspan', rowspan);
+                    painting(is_alternate_color, first_instance, i);
+                } else {
+                    // this cell is different from the last, stop previous rowspan
+                    // baris ini berbeda dengan yang sebelumnya, hentikan proses merger sebelumnya
+                    first_instance = dimension_td;
+                    first_text = text;
+                    rowspan = 1;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                }
+
+            });
+        }
+
+        function painting(is_alternate_color, instance, i) {
+            if (is_alternate_color)
+                instance.attr('style', 'background-color: ' + ((i % 2 == 0) ? '#FFFFB6' : '#ff9da4'));
+        }
+    </script>
 @endsection

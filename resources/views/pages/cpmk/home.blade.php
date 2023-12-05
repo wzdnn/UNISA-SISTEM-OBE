@@ -2,15 +2,17 @@
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-gray-700">Profile Lulusan</h1>
-        @if (Auth::user()->role == 'admin')
-            <a href="{{ route('pl.create') }}">
-                <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah
-                    Profile
-                    Lulusan</button>
+        <h1 class="font-bold text-2xl mb-0 text-gray-700">CPL-CPMK</h1>
+        <div class="flex flex-row space-x-3">
+            <a href="{{ route('list.cpmk') }}">
+                <button
+                    class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">List CPMK
+                </button>
             </a>
-        @endif
+        </div>
     </div>
+
     <div class="flex flex-col">
         <form method="GET" class="rounded">
             {{-- @csrf --}}
@@ -31,6 +33,7 @@
             </div>
         @endif
     </div>
+
     <hr />
 
     <div class="relative py-3">
@@ -41,78 +44,55 @@
                         No.
                     </th>
                     <th scope="col" class="px-6 py-3 ">
-                        Kode PL
+                        CPL
                     </th>
                     <th scope="col" class="px-6 py-3 ">
-                        Profile Lulusan
+                        CPMK
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Deskripsi Profil
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 ">
                         Unit
                     </th>
-                    @if (Auth::user()->role == 'admin')
-                        <th scope="col" class="px-6 py-3">
-                            Action
-                        </th>
-                    @endif
                 </tr>
             </thead>
             <tbody>
-                @if ($akKurikulumPl->count() > 0)
-                    @foreach ($akKurikulumPl as $key => $akKurikulumPls)
-                        <tr class="bg-white border-b text-left">
+                @if ($CPMK->count() > 0)
+                    @foreach ($CPMK as $key => $value)
+                        <tr class="bg-white border-b">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{-- {{ $loop->iteration }} --}}
-                                {{ ($akKurikulumPl->currentPage() - 1) * $akKurikulumPl->perPage() + $key + 1 }}
+                                {{ $loop->iteration }}
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $akKurikulumPls->kode_pl }}
+                            <td class="px-6 py-4 text-left">
+                                {{ $value->kode_cpl }} {{ $value->cpl }}
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $akKurikulumPls->profile_lulusan }}
+                            <td class="px-6 py-4 text-left">
+                                {{-- @foreach ($value->CPMKtoCPL as $cplcpmk)
+                                    {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
+                                @endforeach --}}
+                                @foreach ($value->CpltoCpmk as $cplcpmk)
+                                    &#x2022; {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
+                                @endforeach
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $akKurikulumPls->deskripsi_profile }}
+                            <td class="px-6 py-4 text-left">
+                                {{ $value->kurikulum }}-{{ $value->tahun }}
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $akKurikulumPls->kurikulum }} - {{ $akKurikulumPls->tahun }}
-                            </td>
-                            @if (Auth::user()->role == 'admin')
-                                <td class="px-6 py-4 flex flex-row">
-                                    <a href="{{ route('edit.pl', ['id' => $akKurikulumPls->id]) }}">
-                                        <button
-                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                                class="fa-regular fa-pen-to-square"></i></button>
-                                    </a>
-
-                                    <a href="{{ route('delete.pl', ['id' => $akKurikulumPls->id]) }}">
-                                        <button
-                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                                class="fa-solid fa-trash"></i></button>
-                                    </a>
-                                </td>
-                            @endif
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="6">Profile Lulusan belum ada</td>
+                        <td class="justify-center text-center" colspan="4">Data belum ada</td>
                     </tr>
                 @endif
             </tbody>
         </table>
-        {{ $akKurikulumPl->withQueryString()->links() ?? '' }}
+        {{ $CPMK->links() }}
         <hr />
-
     </div>
+
     <script>
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
-            MergeGridCells('#mytable', 1, false);
-            MergeGridCells('#mytable', 5, false);
+            MergeGridCells('#mytable', 4, false);
 
         });
 

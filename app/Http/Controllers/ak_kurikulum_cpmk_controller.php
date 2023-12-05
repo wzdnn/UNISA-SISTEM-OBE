@@ -9,14 +9,83 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-use function PHPSTORM_META\map;
-
 class ak_kurikulum_cpmk_controller extends Controller
 {
 
-    // 
+    public function cpmkIndex(Request $request)
+    {
 
-    public function cpmkList()
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->orderBy('ak_kurikulum_cpls.id')
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $cpm = ak_kurikulum_cpmk::all();
+        } else {
+            $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->orderBy('ak_kurikulum_cpls.id')
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $cpm = ak_kurikulum_cpmk::all();
+        }
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                    ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
+                    ->join(
+                        "ak_kurikulum",
+                        "ak_kurikulum.kdkurikulum",
+                        "=",
+                        "ak_kurikulum_cpls.kdkurikulum"
+                    )
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+        // return dd($CPMK);
+        return view('pages.cpmk.home', compact('CPMK', 'cpm', 'kdkurikulum'));
+    }
+
+    public function cpmkList(Request $request)
     {
 
         $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
@@ -47,6 +116,10 @@ class ak_kurikulum_cpmk_controller extends Controller
                     "ak_kurikulum_cpmks.kdkurikulum"
                 )
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
                 ->join(
@@ -58,13 +131,40 @@ class ak_kurikulum_cpmk_controller extends Controller
                 ->where("ak_kurikulum.kdunitkerja", "=", Auth::user()->kdunit)
                 ->orWhere("ak_kurikulum.kdunitkerja", '=', 0)
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+        }
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
         }
 
 
-        // return dd($listCPMK);
-        // $listCPMK = DB::table('ak_kurikulum_cpmks')->get();
 
-        return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk', 'akKurikulum'));
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+                    ->join(
+                        "ak_kurikulum",
+                        "ak_kurikulum.kdkurikulum",
+                        "=",
+                        "ak_kurikulum_cpmks.kdkurikulum"
+                    )
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+        return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk', 'akKurikulum', 'kdkurikulum'));
     }
 
 

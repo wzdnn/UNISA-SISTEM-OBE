@@ -11,6 +11,26 @@
             </a>
         @endif
     </div>
+    <div class="flex flex-col">
+        <form method="GET" class="rounded">
+            {{-- @csrf --}}
+            <select name="filter" id="" class="rounded">
+                <option value="null">null</option>
+                @foreach ($kdkurikulum as $item)
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                @endforeach
+            </select>
+            {{-- <input type="text" name="search" class=" rounded"> --}}
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                type="submit">Filter</button>
+        </form>
+
+        @if (request()->search != null && request()->key != null)
+            <div class="my-3">
+                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+            </div>
+        @endif
+    </div>
     <hr />
 
     <div class="relative py-3">
@@ -232,7 +252,7 @@
                 @endif
             </tbody>
         </table>
-        {{ $matakuliah->links() }}
+        {{ $matakuliah->withQueryString()->links() ?? '' }}
         <hr />
     </div>
     <script>

@@ -11,7 +11,7 @@ class ak_kurikulum_pl_Controller extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
         // $akKurikulumPl = ak_kurikulum_pl::all();
 
@@ -21,6 +21,10 @@ class ak_kurikulum_pl_Controller extends Controller
                 ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
                 ->orderBy(('ak_kurikulum_pls.id'))
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $akKurikulumPl = DB::table('ak_kurikulum_pls')
                 ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
@@ -31,10 +35,39 @@ class ak_kurikulum_pl_Controller extends Controller
                 })
                 ->orderBy(('ak_kurikulum_pls.id'))
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+        }
+
+        // $kdkurikulum = DB::table("ak_kurikulum")
+        //     ->where("isObe", "=", 1)
+        //     ->get();
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
         }
 
 
-        return view('pages.profileLulusan.index', compact('akKurikulumPl'));
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $akKurikulumPl = DB::table('ak_kurikulum_pls')
+                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_kurikulum_pls.kdkurikulum')
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+        return view('pages.profileLulusan.index', compact('akKurikulumPl', 'kdkurikulum'));
     }
 
     public function create()

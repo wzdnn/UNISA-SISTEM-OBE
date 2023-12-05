@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class ak_kurikulum_sub_bk_controller extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         // $akKurikulumSubBk = ak_kurikulum_sub_bk::all();
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
@@ -29,6 +29,9 @@ class ak_kurikulum_sub_bk_controller extends Controller
                     "ak_kurikulum_sub_bks.kdkurikulum"
                 )
                 ->paginate(10);
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
                 ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
@@ -49,10 +52,45 @@ class ak_kurikulum_sub_bk_controller extends Controller
                     "ak_kurikulum_sub_bks.kdkurikulum"
                 )
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
         }
 
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
 
-        return view('pages.subBahanKajian.index', compact('akKurikulumSubBk'));
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
+                    ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                    ->join(
+                        "ak_kurikulum_bks",
+                        "ak_kurikulum_bks.id",
+                        "=",
+                        "ak_kurikulum_sub_bks.kdbk"
+                    )
+                    ->join(
+                        "ak_kurikulum",
+                        "ak_kurikulum.kdkurikulum",
+                        "=",
+                        "ak_kurikulum_sub_bks.kdkurikulum"
+                    )
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+        return view('pages.subBahanKajian.index', compact('akKurikulumSubBk', 'kdkurikulum'));
     }
 
     public function listSubBK()
