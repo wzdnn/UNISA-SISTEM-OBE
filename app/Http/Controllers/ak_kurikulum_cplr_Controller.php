@@ -14,7 +14,7 @@ class ak_kurikulum_cplr_Controller extends Controller
     {
         // $akKurikulumCplr = ak_kurikulum_cplr::all();
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $akKurikulumCplr = DB::table('ak_kurikulum_cplrs')
                 ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
                 ->join(

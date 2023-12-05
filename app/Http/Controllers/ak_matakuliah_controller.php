@@ -22,7 +22,7 @@ class ak_matakuliah_controller extends Controller
     public function mkIndex(Request $request)
     {
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)

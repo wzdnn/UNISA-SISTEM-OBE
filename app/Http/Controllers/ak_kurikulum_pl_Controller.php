@@ -15,7 +15,7 @@ class ak_kurikulum_pl_Controller extends Controller
     {
         // $akKurikulumPl = ak_kurikulum_pl::all();
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $akKurikulumPl = DB::table('ak_kurikulum_pls')
                 ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
                 ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")

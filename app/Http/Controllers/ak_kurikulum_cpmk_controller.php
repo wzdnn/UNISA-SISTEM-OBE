@@ -15,7 +15,7 @@ class ak_kurikulum_cpmk_controller extends Controller
     public function cpmkIndex(Request $request)
     {
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
                 ->join(
@@ -107,7 +107,7 @@ class ak_kurikulum_cpmk_controller extends Controller
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
                 ->join(
                     "ak_kurikulum",
