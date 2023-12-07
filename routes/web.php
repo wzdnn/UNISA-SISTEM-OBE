@@ -166,6 +166,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/organisasiMatakuliah', [organisasiMkController::class, 'orgMKShow'])->name('organisasi.mk');
     Route::post('/organisasiMatakuliah', [organisasiMkController::class, 'kelolaMKWPOST']);
 
+    Route::post('/copyMatakuliah', [organisasiMkController::class, 'copyMatakuliah'])->name('copy.mk');
 
     Route::post('/temaSTORE', [organisasiMkController::class, 'temaSTORE'])->name('store.tema');
 

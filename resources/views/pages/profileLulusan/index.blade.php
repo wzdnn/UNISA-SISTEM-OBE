@@ -17,7 +17,8 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">null</option>
                 @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}
+                        {{ $item->tahun }}</option>
                 @endforeach
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
@@ -77,7 +78,7 @@
                                 {{ $akKurikulumPls->deskripsi_profile }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumPls->kurikulum }} - {{ $akKurikulumPls->tahun }}
+                                {{ $akKurikulumPls->kurikulum }} -{{ $akKurikulumPls->tahun }}
                             </td>
                             @if (Auth::user()->role == 'admin')
                                 <td class="px-6 py-4 flex flex-row">

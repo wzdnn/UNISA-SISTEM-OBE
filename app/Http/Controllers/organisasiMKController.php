@@ -51,6 +51,15 @@ class organisasiMkController extends Controller
 
         // return dd($matakuliah);
 
+        //kurikulum univ
+        $kurikulumUniv = DB::table('ak_kurikulum')
+            ->select(['kdkurikulum', 'kurikulum', 'tahun'])
+            ->where('kdunitkerja', '=', 100)
+            ->orwhere('kdunitkerja', '=', 0)
+            ->orwhere('kdunitkerja', '=', 42)
+            ->where("isObe", '=', 1)
+            ->get();
+
         //kurikulum
         $ak_kurikulum = DB::table('ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
@@ -407,7 +416,7 @@ class organisasiMkController extends Controller
             ->get();
 
         // return dd($semester1_0, $semester1_1, $semester1_2);
-        return view('pages.matakuliah.organisasiMK', compact('semester_8_sks', 'semester_7_sks', 'semester_6_sks', 'semester_5_sks', 'semester_4_sks', 'semester_3_sks', 'semester_2_sks', 'semester_1_sks', 'tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum', 'matakuliah', 'mkSelect'));
+        return view('pages.matakuliah.organisasiMK', compact('kurikulumUniv', 'semester_8_sks', 'semester_7_sks', 'semester_6_sks', 'semester_5_sks', 'semester_4_sks', 'semester_3_sks', 'semester_2_sks', 'semester_1_sks', 'tema1', 'tema2', 'tema3', 'tema4', 'tema5', 'tema6', 'tema7', 'tema8', 'semester1_0', 'semester1_1', 'semester1_2', 'semester2_0', 'semester2_1', 'semester2_2', 'semester3_0', 'semester3_1', 'semester3_2', 'semester4_0', 'semester4_1', 'semester4_2', 'semester5_0', 'semester5_1', 'semester5_2', 'semester6_0', 'semester6_1', 'semester6_2', 'semester7_0', 'semester7_1', 'semester7_2', 'semester8_0', 'semester8_1', 'semester8_2', 'ak_kurikulum', 'matakuliah', 'mkSelect'));
     }
 
     public function temaSTORE(Request $request)
@@ -421,6 +430,13 @@ class organisasiMkController extends Controller
         return redirect()->route('organisasi.mk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 
+    public function copyMatakuliah(Request $request)
+    {
+        DB::select('call sistem_obe.copy_mk_univ(?,?)', [$request->unitUniv, $request->unitProdi]);
+
+        // return dd($copyMatakuliah, 'sukses');
+        return redirect()->route('organisasi.mk')->with('success', 'Matakuliah berhasil disalin');
+    }
 
     public function semesterOrigin(int $id)
     {
