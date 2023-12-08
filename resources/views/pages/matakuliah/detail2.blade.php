@@ -39,106 +39,197 @@
 
 
 
-    <div class="flex items-center">
-        <h1 class="font-bold text-2xl mb-0 text-blue-800">Detail Matakuliah</h1>
-    </div>
 
-    <div class="my-3">
+
+    <div class="my-3 ml-5 ">
         {{-- <h2 class="text-lg">Kode : {{ $mkSubBk->kdmatakuliah }}</h2>
     <h2 class="text-lg">Mata Kuliah : {{ $mkSubBk->matakuliah }}</h2> --}}
         <form action="{{ route('post.detail.mk', ['id' => $mkSubBk->kdmatakuliah]) }}" method="post">
             @csrf
-            <table class="w-[40vh] text-sm  text-gray-500 ">
-                <thead class="text-lg text-gray-700 uppercase">
-                    <tr class="text-left">
-                        <th scope="col">
-                            Kode
-                        </th>
-                        <th scope="col">
-                            :
-                        </th>
-                        <th scope="col">
-                            <input type="text" name="kodematakuliah" id="kodematakuliah"
-                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " value="{{ old('kodematakuliah') ?? $mkSubBk->kodematakuliah }}" />
-                            <label for="kodematakuliah"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
-                                Matakuliah</label>
-                        </th>
-                    </tr>
-                    <tr class="text-left">
-                        <th>
-                            Matakuliah
-                        </th>
-                        <th class="">
-                            :
-                        </th>
-                        <th>
-                            <input type="text" name="matakuliah" id="matakuliah"
-                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " value="{{ old('matakuliah') ?? $mkSubBk->matakuliah }}" />
-                            <label for="matakuliah"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Matakuliah</label>
-                        </th>
-                    </tr>
-                    <tr class="text-left">
-                        <th>
-                            MK Singkat
-                        </th>
-                        <th class="">
-                            :
-                        </th>
-                        <th class="ml-3">
-                            <input type="text" name="mk_singkat" id="mk_singkat"
-                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " value="{{ old('mk_singkat') ?? $mkSubBk->mk_singkat }}" />
-                            <label for="mk_singkat"
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
-                                Singkat</label>
-                        </th>
+            <br>
+            <div class="flex-col items-center justify-center h-screen">
+                <h1 class="font-bold text-2xl mb-8 text-blue-800 text-center">Detail Matakuliah</h1>
 
-                    </tr>
-                    <tr class="text-left">
-                        <th>
-                            SKS
+
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-screen-md mx-auto p-8 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mt-0">
+                    <!-- Kode Matakuliah -->
+                    <div class="mb-6 md:mb-0">
+                        <label for="kodematakuliah" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Kode
+                            :</label>
+
+                        <input type="text" name="kodematakuliah" id="kodematakuliah"
+                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('kodematakuliah') ?? $mkSubBk->kodematakuliah }}" />
+                        <label for="kodematakuliah"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
+                            Matakuliah</label>
+                    </div>
+
+                    <!-- Matakuliah -->
+                    <div class="mb-6 md:mb-0">
+                        <label for="matakuliah"
+                            class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Matakuliah :</label>
+                        <input type="text" name="matakuliah" id="matakuliah"
+                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('matakuliah') ?? $mkSubBk->matakuliah }}" />
+                        <label for="matakuliah"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Matakuliah</label>
+
+                    </div>
+
+                    <!-- MK Singkat -->
+                    <div class="mb-6 md:mb-0">
+                        <label for="mk_singkat" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">MK
+                            Singkat :</label>
+                        <input type="text" name="mk_singkat" id="mk_singkat"
+                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('mk_singkat') ?? $mkSubBk->mk_singkat }}" />
+                        <label for="mk_singkat"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
+                            Singkat</label>
+                    </div>
+
+                    <!-- SKS -->
+                    <div class="mb-6 md:mb-0">
+                        <label for="sks" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">SKS
+                            :</label>
+                        <input type="text" name="semester" id="semester"
+                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
+                        <label for=""
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
                         </th>
-                        <th class="">
-                            :
+                    </div>
+
+                    <!-- Rekomendasi SKS -->
+                    <div class="mb-6 md:mb-0">
+                        <label for="rekomendasi_sks"
+                            class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Rekomendasi SKS :</label>
+                        <input type="text" name="rekomendasi_sks" id="rekomendasi_sks"
+                            class="block w-full py-2.5 px-4 text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-600 placeholder-transparent dark:placeholder-gray-500 dark:text-white"
+                            placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}" />
+                    </div>
+
+                    <!-- Batas Nilai Lulus -->
+                    <div class="mb-6 md:mb-0">
+                        <label for="batasnilailulus"
+                            class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Batas Nilai Lulus :</label>
+                        <input type="text" name="semester" id="semester"
+                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
+                        <label for=""
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
                         </th>
-                        <th class="ml-3">
-                            <input type="text" name="semester" id="semester"
-                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
-                            <label for=""
-                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
-                        </th>
-                        <th class="text-xs px-3">
-                            Rekomendasi SKS
-                        </th>
-                        <th class="">
-                            :
-                        </th>
-                        <th class="ml-3">
-                            <input type="text"
-                                class="block py-2.5 px-2  text-sm text-gray-900 bg-transparent  border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}" />
-                        </th>
-                    </tr>
-                </thead>
-            </table>
-            <div class="my-3">
-                <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-2"
-                    type="submit">UPDATE</button>
+                    </div>
+
+                    <div class="col-span-3 my-3 text-center">
+                        <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-4 text-md font-semibold py-2"
+                            type="submit">UPDATE</button>
+                    </div>
+
+                </div>
+
             </div>
-        </form>
 
-        <br />
-        <hr />
+
+    </div>
+
+
+
+
+    {{-- <table class="w-full text-sm text-center  text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase">
+                        <tr class="text-left">
+                            <th scope="col">
+                                Kode
+                            </th>
+                            <th scope="col">
+                                :
+                            </th>
+                            <th scope="col">
+                                <input type="text" name="kodematakuliah" id="kodematakuliah"
+                                    class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" " value="{{ old('kodematakuliah') ?? $mkSubBk->kodematakuliah }}" />
+                                <label for="kodematakuliah"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
+                                    Matakuliah</label>
+                            </th>
+                        </tr>
+                        <tr class="text-left">
+                            <th>
+                                Matakuliah
+                            </th>
+                            <th class="">
+                                :
+                            </th>
+                            <th>
+                                <input type="text" name="matakuliah" id="matakuliah"
+                                    class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" " value="{{ old('matakuliah') ?? $mkSubBk->matakuliah }}" />
+                                <label for="matakuliah"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Matakuliah</label>
+                            </th>
+                        </tr>
+
+
+                        <tr class="text-left">
+                            <th>
+                                MK Singkat
+                            </th>
+                            <th class="">
+                                :
+                            </th>
+                            <th class="ml-3">
+                                <input type="text" name="mk_singkat" id="mk_singkat"
+                                    class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" " value="{{ old('mk_singkat') ?? $mkSubBk->mk_singkat }}" />
+                                <label for="mk_singkat"
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
+                                    Singkat</label>
+                            </th>
+
+                        </tr>
+                        <tr class="text-left">
+                            <th>
+                                SKS
+                            </th>
+                            <th class="">
+                                :
+                            </th>
+                            <th class="ml-3">
+                                <input type="text" name="semester" id="semester"
+                                    class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
+                                <label for=""
+                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
+                            </th>
+                            <th class="text-xs px-3">
+                                Rekomendasi SKS
+                            </th>
+                            <th class="">
+                                :
+                            </th>
+                            <th class="ml-3">
+                                <input type="text"
+                                    class="block py-2.5 px-2  text-sm text-gray-900 bg-transparent  border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}" />
+                            </th>
+                        </tr>
+                    </thead>
+                </table> --}}
+
+    </form>
+
+    <br />
+    <hr />
     </div>
 
     <div>
         <a href="{{ route('mk.subbk', ['id' => $mkSubBk->kdmatakuliah]) }}"><button
-                class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola Sub
+                class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3 ml-5">Kelola
+                Sub
                 Bahan
                 Kajian
             </button>
@@ -146,7 +237,7 @@
         <hr />
         <br />
         <div class="my-3">
-            <h2 class="font-bold text-2xl mb-0 text-blue-800">Sub BK</h2>
+            <h2 class="font-bold text-2xl mb-0 text-blue-800 ml-5">Sub BK</h2>
 
         </div>
 
