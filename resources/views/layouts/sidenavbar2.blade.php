@@ -89,14 +89,13 @@
             {{-- <li>
                 <a href="{{ route('welcome') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
-                    
+
                     <span class="ml-3">Dashboard</span>
                 </a>
             </li> --}}
             <li>
                 <a href="{{ route('index.VM') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
-
                     <span class="ml-3">Visi dan Misi</span>
                 </a>
             </li>
@@ -181,7 +180,6 @@
                     </li>
                 </ul>
             </li>
-
             <li>
                 <a href="{{ route('index.mk') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
