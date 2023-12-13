@@ -233,6 +233,13 @@
                     <span class="ml-3">Bidang Ilmu</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('metopen') }}"
+                    class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+
+                    <span class="ml-3">Metode Penilaian</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

@@ -12,6 +12,7 @@ use App\Http\Controllers\aspekController;
 use App\Http\Controllers\basisIlmuController;
 use App\Http\Controllers\bidangIlmuController;
 use App\Http\Controllers\matakuliah;
+use App\Http\Controllers\metodePenilaianController;
 use App\Http\Controllers\organisasiMkController;
 use App\Http\Controllers\sumberController;
 use App\Http\Controllers\UserController;
@@ -171,6 +172,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/temaSTORE', [organisasiMkController::class, 'temaSTORE'])->name('store.tema');
 
     Route::get('/reset/{id}', [organisasiMkController::class, 'semesterOrigin'])->name('reset.mk');
+
+
+    // Metode Penilaian
+
+    Route::get('/metopen', [metodePenilaianController::class, 'metodePenilaian'])->name('metopen');
+    Route::post('/postMetopen', [metodePenilaianController::class, 'store'])->name('post.metopen');
+    Route::get('/metopen/{id}', [metodePenilaianController::class, 'delete'])->name('delete.metopen');
 });
 
 

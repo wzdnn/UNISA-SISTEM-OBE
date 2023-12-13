@@ -111,7 +111,7 @@ class ak_matakuliah_controller extends Controller
         $matakuliah = ak_matakuliah::create([
             'kodematakuliah' => $request->kodematakuliah,
             'matakuliah' => $request->matakuliah,
-            'mk_singkat' => $request->mk_singkat,
+            'batasNilai' => $request->batasNilai,
             'kdkurikulum' => $request->unit,
             'isObe' => 1
         ]);
@@ -147,8 +147,10 @@ class ak_matakuliah_controller extends Controller
         $request->validate([
             'kodematakuliah' => 'nullable',
             'matakuliah' => 'nullable',
-            'mk_singkat',
+            'mk_singkat' => 'nullable',
         ]);
+
+        // return dd($request->all());
 
         try {
             // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
@@ -159,6 +161,7 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->matakuliah = $request->input('matakuliah');
             $mkSubBk->mk_singkat = $request->input('mk_singkat');
             $mkSubBk->sks = $request->input('sks');
+            $mkSubBk->batasNilai = $request->input('batasNilai');
 
             $mkSubBk->save();
 

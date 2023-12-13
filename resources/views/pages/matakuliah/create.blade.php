@@ -41,67 +41,72 @@
     @if ($errors->any())
         <p style="color: red">{{ $errors->first() }}</p>
     @endif
-    <form class="py-3" action="{{ route('store.mk') }}" method="POST">
-        @csrf
-        <div class="grid md:grid-cols-2 md:gap-6">
-            <div class="flex flex-col z-0 w-full mb-6 group">
-                <label for="Sub Bahan Kajian" class="text-sm text-gray-500">
-                    Sub Bahan Kajian
-                </label>
-                <select id="kdsubbk" name="kdsubbk[]" multiple data-live-search="true" class="form-control">
-                    @foreach ($SBK as $subbk)
-                        <option value="{{ $subbk->id }}">{{ $subbk->kode_subbk }} {{ $subbk->sub_bk }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="kodematakuliah" id="kodematakuliah"
-                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " value="{{ old('kodematakuliah') }}" />
-                <label for="kodematakuliah"
-                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
-                    Matakuliah</label>
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="matakuliah" id="matakuliah"
-                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " value="{{ old('matakuliah') }}" />
-                <label for="matakuliah"
-                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Matakuliah</label>
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="mk_singkat" id="mk_singkat"
-                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" " value="{{ old('mk_singkat') }}" />
-                <label for="mk_singkat"
-                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
-                    Singkat</label>
-            </div>
-            {{-- <div class="relative z-0 w-full mb-6 group">
+    <div class="my-3 mr-3">
+        <div class="px-3 bg-white border border-gray-200 rounded shadow-lg justify-between">
+            <form class="py-3" action="{{ route('store.mk') }}" method="POST">
+                @csrf
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="Sub Bahan Kajian" class="text-sm text-gray-500">
+                            Sub Bahan Kajian
+                        </label>
+                        <select id="kdsubbk" name="kdsubbk[]" multiple data-live-search="true" class="form-control">
+                            @foreach ($SBK as $subbk)
+                                <option value="{{ $subbk->id }}">{{ $subbk->kode_subbk }} {{ $subbk->sub_bk }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="kodematakuliah" id="kodematakuliah"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('kodematakuliah') }}" />
+                        <label for="kodematakuliah"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode
+                            Matakuliah</label>
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="matakuliah" id="matakuliah"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('matakuliah') }}" />
+                        <label for="matakuliah"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Matakuliah</label>
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="mk_singkat" id="mk_singkat"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('mk_singkat') }}" />
+                        <label for="mk_singkat"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
+                            Singkat</label>
+                    </div>
+                    {{-- <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="sks" id="sks"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" " value="{{ old('sks') }}" />
                 <label for="sks"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">SKS</label>
             </div> --}}
-            <div class="flex flex-col z-0 w-full mb-6 group">
-                <label for="unit" class="text-sm text-gray-500">
-                    Unit
-                </label>
-                <select id="unit" name="unit" class="form-control">
-                    @foreach ($ak_kurikulum as $item)
-                        <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }} {{ $item->tahun }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="py-3">
-            <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
-        </div>
+                    <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="unit" class="text-sm text-gray-500">
+                            Unit
+                        </label>
+                        <select id="unit" name="unit" class="form-control">
+                            @foreach ($ak_kurikulum as $item)
+                                <option value="{{ $item->kdkurikulum }}">{{ $item->kurikulum }} {{ $item->tahun }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="py-3">
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+                </div>
 
-    </form>
+            </form>
+        </div>
+    </div>
 @endsection
 
 @push('script')

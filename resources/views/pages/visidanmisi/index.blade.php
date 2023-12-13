@@ -9,7 +9,7 @@
 
 
     <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-500 ">
+        <table class="w-full text-sm text-gray-500 text-justify">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -27,28 +27,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b  text-left">
+                <tr class="bg-white border-b text-justify">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                         Visi
                     </th>
                     <td class="px-6 py-4">
                         @foreach ($visiU as $visiUniv)
                             <p class="mb-2 font-bold  ">
-                                &#x2022; {{ $visiUniv->Visi }}
+                                {{ $visiUniv->Visi }}
                             </p>
                         @endforeach
                     </td>
                     <td class="px-6 py-4">
                         @foreach ($visiF as $visiFakultas)
                             <p class="mb-2 font-bold  ">
-                                &#x2022; {{ $visiFakultas->Visi }}
+                                {{ $visiFakultas->Visi }}
                             </p>
                         @endforeach
                     </td>
                     <td class="px-6 py-4">
                         @foreach ($visiP as $visiProdi)
                             <p class="mb-2 font-bold  ">
-                                &#x2022; {{ $visiProdi->Visi }}
+                                {{ $visiProdi->Visi }}
                             </p>
                         @endforeach
                     </td>
@@ -60,21 +60,23 @@
                     <td class="px-6 py-4">
                         @foreach ($misiU as $misiUniv)
                             <p class="mb-2 font-bold  ">
-                                &#x2022; {{ $misiUniv->Misi }}
+                                {{ $loop->iteration }}. {{ $misiUniv->Misi }}
                             </p>
                         @endforeach
+
+
                     </td>
                     <td class="px-6 py-4">
                         @foreach ($misiF as $misiFakultas)
                             <p class="mb-2 font-bold  ">
-                                &#x2022; {{ $misiFakultas->Misi }}
+                                {{ $loop->iteration }}. {{ $misiFakultas->Misi }}
                             </p>
                         @endforeach
                     </td>
                     <td class="px-6 py-4">
                         @foreach ($misiP as $misiProdi)
                             <p class="mb-2 font-bold  ">
-                                &#x2022; {{ $misiProdi->Misi }}
+                                {{ $loop->iteration }}. {{ $misiProdi->Misi }}
                             </p>
                         @endforeach
                     </td>
@@ -86,21 +88,21 @@
                     <td class="px-6 py-4">
                         @foreach ($tujuanU as $tujuanUniv)
                             <p class="mb-2 font-bold ">
-                                &#x2022; {{ $tujuanUniv->Tujuan }}
+                                {{ $loop->iteration }}. {{ $tujuanUniv->Tujuan }}
                             </p>
                         @endforeach
                     </td>
                     <td class="px-6 py-4">
                         @foreach ($tujuanF as $tujuanFakultas)
                             <p class="mb-2 font-bold ">
-                                &#x2022; {{ $tujuanFakultas->Tujuan }}
+                                {{ $loop->iteration }}. {{ $tujuanFakultas->Tujuan }}
                             </p>
                         @endforeach
                     </td>
                     <td class="px-6 py-4">
                         @foreach ($tujuanP as $tujuanProdi)
                             <p class="mb-2 font-bold ">
-                                &#x2022; {{ $tujuanProdi->Tujuan }}
+                                {{ $loop->iteration }}. {{ $tujuanProdi->Tujuan }}
                             </p>
                         @endforeach
                     </td>

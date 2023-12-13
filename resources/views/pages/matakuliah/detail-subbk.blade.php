@@ -61,77 +61,81 @@
 
     <div class="py-2">
         @include('include.flash-massage')
-        <form action="" method="post" class="mb-5">
-            @csrf
-            <table class="w-screen text-sm  text-gray-500 ">
-                <thead class="text-xs text-gray-700 uppercase">
-                </thead>
-            </table>
-            <div class="py-3">
-                <div class="relative z-0  mb-6 group">
-                    <input type="text" name="pokok_bahasan" id="pokok_bahasan"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('pokok_bahasan') ?? $subbk->pokok_bahasan }}" />
-                    <label for="pokok_bahasan"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Pokok
-                        Bahasan</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="number" name="kuliah" id="kuliah"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('kuliah') ?? $subbk->kuliah }}" />
-                    <label for="kuliah"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kuliah(jam)</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="number" name="tutorial" id="tutorial"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('tutorial') ?? $subbk->tutorial }}" />
-                    <label for="tutorial"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tutorial(jam)</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="number" name="seminar" id="seminar"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('seminar') ?? $subbk->seminar }}" />
-                    <label for="seminar"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Seminar(jam)</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="text" name="praktikum" id="praktikum"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('praktikum') ?? $subbk->praktikum }}" />
-                    <label for="praktikum"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Praktikum(jam)</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="text" name="skill_lab" id="skill_lab"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('skill_lab') ?? $subbk->skill_lab }}" />
-                    <label for="skill_lab"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Skill
-                        Lab(jam)</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="text" name="field_lab" id="field_lab"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('field_lab') ?? $subbk->field_lab }}" />
-                    <label for="field_lab"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Field
-                        Lab(jam)</label>
-                </div>
-                <div class="relative z-0  mb-6 group">
-                    <input type="text" name="praktik" id="praktik"
-                        class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " value="{{ old('praktik') ?? $subbk->praktik }}" />
-                    <label for="praktik"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Praktik(jam)</label>
-                </div>
-            </div>
+        <div class="my-3 mr-3">
+            <div class="px-3 bg-white border border-gray-200 rounded shadow-lg justify-between">
+                <form action="" method="post" class="mb-5">
+                    @csrf
+                    <table class="w-screen text-sm  text-gray-500 ">
+                        <thead class="text-xs text-gray-700 uppercase">
+                        </thead>
+                    </table>
+                    <div class="py-3">
+                        <div class="relative z-0  mb-6 group">
+                            <input type="text" name="pokok_bahasan" id="pokok_bahasan"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('pokok_bahasan') ?? $subbk->pokok_bahasan }}" />
+                            <label for="pokok_bahasan"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Pokok
+                                Bahasan</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="number" name="kuliah" id="kuliah"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('kuliah') ?? $subbk->kuliah }}" />
+                            <label for="kuliah"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kuliah(jam)</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="number" name="tutorial" id="tutorial"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('tutorial') ?? $subbk->tutorial }}" />
+                            <label for="tutorial"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tutorial(jam)</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="number" name="seminar" id="seminar"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('seminar') ?? $subbk->seminar }}" />
+                            <label for="seminar"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Seminar(jam)</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="text" name="praktikum" id="praktikum"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('praktikum') ?? $subbk->praktikum }}" />
+                            <label for="praktikum"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Praktikum(jam)</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="text" name="skill_lab" id="skill_lab"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('skill_lab') ?? $subbk->skill_lab }}" />
+                            <label for="skill_lab"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Skill
+                                Lab(jam)</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="text" name="field_lab" id="field_lab"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('field_lab') ?? $subbk->field_lab }}" />
+                            <label for="field_lab"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Field
+                                Lab(jam)</label>
+                        </div>
+                        <div class="relative z-0  mb-6 group">
+                            <input type="text" name="praktik" id="praktik"
+                                class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " value="{{ old('praktik') ?? $subbk->praktik }}" />
+                            <label for="praktik"
+                                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Praktik(jam)</label>
+                        </div>
+                    </div>
 
-            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-2"
-                type="submit">UPDATE</button>
-        </form>
+                    <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-2"
+                        type="submit">UPDATE</button>
+                </form>
+            </div>
+        </div>
     </div>
     <div class="">
         <h2 class="font-bold text-2xl  text-blue-800">CPMKS</h2>
@@ -148,7 +152,7 @@
     <div class="">
         @foreach ($subbk->cpmks as $item)
             <div class=" hover:text-blue-300 my-2">
-                <button class="bg-blue-600 text-white rounded px-2 text-md font-semibold p-2">
+                <button class=" px-2 text-md font-semibold p-2">
                     &#x2022; {{ $item->kode_cpmk }} {{ $item->cpmk }}
                 </button>
             </div>
