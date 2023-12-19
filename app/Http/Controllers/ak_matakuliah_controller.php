@@ -27,43 +27,8 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.detail2', compact('rekomendasiSKS'));
     }
 
-    public function copyMatakuliah(Throwable $th)
-    {
-        DB::select('call sistem_obe.copy_matkul_univ(?)', [Auth::user()->kdunit]);
-
-        return redirect()->back()->with('failed', 'gagal update data Matakuliah. Error: ' . $th->getMessage());
-    }
-
     public function mkIndex(Request $request)
     {
-        // $matakuliah = ak_matakuliah::with(['MKtoSBKread', 'MKtoSBKinput'])
-        //     ->select('ak_matakuliah.*', 'ak_kurikulum.kurikulum', 'ak_kurikulum.tahun')
-        //     ->join(
-        //         'ak_kurikulum',
-        //         'ak_kurikulum.kdkurikulum',
-        //         '=',
-        //         'ak_matakuliah.kdkurikulum'
-        //     )
-        //     ->where("isObe", "=", 1)
-        //     ->orderBy('ak_matakuliah.kdmatakuliah')
-        //     ->get();
-        // return dd($matakuliah);
-
-        //asli
-        // $matakuliah = ak_matakuliah::with('MKtoSub_bk')
-        //     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-        //     // ->leftJoin('ak_matakuliah_ak_kurikulum_sub_bk', 'ak_matakuliah_ak_kurikulum_sub_bk.kdmatakuliah', '=', 'ak_matakuliah.kdmatakuliah')
-        //     ->where("ak_kurikulum.isObe", '=', 1)
-        //     ->where(function ($query) {
-        //         $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-        //             ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-        //     })
-        //     ->orderBy('matakuliah', 'asc')
-        //     ->paginate(20);
-
-        // $subbk = gabung_matakuliah_subbk::with('subbk', 'cpmks')->first();
-
-
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
@@ -71,26 +36,11 @@ class ak_matakuliah_controller extends Controller
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
-            if ($request->has("key") && $request->has("search")) {
-                switch ($request->key) {
-                    case 'kode':
-                        $matakuliah = ak_matakuliah::where("kodematakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
-                            'key' => $request->key,
-                            'search' => $request->search,
-                        ]);
-                        break;
+            // ->get();
 
-                    case "nama":
-                        $matakuliah = ak_matakuliah::where("matakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
-                            'key' => $request->key,
-                            'search' => $request->search,
-                        ]);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
@@ -101,30 +51,37 @@ class ak_matakuliah_controller extends Controller
                 })
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
-            if ($request->has("key") && $request->has("search")) {
-                switch ($request->key) {
-                    case 'kode':
-                        $matakuliah = ak_matakuliah::where("kodematakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
-                            'key' => $request->key,
-                            'search' => $request->search,
-                        ]);
-                        break;
+            // ->get();
 
-                    case "nama":
-                        $matakuliah = ak_matakuliah::where("matakuliah", "like", "%" . $request->search . "%")->paginate(20)->appends([
-                            'key' => $request->key,
-                            'search' => $request->search,
-                        ]);
-                        break;
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+        }
 
-                    default:
-                        break;
-                }
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", "=", $request->filter)
+                    ->orderBy('kdmatakuliah', 'asc')
+                    ->paginate(10);
             }
         }
         // return dd($matakuliah);
 
-        return view('pages.matakuliah.index', compact('matakuliah',));
+        return view('pages.matakuliah.index', compact('matakuliah', 'kdkurikulum'));
     }
 
     // tambah data
@@ -199,6 +156,7 @@ class ak_matakuliah_controller extends Controller
             'mk_singkat',
         ]);
 
+        // return dd($request->all());
         try {
             // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
 
@@ -258,6 +216,7 @@ class ak_matakuliah_controller extends Controller
         }
 
         try {
+            
             $matkul = ak_matakuliah::where("kdmatakuliah", "=", $id)->with("MKtoSub_bk")->first();
 
             DB::beginTransaction();

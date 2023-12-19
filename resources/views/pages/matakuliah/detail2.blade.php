@@ -106,7 +106,7 @@
                             :
                         </th>
                         <th class="ml-3">
-                            <input type="text" name="semester" id="semester"
+                            <input type="text" name="sks" id="sks"
                                 class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}" />
                             <label for=""
@@ -121,7 +121,7 @@
                         <th class="ml-3">
                             <input type="text"
                                 class="block py-2.5 px-2  text-sm text-gray-900 bg-transparent  border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}" />
+                                placeholder="" disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}" />
                         </th>
                     </tr>
                 </thead>
@@ -131,7 +131,6 @@
                     type="submit">UPDATE</button>
             </div>
         </form>
-
         <br />
         <hr />
     </div>
@@ -149,7 +148,6 @@
             <h2 class="font-bold text-2xl mb-0 text-blue-800">Sub BK</h2>
 
         </div>
-
         <table class="w-screen text-sm  text-gray-500 ">
             <thead class="text-xs text-gray-700 uppercase">
                 <tr>

@@ -11,7 +11,7 @@ class ak_kurikulum_pl_Controller extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
         // $akKurikulumPl = ak_kurikulum_pl::all();
 
@@ -31,10 +31,34 @@ class ak_kurikulum_pl_Controller extends Controller
                 })
                 ->orderBy(('ak_kurikulum_pls.id'))
                 ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
         }
 
 
-        return view('pages.profileLulusan.index', compact('akKurikulumPl'));
+        $arrayProfile = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayProfile, $data->kurikulum);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayProfile)) {
+                $akKurikulumPl = DB::table('ak_kurikulum_pls')
+                    ->Join("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
+                    ->where("ak_kurikulum.isObe", '=', 1)
+                    ->where("kurikulum", '=', $request)
+                    ->orderBy('ak_kurikulum_pls.id', 'asc')
+                    ->paginate(10);
+            }
+        }
+
+        return view('pages.profileLulusan.index', compact('akKurikulumPl', 'kdkurikulum'));
     }
 
     public function create()

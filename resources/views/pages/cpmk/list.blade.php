@@ -128,7 +128,11 @@
                                 @endforeach
                             </td>
                             <td class="px-6 py-4">
-
+                                <a href="{{ route('edit.cpmk', ['id' => $listCPMKs->id]) }}">
+                                        <button
+                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-regular fa-pen-to-square"></i></button>
+                                    </a>
                                 <a href="{{ route('delete.cpmk', ['id' => $listCPMKs->id]) }}">
                                     <button
                                         class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i

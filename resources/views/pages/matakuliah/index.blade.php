@@ -10,13 +10,16 @@
     </div>
     <div class="flex flex-col">
         <form method="GET" class="rounded">
-            <select name="key" id="" class="rounded">
-                <option value="kode" selected>kode matakuliah</option>
-                <option value="nama">nama matakuliah</option>
+            {{-- @csrf --}}
+            <select name="filter" id="" class="rounded">
+                <option value="null">null</option>
+                @foreach ($kdkurikulum as $item)
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                @endforeach
             </select>
-            <input type="text" name="search" class=" rounded">
+            {{-- <input type="text" name="search" class=" rounded"> --}}
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
-                type="submit">Cari</button>
+                type="submit">Filter</button>
         </form>
 
         @if (request()->search != null && request()->key != null)
@@ -245,7 +248,7 @@
                 @endif
             </tbody>
         </table>
-        {{ $matakuliah->links() }}
+        {{ $matakuliah->withQueryString()->links() ?? '' }}
         <hr />
     </div>
     <script>

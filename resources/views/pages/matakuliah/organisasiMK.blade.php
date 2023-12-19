@@ -1,8 +1,207 @@
 @extends('layouts.app')
 
+@push('style')
+    <style>
+        .select2.select2-container {
+            width: 100% !important;
+        }
+
+        .select2.select2-container .select2-selection {
+            border: 1px solid #ccc;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            height: 34px;
+            margin-bottom: 15px;
+            outline: none !important;
+            transition: all .15s ease-in-out;
+        }
+
+        .select2.select2-container .select2-selection .select2-selection__rendered {
+            color: #333;
+            line-height: 32px;
+            padding-right: 33px;
+        }
+
+        .select2.select2-container .select2-selection .select2-selection__arrow {
+            background: #f8f8f8;
+            border-left: 1px solid #ccc;
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+            height: 32px;
+            width: 33px;
+        }
+
+        .select2.select2-container.select2-container--open .select2-selection.select2-selection--single {
+            background: #f8f8f8;
+        }
+
+        .select2.select2-container.select2-container--open .select2-selection.select2-selection--single .select2-selection__arrow {
+            -webkit-border-radius: 0 3px 0 0;
+            -moz-border-radius: 0 3px 0 0;
+            border-radius: 0 3px 0 0;
+        }
+
+        .select2.select2-container.select2-container--open .select2-selection.select2-selection--multiple {
+            border: 1px solid #34495e;
+        }
+
+        .select2.select2-container .select2-selection--multiple {
+            height: auto;
+            min-height: 34px;
+        }
+
+        .select2.select2-container .select2-selection--multiple .select2-search--inline .select2-search__field {
+            margin-top: 0;
+            height: 32px;
+        }
+
+        .select2.select2-container .select2-selection--multiple .select2-selection__rendered {
+            display: block;
+            padding: 0 4px;
+            line-height: 29px;
+        }
+
+        .select2.select2-container .select2-selection--multiple .select2-selection__choice {
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            margin: 4px 4px 0 0;
+            padding: 0 6px 0 22px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 12px;
+            position: relative;
+        }
+
+        .select2.select2-container .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 22px;
+            width: 22px;
+            margin: 0;
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .select2-container .select2-dropdown {
+            background: transparent;
+            border: none;
+            margin-top: -5px;
+        }
+
+        .select2-container .select2-dropdown .select2-search {
+            padding: 0;
+        }
+
+        .select2-container .select2-dropdown .select2-search input {
+            outline: none !important;
+            border: 1px solid #34495e !important;
+            border-bottom: none !important;
+            padding: 4px 6px !important;
+        }
+
+        .select2-container .select2-dropdown .select2-results {
+            padding: 0;
+        }
+
+        .select2-container .select2-dropdown .select2-results ul {
+            background: #fff;
+            border: 1px solid #34495e;
+        }
+
+        .select2-container .select2-dropdown .select2-results ul .select2-results__option--highlighted[aria-selected] {
+            background-color: #3498db;
+        }
+    </style>
+@endpush
+
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Organisasi Matakuliah</h1>
+
+
+
+        <!-- Modal toggle -->
+        <button data-modal-target="copy-modal" data-modal-toggle="copy-modal"
+            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button">
+            Salin Matakuliah
+        </button>
+
+        <!-- Main modal -->
+        <div id="copy-modal" tabindex="-1" aria-hidden="true"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Salin Matakuliah
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="copy-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <!-- Modal content -->
+                    <div class="relative bg-white px-5 py-5 rounded-lg shadow">
+                        <form class="py-3" action="{{ route('copy.mk') }}" method="POST">
+                            @csrf
+
+                            <div class="md:grid-cols-2 md:gap-6">
+                                <div class="flex flex-col z-0 w-full mb-6 group">
+                                    <label for="unit" class="text-sm text-gray-500">
+                                        Kurikulum Universitas
+                                    </label>
+                                    <select id="unitUniv" name="unitUniv" data-live-search="true"
+                                        class="form-control border">
+                                        @foreach ($kurikulumUniv as $unitUniv)
+                                            <option value="{{ $unitUniv->kdkurikulum }}">{{ $unitUniv->kurikulum }}
+                                                {{ $unitUniv->tahun }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="flex flex-col z-0 w-full mb-6 group">
+                                    <label for="unitProdi" class="text-sm text-gray-500">
+                                        Kurikulum Prodi
+                                    </label>
+                                    <select id="unitProdi" name="unitProdi" data-live-search="true"
+                                        class="form-control border">
+                                        @foreach ($ak_kurikulum as $unitProdi)
+                                            <option value="{{ $unitProdi->kdkurikulum }}">{{ $unitProdi->kurikulum }}
+                                                {{ $unitProdi->tahun }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="py-3">
+                                <button type="submit"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <hr />
 
@@ -45,7 +244,7 @@
                     <td scope="row" class="px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap">
                         8
                     </td>
-                    <td class="w-[50vw] text-left">
+                    <td class="w-full text-left">
                         @foreach ($tema8 as $value)
                             &#x2022; {{ $value->tema }}
                             <br />
@@ -136,7 +335,8 @@
                             <div class="relative w-full max-w-2xl max-h-full">
                                 <!-- Modal content -->
                                 <div class="relative bg-white px-5 py-5 rounded-lg shadow">
-                                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Pemetaan Matakuliah Semester
+                                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Pemetaan Matakuliah
+                                        Semester
                                         8</h1>
                                     <form class="py-3" action="" method="POST">
                                         @csrf
@@ -1440,7 +1640,8 @@
                                                 <select id="inputState" name="unit" data-live-search="true"
                                                     class="form-control border">
                                                     @foreach ($ak_kurikulum as $unit)
-                                                        <option value="{{ $unit->kdkurikulum }}">{{ $unit->kurikulum }}
+                                                        <option value="{{ $unit->kdkurikulum }}">
+                                                            {{ $unit->kurikulum }}
                                                             {{ $unit->tahun }}
                                                         </option>
                                                     @endforeach
@@ -1895,6 +2096,8 @@
             $('#mkselect1').select2();
             $('#mkselect1-1').select2();
             $('#mkselect1-2').select2();
+            $('#unitProdi').select2();
+            $('#unitUniv').select2();
         });
     </script>
 @endpush

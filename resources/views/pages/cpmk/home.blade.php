@@ -3,6 +3,7 @@
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">CPL-CPMK</h1>
+        {{-- <h2 class="font-semibold text-sm text-blue-700">{{ $CPMK->kurikulum }}</h2> --}}
         <div class="flex flex-row space-x-3">
             <a href="{{ route('list.cpmk') }}">
                 <button
@@ -28,6 +29,9 @@
                     <th scope="col" class="px-6 py-3 ">
                         CPMK
                     </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Unit
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +52,9 @@
                                     &#x2022; {{ $cplcpmk->kode_cpmk }} {{ $cplcpmk->cpmk }}<br />
                                 @endforeach
                             </td>
-
+                            <td class="px-6 py-4 text-left">
+                                {{ $value->kurikulum }}-{{ $value->tahun }}
+                            </td>
                         </tr>
                     @endforeach
                 @else

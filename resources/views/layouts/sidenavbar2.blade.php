@@ -150,7 +150,7 @@
                             Kajian</a>
                     </li>
                     <li>
-                        <a href="{{ route('subbk.index') }}"
+                        <a href="{{ route('sub-bk.index') }}"
                             class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100  ">Sub-Bahan
                             Kajian</a>
                     </li>
