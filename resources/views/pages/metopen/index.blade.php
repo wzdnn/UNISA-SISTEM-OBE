@@ -53,6 +53,8 @@
             </thead>
             <tbody>
 
+
+
                 @if ($matakuliah->count() > 0)
                     @foreach ($matakuliah as $key => $value)
                         @if ($value->GetAllidSubBK->count() > 0)
@@ -71,7 +73,7 @@
                                                     </td>
                                                     <td class="px-6 py-4">
 
-                                                        <a href="{{ route('metopen.cpmk', ['id' => $cpmk->id]) }}">
+                                                        <a href="{{ route('metopen.cpmk', ['id' => $cpmk->pivot->id]) }}">
                                                             {{ $cpmk->kode_cpmk }}
                                                         </a> <br />
 
@@ -82,20 +84,22 @@
 
 
                                                     </td>
-                                                    <td class="px-3 py-1">
+                                                    <td class="px-3 py-1 flex flex-row">
+                                                        <input type="text" id="bobot" name="bobot"
+                                                            class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                            disabled value="{{ $metopens->pivot->bobot }}">
+                                                        <button data-modal-target="popup-modal" id="btnTambah"
+                                                            data-modal-toggle="popup-modal" class="ml-2"
+                                                            data-id-target="{{ $metopens->pivot->id }}" type="button">
+                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                        </button>
 
+                                                        {{-- Model Start --}}
                                                         {{-- @include('include.flash-massage') --}}
                                                         <div>
-                                                            <button data-modal-target="popup-modal"
-                                                                data-modal-toggle="popup-modal"
-                                                                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-1.5 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                                                type="button">
-                                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                                            </button>
-
                                                             <div id="popup-modal" tabindex="-1"
                                                                 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                                                <div class="relative p-4 w-full max-w-md max-h-full">
+                                                                <div class="relative p-4 w-auto max-w-md max-h-full">
                                                                     <div
                                                                         class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                                                         <button type="button"
@@ -112,21 +116,21 @@
                                                                             <span class="sr-only">Close modal</span>
                                                                         </button>
                                                                         <div
-                                                                            class="p-4 md:p-5 text-center justify-center items-center">
+                                                                            class="p-3 text-center justify-center items-center">
 
                                                                             <form action="" method="POST">
                                                                                 @csrf
-
-                                                                                <div class="flex flex-col px-2 py-4">
+                                                                                <input type="hidden" name="id_gabung"
+                                                                                    id="input-id">
+                                                                                <div class="flex flex-col  py-4">
                                                                                     <label for="bobot"
                                                                                         class="block mb-2 text-sm font-medium py-1 text-gray-900 dark:text-white">Bobot
                                                                                         Nilai</label>
-                                                                                    <input type="number" id="bobot"
+                                                                                    <input type="text" id="bobot"
                                                                                         name="bobot"
                                                                                         aria-describedby="bobot-explanation"
-                                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                                                        placeholder=""
-                                                                                        value="{{ old('bobot') }}">
+                                                                                        class="bg-gray-50 border text-center border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                                        placeholder="">
                                                                                 </div>
 
                                                                                 <button data-modal-hide="popup-modal"
@@ -141,10 +145,12 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        {{-- Model End --}}
 
                                                     </td>
-                                                    <td class=" px-6 py-4">
-
+                                                    <td class=" px-6 py-4 col space-x-2">
+                                                        <button><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                        <button><i class="fa fa-book" aria-hidden="true"></i></button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -158,7 +164,7 @@
                                                     {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <a href="{{ route('metopen.cpmk', ['id' => $cpmk->id]) }}">
+                                                    <a href="{{ route('metopen.cpmk', ['id' => $cpmk->pivot->id]) }}">
                                                         {{ $cpmk->kode_cpmk }}
                                                     </a> <br />
                                                 </td>
@@ -280,6 +286,15 @@
     <script>
         $(document).ready(function() {
             $('#metopenselect').select2();
+        });
+
+        const btnTambah = document.querySelectorAll("#btnTambah");
+        btnTambah.forEach(e => {
+            e.addEventListener("click", () => {
+                console.log(e.getAttribute('data-id-target'));
+                const inputTarget = document.getElementById('input-id');
+                inputTarget.value = e.getAttribute('data-id-target');
+            })
         });
     </script>
 @endpush

@@ -42,7 +42,7 @@
 
             <select class="w-[41vw]" id="metopenSelect" name="metopenSelect[]" multiple="multiple">
                 @foreach ($metopen as $item)
-                    <option value="{{ $item->id }}" @selected(in_array($item->id, $metopenSelect))>
+                    <option value="{{ $item->id }}" @selected(in_array($item->id, $id_metopen))>
                         {{ $item->metode_penilaian }}
                     </option>
                 @endforeach

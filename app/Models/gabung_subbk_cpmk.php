@@ -18,6 +18,6 @@ class gabung_subbk_cpmk extends Model
 
     public function CPMKtoMTP()
     {
-        return $this->belongsToMany(metode_penilaian::class, 'gabung_metopen_cpmks', 'id_gabung_cpmk', 'id_metopen');
+        return $this->belongsToMany(metode_penilaian::class, 'gabung_metopen_cpmks', 'id_gabung_cpmk', 'id_metopen')->withPivot('id', 'bobot');
     }
 }

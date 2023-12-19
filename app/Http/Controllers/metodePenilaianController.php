@@ -89,11 +89,14 @@ class metodePenilaianController extends Controller
     public function postIndex(Request $request)
     {
         $request->validate([
+            'id_gabung' => ['required', 'numeric'],
             'bobot' => ['nullable', 'numeric']
         ]);
 
+        // return dd($request->all());
+
         try {
-            $mtp = gabung_metopen_cpmk::first();
+            $mtp = gabung_metopen_cpmk::findOrFail($request->input("id_gabung"));
 
             DB::beginTransaction();
 
@@ -149,13 +152,14 @@ class metodePenilaianController extends Controller
 
         // metode penilaian
         $metopen = metode_penilaian::with('MTPtoCPMK')->get();
+        $gabung_subbk_cpmk = gabung_subbk_cpmk::with('CPMKtoMTP')->findOrFail($id);
 
-        $metopenSelect = [];
-        foreach ($metopen as $data) {
-            array_push($metopenSelect, $data->metode_penilaian);
+        $id_metopen = [];
+        foreach ($gabung_subbk_cpmk->CPMKtoMTP as $data) {
+            $id_metopen[] = $data->id;
         }
 
-        return view('pages.metopen.metopen', compact('metopen', 'metopenSelect'));
+        return view('pages.metopen.metopen', compact('id_metopen', 'metopen'));
     }
 
     public function postKelolaMetopen(int $id, Request $request)
@@ -173,15 +177,19 @@ class metodePenilaianController extends Controller
             }
         }
 
-        try {
-            $metopenCPMK = gabung_subbk_cpmk::where('id_cpmk', '=', $id)->with('CPMKtoMTP')->first();
+        // return dd($metopenSelect);
 
+        try {
+            // $metopenCPMK = gabung_subbk_cpmk::where('id_cpmk', '=', $id)->with('CPMKtoMTP')->first();
+
+            $gabung_subbk_cpmk = gabung_subbk_cpmk::with('CPMKtoMTP')->findOrFail($id);
             DB::beginTransaction();
+
             if (count($metopenSelect) > 0) {
 
-                $metopenCPMK->CPMKtoMTP()->sync($metopenSelect);
+                $gabung_subbk_cpmk->CPMKtoMTP()->sync($metopenSelect);
             } else {
-                $metopenCPMK->CPMKtoMTP()->detach();
+                $gabung_subbk_cpmk->CPMKtoMTP()->detach();
             }
 
             DB::commit();
