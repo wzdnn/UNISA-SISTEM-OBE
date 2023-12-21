@@ -109,5 +109,10 @@
                 </tr>
             </tbody>
         </table>
+        <div class="p-5 mx-5">
+            <h1 class="font-bold text-lg text-gray-700">Core Value : Akhlak Mulia, Amanah, Profesional,
+                Kolaboratif, Unggul
+            </h1>
+        </div>
     </div>
 @endsection

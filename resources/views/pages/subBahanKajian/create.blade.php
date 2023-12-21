@@ -10,7 +10,7 @@
     <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="{{ route('subbk.index') }}"
+                <a href="{{ route('sub-bk.index') }}"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
                     <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                         viewBox="0 0 20 20">
@@ -44,7 +44,7 @@
     @endif
     <div class="my-3 mr-3">
         <div class="px-3 bg-white border border-gray-200 rounded shadow-lg justify-between">
-            <form class="py-3" action="{{ route('subbk.store') }}" method="POST">
+            <form class="py-3" action="{{ route('sub-bk.store') }}" method="POST">
                 @csrf
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">

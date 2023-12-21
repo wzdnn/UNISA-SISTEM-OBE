@@ -153,7 +153,7 @@
                             Kajian</a>
                     </li>
                     <li>
-                        <a href="{{ route('subbk.index') }}"
+                        <a href="{{ route('sub-bk.index') }}"
                             class="flex items-center w-full p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100  ">Sub-Bahan
                             Kajian</a>
                     </li>
@@ -192,12 +192,19 @@
                     <span class="flex-1 ml-3 whitespace-nowrap">Matakuliah</span>
                 </a>
             </li>
-
             <li>
                 <a href="{{ route('organisasi.mk') }}"
                     class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Organisasi Matakuliah</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('index.metopen') }}"
+                    class="flex items-center p-2 text-gray-900 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-gray-100  group">
+
+                    <span class="flex-1 ml-3 whitespace-nowrap">Master Metode Penilaian</span>
                 </a>
             </li>
         </ul>

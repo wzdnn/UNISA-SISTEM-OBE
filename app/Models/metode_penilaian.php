@@ -12,4 +12,9 @@ class metode_penilaian extends Model
     protected $fillable = [
         'metode_penilaian'
     ];
+
+    public function MTPtoCPMK()
+    {
+        return $this->belongsToMany(ak_kurikulum_cpmk::class, 'gabung_metopen_cpmks', 'id_gabung_cpmk', 'id_metopen');
+    }
 }

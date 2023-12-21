@@ -14,7 +14,6 @@ class ak_matakuliah extends Model
         'matakuliah',
         'kdkurikulum',
         'mk_singkat',
-        'sks',
         'isObe',
         'batasNilai'
     ];
