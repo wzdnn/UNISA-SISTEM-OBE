@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('body')
-    <div class="flex items-center justify-between py-5 px-5 mx-10">
+    <div class="flex items-center justify-between py-5 px-5">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Profile Lulusan</h1>
         @if (Auth::user()->role == 'admin')
             <a href="{{ route('pl.create') }}">

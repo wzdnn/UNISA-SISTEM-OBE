@@ -37,8 +37,7 @@
     </nav>
 
 
-
-
+<br>
     <div class="text-center">
         <h1 class="font-bold text-2xl mb-0 text-blue-800">Detail Matakuliah</h1>
     </div>
