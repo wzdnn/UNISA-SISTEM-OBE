@@ -19,15 +19,15 @@
 </head>
 
 <body class="">
-    @include('layouts.sidenavbar2')
+    @include('layouts.sidenavbar')
+    @include('layouts.navbar')
 
     {{-- <div class="px-5 py-5 w-full max-h-screen">
         @yield('body')
     </div> --}}
-
-    <div class="main-body my-5">
-        <div class="">
-            <div class="p-4 min-height w-screen">
+    <div class="main-body sm:ml-64 sm:mt-11 ">
+            <div class="">
+                <div class="p-4 min-height ">
                 @yield('body')
             </div>
         </div>

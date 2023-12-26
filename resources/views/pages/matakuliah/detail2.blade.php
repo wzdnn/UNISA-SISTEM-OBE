@@ -39,10 +39,10 @@
 
 <br>
     <div class="text-center">
-        <h1 class="font-bold text-2xl mb-0 text-blue-800">Detail Matakuliah</h1>
+        <h1 class="font-bold text-2xl mb-0 text-dark-700">Detail Matakuliah</h1>
     </div>
 
-    <div class="my-3 mr-3">
+    <div class="my-3 mx-auto max-w-4xl">
         <div class=" px-3 bg-white border border-gray-200 rounded-lg shadow-lg justify-between">
             <form action="{{ route('post.detail.mk', ['id' => $mkSubBk->kdmatakuliah]) }}" method="post">
                 @csrf
@@ -88,8 +88,13 @@
 
                 <div class="my-3 text-center">
                     <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-sm font-semibold p-2"
-                        type="submit">UPDATE</button>
-                </div>
+                        type="submit">UPDATE
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                          </svg>
+
+                    </button>
+                    </div>
             </form>
         </div>
 

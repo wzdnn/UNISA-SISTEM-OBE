@@ -36,7 +36,7 @@
 
     <br>
     <div class="text-center">
-        <h1 class="font-bold text-2xl mb-0 text-blue-700">Tambah Profile Lulusan</h1>
+        <h1 class="font-bold text-2xl mb-0 text-dark-700">Tambah Profile Lulusan</h1>
     </div>
 
     {{-- <hr/> --}}
@@ -96,10 +96,6 @@
                         </svg>
                     </button>
                 </div>
-
-
-
-
             </form>
         </div>
     </div>
