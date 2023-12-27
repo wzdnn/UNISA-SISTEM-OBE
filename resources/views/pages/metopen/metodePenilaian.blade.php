@@ -39,7 +39,7 @@
                 </button>
             @endif
         </div>
-    </div>
+
 
     {{-- @extends('layouts.app')
 

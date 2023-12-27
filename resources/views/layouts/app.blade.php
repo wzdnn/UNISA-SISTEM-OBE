@@ -18,20 +18,38 @@
     <title>SISTEM OBE | UNIVERSITAS 'AISYIYAH YOGYAKARTA</title>
 </head>
 
-<body class="">
-    @include('layouts.sidenavbar')
-    @include('layouts.navbar')
+<body class="bg-gray-100" x-data="sidebar()" @resize.window="handleResize()">
+    {{-- @include('layouts.sidenavbar')
+    @include('layouts.navbar') --}}
 
     {{-- <div class="px-5 py-5 w-full max-h-screen">
         @yield('body')
     </div> --}}
-    <div class="main-body sm:ml-64 sm:mt-11 ">
+    {{-- <div class="main-body sm:ml-64 sm:mt-11 ">
             <div class="">
                 <div class="p-4 min-height ">
                 @yield('body')
             </div>
         </div>
-    </div>
+    </div> --}}
+
+    <div x-data="{ sidebarOpen: true }" class="flex overflow-x-hidden">
+        @include('layouts.sidenavbar3')
+        <div class="flex-1">
+
+            @include('layouts.navbar2')
+            <main class="p-4">
+            @yield('body')
+
+          </main>
+        </div>
+      </div>
+
+    {{--  --}}
+    <script
+        src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+        defer
+    ></script>
     @stack('script')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
