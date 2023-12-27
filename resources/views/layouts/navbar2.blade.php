@@ -1,4 +1,4 @@
-<header class="flex w-full items-center p-4 text-semibold text-gray-100 bg-white justify-between  border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<header class=" flex w-full items-center p-4 text-semibold text-gray-100 bg-white justify-between  border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     {{-- <button class="p-1 mr-4" @click="sidebarOpen = !sidebarOpen">
         <svg
             class="w-5 h-5 text-gray-300 stroke-current"

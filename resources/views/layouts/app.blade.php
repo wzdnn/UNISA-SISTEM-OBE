@@ -33,17 +33,15 @@
         </div>
     </div> --}}
 
-    <div x-data="{ sidebarOpen: true }" class="flex overflow-x-hidden">
+    <div x-data="{ sidebarOpen: true }" class="flex overflow-x-hidden mt-[-24px]">
         @include('layouts.sidenavbar3')
         <div class="flex-1">
-
             @include('layouts.navbar2')
             <main class="p-4">
-            @yield('body')
-
-          </main>
+                @yield('body')
+            </main>
         </div>
-      </div>
+    </div>
 
     {{--  --}}
     <script

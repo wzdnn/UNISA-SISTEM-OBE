@@ -1,4 +1,4 @@
-<aside class="flex-shrink-0 w-64 flex flex-col border-r transition-all duration-300 bg-white" :class="{ '-ml-64': !sidebarOpen }">
+<aside class="flex-shrink-0 w-64 flex flex-col border-r transition-all duration-300 bg-white min-h-screen" :class="{ '-ml-64': !sidebarOpen }">
     <nav class="flex-1 flex flex-col bg-[#00A650]">
       <div class="px-6 pt-4 ">
           <div class="flex items-center justify-between">

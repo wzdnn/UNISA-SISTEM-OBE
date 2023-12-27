@@ -20,6 +20,7 @@
                     Profile Lulusan
                 </a>
             </li>
+        </ol>
     </nav>
     <div class="flex items-center justify-between py-5 px-5">
         <div class="flex items-center">
@@ -135,7 +136,6 @@
         </table>
         {{ $akKurikulumPl->withQueryString()->links() ?? '' }}
         <hr />
-
     </div>
     <script>
         //on load
