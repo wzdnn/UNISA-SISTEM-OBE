@@ -1,5 +1,48 @@
 @extends('layouts.app')
 
+@push('style')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endpush
+<br>
+@section('body')
+    <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('index.sumber') }}"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path
+                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                    </svg>
+                    Bidang Ilmu
+                </a>
+            </li>
+    </nav>
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Bidang Ilmu</h1>
+        </div>
+        <div class="flex items-center">
+            @if (Auth::user()->role == 'admin')
+            <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6 inline-block mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+                Tambah Bidang Ilmu
+            </button>
+        @endif
+        </div>
+    </div>
+{{--
+@extends('layouts.app')
+
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Bidang Ilmu</h1>
@@ -9,7 +52,7 @@
                 type="button">
                 Tambah Bidang Ilmu
             </button>
-        @endif
+        @endif --}}
 
         <!-- Main modal -->
         <div id="defaultModal" tabindex="-1" aria-hidden="true"
@@ -29,12 +72,17 @@
                                     Ilmu</label>
                             </div>
                         </div>
-                        <div class="py-3">
+                        <div class="py-3 text-center mx-auto">
                             <button type="submit"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+                                class="flex items-center justify-center mx-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5">
+                                <span class="mr-2 font-medium">Submit</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                </svg>
+                            </button>
                         </div>
-                    </form>
-                </div>
             </div>
         </div>
 
