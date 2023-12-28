@@ -93,9 +93,8 @@
             <tbody>
                 @if ($akKurikulumPl->count() > 0)
                     @foreach ($akKurikulumPl as $key => $akKurikulumPls)
-                        <tr class="bg-white border-b text-left">
+                        <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{-- {{ $loop->iteration }} --}}
                                 {{ ($akKurikulumPl->currentPage() - 1) * $akKurikulumPl->perPage() + $key + 1 }}
                             </td>
                             <td class="px-6 py-4">
@@ -114,10 +113,10 @@
                                 <td class="px-6 py-4 flex flex-row">
                                     <a href="{{ route('edit.pl', ['id' => $akKurikulumPls->id]) }}">
                                         <button
-                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                                class="fa-regular fa-pen-to-square"></i></button>
+                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
                                     </a>
-
                                     <a href="{{ route('delete.pl', ['id' => $akKurikulumPls->id]) }}">
                                         <button
                                             class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i

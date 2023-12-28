@@ -120,8 +120,8 @@
             <tbody>
                 @if ($akKurikulumCpl->count() > 0)
                     @foreach ($akKurikulumCpl as $key => $akKurikulumCpls)
-                        <tr class="bg-white border-b text-left">
-                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{-- {{ $loop->iteration }} --}}
                                 {{ ($akKurikulumCpl->currentPage() - 1) * $akKurikulumCpl->perPage() + $key + 1 }}
                             </td>
