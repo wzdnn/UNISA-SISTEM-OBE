@@ -55,7 +55,7 @@
         <form method="GET" class="rounded">
             {{-- @csrf --}}
             <select name="filter" id="" class="rounded">
-                <option value="null">null</option>
+                <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
@@ -143,7 +143,7 @@
 
                         @if ($value->MKtoSBKread->count() > 0)
                             @foreach ($value->MKtoSBKread as $mksbk)
-                                <tr class="bg-white border-b text-left">
+                                <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
                                     </td>
@@ -227,7 +227,7 @@
                                 </tr>
                             @endforeach
                         @else
-                            <tr class="bg-white border-b text-left">
+                            <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
                                 </td>

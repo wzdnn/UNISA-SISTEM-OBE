@@ -205,7 +205,7 @@
         <form method="GET" class="rounded">
             {{-- @csrf --}}
             <select name="filter" id="" class="rounded">
-                <option value="null">null</option>
+                <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach

@@ -1,35 +1,35 @@
 @extends('layouts.app')
 
 @push('style')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endpush
 
 <br>
 @section('body')
-<nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
-    <ol class="inline-flex items-center space-x-1 md:space-x-3">
-        <li class="inline-flex items-center">
-            <a href="{{ route('metopen') }}"
-                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
-                <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                    viewBox="0 0 20 20">
-                    <path
-                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                </svg>
-                Metode Penilaian
-            </a>
-        </li>
-</nav>
+    <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('metopen') }}"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path
+                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                    </svg>
+                    Metode Penilaian
+                </a>
+            </li>
+    </nav>
 
-<div class="flex items-center justify-between py-5 px-5">
-    <div class="flex items-center">
-        <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
-Metode Penilaian</h1>
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
+                Metode Penilaian</h1>
+        </div>
     </div>
-</div>
-{{-- @extends('layouts.app')
+    {{-- @extends('layouts.app')
 
 
 @section('body')
@@ -40,7 +40,7 @@ Metode Penilaian</h1>
         <form method="GET" class="rounded">
             {{-- @csrf --}}
             <select name="filter" id="" class="rounded">
-                <option value="null">null</option>
+                <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
@@ -90,7 +90,8 @@ Metode Penilaian</h1>
                                     @foreach ($cpmk->metopens as $cpmks)
                                         @if ($cpmks->CPMKtoMTP->count() > 0)
                                             @foreach ($cpmks->CPMKtoMTP as $metopens)
-                                                <tr class="bg-white border-b text-left">
+                                                <tr
+                                                    class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                                                     <td scope="row"
                                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                         {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
@@ -178,7 +179,8 @@ Metode Penilaian</h1>
                                                 </tr>
                                             @endforeach
                                         @else
-                                            <tr class="bg-white border-b text-left">
+                                            <tr
+                                                class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                                                 <td scope="row"
                                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                     {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
@@ -206,7 +208,7 @@ Metode Penilaian</h1>
                                 @endforeach
                             @endforeach
                         @else
-                            <tr class="bg-white border-b text-left">
+                            <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
                                 </td>

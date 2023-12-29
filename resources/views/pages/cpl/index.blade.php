@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-    @push('style')
+@push('style')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -26,7 +26,7 @@
     <div class="flex items-center justify-between py-5 px-5">
         <div class="flex items-center">
             <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Capaian Pembelajaran Lulusan
-</h1>
+            </h1>
         </div>
         <div class="flex items-center">
             @if (Auth::user()->role == 'admin')
@@ -43,7 +43,7 @@
             @endif
         </div>
     </div>
-{{-- @section('body')
+    {{-- @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">CPL</h1>
         @if (Auth::user()->role == 'admin')
@@ -64,7 +64,7 @@
         <form method="GET" class="rounded">
             {{-- @csrf --}}
             <select name="filter" id="" class="rounded">
-                <option value="null">null</option>
+                <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
@@ -120,8 +120,8 @@
             <tbody>
                 @if ($akKurikulumCpl->count() > 0)
                     @foreach ($akKurikulumCpl as $key => $akKurikulumCpls)
-                    <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{-- {{ $loop->iteration }} --}}
                                 {{ ($akKurikulumCpl->currentPage() - 1) * $akKurikulumCpl->perPage() + $key + 1 }}
                             </td>

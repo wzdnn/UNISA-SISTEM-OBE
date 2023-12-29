@@ -39,7 +39,7 @@
             @endif
         </div>
     </div>
-{{-- @section('body')
+    {{-- @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Sub Bahan Kajian</h1>
         @if (Auth::user()->role == 'admin')
@@ -54,7 +54,7 @@
         <form method="GET" class="rounded">
             {{-- @csrf --}}
             <select name="filter" id="" class="rounded">
-                <option value="null">null</option>
+                <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
@@ -104,7 +104,7 @@
             <tbody>
                 @if ($akKurikulumSubBk->count() > 0)
                     @foreach ($akKurikulumSubBk as $key => $akKurikulumSubBks)
-                        <tr class="bg-white border-b text-left">
+                        <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ ($akKurikulumSubBk->currentPage() - 1) * $akKurikulumSubBk->perPage() + $key + 1 }}
                             </td>

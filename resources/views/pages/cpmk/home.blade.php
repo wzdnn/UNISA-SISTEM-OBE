@@ -17,7 +17,7 @@
         <form method="GET" class="rounded">
             {{-- @csrf --}}
             <select name="filter" id="" class="rounded">
-                <option value="null">null</option>
+                <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
@@ -57,7 +57,7 @@
             <tbody>
                 @if ($CPMK->count() > 0)
                     @foreach ($CPMK as $key => $value)
-                        <tr class="bg-white border-b">
+                        <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
