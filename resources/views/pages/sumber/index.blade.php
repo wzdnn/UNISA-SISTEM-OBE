@@ -120,7 +120,8 @@
                             @if (Auth::user()->role == 'admin')
                                 <td class="px-6 py-4">
 
-                                    <a href="{{ route('delete.sumber', ['id' => $sumbers->id]) }}">
+                                    <a href="{{ route('delete.sumber', ['id' => $sumbers->id]) }}"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
                                         <button
                                             class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                                 class="fa-solid fa-trash"></i></button>

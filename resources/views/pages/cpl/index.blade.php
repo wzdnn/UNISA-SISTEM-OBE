@@ -164,11 +164,13 @@
                                             class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                                 class="fa-regular fa-pen-to-square"></i></button>
                                     </a>
-                                    <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}">
-                                        <button
+                                    <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                          <button
                                             class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                                 class="fa-solid fa-trash"></i></button>
                                     </a>
+
                                 </td>
                             @endif
                         </tr>
