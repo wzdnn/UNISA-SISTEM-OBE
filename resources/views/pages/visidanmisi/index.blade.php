@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-justify">
+                <tr class="bg-white border-b text-justify">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                         Visi
                     </th>
@@ -53,7 +53,7 @@
                         @endforeach
                     </td>
                 </tr>
-                <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b ">
+                <tr class="bg-white border-b ">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                         Misi
                     </th>
@@ -81,7 +81,7 @@
                         @endforeach
                     </td>
                 </tr>
-                <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} ">
+                <tr class="bg-white ">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900  whitespace-nowrap ">
                         Tujuan
                     </th>
