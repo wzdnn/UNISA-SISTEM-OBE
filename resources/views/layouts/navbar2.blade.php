@@ -85,7 +85,9 @@
                     <li>
                         <a href="/logout"
                             class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                            role="menuitem">Sign Out</a>
+                            role="menuitem"
+                            onclick="return confirm('Apakah Anda yakin ingin keluar?');">
+                            Sign Out</a>
                     </li>
                 </ul>
             </div>
