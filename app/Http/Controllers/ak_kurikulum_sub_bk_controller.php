@@ -146,7 +146,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
         ]);
 
 
-        return redirect()->route('subbk.index')->with('success', 'Sub Bahan Kajian berhasil ditambah');
+        return redirect()->route('sub-bk.index')->with('success', 'Sub Bahan Kajian berhasil ditambah');
     }
 
     public function edit(int $id)
@@ -174,7 +174,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
             'referensi' => $request->referensi,
             'id' => $request->bahan_kajian
         ]);
-        return redirect()->route('subbk.index')->with('success', 'Sub BK Berhasil Disunting');
+        return redirect()->route('sub-bk.index')->with('success', 'Sub BK Berhasil Disunting');
     }
 
     public function delete(int $id)

@@ -84,133 +84,88 @@
             <tbody>
                 @if ($matakuliah->count() > 0)
                     @foreach ($matakuliah as $key => $value)
-                        @if ($value->GetAllidSubBK->count() > 0)
-                            @foreach ($value->GetAllidSubBK as $mksbk)
-                                @foreach ($mksbk->cpmks as $cpmk)
-                                    @foreach ($cpmk->metopens as $cpmks)
-                                        @if ($cpmks->CPMKtoMTP->count() > 0)
-                                            @foreach ($cpmks->CPMKtoMTP as $metopens)
-                                                <tr
-                                                    class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
-                                                    <td scope="row"
-                                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                        {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
-                                                    </td>
-                                                    <td class="px-6 py-4">
+                        @if ($value->gscid > 0)
+                            <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
+                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{-- {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }} --}}
+                                    {{ $value->kdmatakuliah }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ route('metopen.cpmk', ['id' => $value->gscid]) }}">
+                                        {{ $value->kode_cpmk }}
+                                    </a> <br />
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $value->metode_penilaian }}
+                                </td>
+                                <td class="px-3 py-4 flex flex-row">
+                                    <input type="text" id="bobot" name="bobot"
+                                        class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
+                                        disabled value="{{ $value->bobot }}">
+                                    <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
+                                        class="ml-2" data-id-target="{{ $value->gmcid }}" type="button">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
 
-                                                        <a href="{{ route('metopen.cpmk', ['id' => $cpmk->pivot->id]) }}">
-                                                            {{ $cpmk->kode_cpmk }}
-                                                        </a> <br />
+                                    {{-- Model Start --}}
+                                    {{-- @include('include.flash-massage') --}}
+                                    <div>
+                                        <div id="popup-modal" tabindex="-1"
+                                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                            <div class="relative p-4 w-auto max-w-md max-h-full">
+                                                <div class="relative bg-white rounded-lg shadow ">
+                                                    <button type="button"
+                                                        class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
+                                                        data-modal-hide="popup-modal">
+                                                        <svg class="w-3 h-3" aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
+                                                    <div class="p-3 text-center justify-center items-center">
 
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        {{ $metopens->metode_penilaian }}
-                                                    </td>
-                                                    <td class="px-3 py-1 flex flex-row">
-                                                        <input type="text" id="bobot" name="bobot"
-                                                            class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
-                                                            disabled value="{{ $metopens->pivot->bobot }}">
-                                                        <button data-modal-target="popup-modal" id="btnTambah"
-                                                            data-modal-toggle="popup-modal" class="ml-2"
-                                                            data-id-target="{{ $metopens->pivot->id }}" type="button">
-                                                            <i class="fa fa-plus" aria-hidden="true"></i>
-                                                        </button>
-
-                                                        {{-- Model Start --}}
-                                                        {{-- @include('include.flash-massage') --}}
-                                                        <div>
-                                                            <div id="popup-modal" tabindex="-1"
-                                                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                                                <div class="relative p-4 w-auto max-w-md max-h-full">
-                                                                    <div class="relative bg-white rounded-lg shadow ">
-                                                                        <button type="button"
-                                                                            class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
-                                                                            data-modal-hide="popup-modal">
-                                                                            <svg class="w-3 h-3" aria-hidden="true"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                fill="none" viewBox="0 0 14 14">
-                                                                                <path stroke="currentColor"
-                                                                                    stroke-linecap="round"
-                                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                                            </svg>
-                                                                            <span class="sr-only">Close modal</span>
-                                                                        </button>
-                                                                        <div
-                                                                            class="p-3 text-center justify-center items-center">
-
-                                                                            <form action="" method="POST">
-                                                                                @csrf
-                                                                                <input type="hidden" name="id_gabung"
-                                                                                    id="input-id">
-                                                                                <div class="flex flex-col  py-4">
-                                                                                    <label for="bobot"
-                                                                                        class="block mb-2 text-sm font-medium py-1 text-gray-900 ">Bobot
-                                                                                        Nilai</label>
-                                                                                    <input type="text" id="bobot"
-                                                                                        name="bobot"
-                                                                                        aria-describedby="bobot-explanation"
-                                                                                        class="bg-gray-50 border text-center border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block  "
-                                                                                        placeholder="">
-                                                                                </div>
-
-                                                                                <button data-modal-hide="popup-modal"
-                                                                                    type="submit"
-                                                                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-2 py-2 text-center">
-                                                                                    Submit
-                                                                                </button>
-                                                                            </form>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                        <form action="" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id_gabung" id="input-id">
+                                                            <div class="flex flex-col  py-4">
+                                                                <label for="bobot"
+                                                                    class="block mb-2 text-sm font-medium py-1 text-gray-900 ">Bobot
+                                                                    Nilai</label>
+                                                                <input type="text" id="bobot" name="bobot"
+                                                                    aria-describedby="bobot-explanation"
+                                                                    class="bg-gray-50 border text-center border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block  "
+                                                                    placeholder="">
                                                             </div>
-                                                        </div>
-                                                        {{-- Model End --}}
 
-                                                    </td>
-                                                    <td class=" px-6 py-4 col space-x-2">
-                                                        <button><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                                        <button><i class="fa fa-book" aria-hidden="true"></i></button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <tr
-                                                class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
-                                                <td scope="row"
-                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                    {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="{{ route('metopen.cpmk', ['id' => $cpmk->pivot->id]) }}">
-                                                        {{ $cpmk->kode_cpmk }}
-                                                    </a> <br />
-                                                </td>
-                                                <td class="px-6 py-4">
+                                                            <button data-modal-hide="popup-modal" type="submit"
+                                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-2 py-2 text-center">
+                                                                Submit
+                                                            </button>
+                                                        </form>
 
-                                                </td>
-                                                <td class="px-3 py-1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- Model End --}}
+                                </td>
+                                <td class=" px-6 py-4">
 
-                                                </td>
-                                                <td class=" px-6 py-4">
-
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endforeach
+                                </td>
+                            </tr>
                         @else
                             <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }}
+                                    {{-- {{ ($matakuliah->currentPage() - 1) * $matakuliah->perPage() + $key + 1 }} --}}
+                                    {{ $value->kdmatakuliah }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
@@ -221,7 +176,7 @@
                                 <td class="px-6 py-4">
 
                                 </td>
-                                <td class="px-3 py-1">
+                                <td class="px-3 py-4 flex flex-row">
 
                                 </td>
                                 <td class=" px-6 py-4">

@@ -19,16 +19,46 @@ class metodePenilaianController extends Controller
     {
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
-            $matakuliah = ak_matakuliah::with("GetAllidSubBK.cpmks.metopens.CPMKtoMTP")
-                ->where("isObe", '=', 1)
+            // $matakuliah = ak_matakuliah::with("GetAllidSubBK.cpmks.metopens.CPMKtoMTP")
+            //     ->where("isObe", '=', 1)
+            //     ->orderBy('kdmatakuliah', 'asc')
+            //     ->paginate(10);
+
+            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "ak_matakuliah.kodematakuliah", "ak_matakuliah.matakuliah", "mks.ak_kurikulum_sub_bk_id", "id_cpmk", "kode_cpmk", "cpmk", "gsc.id as gscid", "metode_penilaian", "gmc.id as gmcid", "bobot")
+                ->leftJoin("ak_matakuliah_ak_kurikulum_sub_bk as mks", "mks.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+                ->leftJoin("ak_kurikulum_sub_bks as sbk", "sbk.id", "=", "mks.ak_kurikulum_sub_bk_id")
+                ->leftJoin("gabung_subbk_cpmks as gsc", "gsc.id_gabung_subbk", "=", "mks.id")
+                ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "gsc.id_cpmk")
+                ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "gsc.id")
+                ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+                ->where("ak_kurikulum.isObe", '=', 1)
+                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->orderBy('kdmatakuliah', 'asc')
-                ->paginate(10);
+                ->paginate(15);
 
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
         } else {
-            $matakuliah = ak_matakuliah::with("GetAllidSubBK.cpmks.metopens.CPMKtoMTP")
+            // $matakuliah = ak_matakuliah::with("GetAllidSubBK.cpmks.metopens.CPMKtoMTP")
+            //     ->where("ak_kurikulum.isObe", '=', 1)
+            //     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            //     ->where(function ($query) {
+            //         $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+            //             ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+            //     })
+            //     
+            //     ->limit(5)->get();
+            //     ->paginate(10);
+            // ->first();
+
+            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "ak_matakuliah.kodematakuliah", "ak_matakuliah.matakuliah", "mks.ak_kurikulum_sub_bk_id", "id_cpmk", "kode_cpmk", "cpmk", "gsc.id as gscid", "metode_penilaian", "gmc.id as gmcid", "bobot")
+                ->leftJoin("ak_matakuliah_ak_kurikulum_sub_bk as mks", "mks.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+                ->leftJoin("ak_kurikulum_sub_bks as sbk", "sbk.id", "=", "mks.ak_kurikulum_sub_bk_id")
+                ->leftJoin("gabung_subbk_cpmks as gsc", "gsc.id_gabung_subbk", "=", "mks.id")
+                ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "gsc.id_cpmk")
+                ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "gsc.id")
+                ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where(function ($query) {
@@ -36,9 +66,7 @@ class metodePenilaianController extends Controller
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
                 ->orderBy('kdmatakuliah', 'asc')
-                // ->limit(5)->get();
                 ->paginate(10);
-            // ->first();
 
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where(function ($query) {
@@ -60,11 +88,24 @@ class metodePenilaianController extends Controller
         // searching belum disamakan dengan metode kd unit
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayKurikulum)) {
-                $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                // $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+                //     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                //     ->where("ak_kurikulum.isObe", '=', 1)
+                //     ->where("kurikulum", "=", $request->filter)
+                //     ->orderBy('kdmatakuliah', 'asc')
+                //     ->paginate(10);
+
+
+                $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "ak_matakuliah.kodematakuliah", "ak_matakuliah.matakuliah", "mks.ak_kurikulum_sub_bk_id", "id_cpmk", "kode_cpmk", "cpmk", "gsc.id as gscid", "metode_penilaian", "gmc.id as gmcid", "bobot")
+                    ->leftJoin("ak_matakuliah_ak_kurikulum_sub_bk as mks", "mks.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+                    ->leftJoin("ak_kurikulum_sub_bks as sbk", "sbk.id", "=", "mks.ak_kurikulum_sub_bk_id")
+                    ->leftJoin("gabung_subbk_cpmks as gsc", "gsc.id_gabung_subbk", "=", "mks.id")
+                    ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "gsc.id_cpmk")
+                    ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "gsc.id")
+                    ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                     ->where("ak_kurikulum.isObe", '=', 1)
+                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                     ->where("kurikulum", "=", $request->filter)
-                    ->orderBy('kdmatakuliah', 'asc')
                     ->paginate(10);
             }
         }
