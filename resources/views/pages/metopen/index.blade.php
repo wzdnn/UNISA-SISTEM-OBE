@@ -76,9 +76,9 @@
                     <th scope="col" class="px-3 py-1 ">
                         Bobot
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    {{-- <th scope="col" class="px-6 py-3 ">
                         Action
-                    </th>
+                    </th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -157,9 +157,9 @@
                                     </div>
                                     {{-- Model End --}}
                                 </td>
-                                <td class=" px-6 py-4">
+                                {{-- <td class=" px-6 py-4">
 
-                                </td>
+                                </td> --}}
                             </tr>
                         @else
                             <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
@@ -179,9 +179,9 @@
                                 <td class="px-3 py-4 flex flex-row">
 
                                 </td>
-                                <td class=" px-6 py-4">
+                                {{-- <td class=" px-6 py-4">
 
-                                </td>
+                                </td> --}}
                             </tr>
                         @endif
                     @endforeach

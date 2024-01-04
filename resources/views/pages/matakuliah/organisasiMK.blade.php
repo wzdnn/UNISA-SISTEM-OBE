@@ -121,6 +121,7 @@
         }
     </style>
 @endpush
+<br />
 
 @section('body')
     <div class="flex items-center justify-between py-5 px-5 mx-10">

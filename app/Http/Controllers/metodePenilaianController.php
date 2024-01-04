@@ -66,7 +66,7 @@ class metodePenilaianController extends Controller
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
                 ->orderBy('kdmatakuliah', 'asc')
-                ->paginate(10);
+                ->paginate(15);
 
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where(function ($query) {
@@ -106,7 +106,7 @@ class metodePenilaianController extends Controller
                     ->where("ak_kurikulum.isObe", '=', 1)
                     ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                     ->where("kurikulum", "=", $request->filter)
-                    ->paginate(10);
+                    ->paginate(15);
             }
         }
 
