@@ -47,8 +47,7 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}
-                        {{ $item->tahun }}</option>
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
@@ -119,7 +118,8 @@
                                     </a>
                                     <a href="{{ route('delete.pl', ['id' => $akKurikulumPls->id]) }}"
                                         onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
-                                        <button class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
+                                        <button
+                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </a>

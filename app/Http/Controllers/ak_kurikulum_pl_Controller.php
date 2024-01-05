@@ -42,6 +42,7 @@ class ak_kurikulum_pl_Controller extends Controller
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
                 ->where("isObe", "=", 1)
+                ->orderBy("kdkurikulum")
                 ->get();
         }
 
