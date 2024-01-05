@@ -33,7 +33,6 @@ class metodePenilaianController extends Controller
                 ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-                ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(15);
 
             $kdkurikulum = DB::table("ak_kurikulum")
@@ -65,7 +64,6 @@ class metodePenilaianController extends Controller
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
-                ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(15);
 
             $kdkurikulum = DB::table("ak_kurikulum")
