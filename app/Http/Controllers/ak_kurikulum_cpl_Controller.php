@@ -34,6 +34,31 @@ class ak_kurikulum_cpl_Controller extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
+        }
+        if (auth()->user()->leveling == 3) {
+            $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->join(
+                    "ak_kurikulum_aspeks",
+                    "ak_kurikulum_aspeks.id",
+                    "=",
+                    "ak_kurikulum_cpls.kdaspek"
+                )
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where('puk.kdunitkerjapj', '=', Auth::user()->kdunit)
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")

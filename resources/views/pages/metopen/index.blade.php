@@ -11,7 +11,7 @@
     <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="{{ route('metopen') }}"
+                <a href="{{ route('index.metopen') }}"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
                     <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                         viewBox="0 0 20 20">
@@ -76,8 +76,11 @@
                     <th scope="col" class="px-3 py-1 ">
                         Bobot
                     </th>
-                    {{-- <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 ">
                         Action
+                    </th>
+                    {{-- <th scope="col" class="px-6 py-3">
+                        Nilai
                     </th> --}}
                 </tr>
             </thead>
@@ -105,6 +108,8 @@
                                     <input type="text" id="bobot" name="bobot"
                                         class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
                                         disabled value="{{ $value->bobot }}%">
+
+
                                     <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
                                         class="ml-2" data-id-target="{{ $value->gmcid }}" type="button">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -134,7 +139,7 @@
                                                         <form action="" method="POST">
                                                             @csrf
                                                             <input type="hidden" name="id_gabung" id="input-id">
-                                                            <div class="flex flex-col  py-4">
+                                                            <div class="flex flex-col py-4">
                                                                 <label for="bobot"
                                                                     class="block mb-2 text-sm font-medium py-1 text-gray-900 ">Bobot
                                                                     Nilai</label>
@@ -157,9 +162,87 @@
                                     </div>
                                     {{-- Model End --}}
                                 </td>
-                                {{-- <td class=" px-6 py-4">
-                                   
-                                </td> --}}
+                                @if ($value->gmcid > 0)
+                                    <td class=" px-6 py-4 ">
+                                        {{-- <a href="{{ route('tugas.metopen', ['id' => $value->gmcid]) }}">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a> --}}
+
+                                        <!-- Modal toggle -->
+                                        <button data-modal-target="authentic-modal" id="tgsTambah"
+                                            data-id-target="{{ $value->gmcid }}" data-modal-toggle="{{ $value->gmcid }}"
+                                            class="px-2 text-md font-semibold p-1" type="button">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+
+                                        <!-- Main modal -->
+                                        <div id="{{ $value->gmcid }}" tabindex="-1" aria-hidden="true"
+                                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                            <div class="relative p-4 w-full max-w-md max-h-full">
+                                                <!-- Modal content -->
+                                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+
+                                                    <!-- Modal body -->
+                                                    <div class="p-4 md:p-5">
+                                                        <h1 class="font-bold text-2xl mb-0 ">
+                                                            {{ $value->metode_penilaian }} </h1>
+                                                        <h3 class="font-medium text-xl mb-0 text-gray-500">
+                                                            {{ $value->kode_cpmk }} </h3>
+                                                        <h3 class="font-semibold text-md text-justify">{{ $value->cpmk }}
+                                                        </h3>
+                                                        <h3 class="font-semibold text-l mb-0">Bobot CPMK :
+                                                            {{ $value->bobot }}%
+
+                                                        </h3>
+
+                                                        <form class="space-y-4" action="{{ route('tugas.keterangan') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="tgsinput_id" id="tgsinput_id"
+                                                                value="{{ $value->gmcid }}">
+                                                            {{-- <input type="hidden" name="kdmatakuliah" id="kdmatakuliah"
+                                                                value="{{ $value->kdmatakuliah }}"> --}}
+
+                                                            <div>
+                                                                <label for="keterangan"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
+                                                                <input type="text" name="keterangan" id="keterangan"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                                            </div>
+
+                                                            <div>
+                                                                <select id="tahunakademik" name="tahunakademik"
+                                                                    class="form-control">
+                                                                    @foreach ($tahunAkademik as $tahunakademik)
+                                                                        <option
+                                                                            value="{{ $tahunakademik->kdtahunakademik }}">
+                                                                            {{ $tahunakademik->tahunakademik }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <button type="submit"
+                                                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <a href="{{ route('list.metopen', ['id' => $value->gmcid]) }}">
+                                            <i class="fa fa-list" aria-hidden="true"></i>
+                                        </a>
+
+
+                                    </td>
+                                    {{-- <td class="px-6 py-4">
+                                        <a href="{{ route('matkul.nilai', ['id' => $value->kdmatakuliah]) }}">
+                                            <i class="fa fa-folder" aria-hidden="true"></i>
+                                        </a>
+                                    </td> --}}
+                                @endif
+
                             </tr>
                         @else
                             <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
@@ -177,6 +260,9 @@
 
                                 </td>
                                 <td class="px-3 py-4 flex flex-row">
+
+                                </td>
+                                <td class=" px-6 py-4">
 
                                 </td>
                                 {{-- <td class=" px-6 py-4">
@@ -199,7 +285,9 @@
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
-            // MergeGridCells('#mytable', 4, false);
+            // MergeGridCells('#mytable', 7, false);
+
+            // MergeGridCells('#mytable', 7, false);
             MergeGridCells('#mytable', 3, false);
             MergeGridCells('#mytable', 2, false);
             MergeGridCells('#mytable', 1, false);
@@ -276,5 +364,14 @@
                 inputTarget.value = e.getAttribute('data-id-target');
             })
         });
+
+        const tgsTambah = document.querySelectorAll("#tgsTambah");
+        tgsTambah.forEach(e => {
+            e.addEventListener("click", () => {
+                console.log(e.getAttribute('data-id-target'))
+                const targetInput = document.getElementById('tgsinput_id');
+                targetInput.value = e.getAttribute('data-id-target');
+            })
+        })
     </script>
 @endpush

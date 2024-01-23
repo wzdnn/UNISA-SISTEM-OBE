@@ -32,6 +32,30 @@ class ak_kurikulum_sub_bk_controller extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
+        }
+        if (auth()->user()->leveling == 3) {
+            $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
+                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->join(
+                    "ak_kurikulum_bks",
+                    "ak_kurikulum_bks.id",
+                    "=",
+                    "ak_kurikulum_sub_bks.kdbk"
+                )
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_sub_bks.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->paginate(10);
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
                 ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")

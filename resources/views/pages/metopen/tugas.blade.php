@@ -1,11 +1,66 @@
 @extends('layouts.app')
 
-
+<br />
 @section('body')
-    <div class="flex flex-col py-5">
-        <h1 class="font-bold text-2xl mb-0 text-blue-700">Tugas/metode penilaian lainnya | (urutan)</h1>
+    <nav class="flex px-5 py-3 bg-white border shadow-md rounded-lg mb-3 mr-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('index.metopen') }}"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path
+                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                    </svg>
+                    Penilaian
+                </a>
+            </li>
+            <li aria-current="page">
 
-        <h3 class="font-medium text-xl mb-0 text-blue-700">CPMK (no cpmk) </h3>
+                <a href="{{ route('list.metopen', ['id' => $kelas->gmcid]) }}" class="flex items-center">
+                    <svg class="w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <span
+                        class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400 hover:text-blue-600">Detail
+                        -
+                        {{ $kelas->metode_penilaian ?? '' }} | {{ $kelas->kode_cpmk ?? '' }} |
+                        {{ $kelas->matakuliah ?? '' }}
+                    </span>
+                </a>
+
+            </li>
+            <li>
+                <div class="flex items-center">
+
+                    <svg class="w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
+                        {{ $kelas->keterangan ?? '' }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+
+    <br />
+
+    <div class=" bg-white">
+        <div class="flex flex-col py-5 px-4">
+
+            <h1 class="font-bold text-2xl mb-0 text-gray-700">{{ $kelas->matakuliah ?? '' }} | {{ $kelas->kelas ?? '' }}
+            </h1>
+            <h3 class="font-medium text-xl mb-0 text-gray-700">{{ $kelas->keterangan ?? '' }} </h3>
+            <h3 class="font-semibold text-l mb-0 text-gray-700">{{ $kelas->kode_cpmk ?? '' }} | {{ $kelas->cpmk ?? '' }}
+            </h3>
+            <h3 class="font-semibold text-l mb-0 text-gray-700">Bobot CPMK : {{ $kelas->bobot ?? '' }}% </h3>
+            <h3 class="font-semibold text-l mb-0 text-gray-700">Batas Nilai : {{ $kelas->batas_nilai ?? '' }} </h3>
+        </div>
     </div>
 
     <table class="w-full text-sm text-center  text-gray-500">
@@ -13,6 +68,9 @@
             <tr class="text-left">
                 <th scope="col" class="px-6 py-3 w-[50px]">
                     No.
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Nim
                 </th>
                 <th scope="col" class="px-6 py-3 ">
                     Nama Mahasiswa
@@ -23,17 +81,89 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b text-left shadow">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            @foreach ($penilaian as $key => $value)
+                <tr class="bg-white border-b text-left shadow">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {{-- {{ ($penilaian->currentPage() - 1) * $penilaian->perPage() + $key + 1 }} --}}
+                        {{ $loop->iteration }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ $value->nim }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ $value->namalengkap }}
+                    </td>
+                    <td class="px-6 py-4 flex flex-row">
 
-                </td>
-                <td class="px-6 py-4">
+                        <input type="text" id="nilai" name="nilai"
+                            class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
+                            disabled value="{{ $value->apnilai }}">
 
-                </td>
-                <td class="px-6 py-4">
+                        <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
+                            class="ml-2" data-id-target="{{ $value->kdpen }}" type="button">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
 
-                </td>
-            </tr>
+                        {{-- Model Start --}}
+                        {{-- @include('include.flash-massage') --}}
+                        <div>
+                            <div id="popup-modal" tabindex="-1"
+                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div class="relative p-4 w-auto max-w-md max-h-full">
+                                    <div class="relative bg-white rounded-lg shadow ">
+                                        <button type="button"
+                                            class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
+                                            data-modal-hide="popup-modal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                        <div class="p-3 text-center justify-center items-center">
+
+                                            <form action="" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="kdpenilaian" id="input-id">
+                                                <div class="flex flex-col py-4">
+                                                    <label for="nilai"
+                                                        class="block mb-2 text-sm font-medium py-1 text-gray-900 ">Nilai</label>
+                                                    <input type="text" id="nilai" name="nilai"
+                                                        aria-describedby="nilai-explanation"
+                                                        class="bg-gray-50 border text-center border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block  "
+                                                        placeholder="">
+                                                </div>
+
+                                                <button data-modal-hide="popup-modal" type="submit"
+                                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-2 py-2 text-center">
+                                                    Submit
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Model End --}}
+                    </td>
+                </tr>
+            @endforeach
+
         </tbody>
     </table>
 @endsection
+
+@push('script')
+    <script>
+        const btnTambah = document.querySelectorAll("#btnTambah");
+        btnTambah.forEach(e => {
+            e.addEventListener("click", () => {
+                console.log(e.getAttribute('data-id-target'));
+                const inputTarget = document.getElementById('input-id');
+                inputTarget.value = e.getAttribute('data-id-target');
+            })
+        });
+    </script>
+@endpush

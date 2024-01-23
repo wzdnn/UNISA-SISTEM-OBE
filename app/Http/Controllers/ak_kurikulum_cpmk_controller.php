@@ -32,6 +32,28 @@ class ak_kurikulum_cpmk_controller extends Controller
                 ->get();
 
             $cpm = ak_kurikulum_cpmk::all();
+        }
+        if (auth()->user()->leveling == 3) {
+            $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->orderBy('ak_kurikulum_cpls.id')
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $cpm = ak_kurikulum_cpmk::all();
         } else {
             $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
@@ -118,6 +140,24 @@ class ak_kurikulum_cpmk_controller extends Controller
                 ->paginate(10);
 
             $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+        }
+        if (auth()->user()->leveling == 3) {
+            $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpmks.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
                 ->get();
         } else {

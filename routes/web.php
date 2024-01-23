@@ -178,6 +178,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/metode-penilaian', [metodePenilaianController::class, 'index'])->name('index.metopen');
     Route::post('/metode-penilaian', [metodePenilaianController::class, 'postIndex']);
+    Route::post('/metode-penilaian/keterangan', [metodePenilaianController::class, 'tugasPost'])->name('tugas.keterangan');
     Route::get('/metopen', [metodePenilaianController::class, 'metodePenilaian'])->name('metopen');
     Route::post('/post-metopen', [metodePenilaianController::class, 'store'])->name('post.metopen');
     Route::get('/metopen/{id}', [metodePenilaianController::class, 'delete'])->name('delete.metopen');
@@ -185,37 +186,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/metode-penilaian/store/{id}', [metodePenilaianController::class, 'kelolaMetopen'])->name('metopen.cpmk');
     Route::post('/metode-penilaian/store/{id}', [metodePenilaianController::class, 'postKelolaMetopen']);
 
-    Route::get('/metode-penilaian/tugas', [metodePenilaianController::class, 'tugasIndex'])->name('tugas.metopen');
-});
 
 
 
+    // Tugas
 
+    Route::get('/metode-penilaian/tugas/{id}', [metodePenilaianController::class, 'tugasIndex'])->name('tugas.metopen');
+    Route::get('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilai'])->name('list.metopen');
+    Route::post('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilaiPost'])->name('copy.mhs');
 
+    // Penilaian
+    Route::get('/penilaian/{id}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');
+    Route::post('/penilaian/{id}', [metodePenilaianController::class, 'postPenilaian'])->name('post.nilai');
 
-
-// Route::get('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'MapCPMKShow'])->name('CPMKshow.mk');
-// Route::post('/petaCPMKSHOW/{id}', [ak_matakuliah_controller::class, 'mappingCPMK'])->name('CPMKpost.mk');
-// Route::get('/matakuliah/edit/{id}', [ak_matakuliah_controller::class, 'subbkEdit'])->name('edit.mk');
-// Route::post('/matakuliah/edit/store/{id}', [ak_matakuliah_controller::class, 'subbkEditStore'])->name('update.mk');
-
-
-
-/**
- * TEst route
- */
-
-Route::get('/test', function () {
-    $cpmk = DB::table('ak_kurikulum_cpl_ak_kurikulum_cpmk')
-        ->where('id', '=', '7')
-        ->first();
-    $cpmk->ak_kurikulum_cpmk = unserialize($cpmk->ak_kurikulum_cpmk);
-    // return dd($cpmk->ak_kurikulum_cpmk);
-    $array = $cpmk->ak_kurikulum_cpmk;
-
-    $data = DB::table('ak_kurikulum_cpmks')
-        ->whereIn('id', $array)
-        ->get();
-
-    return dd($data);
+    // Final Penilaian
+    Route::get('/matkul-nilai/{id}', [metodePenilaianController::class, 'finalNilai'])->name('matkul.nilai');
 });
