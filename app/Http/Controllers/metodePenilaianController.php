@@ -41,7 +41,7 @@ class metodePenilaianController extends Controller
         } else {
 
 
-            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
+            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "gmc.bobot as bobot", "amc.id as amcid", "gmc.id as gmcid")
                 ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
                 ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
                 ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
@@ -53,6 +53,7 @@ class metodePenilaianController extends Controller
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
+                ->orderBy("kdmatakuliah")
                 ->paginate(15);
 
             $kdkurikulum = DB::table("ak_kurikulum")

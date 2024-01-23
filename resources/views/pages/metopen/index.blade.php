@@ -76,9 +76,9 @@
                     <th scope="col" class="px-3 py-1 ">
                         Bobot
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    {{-- <th scope="col" class="px-6 py-3 ">
                         Action
-                    </th>
+                    </th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -104,7 +104,7 @@
                                 <td class="px-3 py-4 flex flex-row">
                                     <input type="text" id="bobot" name="bobot"
                                         class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
-                                        disabled value="{{ $value->bobot }}">
+                                        disabled value="{{ $value->bobot }}%">
                                     <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
                                         class="ml-2" data-id-target="{{ $value->gmcid }}" type="button">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -157,11 +157,9 @@
                                     </div>
                                     {{-- Model End --}}
                                 </td>
-                                <td class=" px-6 py-4">
-                                    {{-- <a href="{{ route('tugas.metopen', ['id' => $value->gmcid]) }}">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a> --}}
-                                </td>
+                                {{-- <td class=" px-6 py-4">
+                                   
+                                </td> --}}
                             </tr>
                         @else
                             <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
@@ -181,9 +179,9 @@
                                 <td class="px-3 py-4 flex flex-row">
 
                                 </td>
-                                <td class=" px-6 py-4">
+                                {{-- <td class=" px-6 py-4">
 
-                                </td>
+                                </td> --}}
                             </tr>
                         @endif
                     @endforeach
