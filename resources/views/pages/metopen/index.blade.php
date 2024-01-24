@@ -79,9 +79,9 @@
                     <th scope="col" class="px-6 py-3 ">
                         Action
                     </th>
-                    {{-- <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3">
                         Nilai
-                    </th> --}}
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -236,11 +236,11 @@
 
 
                                     </td>
-                                    {{-- <td class="px-6 py-4">
+                                    <td class="px-6 py-4">
                                         <a href="{{ route('matkul.nilai', ['id' => $value->kdmatakuliah]) }}">
                                             <i class="fa fa-folder" aria-hidden="true"></i>
                                         </a>
-                                    </td> --}}
+                                    </td>
                                 @endif
 
                             </tr>
@@ -265,9 +265,9 @@
                                 <td class=" px-6 py-4">
 
                                 </td>
-                                {{-- <td class=" px-6 py-4">
+                                <td class=" px-6 py-4">
 
-                                </td> --}}
+                                </td>
                             </tr>
                         @endif
                     @endforeach
@@ -287,7 +287,7 @@
             // MergeGridCells('#mytable', 1, false);
             // MergeGridCells('#mytable', 7, false);
 
-            // MergeGridCells('#mytable', 7, false);
+            MergeGridCells('#mytable', 7, false);
             MergeGridCells('#mytable', 3, false);
             MergeGridCells('#mytable', 2, false);
             MergeGridCells('#mytable', 1, false);
