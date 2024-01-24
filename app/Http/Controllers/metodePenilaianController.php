@@ -419,18 +419,34 @@ class metodePenilaianController extends Controller
     public function finalNilai(int $id)
     {
 
-        $matakuliah = ak_matakuliah::select("matakuliah")
-            ->join('ak_matakuliah_cpmk as amc', "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+        $matakuliah = ak_matakuliah::select("matakuliah", "batasNilai", "namalengkap", "gelarbelakang")
+            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
+            ->join("pt_person as per", "per.kdperson", "=", "att.kdperson")
             ->where('ak_matakuliah.kdmatakuliah', "=", $id)
             ->first();
 
+        $cpl = ak_matakuliah::select("kode_cpl")
+            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "amc.id_cpmk")
+            ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
+            ->join("pt_person as per", "per.kdperson", "=", "att.kdperson")
+            ->where('ak_matakuliah.kdmatakuliah', "=", $id)
+            ->where('pmk.kdtahunakademik', "=", 20231)
+            ->distinct()
+            ->get();
 
-        $tabel = ak_matakuliah_cpmk::select("metode_penilaian", "bobot")
+
+        $tabel = ak_matakuliah_cpmk::select("metode_penilaian", "bobot", "kode_cpmk")
             ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
             ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
             ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
             ->where("mk.kdmatakuliah", "=", $id)
             ->distinct()
             ->get();
@@ -438,9 +454,9 @@ class metodePenilaianController extends Controller
         $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
 
 
-        // dd($tabel);
+        // dd($cpl);
 
 
-        return view('pages.metopen.final', compact('tabularNilai', 'tabel', 'matakuliah'));
+        return view('pages.metopen.final', compact('tabularNilai', 'tabel', 'matakuliah', 'cpl'));
     }
 }

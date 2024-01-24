@@ -8,15 +8,39 @@
             <h1 class="font-bold text-2xl mb-0 text-gray-700">
                 {{ $matakuliah->matakuliah }}
             </h1>
-            <h3 class="font-medium text-xl mb-0 text-gray-700"> </h3>
-            <h3 class="font-semibold text-l mb-0 text-gray-700"> |
+
+            <h3 class="font-semibold text-xl mb-0 text-gray-700">{{ $matakuliah->namalengkap }},
+                {{ $matakuliah->gelarbelakang }} </h3>
+
+            <h3 class="font-medium text-sm mb-0 text-gray-700">Batas Nilai : {{ $matakuliah->batasNilai }} </h3>
+
+            <h3 class="font-medium text-l mb-0 text-gray-700">Kode CPL :
+                @foreach ($cpl as $c)
+                    {{ $c->kode_cpl }},
+                @endforeach
             </h3>
-            <h3 class="font-semibold text-l mb-0 text-gray-700">Bobot CPMK : % </h3>
+
         </div>
     </div>
 
     <table class="w-full text-sm text-center  text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-500">
+            <tr class="text-left">
+                <th scope="col" class="px-6 py-3 w-[50px]">
+                </th>
+                <th scope="col" class="px-6 py-3">
+                </th>
+                <th scope="col" class="px-6 py-3 ">
+                </th>
+                <th scope="col" class="px-6 py-3 ">
+
+                </th>
+                @foreach ($tabel as $tbl)
+                    <th scope="col" class="px-6 py-3 ">
+                        {{ $tbl->kode_cpmk }}
+                    </th>
+                @endforeach
+            </tr>
             <tr class="text-left">
                 <th scope="col" class="px-6 py-3 w-[50px]">
                     No.
@@ -68,14 +92,14 @@
                     <td class="px-6 py-4">
                         {{ $value->namalengkap }}
                     </td>
-                    {{-- @foreach ($tabel as $tbl)
-                        <td>
-                            {{ $tbl->bobot }}
-                        </td>
-                        @endforeach --}}
                     <td class="px-6 py-4">
                         {{ $value->nilai_akhir }}
                     </td>
+                    @foreach ($tabel as $tbl)
+                        <td>
+                            {{-- {{ $tbl->nilai }} --}}
+                        </td>
+                    @endforeach
                 </tr>
             @endforeach
 
