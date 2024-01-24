@@ -85,7 +85,8 @@
                 <tr class="bg-white border-b text-left shadow">
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{-- {{ ($penilaian->currentPage() - 1) * $penilaian->perPage() + $key + 1 }} --}}
-                        {{ $loop->iteration }}
+                        {{-- {{ $loop->iteration }} --}}
+                        {{ $value->kdpen }}
                     </td>
                     <td class="px-6 py-4">
                         {{ $value->nim }}

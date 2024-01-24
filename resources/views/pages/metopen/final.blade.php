@@ -12,7 +12,7 @@
             <h3 class="font-semibold text-xl mb-0 text-gray-700">{{ $matakuliah->namalengkap }},
                 {{ $matakuliah->gelarbelakang }} </h3>
 
-            <h3 class="font-medium text-sm mb-0 text-gray-700">Batas Nilai : {{ $matakuliah->batasNilai }} </h3>
+            <h3 class="font-medium text-xl mb-0 text-gray-700">Batas Nilai : {{ $matakuliah->batasNilai }} </h3>
 
             <h3 class="font-medium text-l mb-0 text-gray-700">Kode CPL :
                 @foreach ($cpl as $c)
@@ -81,23 +81,23 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($tabularNilai as $key => $value)
+            @foreach ($mahasiswa as $key => $value)
                 <tr class="bg-white border-b text-left shadow">
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ $loop->iteration }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $value->nim }}
+                        {{ $value[1] }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $value->namalengkap }}
+                        {{ $value[2] }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $value->nilai_akhir }}
+                        {{ $value[3] }}
                     </td>
-                    @foreach ($tabel as $tbl)
+                    @foreach ($value[4] as $nilai)
                         <td>
-                            {{-- {{ $tbl->nilai }} --}}
+                            {{ $nilai }}
                         </td>
                     @endforeach
                 </tr>

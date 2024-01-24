@@ -370,7 +370,7 @@ class metodePenilaianController extends Controller
 
         // dd($test);
 
-        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap")
+        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
@@ -453,10 +453,28 @@ class metodePenilaianController extends Controller
 
         $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
 
+        $nilai = json_decode(json_encode($tabularNilai), true);
 
-        // dd($cpl);
+        // $mahasiswa = [];
+        // foreach ($nilai as $key => $value) {
+        //     $mahasiswa[] = array_values($value);
+        // }
 
 
-        return view('pages.metopen.final', compact('tabularNilai', 'tabel', 'matakuliah', 'cpl'));
+        foreach ($nilai as $key => $value) {
+            $loop = 1;
+            foreach ($value as $urutanData => $data) {
+                if ($loop <= 4) {
+                    $mahasiswa[$key][] = $data;
+                } else {
+                    $mahasiswa[$key][4][] = $data;
+                }
+                $loop++;
+            }
+        }
+        // dd($tabularNilai);
+
+
+        return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl'));
     }
 }
