@@ -46,8 +46,7 @@ class metodePenilaianController extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
-        }
-        if (auth()->user()->leveling == 3) {
+        } elseif (auth()->user()->leveling == 3) {
             $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
                 ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
                 ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
@@ -298,8 +297,21 @@ class metodePenilaianController extends Controller
 
         ]);
 
+
+        // $test = gabung_nilai_metopen::create([
+        //     'id_gabung_metopen' => $request->tgsinput_id,
+        //     'keterangan' => $request->keterangan,
+        //     'kdtahunakademik' => $request->tahunakademik
+
+        // ]);
+
+        // $test->id;
+
+        // dd($test->id);
+
         return redirect()->route('index.metopen')->with('success', 'keterangan metode penilaian berhasil ditambah');
     }
+
 
     public function listNilai(int $id)
     {

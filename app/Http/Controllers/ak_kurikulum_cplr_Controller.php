@@ -40,8 +40,7 @@ class ak_kurikulum_cplr_Controller extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
-        }
-        if (auth()->user()->leveling == 3) {
+        } elseif (auth()->user()->leveling == 3) {
             $akKurikulumCplr = DB::table('ak_kurikulum_cplrs')
                 ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
                 ->join(

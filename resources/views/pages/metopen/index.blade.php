@@ -97,11 +97,12 @@
                                     {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="{{ route('metopen.cpmk', ['id' => $value->amcid]) }}">
+                                    <a href="{{ route('metopen.cpmk', ['id' => $value->amcid]) }}"
+                                        class="hover:text-blue-600">
                                         {{ $value->kode_cpmk }}
                                     </a> <br />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 ">
                                     {{ $value->metode_penilaian }}
                                 </td>
                                 <td class="px-3 py-4 flex flex-row">
@@ -111,7 +112,8 @@
 
 
                                     <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
-                                        class="ml-2" data-id-target="{{ $value->gmcid }}" type="button">
+                                        class="ml-2 hover:text-blue-600" data-id-target="{{ $value->gmcid }}"
+                                        type="button">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
                                     </button>
 
@@ -171,7 +173,7 @@
                                         <!-- Modal toggle -->
                                         <button data-modal-target="authentic-modal" id="tgsTambah"
                                             data-id-target="{{ $value->gmcid }}" data-modal-toggle="{{ $value->gmcid }}"
-                                            class="px-2 text-md font-semibold p-1" type="button">
+                                            class="px-2 text-md font-semibold p-1 hover:text-blue-600" type="button">
                                             <i class="fa fa-plus" aria-hidden="true"></i>
                                         </button>
 
@@ -211,6 +213,9 @@
                                                             </div>
 
                                                             <div>
+                                                                <label for="keterangan"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun
+                                                                    Akademik</label>
                                                                 <select id="tahunakademik" name="tahunakademik"
                                                                     class="form-control">
                                                                     @foreach ($tahunAkademik as $tahunakademik)
@@ -230,14 +235,16 @@
                                             </div>
                                         </div>
 
-                                        <a href="{{ route('list.metopen', ['id' => $value->gmcid]) }}">
+                                        <a href="{{ route('list.metopen', ['id' => $value->gmcid]) }}"
+                                            class="hover:text-blue-600">
                                             <i class="fa fa-list" aria-hidden="true"></i>
                                         </a>
 
 
                                     </td>
                                     <td class="px-6 py-4">
-                                        <a href="{{ route('matkul.nilai', ['id' => $value->kdmatakuliah]) }}">
+                                        <a href="{{ route('matkul.nilai', ['id' => $value->kdmatakuliah]) }}"
+                                            class="hover:text-blue-600">
                                             <i class="fa fa-folder" aria-hidden="true"></i>
                                         </a>
                                     </td>

@@ -47,8 +47,7 @@ class ak_kurikulum_bk_controller extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
-        }
-        if (auth()->user()->leveling == 3) {
+        } elseif (auth()->user()->leveling == 3) {
             $akKurikulumBk = DB::table('ak_kurikulum_bks')
                 ->select(
                     "ak_kurikulum_bks.*",

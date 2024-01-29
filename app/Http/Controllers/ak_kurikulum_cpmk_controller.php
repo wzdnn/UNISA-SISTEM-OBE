@@ -32,8 +32,7 @@ class ak_kurikulum_cpmk_controller extends Controller
                 ->get();
 
             $cpm = ak_kurikulum_cpmk::all();
-        }
-        if (auth()->user()->leveling == 3) {
+        } elseif (auth()->user()->leveling == 3) {
             $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
                 ->join(
@@ -142,8 +141,7 @@ class ak_kurikulum_cpmk_controller extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
-        }
-        if (auth()->user()->leveling == 3) {
+        } elseif (auth()->user()->leveling == 3) {
             $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
                 ->join(
                     "ak_kurikulum",

@@ -82,8 +82,8 @@
         </thead>
         <tbody>
             @foreach ($mahasiswa as $key => $value)
-                <tr class="bg-white border-b text-left shadow">
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                <tr class="border-b text-left shadow ">
+                    <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                         {{ $loop->iteration }}
                     </td>
                     <td class="px-6 py-4">
@@ -96,7 +96,7 @@
                         {{ $value[3] }}
                     </td>
                     @foreach ($value[4] as $nilai)
-                        <td>
+                        <td class="{{ $nilai < $matakuliah->batasNilai ? 'bg-red-500 text-white' : 'bg-white' }}">
                             {{ $nilai }}
                         </td>
                     @endforeach
