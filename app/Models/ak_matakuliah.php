@@ -15,7 +15,11 @@ class ak_matakuliah extends Model
         'kdkurikulum',
         'mk_singkat',
         'isObe',
-        'batasNilai'
+        'batasNilai',
+        'deskripsi_mk',
+        'luring',
+        'daring',
+        'akses_media'
     ];
 
     protected $table = 'ak_matakuliah';

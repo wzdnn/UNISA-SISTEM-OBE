@@ -37,7 +37,7 @@
     </nav>
 
 
-<br>
+    <br>
     <div class="text-center">
         <h1 class="font-bold text-2xl mb-0 text-dark-700">Detail Matakuliah</h1>
     </div>
@@ -79,21 +79,56 @@
                     </div>
                 </div>
                 <hr />
-                <div class="relative z-0 px-3 py-3 ">
-                    <label for="batasNilai" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Batas Nilai</label>
-                    <input type="text" name="batasNilai" id="batasNilai"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                        placeholder=" " value="{{ old('batasNilai') ?? $mkSubBk->batasNilai }}">
+                <div class="grid md:grid-cols-2">
+                    <div class="relative z-0 px-3 py-3">
+                        <label for="akses_media" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Akses
+                            Media</label>
+                        <input type="text" name="akses_media" id="akses_media"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                            placeholder=" " value="{{ old('akses_media') ?? $mkSubBk->akses_media }}">
+                    </div>
+                    <div class="relative z-0 px-3 py-3 ">
+                        <label for="batasNilai" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Batas
+                            Nilai</label>
+                        <input type="text" name="batasNilai" id="batasNilai"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                            placeholder=" " value="{{ old('batasNilai') ?? $mkSubBk->batasNilai }}">
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2">
+                    <div class="relative z-0 px-3 py-3 ">
+                        <label for="luring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
+                        <input type="text" name="luring" id="luring"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                            placeholder=" " value="{{ old('luring') ?? $mkSubBk->luring }}%">
+                    </div>
+                    <div class="relative z-0 px-3 py-3 ">
+                        <label for="daring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
+                        <input type="text" name="daring" id="daring"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                            placeholder=" " value="{{ old('daring') ?? $mkSubBk->daring }}%">
+                    </div>
+                </div>
+                <div>
+                    <div class="relative z-0 px-3 py-3">
+                        <label for="deskripsi_mk" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Deskripsi
+                            Matakuliah</label>
+                        <input type="text" name="deskripsi_mk" id="deskripsi_mk"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                            placeholder=" " value="{{ old('deskripsi_mk') ?? $mkSubBk->deskripsi_mk }}">
+                    </div>
                 </div>
                 <div class="flex justify-center">
-                    <button class="flex items-center bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-sm font-semibold p-2" type="submit">
+                    <button
+                        class="flex items-center bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-sm font-semibold p-2"
+                        type="submit">
 
                         UPDATE
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-                    </svg>
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                        </svg>
                     </button>
                 </div>
 

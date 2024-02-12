@@ -176,6 +176,10 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->mk_singkat = $request->input('mk_singkat');
             $mkSubBk->sks = $request->input('sks');
             $mkSubBk->batasNilai = $request->input('batasNilai');
+            $mkSubBk->deskripsi_mk = $request->input('deskripsi_mk');
+            $mkSubBk->akses_media = $request->input('akses_media');
+            $mkSubBk->luring = $request->input('luring');
+            $mkSubBk->daring = $request->input('daring');
 
             $mkSubBk->save();
 

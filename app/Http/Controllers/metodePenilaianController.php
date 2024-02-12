@@ -357,6 +357,8 @@ class metodePenilaianController extends Controller
     public function penilaian(int $id)
     {
 
+        // dd('test');
+
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
@@ -370,6 +372,8 @@ class metodePenilaianController extends Controller
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
             ->where("gnm.kdjenisnilai", "=", $id)
             ->first();
+        // ->all();
+        // ->paginate(10);
 
         // dd($kelas);
 
@@ -390,7 +394,11 @@ class metodePenilaianController extends Controller
             ->where("gnm.kdjenisnilai", "=", $id)
             ->get();
 
-        // dd($penilaian, "masuk");
+        // $penilaian = ak_penilaian::all();
+
+        // dd($penilaian);
+
+        // dd($kelas, $penilaian);
 
         return view('pages.metopen.tugas', compact('penilaian', 'kelas'));
     }
