@@ -491,12 +491,29 @@ class metodePenilaianController extends Controller
         $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
 
         $persentaseLulus = DB::select('call sistem_obe.total_lulus(?)', [$id]);
+        foreach ($persentaseLulus as $key => $item) {
+            foreach ($item as $KY => $keys) {
+                $nilaiAkhir[] = $keys;
+            }
+        }
 
         $plo = DB::select('call sistem_obe.persenplo(?)', [$id]);
 
-        // dd($tabel);
+        // foreach ($plo as $kunci => $tem) {
+        //     foreach ($tem as $kun => $kuncis) {
+        //         $persenplo[] = $kuncis;
+        //     }
+        // }
+
+        $persenplo = json_decode(json_encode($plo), true);
+
+        // dd(collect($persentaseLulus)->toArray());
+
 
         $nilai = json_decode(json_encode($tabularNilai), true);
+
+        // dd($persenplo);
+
 
         // $mahasiswa = [];
         // foreach ($nilai as $key => $value) {
@@ -518,6 +535,6 @@ class metodePenilaianController extends Controller
         // dd($tabularNilai);
 
 
-        return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus'));
+        return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
     }
 }
