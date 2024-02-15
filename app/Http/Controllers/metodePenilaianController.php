@@ -459,19 +459,42 @@ class metodePenilaianController extends Controller
             ->distinct()
             ->get();
 
+        $test = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian")
+            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
+            ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
+            ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
+            ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
+            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+            ->where("ak_matakuliah.kdmatakuliah", "=", $id)
+            ->where("ak_kurikulum.isObe", '=', 1)
+            ->distinct()
+            ->get();
 
-        $tabel = ak_matakuliah_cpmk::select("metode_penilaian", "bobot", "kode_cpmk")
+
+        $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl")
             ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
             ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
             ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
             ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+            ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
+            ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
             ->where("mk.kdmatakuliah", "=", $id)
+            ->orderBy('gmc.id')
             ->distinct()
             ->get();
 
         $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
+
+        $persentaseLulus = DB::select('call sistem_obe.total_lulus(?)', [$id]);
+
+        $plo = DB::select('call sistem_obe.persenplo(?)', [$id]);
+
+        // dd($tabel);
 
         $nilai = json_decode(json_encode($tabularNilai), true);
 
@@ -495,6 +518,6 @@ class metodePenilaianController extends Controller
         // dd($tabularNilai);
 
 
-        return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl'));
+        return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus'));
     }
 }
