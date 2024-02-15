@@ -512,14 +512,6 @@ class metodePenilaianController extends Controller
 
         $nilai = json_decode(json_encode($tabularNilai), true);
 
-        // dd($persenplo);
-
-
-        // $mahasiswa = [];
-        // foreach ($nilai as $key => $value) {
-        //     $mahasiswa[] = array_values($value);
-        // }
-
 
         foreach ($nilai as $key => $value) {
             $loop = 1;
@@ -534,6 +526,18 @@ class metodePenilaianController extends Controller
         }
         // dd($tabularNilai);
 
+        foreach ($mahasiswa as $key => $mhs) {
+            $gagal = false;
+            foreach ($mhs[4] as $nilai) {
+                if ($nilai < $matakuliah->batasNilai) {
+                    $gagal = true;
+                    break;
+                }
+            }
+            array_push($mahasiswa[$key], $gagal);
+        }
+
+        // return dd($mahasiswa);
 
         return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
     }
