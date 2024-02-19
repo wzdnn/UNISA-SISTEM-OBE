@@ -14,6 +14,7 @@ use App\Http\Controllers\bidangIlmuController;
 use App\Http\Controllers\matakuliah;
 use App\Http\Controllers\metodePenilaianController;
 use App\Http\Controllers\organisasiMkController;
+use App\Http\Controllers\pengalamanMahasiswaController;
 use App\Http\Controllers\sumberController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\visimisiController;
@@ -74,6 +75,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bidang-ilmu', [bidangIlmuController::class, 'indexBidangIlmu'])->name('index.bidil');
     Route::post('/post-bidang-ilmu', [bidangIlmuController::class, 'storeBidangIlmu'])->name('store.bidil');
     Route::get('/bidang-ilmu/{id}', [bidangIlmuController::class, 'delete'])->name('delete.bidil');
+
+
+    // Pengalaman Mahasiswa
+    Route::get('/pengalaman-mahasiswa', [pengalamanMahasiswaController::class, 'indexPengalamanMahasiswa'])->name('index.pengalaman');
+    Route::post('/pengalaman-mahasiswa/store', [pengalamanMahasiswaController::class, 'storePengalamanMahasiswa'])->name('post.pengalaman');
+    Route::get('/pengalaman-mahasiswa/{id}', [pengalamanMahasiswaController::class, 'delete'])->name('delete.pengalaman');
 
 
     // BK
@@ -162,6 +169,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/detail-mk/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
     Route::get('/detail-mk/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
     Route::post('/detail-mk/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+
+
+    // detail Subbk-CPMK
+    Route::get('/detail-mk/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'cpmkPembelajaran'])->name('cpmkPembelajaran.index');
+    Route::post('/detail-mk/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'postCpmkPembelajaran']);
+
 
     // Organisasi Matakuliah
 

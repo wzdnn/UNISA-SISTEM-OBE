@@ -100,13 +100,13 @@
                         <label for="luring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
                         <input type="text" name="luring" id="luring"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                            placeholder=" " value="{{ old('luring') ?? $mkSubBk->luring }}%">
+                            placeholder=" " value="{{ old('luring') ?? $mkSubBk->luring }}">
                     </div>
                     <div class="relative z-0 px-3 py-3 ">
                         <label for="daring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
                         <input type="text" name="daring" id="daring"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                            placeholder=" " value="{{ old('daring') ?? $mkSubBk->daring }}%">
+                            placeholder=" " value="{{ old('daring') ?? $mkSubBk->daring }}">
                     </div>
                 </div>
                 <div>
@@ -118,6 +118,39 @@
                             placeholder=" " value="{{ old('deskripsi_mk') ?? $mkSubBk->deskripsi_mk }}">
                     </div>
                 </div>
+
+                {{-- Pengalaman Belajar Pada Mahasiswa --}}
+                <div class="grid">
+                    <div class="relative z-0 px-3">
+                        <label for="" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Pengalaman
+                            Belajar Mahasiswa</label>
+                    </div>
+                    <div class="relative z-0 px-3">
+                        <label for=""
+                            class="block mb-2 text-sm font-medium text-gray-900 uppercase">Sinkron</label>
+                        <select class="w-auto" id="pengalamanSelectSinkron" name="pengalamanSelectSinkron[]"
+                            multiple="multiple">
+                            @foreach ($mkPengalaman as $item)
+                                <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanSinkron))>
+                                    {{ $item->pengalaman_mahasiswa }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="relative z-0 px-3 py-1">
+                        <label for=""
+                            class="block mb-2 py-1 text-sm font-medium text-gray-900 uppercase">Asinkron</label>
+                        <select class="w-auto" id="pengalamanSelectAsinkron" name="pengalamanSelectAsinkron[]"
+                            multiple="multiple">
+                            @foreach ($mkPengalaman as $item)
+                                <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanAsinkron))>
+                                    {{ $item->pengalaman_mahasiswa }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <div class="flex justify-center">
                     <button
                         class="flex items-center bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-sm font-semibold p-2"
@@ -182,6 +215,19 @@
     <script>
         $(document).ready(function() {
             $('#subbk').select2();
+        });
+    </script>
+@endpush
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('#pengalamanSelectSinkron').select2();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#pengalamanSelectAsinkron').select2();
         });
     </script>
 @endpush

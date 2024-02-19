@@ -508,6 +508,28 @@
                         <span class="flex-1 whitespace-nowrap">Metode Penilaian</span>
                     </a>
                 </li>
+                <li class="relative text-green-100 hover:text-green-800 focus-within:text-white">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
+                        <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="7.25" stroke="currentColor"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle>
+                            <circle cx="12" cy="12" r="3.25" stroke="currentColor"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5" d="M7 17L9.5 14.5"></path>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5" d="M17 17L14.5 14.5"></path>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5" d="M9.5 9.5L7 7"></path>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5" d="M14.5 9.5L17 7"></path>
+                        </svg>
+                    </div>
+                    <a href="{{ route('index.pengalaman') }}"
+                        class="inline-block w-full py-2 pl-8 pr-4 text-md rounded hover:bg-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-300">
+                        <span class="flex-1 whitespace-nowrap">Pengalaman</span>
+                    </a>
+                </li>
                 {{-- <li>
                 <a href="{{ route('metopen') }}"
                     class="flex items-center p-2 text-[#F4FAF8] hover:text-green-800 dark:text-white dark:hover:text-gray-500 rounded-lg  hover:bg-green-300  group">

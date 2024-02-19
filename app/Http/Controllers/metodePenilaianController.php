@@ -393,6 +393,7 @@ class metodePenilaianController extends Controller
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
             ->where("gnm.kdjenisnilai", "=", $id)
             ->get();
+        // ->toSql();
 
         // $penilaian = ak_penilaian::all();
 

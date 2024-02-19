@@ -28,7 +28,8 @@
                             d="m1 9 4-4-4-4" />
                     </svg>
                     <a href="{{ route('detail.mk', ['id' => $id]) }}"
-                        class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 ">Detail</a>
+                        class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 ">Detail
+                        {{ $mkSubBk->kodematakuliah }} {{ $mkSubBk->matakuliah }}</a>
                 </div>
             </li>
 
@@ -151,11 +152,15 @@
     </div>
     <div class="">
         @foreach ($subbk->cpmks as $item)
-            <div class=" hover:text-blue-300 my-2">
-                <button class=" px-2 text-md font-semibold p-2">
-                    &#x2022; {{ $item->kode_cpmk }} {{ $item->cpmk }}
-                </button>
-            </div>
+            <a
+                href="{{ route('cpmkPembelajaran.index', ['id' => $subbk->kdmatakuliah, 'sub' => $item->pivot->id_gabung_subbk, 'id_cpmk' => $item->pivot->id]) }}">
+
+                <div class=" hover:text-blue-300 my-2">
+                    <button class=" px-2 text-md font-semibold p-2">
+                        &#x2022; {{ $item->kode_cpmk }} {{ $item->cpmk }}
+                    </button>
+                </div>
+            </a>
         @endforeach
     </div>
 @endsection

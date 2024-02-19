@@ -45,4 +45,14 @@ class ak_matakuliah extends Model
     {
         return $this->hasMany(gabung_matakuliah_subbk::class, 'kdmatakuliah', 'kdmatakuliah');
     }
+
+    public function pengalamanSinkron()
+    {
+        return $this->belongsToMany(ak_pengalamanmahasiswa::class, 'gabung_matakuliah_pengalaman_sinkron', 'kdmatakuliah', 'id_pengalaman')->withPivot('id');
+    }
+
+    public function pengalamanAsinkron()
+    {
+        return $this->belongsToMany(ak_pengalamanmahasiswa::class, 'gabung_matakuliah_pengalaman_asinkron', 'kdmatakuliah', 'id_pengalaman')->withPivot('id');
+    }
 }

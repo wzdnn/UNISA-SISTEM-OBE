@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\ak_kurikulum_cpmk;
 use App\Models\ak_kurikulum_sub_bk;
 use App\Models\ak_matakuliah;
+use App\Models\ak_metodepembelajaran;
+use App\Models\ak_pengalamanmahasiswa;
+use App\Models\gabung_cpmk_pembelajaran;
 use App\Models\gabung_matakuliah_subbk;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\mk_sub_bk;
@@ -30,20 +33,6 @@ class ak_matakuliah_controller extends Controller
                 ->paginate(10);
 
             $kdkurikulum = DB::table("ak_kurikulum")
-                ->where("isObe", "=", 1)
-                ->get();
-        } elseif (auth()->user()->leveling == 3) {
-            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
-                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
-                ->where("ak_kurikulum.isObe", '=', 1)
-                ->orderBy('kdmatakuliah', 'asc')
-                ->paginate(10);
-
-            $kdkurikulum = DB::table("ak_kurikulum")
-                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
-                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
                 ->get();
         } else {
@@ -147,17 +136,55 @@ class ak_matakuliah_controller extends Controller
     {
         $rekomendasiSKS = DB::select('call sistem_obe.rekomendasi_sks(?, 144, ?)', [Auth::user()->kdunit, $id]);
 
-        $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
+        $mkSubBk = ak_matakuliah::with('MKtoSub_bk', 'pengalamanSinkron', 'pengalamanAsinkron')->findOrFail($id);
 
+        $mkPengalaman = ak_pengalamanmahasiswa::with('pengalamanSinkron', 'pengalamanAsinkron')->get();
+
+
+        $id_pengalamanSinkron = [];
+        foreach ($mkSubBk->pengalamanSinkron as $data) {
+            $id_pengalamanSinkron[] = $data->id;
+        }
+
+        $id_pengalamanAsinkron = [];
+        foreach ($mkSubBk->pengalamanAsinkron as $data) {
+            $id_pengalamanAsinkron[] = $data->id;
+        }
+
+
+        // return dd($mkPengalaman);
         // return dd($mkSubBk);
 
         // return dd($rekomendasiSKS);
 
-        return view('pages.matakuliah.detail2', compact('mkSubBk', 'rekomendasiSKS'));
+        return view('pages.matakuliah.detail2', compact('mkSubBk', 'rekomendasiSKS', 'id_pengalamanSinkron', 'id_pengalamanAsinkron', 'mkPengalaman'));
     }
 
     public function postsubbkDetail(int $id, Request $request)
     {
+        $pengalamanSelectSinkron = [];
+        if ($request->has('pengalamanSelectSinkron')) {
+            foreach ($request->input("pengalamanSelectSinkron") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($pengalamanSelectSinkron, $value);
+                }
+            }
+        }
+
+        $pengalamanSelectAsinkron = [];
+        if ($request->has('pengalamanSelectAsinkron')) {
+            foreach ($request->input("pengalamanSelectAsinkron") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($pengalamanSelectAsinkron, $value);
+                }
+            }
+        }
+
+
         $request->validate([
             'kodematakuliah' => 'nullable',
             'matakuliah' => 'nullable',
@@ -167,9 +194,7 @@ class ak_matakuliah_controller extends Controller
         // return dd($request->all());
 
         try {
-            // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
-
-            $mkSubBk = ak_matakuliah::where('kdmatakuliah', '=', $id)->first();
+            $mkSubBk = ak_matakuliah::where('kdmatakuliah', '=', $id)->with('pengalamanSinkron')->first();
 
             $mkSubBk->kodematakuliah = $request->input('kodematakuliah');
             $mkSubBk->matakuliah = $request->input('matakuliah');
@@ -181,11 +206,23 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->luring = $request->input('luring');
             $mkSubBk->daring = $request->input('daring');
 
+            if (count($pengalamanSelectSinkron) > 0) {
+                $mkSubBk->pengalamanSinkron()->sync($pengalamanSelectSinkron);
+            } else {
+                $mkSubBk->pengalamanSinkron()->detach();
+            }
+
+            if (count($pengalamanSelectAsinkron) > 0) {
+                $mkSubBk->pengalamanAsinkron()->sync($pengalamanSelectAsinkron);
+            } else {
+                $mkSubBk->pengalamanAsinkron()->detach();
+            }
+
             $mkSubBk->save();
 
             return redirect()->back()->with('success', 'berhasil update data Matakuliah');
         } catch (Throwable $th) {
-
+            DB::rollBack();
             return redirect()->back()->with('failed', 'gagal update data Matakuliah. Error: ' . $th->getMessage());
         }
     }
@@ -252,12 +289,14 @@ class ak_matakuliah_controller extends Controller
     {
         $subbk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('subbk', 'cpmks')->first();
 
+        $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->where('kdmatakuliah', '=', $id)->first();
+
         if (!$subbk) {
             return abort(404);
         }
         // return dd($subbk);
 
-        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk'));
+        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk', 'mkSubBk'));
     }
 
     public function postsubbkSKS(int $id, int $sub, Request $request)
@@ -293,6 +332,70 @@ class ak_matakuliah_controller extends Controller
             return redirect()->back()->with('failed', 'gagal update SKS. Error: ' . $th->getMessage());
         }
     }
+
+    // Metod ePembelajaran
+    public function cpmkPembelajaran(int $id, int $sub, int $id_cpmk)
+    {
+        $pembelajaran = ak_metodepembelajaran::with('pembelajaran')->get();
+
+        $subbk = gabung_matakuliah_subbk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->with('subbk', 'cpmks')->first();
+
+        $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->where('kdmatakuliah', '=', $id)->first();
+
+        $detailCpmk = gabung_subbk_cpmk::with('pembelajaran')
+            ->where('gabung_subbk_cpmks.id', '=', $id_cpmk)
+            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'gabung_subbk_cpmks.id_cpmk')
+            ->first();
+
+        $cpmk = gabung_subbk_cpmk::with('pembelajaran')
+            ->where('gabung_subbk_cpmks.id', '=', $id_cpmk)
+            // ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'gabung_subbk_cpmks.id_cpmk')
+            ->first();
+
+        // dump($cpmk);
+        // return;
+        $id_pembelajaran = [];
+        foreach ($cpmk->pembelajaran as $data) {
+            $id_pembelajaran[] = $data->pivot->id;
+        }
+
+        // dd($cpmk);
+
+        return view('pages.matakuliah.detail-cpmk', compact('id', 'sub', 'cpmk', 'subbk', 'mkSubBk', 'id_pembelajaran', 'pembelajaran', 'detailCpmk'));
+    }
+
+    public function postCpmkPembelajaran(int $id, int $sub, int $id_cpmk, Request $request)
+    {
+        $pembelajaranSelect = [];
+        if ($request->has('pembelajaranSelect')) {
+            foreach ($request->input("pembelajaranSelect") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($pembelajaranSelect, $value);
+                }
+            }
+        }
+
+        try {
+
+            $cpmkPembelajaran = gabung_subbk_cpmk::with('pembelajaran')->findOrFail($id_cpmk);
+            DB::beginTransaction();
+
+            if (count($pembelajaranSelect) > 0) {
+                $cpmkPembelajaran->pembelajaran()->sync($pembelajaranSelect);
+            } else {
+                $cpmkPembelajaran->pembelajaran()->detach();
+            }
+            DB::commit();
+
+            return redirect()->back()->with("success", "berhasil update Metode Pembelajaran pada CPMK");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with("failed", "gagal update" . $th->getMessage());
+        }
+    }
+
 
     public function kelolacpmk(int $id, int $sub)
     {
@@ -463,5 +566,58 @@ class ak_matakuliah_controller extends Controller
                 ]);
         }
         return redirect()->route('index.mk');
+    }
+
+
+
+
+
+
+    // Belum dipakai
+    // mapping metode pembelajaran index
+    public function kelolaPembelajaran(int $id)
+    {
+
+        $metodePembelajaran = ak_metodepembelajaran::all();
+
+        $cmpkPembelajaran = gabung_subbk_cpmk::where('id', '=', $id)->with('pembelajaran')->first();
+
+        $pembelajaranSelected = [];
+        foreach ($cmpkPembelajaran->pembelajaran as $item) {
+            array_push($pembelajaranSelected, $item->id);
+        }
+
+        return view('pages.matakuliah.pembelajaran', compact('id', 'pembelajaran', 'pembelajaranSelected'));
+    }
+
+    // POST mapping metode pembelajaran index
+    public function postKelolaPembelajaran(Request $request, int $id)
+    {
+        $pembelajaranSelect = [];
+        // validasi
+        if ($request->has("pembelajaran")) {
+            foreach ($request->input("pembelajaran") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($pembelajaranSelect, $value);
+                }
+            }
+        }
+
+        try {
+            $pembelajaran = gabung_subbk_cpmk::where('id', '=', $id)->with('pembelajaran')->first();
+            DB::beginTransaction();
+            if (count($pembelajaranSelect) > 0) {
+                $pembelajaran->pembelajaran()->sync($pembelajaranSelect);
+            } else {
+                $pembelajaran->pembelajaran()->detach();
+            }
+            DB::commit();
+            return redirect()->back()->with("success", "sukses update Metode Pembelajaran");
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->back()->with("failed", "gagal update" . $th->getMessage());
+        }
     }
 }

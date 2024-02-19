@@ -125,21 +125,22 @@
     <div class=" bg-white rounded-sm">
         <div class="flex flex-col py-5 px-4">
 
-            <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Lulus : {{ $nilaiAkhir[4] }}% </h3>
+            {{-- <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Lulus : {{ $nilaiAkhir[4] }}% </h3>
 
             <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Tidak Lulus : {{ $nilaiAkhir[5] }}%</h3>
 
+        </div> --}}
+            <div class="flex flex-col py-5 px-4">
+                @foreach ($persenplo as $pplo)
+                    <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Lulus CPL {{ $pplo['kode_cpl'] }} =
+                        {{ $pplo['LULUS'] }} Orang | {{ $pplo['PersenLulus'] }}% </h3>
+                    <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Tidak Lulus CPL
+                        {{ $pplo['kode_cpl'] }}
+                        =
+                        {{ $pplo['TIDAK_LULUS'] }} Orang | {{ $pplo['PersenTidakLulus'] }}% </h3>
+                    <br />
+                    <br />
+                @endforeach
+            </div>
         </div>
-        <div class="flex flex-col py-5 px-4">
-            @foreach ($persenplo as $pplo)
-                <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Lulus CPL {{ $pplo['kode_cpl'] }} =
-                    {{ $pplo['LULUS'] }} Orang | {{ $pplo['PersenLulus'] }}% </h3>
-                <h3 class="font-medium text-xl mb-0 text-gray-700">Total Mahasiswa Tidak Lulus CPL {{ $pplo['kode_cpl'] }}
-                    =
-                    {{ $pplo['TIDAK_LULUS'] }} Orang | {{ $pplo['PersenTidakLulus'] }}% </h3>
-                <br />
-                <br />
-            @endforeach
-        </div>
-    </div>
-@endsection
+    @endsection

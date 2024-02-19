@@ -20,4 +20,11 @@ class gabung_subbk_cpmk extends Model
     {
         return $this->belongsToMany(metode_penilaian::class, 'gabung_metopen_cpmks', 'id_gabung_cpmk', 'id_metopen')->withPivot('id', 'bobot');
     }
+
+    public function pembelajaran()
+    {
+        return $this->belongsToMany(ak_metodepembelajaran::class, 'gabung_cpmk_pembelajarans', 'id_gabung_cpmk', 'id_pembelajaran')->withPivot('id');
+        // return $this->hasMany(ak_metodepembelajaran::class, 'id', 'id_pembelajaran');
+        // return $this->hasOne(ak_metodepembelajaran::class, 'id', 'id_pembelajaran');
+    }
 }
