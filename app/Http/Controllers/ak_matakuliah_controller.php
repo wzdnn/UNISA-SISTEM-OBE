@@ -356,7 +356,7 @@ class ak_matakuliah_controller extends Controller
         // return;
         $id_pembelajaran = [];
         foreach ($cpmk->pembelajaran as $data) {
-            $id_pembelajaran[] = $data->pivot->id;
+            $id_pembelajaran[] = $data->id;
         }
 
         // dd($cpmk);

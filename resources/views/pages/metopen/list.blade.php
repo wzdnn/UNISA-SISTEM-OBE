@@ -30,17 +30,37 @@
         </ol>
     </nav>
 
+    {{-- Kop Dibawah Header --}}
+    <div class="flex flex-col py-5">
+        <h1 class="font-bold text-2xl mb-0 ">{{ $list->metode_penilaian }}</h1>
+        <h3 class="font-medium text-xl mb-0 ">{{ $list->kode_cpmk }} | {{ $list->matakuliah }} </h3>
+        <h3 class="font-semibold text-xl mb-0">Bobot CPMK : {{ $list->bobot }}%</h3>
+    </div>
 
-    <br />
+    {{-- Filter Tahun Akademik --}}
+    <div class="flex flex-col">
+        <form method="GET" class="rounded">
+            @csrf
+            <select name="filter" id="" class="rounded">
+                <option value="null">Tahun Akademik</option>
+                @foreach ($tahunAkademik as $item)
+                    <option value="{{ $item->tahunakademik }}" @selected(request()->filter == $item->tahunakademik)>{{ $item->tahunakademik }}
+                    </option>
+                @endforeach
+            </select>
+            {{-- <input type="text" name="search" class=" rounded"> --}}
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                type="submit">Filter</button>
+        </form>
 
+        @if (request()->search != null && request()->key != null)
+            <div class="my-3">
+                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+            </div>
+        @endif
+    </div>
 
-    {{-- @if ($listNilai)
-        <div class="flex flex-col py-5">
-            <h1 class="font-bold text-2xl mb-0 ">{{ $listNilai }} | urutan</h1>
-            <h3 class="font-medium text-xl mb-0 text-gray-500">{{ $listNilai }} </h3>
-            <h3 class="font-semibold text-l mb-0">Bobot CPMK : {{ $listNilai }}%</h3>
-        </div>
-    @endif --}}
+    {{-- Isian Tabel Tahun Akademik --}}
     <table class="w-full text-sm text-center  text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr class="text-left">
@@ -49,6 +69,9 @@
                 </th>
                 <th scope="col" class="px-6 py-3 ">
                     Keterangan
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Tahun Akademik
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Action
@@ -62,11 +85,14 @@
                         {{ ($listNilai->currentPage() - 1) * $listNilai->perPage() + $key + 1 }}
                     </td>
                     <td class="px-6 py-4 ">
-                        <a href="{{ route('index.penilaian', ['id' => $value->kjn]) }}" class="hover:bg-gray-100">
-                            {{ $value->keterangan }}
-                        </a>
+
+                        {{ $value->keterangan }}
+
                     </td>
                     <td class="px-6 py-4">
+                        {{ $value->tahunakademik }}
+                    </td>
+                    <td class="flex space-x-1 px-6 py-4">
                         <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                             data-id-target="{{ $value->kjn }}" type="button">
@@ -142,7 +168,16 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
+
+                        <a href="{{ route('index.penilaian', ['id' => $value->kjn]) }}">
+                            <button id="btnDetail"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                type="button">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                            </button>
+                        </a>
+
+
                     </td>
                 </tr>
             @endforeach

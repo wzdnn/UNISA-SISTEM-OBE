@@ -313,7 +313,7 @@ class metodePenilaianController extends Controller
     }
 
 
-    public function listNilai(int $id)
+    public function listNilai(int $id, Request $request)
     {
 
 
@@ -329,18 +329,40 @@ class metodePenilaianController extends Controller
             ->first();
 
 
-        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd")
+        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik")
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
             ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
+            ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
             ->paginate(15);
 
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
             ->get();
+
+
+        $arrayTahun = [];
+        foreach ($tahunAkademik as $data) {
+            array_push($arrayTahun, $data->tahunakademik);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayTahun)) {
+                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik")
+                    ->where("id_gabung_metopen", '=', $id)
+                    ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
+                    ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+                    ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+                    ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
+                    ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
+                    ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
+                    ->where("tahunakademik", "=", $request->filter)
+                    ->paginate(15);
+            }
+        }
 
 
         // dd($listNilai);
