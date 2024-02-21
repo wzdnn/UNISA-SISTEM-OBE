@@ -577,7 +577,7 @@ class metodePenilaianController extends Controller
         return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
     }
 
-    public function exportNilai($id)
+    public function exportNilai($id, $kdtahunakademik)
     {
 
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
@@ -592,6 +592,7 @@ class metodePenilaianController extends Controller
             ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
             ->where("gnm.kdjenisnilai", "=", $id)
+            ->where("gnm.kdtahunakademik", "=", $kdtahunakademik)
             ->first();
         // return Excel::download(new ExportNilai, "nilai.xlsx");
 

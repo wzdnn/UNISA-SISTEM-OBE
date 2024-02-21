@@ -63,7 +63,7 @@
         </div>
 
         <div class="flex space-x-1">
-            <a href="{{ route('export.nilai', ['id' => $id]) }}">
+            <a href="{{ route('export.nilai', ['id' => $id, 'kdtahunakademik' => $kdtahunakademik]) }}">
                 <button
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center ">Cetak
                     Excel</button>
@@ -72,7 +72,8 @@
 
             <div>
 
-                <form action="{{ route('import.nilai', ['id' => $id]) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('import.nilai', ['id' => $id, 'kdtahunakademik' => $kdtahunakademik]) }}"
+                    method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="file" name="file" class="rounded-lg px-2 ">
                     <button type="submit"
@@ -123,7 +124,7 @@
 
                         <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
                             class="ml-2" data-id-target="{{ $value->kdpen }}" type="button">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
 
                         {{-- Model Start --}}
