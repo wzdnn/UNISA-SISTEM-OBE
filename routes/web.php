@@ -209,8 +209,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilaiPost'])->name('copy.mhs');
 
     // Penilaian
-    Route::get('/penilaian/{id}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');
-    Route::post('/penilaian/{id}', [metodePenilaianController::class, 'postPenilaian'])->name('post.nilai');
+    Route::get('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');
+    Route::post('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'postPenilaian'])->name('post.nilai');
+
+    // Cetak Penilaian
+    Route::get('/cetakPenilaian/{id}', [metodePenilaianController::class, 'exportNilai'])->name('export.nilai');
+
+    // Import Penilaian
+    Route::post('/importPenilaian/{id}', [metodePenilaianController::class, 'importNilai'])->name('import.nilai');
 
     // Final Penilaian
     Route::get('/matkul-nilai/{id}', [metodePenilaianController::class, 'finalNilai'])->name('matkul.nilai');

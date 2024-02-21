@@ -61,6 +61,23 @@
             <h3 class="font-semibold text-l mb-0 text-gray-700">Bobot CPMK : {{ $kelas->bobot ?? '' }}% </h3>
             <h3 class="font-semibold text-l mb-0 text-gray-700">Batas Nilai : {{ $kelas->batas_nilai ?? '' }} </h3>
         </div>
+
+        <div class="flex space-x-1">
+            <a href="{{ route('export.nilai', ['id' => $id]) }}"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center ">
+                Cetak Excel
+            </a>
+
+            <div>
+
+                <form action="{{ route('import.nilai', ['id' => $id]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="file" class="rounded-lg px-2">
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <table class="w-full text-sm text-center  text-gray-500">

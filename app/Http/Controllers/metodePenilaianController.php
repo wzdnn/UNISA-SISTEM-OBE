@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportNilai;
+use App\Imports\ImportNilai;
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_penilaian;
+use App\Models\exportNilaiModel;
 use App\Models\gabung_metopen_cpmk;
 use App\Models\gabung_mk_cpmk;
 use App\Models\gabung_nilai_metopen;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\metode_penilaian;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class metodePenilaianController extends Controller
@@ -329,7 +334,7 @@ class metodePenilaianController extends Controller
             ->first();
 
 
-        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik")
+        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "gabung_nilai_metopen.kdtahunakademik", "tahunakademik")
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -376,7 +381,7 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', 'Mahasiswa berhasil ditambah');
     }
 
-    public function penilaian(int $id)
+    public function penilaian(int $id, int $kdtahunakademik)
     {
 
         // dd('test');
@@ -392,6 +397,7 @@ class metodePenilaianController extends Controller
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
             ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->where("krs.kdtahunakademik", "=", $kdtahunakademik)
             ->where("gnm.kdjenisnilai", "=", $id)
             ->first();
         // ->all();
@@ -414,16 +420,21 @@ class metodePenilaianController extends Controller
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
             ->where("gnm.kdjenisnilai", "=", $id)
+            ->where("krs.kdtahunakademik", "=", $kdtahunakademik)
+            ->orderby('nim')
             ->get();
         // ->toSql();
+
+        $viewnilai = exportNilaiModel::where("kdjenisnilai", "=", $id);
 
         // $penilaian = ak_penilaian::all();
 
         // dd($penilaian);
+        // dd($viewnilai);
 
         // dd($kelas, $penilaian);
 
-        return view('pages.metopen.tugas', compact('penilaian', 'kelas'));
+        return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik'));
     }
 
     public function postPenilaian(Request $request)
@@ -563,5 +574,35 @@ class metodePenilaianController extends Controller
         // return dd($mahasiswa);
 
         return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
+    }
+
+    public function exportNilai($id)
+    {
+
+        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
+            ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
+            ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
+            ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
+            ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+            ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
+            ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->where("gnm.kdjenisnilai", "=", $id)
+            ->first();
+        // return Excel::download(new ExportNilai, "nilai.xlsx");
+
+        return (new ExportNilai($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
+    }
+
+    public function importNilai(Request $request, $id)
+    {
+        // dd($request->file('file'));
+
+        Excel::import(new ImportNilai, $request->file('file'));
+
+        return redirect()->back();
     }
 }
