@@ -324,13 +324,14 @@ class metodePenilaianController extends Controller
 
 
 
-        $list = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "mk.matakuliah")
+        $list = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "mk.matakuliah", "gabung_nilai_metopen.kdtahunakademik")
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
             ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
+            ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
             ->first();
 
 
@@ -351,12 +352,12 @@ class metodePenilaianController extends Controller
 
         $arrayTahun = [];
         foreach ($tahunAkademik as $data) {
-            array_push($arrayTahun, $data->tahunakademik);
+            array_push($arrayTahun, $data->kdtahunakademik);
         }
 
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayTahun)) {
-                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik")
+                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik", "gabung_nilai_metopen.kdtahunakademik")
                     ->where("id_gabung_metopen", '=', $id)
                     ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
                     ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -364,7 +365,7 @@ class metodePenilaianController extends Controller
                     ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
                     ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
                     ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
-                    ->where("tahunakademik", "=", $request->filter)
+                    ->where("gabung_nilai_metopen.kdtahunakademik", "=", $request->filter)
                     ->paginate(15);
             }
         }
@@ -381,7 +382,7 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', 'Mahasiswa berhasil ditambah');
     }
 
-    public function penilaian(int $id, int $kdtahunakademik)
+    public function penilaian(int $id, string $kdtahunakademik)
     {
 
         // dd('test');

@@ -44,7 +44,7 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Tahun Akademik</option>
                 @foreach ($tahunAkademik as $item)
-                    <option value="{{ $item->tahunakademik }}" @selected(request()->filter == $item->tahunakademik)>{{ $item->tahunakademik }}
+                    <option value="{{ $item->kdtahunakademik }}" @selected(request()->filter == $item->kdtahunakademik)>{{ $item->tahunakademik }}
                     </option>
                 @endforeach
             </select>
