@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\ak_kurikulum_cpmk;
 use App\Models\ak_kurikulum_sub_bk;
 use App\Models\ak_matakuliah;
+use App\Models\ak_matakuliah__referensi_luaran;
+use App\Models\ak_matakuliah__referensi_tambahan;
+use App\Models\ak_matakuliah__referensi_utama;
 use App\Models\ak_metodepembelajaran;
 use App\Models\ak_pengalamanmahasiswa;
+use App\Models\ak_referensi;
 use App\Models\gabung_cpmk_pembelajaran;
 use App\Models\gabung_matakuliah_subbk;
 use App\Models\gabung_subbk_cpmk;
@@ -140,6 +144,23 @@ class ak_matakuliah_controller extends Controller
 
         $mkPengalaman = ak_pengalamanmahasiswa::with('pengalamanSinkron', 'pengalamanAsinkron')->get();
 
+        $referensiUtama = ak_matakuliah__referensi_utama::where("mk.kdmatakuliah", "=", $id)
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
+            ->get();
+
+        $referensiTambahan = ak_matakuliah__referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
+            ->get();
+
+        $referensiLuaran = ak_matakuliah__referensi_luaran::where("mk.kdmatakuliah", "=", $id)
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
+            ->get();
+
+        // dd($referensiUtama, $referensiLuaran, $referensiTambahan);
+
 
         $id_pengalamanSinkron = [];
         foreach ($mkSubBk->pengalamanSinkron as $data) {
@@ -157,7 +178,7 @@ class ak_matakuliah_controller extends Controller
 
         // return dd($rekomendasiSKS);
 
-        return view('pages.matakuliah.detail2', compact('mkSubBk', 'rekomendasiSKS', 'id_pengalamanSinkron', 'id_pengalamanAsinkron', 'mkPengalaman'));
+        return view('pages.matakuliah.detail2', compact('mkSubBk', 'rekomendasiSKS', 'id_pengalamanSinkron', 'id_pengalamanAsinkron', 'mkPengalaman', 'referensiUtama', 'referensiTambahan', 'referensiLuaran'));
     }
 
     public function postsubbkDetail(int $id, Request $request)
@@ -568,12 +589,6 @@ class ak_matakuliah_controller extends Controller
         return redirect()->route('index.mk');
     }
 
-
-
-
-
-
-    // Belum dipakai
     // mapping metode pembelajaran index
     public function kelolaPembelajaran(int $id)
     {
@@ -619,5 +634,109 @@ class ak_matakuliah_controller extends Controller
             DB::rollback();
             return redirect()->back()->with("failed", "gagal update" . $th->getMessage());
         }
+    }
+
+    // referensi
+
+    public function referensiIndex(int $id)
+    {
+
+        $matakuliah = ak_matakuliah::findOrFail($id);
+
+        return view('pages.detailMatakuliah.index', compact('matakuliah'));
+    }
+
+    public function referensiStore(Request $request, int $id)
+    {
+        $request->validate(['referensi']);
+
+        if ($request->input("referensi_utama") != '' || $request->input("referensi_utama") != null) {
+
+            foreach ($request->input("referensi_utama") as $inputUtama) {
+                $referensiUtama = ak_referensi::create([
+                    'referensi'  => $inputUtama,
+                    'jenis'  => 'utama'
+                ]);
+                // dd($referensiUtama, 'masuk');
+                $dataUtama = DB::table('ak_matakuliah_referensi_utama')->insert([
+                    "kdmatakuliah" => $id,
+                    "id_referensi" => $referensiUtama->kdreferensi
+                ]);
+            }
+        }
+
+
+        if ($request->input("referensi_tambahan") != '' || $request->input("referensi_tambahan") != null) {
+            foreach ($request->input("referensi_tambahan") as $inputTambahan) {
+                $referensiTambahan = ak_referensi::create([
+                    'referensi'  => $inputTambahan,
+                    'jenis'  => 'tambahan'
+                ]);
+
+                $dataTambahan = DB::table('ak_matakuliah_referensi_tambahan')->insert([
+                    "kdmatakuliah" => $id,
+                    "id_referensi" => $referensiTambahan->kdreferensi
+                ]);
+            }
+        }
+
+        if ($request->input("refrensi_luaran") != '' || $request->input("referensi_luaran") != null) {
+            foreach ($request->input("referensi_luaran") as $inputLuaran) {
+                $referensiLuaran = ak_referensi::create([
+                    'referensi' => $inputLuaran,
+                    'jenis' => 'luaran'
+                ]);
+
+                $dataluaran = DB::table('ak_matakuliah_referensi_luaran')->insert([
+                    "kdmatakuliah" => $id,
+                    "id_referensi" => $referensiLuaran->kdreferensi
+                ]);
+            }
+        }
+        return redirect()->back();
+    }
+
+    public function deleteReferensiUtama(int $id)
+    {
+
+        $referensiUtama = ak_matakuliah__referensi_utama::findOrFail($id);
+        if (!$referensiUtama) {
+            return abort(404);
+        }
+
+        $referensiUtama->delete();
+
+
+        return redirect()->back()->with('success', 'sukses hapus');
+    }
+
+    public function deleteReferensiTambahan(int $id)
+    {
+        $referensiTambahan = ak_matakuliah__referensi_tambahan::findOrFail($id);
+
+        if (!$referensiTambahan) {
+            return abort(404);
+        }
+
+        $referensiTambahan->delete();
+
+
+
+        return redirect()->back()->with('success', 'sukses hapus');
+    }
+
+    public function deleteReferensiLuaran(int $id)
+    {
+        $referensiLuaran = ak_matakuliah__referensi_luaran::findOrFail($id);
+
+        if (!$referensiLuaran) {
+            return abort(404);
+        }
+
+        $referensiLuaran->delete();
+
+
+
+        return redirect()->back()->with('success', 'sukses hapus');
     }
 }

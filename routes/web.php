@@ -160,20 +160,41 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/matakuliah/copyMK', [ak_matakuliah_controller::class, 'copyMatakuliah'])->name('copy.mk');
 
-    Route::get('/detail-mk/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
-    Route::post('/detail-mk/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
-    Route::get('/detail-mk/{id}/sub-bk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
-    Route::post('/detail-mk/{id}/sub-bk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
+    //Detail-MK
+    Route::get('/matakuliah/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
+    Route::post('/matakuliah/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
 
-    Route::get('/detail-mk/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
-    Route::post('/detail-mk/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
-    Route::get('/detail-mk/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
-    Route::post('/detail-mk/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+
+
+    //Delete referensi pada Detail-MK
+    Route::get('/deleteReferensiUtama/{id}', [ak_matakuliah_controller::class, 'deleteReferensiUtama'])->name('delete.referensi.utama');
+    Route::get('/deleteReferensiTambahan/{id}', [ak_matakuliah_controller::class, 'deleteReferensiTambahan'])->name('delete.referensi.tambahan');
+    Route::get('/deleteReferensiLuaran/{id}', [ak_matakuliah_controller::class, 'deleteReferensiLuaran'])->name('delete.referensi.luaran');
+
+
+    Route::get('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
+    Route::post('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
+
+    Route::get('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
+    Route::post('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
+    Route::get('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
+    Route::post('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+
+
+
+    // Detail Matakuliah
+
+    route::get('/matakuliah/{id}/referensi', [ak_matakuliah_controller::class, 'referensiIndex'])->name("referensi.index");
+    route::post('/matakuliah/{id}/referensi/store', [ak_matakuliah_controller::class, 'referensiStore'])->name('referensi.store');
+
+
+
+
 
 
     // detail Subbk-CPMK
-    Route::get('/detail-mk/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'cpmkPembelajaran'])->name('cpmkPembelajaran.index');
-    Route::post('/detail-mk/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'postCpmkPembelajaran']);
+    Route::get('/matakuliah/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'cpmkPembelajaran'])->name('cpmkPembelajaran.index');
+    Route::post('/matakuliah/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'postCpmkPembelajaran']);
 
 
     // Organisasi Matakuliah
