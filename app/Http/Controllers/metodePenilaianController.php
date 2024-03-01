@@ -561,18 +561,45 @@ class metodePenilaianController extends Controller
         }
         // dd($tabularNilai);
 
+        $bobotTugasDalamPercen = [];
+        foreach ($tabel as $item) {
+            $bobotTugasDalamPercen[] = $item->bobot;
+        }
+
+        // Penentu Gagal dan Lolos NMahasiswa
         foreach ($mahasiswa as $key => $mhs) {
             $gagal = false;
-            foreach ($mhs[4] as $nilai) {
-                if ($nilai < $matakuliah->batasNilai) {
+            foreach ($mhs[4] as $urutan => $nilai) {
+                if (($bobotTugasDalamPercen[$urutan] * ((int)$matakuliah->batasNilai / 100)) > $nilai) {
                     $gagal = true;
                     break;
                 }
+
+                // return dd($bobotTugasDalamPercen);
+
+                // if ($nilai < $matakuliah->batasNilai) {
+                //     $gagal = true;
+                //     break;
+                // }
             }
+            // return dd($mahasiswa[$key], $gagal);
             array_push($mahasiswa[$key], $gagal);
         }
 
+        // foreach ($mahasiswa[13][4] as $key => $nilai) {
+        //     dump(($bobotTugasDalamPercen[$key] * ((int)$matakuliah->batasNilai / 100)) > $nilai)
+        //     dump(($bobotTugasDalamPercen[$key] * ((int)$matakuliah->batasNilai / 100)) > $nilai);
+        // }
+
+        // dump($mahasiswa[13][4]);
+        // dump($mahasiswa[13]);
+        // return;
+
         // return dd($mahasiswa);
+
+
+
+        // return dd($bobotTugasDalamPercen);
 
         return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
     }

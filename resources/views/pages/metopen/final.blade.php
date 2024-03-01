@@ -24,7 +24,7 @@
     </div>
 
     <table class="w-full text-sm text-center  text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-white">
             <tr class="text-left">
                 <th scope="col" class="px-6 py-3 w-[50px]">
                 </th>

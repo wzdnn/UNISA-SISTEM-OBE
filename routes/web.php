@@ -164,6 +164,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matakuliah/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
     Route::post('/matakuliah/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
 
+    route::get('/matakuliah/{id}/detail', [ak_matakuliah_controller::class, 'detailIndex'])->name("detail.index");
+    route::post('/matakuliah/{id}/detail/store', [ak_matakuliah_controller::class, 'detailStore'])->name('detail.store');
+
+    route::geT('/matakuliah/delete-pengalaman-sinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanSinkron'])->name('pengalaman-sinkron.delete');
+    route::geT('/matakuliah/delete-pengalaman-asinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanAsinkron'])->name('pengalaman-asinkron.delete');
 
 
     //Delete referensi pada Detail-MK
@@ -179,18 +184,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
     Route::get('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
     Route::post('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
-
-
-
-    // Detail Matakuliah
-
-    route::get('/matakuliah/{id}/referensi', [ak_matakuliah_controller::class, 'referensiIndex'])->name("referensi.index");
-    route::post('/matakuliah/{id}/referensi/store', [ak_matakuliah_controller::class, 'referensiStore'])->name('referensi.store');
-
-
-
-
-
 
     // detail Subbk-CPMK
     Route::get('/matakuliah/{id}/sub-bk/{sub}/cpmk/{id_cpmk}', [ak_matakuliah_controller::class, 'cpmkPembelajaran'])->name('cpmkPembelajaran.index');
@@ -219,9 +212,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/metode-penilaian/store/{id}', [metodePenilaianController::class, 'kelolaMetopen'])->name('metopen.cpmk');
     Route::post('/metode-penilaian/store/{id}', [metodePenilaianController::class, 'postKelolaMetopen']);
-
-
-
 
     // Tugas
 
