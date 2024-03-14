@@ -17,4 +17,6 @@ class gabung_nilai_metopen extends Model
         'keterangan',
         'kdtahunakademik'
     ];
+
+    protected $primarykey = "kdjenisnilai";
 }

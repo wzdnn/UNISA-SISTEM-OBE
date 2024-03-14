@@ -178,6 +178,12 @@
                             </button>
                         </a>
 
+                        <a href="{{ route('list.delete', ['kdjenisnilai' => $value->kjn]) }}"
+                            onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                            <button
+                                class="bg-red-600 hover:bg-red-800 text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"><i
+                                    class="fa-solid fa-trash"></i></button>
+                        </a>
 
                     </td>
                 </tr>

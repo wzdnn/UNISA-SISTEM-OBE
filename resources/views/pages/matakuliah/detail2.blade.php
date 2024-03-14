@@ -126,20 +126,16 @@
 
             {{-- Header 2nd Card --}}
             <div class="flex px-3 py-2 mt-3 justify-between">
-
-                {{-- Filter Tahun Akademik --}}
                 <div class="flex flex-col">
                     <form method="GET" class="rounded">
                         @csrf
-                        <select name="filter" id="" class="rounded">
-                            <option value="null">Tahun Akademik</option>
-                            @foreach ($tahunAkademik as $item)
-                                <option value="{{ $item->kdtahunakademik }}" @selected(request()->filter == $item->kdtahunakademik)>
-                                    {{ $item->tahunakademik }}
+                        <select name="filter" id="">
+                            @foreach ($filter['filter'] as $item)
+                                <option value="{{ $item }}" @selected($item == $filter['latest'])>
+                                    {{ $item }}
                                 </option>
                             @endforeach
                         </select>
-                        {{-- <input type="text" name="search" class=" rounded"> --}}
                         <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
                             type="submit">Filter</button>
                     </form>

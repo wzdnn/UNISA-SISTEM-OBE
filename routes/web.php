@@ -167,8 +167,15 @@ Route::middleware(['auth'])->group(function () {
     route::get('/matakuliah/{id}/detail', [ak_matakuliah_controller::class, 'detailIndex'])->name("detail.index");
     route::post('/matakuliah/{id}/detail/store', [ak_matakuliah_controller::class, 'detailStore'])->name('detail.store');
 
-    route::geT('/matakuliah/delete-pengalaman-sinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanSinkron'])->name('pengalaman-sinkron.delete');
-    route::geT('/matakuliah/delete-pengalaman-asinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanAsinkron'])->name('pengalaman-asinkron.delete');
+    route::get('/matakuliah/delete-pengalaman-sinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanSinkron'])->name('pengalaman-sinkron.delete');
+    route::get('/matakuliah/delete-pengalaman-asinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanAsinkron'])->name('pengalaman-asinkron.delete');
+
+    //Timeline Matakuliah
+    route::get('/matakuliah/{id}/timeline', [ak_matakuliah_controller::class, 'timeline'])->name('timeline.index');
+    route::get('/matakuliah/{id}/timeline/create', [ak_matakuliah_controller::class, 'createTimeline'])->name('timeline.create');
+
+    //RPS Matakuliah
+    route::get('/matakuliah/{id}/rps', [ak_matakuliah_controller::class, 'rps'])->name('rps.index');
 
 
     //Delete referensi pada Detail-MK
@@ -218,6 +225,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/metode-penilaian/tugas/{id}', [metodePenilaianController::class, 'tugasIndex'])->name('tugas.metopen');
     Route::get('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilai'])->name('list.metopen');
     Route::post('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilaiPost'])->name('copy.mhs');
+
+    // Delete List Penilaian
+
+    route::get('/list-penilaian/{kdjenisnilai}/delete', [metodePenilaianController::class, 'listNilaiDelete'])->name('list.delete');
 
     // Penilaian
     Route::get('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');

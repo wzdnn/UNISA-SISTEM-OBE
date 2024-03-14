@@ -23,6 +23,8 @@
         </div>
     </div>
 
+
+
     <table class="w-full text-sm text-center  text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-white">
             <tr class="text-left">
@@ -98,7 +100,7 @@
         </thead>
         <tbody>
             @foreach ($mahasiswa as $key => $value)
-                <tr class=" border-b text-left shadow {{ $value[5] ? 'bg-red-500 text-white' : 'bg-white' }}">
+                <tr class=" border-b text-left shadow {{ $value[5] ? 'bg-yellow-300 text-white' : 'bg-white' }}">
                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                         {{ $loop->iteration }}
                     </td>

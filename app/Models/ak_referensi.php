@@ -11,11 +11,9 @@ class ak_referensi extends Model
 
     protected $table = 'ak_referensi';
 
-    // protected $fillable = ['referensi', 'jenis'];
     protected $guarded = ['kdreferensi'];
 
     protected $primaryKey = 'kdreferensi';
-
 
 
     public function referensiUtama()

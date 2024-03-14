@@ -345,6 +345,8 @@ class metodePenilaianController extends Controller
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
             ->paginate(15);
 
+        // dd($listNilai);
+
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
             ->get();
@@ -370,9 +372,15 @@ class metodePenilaianController extends Controller
             }
         }
 
-
         // dd($listNilai);
         return view('pages.metopen.list', compact('listNilai', 'tahunAkademik', 'list'));
+    }
+
+    public function listNilaiDelete(int $kdjenisnilai)
+    {
+        DB::table('gabung_nilai_metopen')->where("kdjenisnilai", $kdjenisnilai)->delete();
+
+        return redirect()->back()->with('success', 'berhasil hapus list');
     }
 
     public function listNilaiPost(Request $request)
@@ -471,8 +479,11 @@ class metodePenilaianController extends Controller
         }
     }
 
-    public function finalNilai(int $id)
+    public function finalNilai(int $id, Request $request)
     {
+
+
+
 
         $matakuliah = ak_matakuliah::select("matakuliah", "batasNilai", "namalengkap", "gelarbelakang")
             ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
@@ -494,20 +505,6 @@ class metodePenilaianController extends Controller
             ->distinct()
             ->get();
 
-        $test = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian")
-            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
-            ->join("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
-            ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
-            ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
-            ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
-            ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-            ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
-            ->where("ak_matakuliah.kdmatakuliah", "=", $id)
-            ->where("ak_kurikulum.isObe", '=', 1)
-            ->distinct()
-            ->get();
-
 
         $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl")
             ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
@@ -519,11 +516,28 @@ class metodePenilaianController extends Controller
             ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
             ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
             ->where("mk.kdmatakuliah", "=", $id)
-            ->orderBy('gmc.id')
+            // ->orderBy('ap.kdkrsnilai')
             ->distinct()
             ->get();
 
-        $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
+        // $tabel = ak_penilaian::select("ak_penilaian.kdkrsnilai", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl")
+        //     ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+        //     ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
+        //     ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+        //     ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
+        //     ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+        //     ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
+        //     ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
+        //     ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+        //     ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
+        //     ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "amc.id_cpmk")
+        //     ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+        //     ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+        //     ->where("mk.kdmatakuliah", "=", $id)
+        //     ->orderBy('ak_penilaian.kdkrsnilai')
+        //     ->distinct()
+        //     ->get();
+
 
         $persentaseLulus = DB::select('call sistem_obe.total_lulus(?)', [$id]);
         foreach ($persentaseLulus as $key => $item) {
@@ -540,13 +554,13 @@ class metodePenilaianController extends Controller
         //     }
         // }
 
+        // dd(collect($persentaseLulus)->toArray());      
+
         $persenplo = json_decode(json_encode($plo), true);
 
-        // dd(collect($persentaseLulus)->toArray());
-
+        $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
 
         $nilai = json_decode(json_encode($tabularNilai), true);
-
 
         foreach ($nilai as $key => $value) {
             $loop = 1;
@@ -559,7 +573,9 @@ class metodePenilaianController extends Controller
                 $loop++;
             }
         }
-        // dd($tabularNilai);
+
+        // dd($persenplo);
+
 
         $bobotTugasDalamPercen = [];
         foreach ($tabel as $item) {
@@ -570,36 +586,15 @@ class metodePenilaianController extends Controller
         foreach ($mahasiswa as $key => $mhs) {
             $gagal = false;
             foreach ($mhs[4] as $urutan => $nilai) {
-                if (($bobotTugasDalamPercen[$urutan] * ((int)$matakuliah->batasNilai / 100)) > $nilai) {
+                if (($bobotTugasDalamPercen[$urutan] * ((int)$matakuliah->batasNilai / 100)) >= $nilai) {
                     $gagal = true;
                     break;
                 }
-
-                // return dd($bobotTugasDalamPercen);
-
-                // if ($nilai < $matakuliah->batasNilai) {
-                //     $gagal = true;
-                //     break;
-                // }
             }
-            // return dd($mahasiswa[$key], $gagal);
             array_push($mahasiswa[$key], $gagal);
         }
 
-        // foreach ($mahasiswa[13][4] as $key => $nilai) {
-        //     dump(($bobotTugasDalamPercen[$key] * ((int)$matakuliah->batasNilai / 100)) > $nilai)
-        //     dump(($bobotTugasDalamPercen[$key] * ((int)$matakuliah->batasNilai / 100)) > $nilai);
-        // }
 
-        // dump($mahasiswa[13][4]);
-        // dump($mahasiswa[13]);
-        // return;
-
-        // return dd($mahasiswa);
-
-
-
-        // return dd($bobotTugasDalamPercen);
 
         return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
     }
