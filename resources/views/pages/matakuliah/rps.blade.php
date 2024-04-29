@@ -58,7 +58,7 @@
                             </h3>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="text-center justify-center font-bold bg-[#00A650]/50">
                         <td class="border px-4 py-2">
                             Kode Matakuliah
                         </td>
@@ -78,7 +78,7 @@
                             Matakuliah Prasyarat
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="text-center justify-center">
                         <td class="border px-4 py-2 font-bold">
                             {{ $matakuliah->kodematakuliah }}
                         </td>
@@ -86,29 +86,74 @@
 
                         </td>
                         <td class="border px-4 py-2">
-
+                            Teori
                         </td>
                         <td class="border px-4 py-2">
-
+                            Seminar
                         </td>
                         <td class="border px-4 py-2">
-
+                            Tutorial
                         </td>
                         <td class="border px-4 py-2">
-
+                            Praktikum / Skill Lab
                         </td>
                         <td class="border px-4 py-2">
-
+                            Praktik
                         </td>
                         <td class="border px-4 py-2">
-
+                            {{ $matakuliah->semester }}
                         </td>
                         <td class="border px-4 py-2">
-
+                            {{ $matakuliah->status }}
                         </td>
                         <td class="border px-4 py-2">
-
+                            -
                         </td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">Deskripsi Singkat Matakuliah</td>
+                        <td colspan="9" class="border px-4 py-2">{{ $matakuliah->deskripsi_mk }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="border px-4 py-2 font-bold">Capaian Pembelajaran Lulusan (CPL) yang
+                            Dibebankan pada MK
+                        </td>
+                        @foreach ($cpl as $cpls)
+                            <td class="border text-center font-bold items-center justify-center bg-[#00A650]/50">
+                                {{ $cpls->kode_cpl }}</td>
+                            <td colspan="2">{{ $cpls->deskripsi_cpl }}</td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2 font-bold">Capaian Pembelajaran Mata Kuliah (CPMK)</td>
+                        <td colspan="9" class="border px-4 py-2 font-medium bg-[#00A650]/50">Setelah menyelesaikan
+                            pembelajaran mata
+                            kuliah ini, mahasiswa diharapkan mampu:</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2"></td>
+                        @foreach ($cpmk as $cpmks)
+                            <td class="border text-center font-bold items-center justify-center bg-[#00A650]/50">
+                                {{ $cpmks->kode_cpmk }}</td>
+                            <td colspan="2">{{ $cpmks->cpmk }}</td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2 font-bold">Kaitan CPMK
+                            dengan Materi dan
+                            Bentuk
+                            Pembelajaran,
+                            serta Alokasi
+                            Waktu</td>
+                        <td class="border px-4 py-2"></td>
+                        <td colspan="3" class="border px-4 py-2 font-bold">Bahan Kajian dan Materi Pembelajaran</td>
+                        <td colspan="2" class="border px-4 py-2 font-bold">Bentuk Pembelajaran</td>
+                        <td colspan="2" class="border px-4 py-2 font-bold">Metode Pembelajaran</td>
+                        <td class="border px-4 py-2 font-bold">Alokasi Waktu</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2 font-bold">Pengalaman Belajar Mahasiswa</td>
+                        <td colspan="9" class="border px-4 py-2"></td>
                     </tr>
                 </tbody>
             </table>

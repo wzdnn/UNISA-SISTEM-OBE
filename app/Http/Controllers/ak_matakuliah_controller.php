@@ -9,6 +9,7 @@ use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah__referensi_luaran;
 use App\Models\ak_matakuliah__referensi_tambahan;
 use App\Models\ak_matakuliah__referensi_utama;
+use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_metodepembelajaran;
 use App\Models\ak_pengalamanmahasiswa;
 use App\Models\ak_referensi;
@@ -765,7 +766,7 @@ class ak_matakuliah_controller extends Controller
     public function detailIndex(int $id, Request $request)
     {
 
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->get();
+        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "asc")->get();
         $filterLatest = $filter->last();
         $kelompok = $filter->groupBy("kdtahunakademik")->toArray();
 
@@ -1193,8 +1194,23 @@ class ak_matakuliah_controller extends Controller
 
         $matakuliah = ak_matakuliah::findOrFail($id);
 
-        return view('pages.detailMatakuliah.createTimeline', compact('matakuliah'));
+        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
+
+        $cpmk = ak_matakuliah_cpmk::join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+            ->where('kdmatakuliah', $id)
+            ->get();
+
+
+
+
+        return view('pages.detailMatakuliah.createTimeline', compact('matakuliah', 'cpmk'));
     }
+
+    public function storeTimeline(Request $request, int $id)
+    {
+    }
+
+
 
     //RPS matakuliah
 
@@ -1202,6 +1218,25 @@ class ak_matakuliah_controller extends Controller
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
 
-        return view('pages.matakuliah.rps', compact('matakuliah'));
+        $cpl = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
+            ->select('kode_cpl', 'deskripsi_cpl')
+            ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', "=", "amsb.id")
+            ->join('ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk', 'cplcpmk.ak_kurikulum_cpmk_id', '=', 'gsc.id_cpmk')
+            ->join('ak_kurikulum_cpls as cpl', 'cpl.id', '=', 'cplcpmk.ak_kurikulum_cpl_id')
+            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'cplcpmk.ak_kurikulum_cpmk_id')
+            ->where('kdmatakuliah', $id)
+            ->get();
+
+        $cpmk = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
+            ->select('kode_cpmk', 'cpmk')
+            ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', "=", "amsb.id")
+            ->join('ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk', 'cplcpmk.ak_kurikulum_cpmk_id', '=', 'gsc.id_cpmk')
+            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'cplcpmk.ak_kurikulum_cpmk_id')
+            ->where('kdmatakuliah', $id)
+            ->get();
+
+        // dd($cplcpmk);
+
+        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk'));
     }
 }

@@ -30,28 +30,49 @@
                         <label for="cpmk" class="text-sm text-gray-500">
                             CPMK
                         </label>
-                        <select id="kdcpmk" name="" data-live-search="true" class="form-control">
-
+                        <select id="kdcpmk" name="kdcpmk" data-live-search="true" multiple class="form-control">
+                            @foreach ($cpmk as $c)
+                                <option value="{{ $c->id }}">{{ $c->kode_cpmk }} {{ $c->cpmk }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="matakuliah" id="matakuliah"
+                        <input type="text" name="materi" id="materi"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="{{ old('matakuliah') }}" />
-                        <label for="matakuliah"
+                            placeholder=" " value="{{ old('materi') }}" />
+                        <label for="materi"
                             class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Matakuliah</label>
+                            Materi</label>
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="mk_singkat" id="mk_singkat"
+                        <input type="text" name="metode_pembelajaran" id="metode_pembelajaran"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="{{ old('mk_singkat') }}" />
-                        <label for="mk_singkat"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">MK
-                            Singkat</label>
+                            placeholder=" " value="{{ old('metode_pembelajaran') }}" />
+                        <label for="metode_pembelajaran"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Metode
+                            Pembelajaran</label>
+                    </div>
+
+                </div>
+
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="dosen" id="dosen"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('dosen') }}" />
+                        <label for="dosen"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Dosen</label>
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="bentuk_pembelajaran" id="bentuk_pembelajaran"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('bentuk_pembelajaran') }}" />
+                        <label for="bentuk_pembelajaran"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Bentuk
+                            Pembelajaran</label>
                     </div>
                 </div>
 
@@ -66,7 +87,6 @@
                         </svg>
                     </button>
                 </div>
-
             </form>
         </div>
     </div>
