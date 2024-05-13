@@ -455,7 +455,9 @@ class ak_matakuliah_controller extends Controller
             'praktikum' => ['nullable', 'numeric'],
             'skill_lab' => ['nullable', 'numeric'],
             'field_lab' => ['nullable', 'numeric'],
-            'praktik' => ['nullable', 'numeric']
+            'praktik' => ['nullable', 'numeric'],
+            'penugasan' => ['nullable', 'numeric'],
+            'belajar_mandiri' => ['nullable', 'numeric']
         ]);
 
         try {
@@ -469,6 +471,8 @@ class ak_matakuliah_controller extends Controller
             $subbk->skill_lab = $request->input('skill_lab');
             $subbk->field_lab = $request->input('field_lab');
             $subbk->praktik = $request->input('praktik');
+            $subbk->penugasan = $request->input('penugasan');
+            $subbk->belajar_mandiri = $request->input('belajar_mandiri');
 
             $subbk->save();
 
@@ -1237,6 +1241,41 @@ class ak_matakuliah_controller extends Controller
 
         // dd($cplcpmk);
 
-        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk'));
+        $asinkron = gabung_matakuliah_pengalaman_asinkron::select('pengalaman_mahasiswa')
+            ->join('ak_pengalamanmahasiswa as apm', 'apm.id', '=', "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
+            ->where('kdmatakuliah', $id)
+            ->get();
+
+        $sinkron = gabung_matakuliah_pengalaman_sinkron::select('pengalaman_mahasiswa')
+            ->join('ak_pengalamanmahasiswa as apm', 'apm.id', '=', "gabung_matakuliah_pengalaman_sinkron.id_pengalaman")
+            ->where('kdmatakuliah', $id)
+            ->get();
+
+        $aksesmedia = DB::table('gabung_matakuliah_akses as gma')
+            ->select('*')
+            ->join('ak_aksesmedia as am', 'am.kdakses', '=', 'gma.kdakses')
+            ->where('kdmatakuliah', $id)
+            // ->get();
+            ->first();
+        // $aksesmedia = gabung_matakuliah_akses::first();
+
+        // dd($aksesmedia);
+
+        $referensiUtama = ak_matakuliah__referensi_utama::where("mk.kdmatakuliah", "=", $id)
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
+            ->get();
+
+        $referensiTambahan = ak_matakuliah__referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
+            ->get();
+
+        $referensiLuaran = ak_matakuliah__referensi_luaran::where("mk.kdmatakuliah", "=", $id)
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
+            ->get();
+
+        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran'));
     }
 }

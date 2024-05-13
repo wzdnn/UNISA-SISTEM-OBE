@@ -52,9 +52,9 @@
                 <tbody>
                     <tr class="border ">
                         <td colspan="10" class="bg-blue-100">
-                            <h3 class="text-center font-semibold text-lg uppercase">rencana program dan kegiatan
+                            <h3 class="text-center font-semibold text-lg uppercase">rencana
                                 pembelajaran
-                                semester (RPKPS)
+                                semester (RPS)
                             </h3>
                         </td>
                     </tr>
@@ -152,8 +152,72 @@
                         <td class="border px-4 py-2 font-bold">Alokasi Waktu</td>
                     </tr>
                     <tr>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="border px-4 py-2 font-bold">Pengalaman Belajar Mahasiswa</td>
-                        <td colspan="9" class="border px-4 py-2"></td>
+                        <td colspan="9" class="border px-4 py-2">
+                            Saat Sinkron : <br />
+                            @foreach ($sinkron as $s)
+                                {{ $loop->iteration }}.
+                                {{ $s->pengalaman_mahasiswa }} <br />
+                            @endforeach
+                            <br />
+                            Saat Asinkron : <br />
+                            @foreach ($asinkron as $as)
+                                {{ $loop->iteration }}.
+                                {{ $as->pengalaman_mahasiswa }}<br />
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2 font-bold">Akses Media
+                            Pembelajaran/
+                            LMS
+                            dan Persentase
+                            Luring & Daring</td>
+                        <td colspan="3" class="border px-4 py-2">
+                            {{-- @foreach ($aksesmedia as $am)
+                                {{ $am->kdakses }}
+                            @endforeach --}}
+                            {{ $aksesmedia->linkakses }}
+                        </td>
+                        <td colspan="2" class=" border px-4 py-2">Luring :</td>
+                        <td colspan="2" class=" border px-4 py-2">Daring :</td>
+                        <td colspan="2" class=" border px-4 py-2">Blended :</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2 font-bold">
+                            Metode Penilaian
+                            dan Keselarasan
+                            dengan CPMK
+                        </td>
+                        <td colspan="2" class="border px-4 py-2 font-bold">Metode Penilaian</td>
+                        <td colspan="1" class="border px-4 py-2 font-bold">Bobot Penilaian (%)</td>
+                        <td colspan="2" class="border px-4 py-2 font-bold">Komponen Evaluasi (kriteria/Indikator)</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2 font-bold">Daftar Referensi</td>
+                        <td colspan="9" class="border px-4 py-2">
+                            <p class="font-bold">Referensi Utama :</p>
+                            @foreach ($referensiUtama as $utama)
+                                {{ $loop->iteration }}. {{ $utama->referensi }}
+                            @endforeach
+                            <br />
+                            <p class="font-bold">Referensi Tambahan :</p>
+                            @foreach ($referensiTambahan as $tambahan)
+                                {{ $loop->iteration }}. {{ $tambahan->referensi }}
+                            @endforeach
+                            <br />
+
+                            <p class="font-bold">Referensi Luaran :</p>
+                            @foreach ($referensiLuaran as $luaran)
+                                {{ $loop->iteration }}. {{ $luaran->referensi }}
+                            @endforeach
+                            <br />
+                        </td>
                     </tr>
                 </tbody>
             </table>
