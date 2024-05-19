@@ -50,7 +50,7 @@
                     </a>
                 </li>
                 {{-- Bahan Penilaian Lulusan --}}
-                @if (auth()->user()->leveling != 4)
+                @if (auth()->user()->leveling != 4 && auth()->user()->leveling != 5)
                     <li class="">
                         <div
                             class="relative flex justify-between text-green-100 hover:text-white focus-within:text-white">
@@ -285,7 +285,7 @@
         <div class="px-6 pt-4">
             <hr class="border-green-300" />
         </div>
-        @if (auth()->user()->leveling != 4)
+        @if (auth()->user()->leveling != 4 && auth()->user()->leveling != 5)
             <div class="px-6 pt-1">
                 <ul class="relative text-green-100 hover:text-green-800 focus-within:text-white">
                     <li class="relative text-green-100 hover:text-green-800 focus-within:text-white">

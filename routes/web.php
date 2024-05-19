@@ -187,8 +187,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
     Route::post('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
 
+    // Materi Pembelajaran Pada SUBBK
+    Route::post('/materiStore', [ak_matakuliah_controller::class, 'storeMateri'])->name('store.materi');
+    Route::get('/materi/{materi}/subbk/{sub}', [ak_matakuliah_controller::class, 'indexMateri'])->name('index.materi');
+    Route::post('/materi/{materi}/subbk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
+
+
+    // Matakuliah - SUBBK
     Route::get('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
-    Route::post('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
     Route::get('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
     Route::post('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
 
@@ -220,6 +226,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/metode-penilaian/store/{id}', [metodePenilaianController::class, 'kelolaMetopen'])->name('metopen.cpmk');
     Route::post('/metode-penilaian/store/{id}', [metodePenilaianController::class, 'postKelolaMetopen']);
 
+
     // Tugas
 
     Route::get('/metode-penilaian/tugas/{id}', [metodePenilaianController::class, 'tugasIndex'])->name('tugas.metopen');
@@ -233,6 +240,9 @@ Route::middleware(['auth'])->group(function () {
     // Penilaian
     Route::get('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');
     Route::post('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'postPenilaian'])->name('post.nilai');
+
+    Route::post('/penilaian/{id}/{kdtahunakademik}/rubik/upload', [metodePenilaianController::class, 'penilaianUploadPost'])->name('rubik.post');
+    Route::get('/penilaian/{id}/{kdtahunakademik}/rubik/delete/{file_id}', [metodePenilaianController::class, 'penilaianUploadDelete'])->name('rubik.delete');
 
     // Cetak Penilaian
     Route::get('/cetakPenilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'exportNilai'])->name('export.nilai');

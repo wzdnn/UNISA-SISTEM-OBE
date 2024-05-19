@@ -13,10 +13,12 @@ use App\Models\gabung_mk_cpmk;
 use App\Models\gabung_nilai_metopen;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\metode_penilaian;
+use App\Models\PenilaianFileUpload;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
@@ -436,6 +438,8 @@ class metodePenilaianController extends Controller
 
         $viewnilai = exportNilaiModel::where("kdjenisnilai", "=", $id);
 
+        $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
+
         // $penilaian = ak_penilaian::all();
 
         // dd($penilaian);
@@ -443,8 +447,48 @@ class metodePenilaianController extends Controller
 
         // dd($kelas, $penilaian);
 
-        return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik'));
+        return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }
+
+    public function penilaianUploadPost(Request $request, $id, $tahun)
+    {
+        $request->validate([
+            'file' => ["required", "max:2000"]
+        ]);
+
+        try {
+            $folder = rand();
+
+            $file = \Illuminate\Support\Str::random() . '-' . $request->file('file')->getClientOriginalName();
+
+            // save to db
+            PenilaianFileUpload::create([
+                'folder' => $folder,
+                'file' => $file,
+                'jenisNilai_id' => $id,
+                'tahunAkademik_id' => $tahun
+            ]);
+
+            Storage::putFileAs("public/rubik/$folder", $request->file('file'), $file);
+
+            return redirect(url()->previous())->with('success', 'rubik berhasil di up');
+        } catch (Throwable $th) {
+            dd($th->getMessage());
+        }
+        return dd($request->all(), $id, $tahun);
+    }
+
+    public function penilaianUploadDelete($id, $tahun, $id_file)
+    {
+        $file = PenilaianFileUpload::findOrFail($id_file);
+
+        Storage::deleteDirectory("public/rubik/" . $file->folder);
+
+        $file->delete();
+
+        return redirect(url()->previous())->with('success', 'berhasil hapus');
+    }
+
 
     public function postPenilaian(Request $request)
     {

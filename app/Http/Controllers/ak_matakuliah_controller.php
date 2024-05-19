@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ak_aksesmedia;
 use App\Models\ak_kurikulum_cpmk;
 use App\Models\ak_kurikulum_sub_bk;
+use App\Models\ak_kurikulum_sub_bk_materi;
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah__referensi_luaran;
 use App\Models\ak_matakuliah__referensi_tambahan;
@@ -375,6 +376,7 @@ class ak_matakuliah_controller extends Controller
 
     public function kelolaSubBK(int $id)
     {
+
         $mkSubBk = ak_matakuliah::where('kdmatakuliah', '=', $id)->with('GetAllidSubBK')->first();
         // $subbk = ak_kurikulum_sub_bk::all();
 
@@ -393,10 +395,12 @@ class ak_matakuliah_controller extends Controller
             array_push($subbkSelect, $item->ak_kurikulum_sub_bk_id);
         }
 
-        // return dd($subbkSelect, $subbk);
+        // return dd($mkSubBk);
 
         return view('pages.matakuliah.subbk', compact('subbk', 'subbkSelect', 'id'));
     }
+
+
 
     public function postkelolaSubBK(int $id, Request $request)
     {
@@ -430,6 +434,20 @@ class ak_matakuliah_controller extends Controller
         }
     }
 
+
+    public function storeMateri(Request $request)
+    {
+        $request->validate(['materi_pembelajaran']);
+
+        ak_kurikulum_sub_bk_materi::create([
+            'id_gabung' => $request->materi_input_id,
+            'materi_pembelajaran' => $request->materi,
+            'kdtahunakademik' => $request->tahunakademik
+        ]);
+
+        return redirect()->back()->with('success', ' Materi Pembelajaran Berhasil Ditambahkan');
+    }
+
     // detail sub bk dan cpmk
     public function subbkCPMK(int $id, int $sub)
     {
@@ -437,18 +455,36 @@ class ak_matakuliah_controller extends Controller
 
         $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->where('kdmatakuliah', '=', $id)->first();
 
+        $materi = ak_kurikulum_sub_bk_materi::where('id_gabung', $sub)->get();
+
+        $tahunAkademik = DB::table('ak_tahunakademik')
+            ->where("isAktif", "=", 1)
+            ->get();
+
         if (!$subbk) {
             return abort(404);
         }
-        // return dd($subbk);
+        // return dd($materi);
 
-        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk', 'mkSubBk'));
+        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk', 'mkSubBk', 'materi', 'tahunAkademik'));
+    }
+
+    public function indexMateri(int $id, int $sub)
+    {
+
+        $detail = gabung_matakuliah_subbk::where('id', $sub)->with('subbk', 'cpmks')->first();
+
+        $subbk = ak_kurikulum_sub_bk_materi::where('id', $id)->first();
+
+        // dd($detail);
+
+        return view('pages.matakuliah.detail-subbk-materi', compact('subbk', 'id', 'detail'));
     }
 
     public function postsubbkSKS(int $id, int $sub, Request $request)
     {
         $request->validate([
-            'pokok_bahasan' => 'nullable',
+            'materi_pembelajaran' => 'nullable',
             'kuliah' => ['nullable', 'numeric'],
             'tutorial' => ['nullable', 'numeric'],
             'seminar' => ['nullable', 'numeric'],
@@ -461,9 +497,10 @@ class ak_matakuliah_controller extends Controller
         ]);
 
         try {
-            $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
+            // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
+            $subbk = ak_kurikulum_sub_bk_materi::where('id', $id)->first();
 
-            $subbk->pokok_bahasan = $request->input('pokok_bahasan');
+            $subbk->materi_pembelajaran = $request->input('materi_pembelajaran');
             $subbk->kuliah = $request->input('kuliah');
             $subbk->tutorial = $request->input('tutorial');
             $subbk->seminar = $request->input('seminar');
