@@ -17,14 +17,14 @@
                         <path
                             d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                     </svg>
-                    Profile Lulusan
+                    Profil Lulusan
                 </a>
             </li>
         </ol>
     </nav>
     <div class="flex items-center justify-between py-5 px-5">
         <div class="flex items-center">
-            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Profile Lulusan</h1>
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Profil Lulusan</h1>
         </div>
         <div class="flex items-center">
             @if (Auth::user()->role == 'admin')
@@ -35,7 +35,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
-                        Tambah Profile Lulusan</button>
+                        Tambah Profil Lulusan</button>
                 </a>
             @endif
         </div>
@@ -74,7 +74,7 @@
                         Kode PL
                     </th>
                     <th scope="col" class="px-6 py-3 ">
-                        Profile Lulusan
+                        Profil Lulusan
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Deskripsi Profil
@@ -130,7 +130,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td class="justify-center text-center" colspan="6">Profile Lulusan belum ada</td>
+                        <td class="justify-center text-center" colspan="6">Profil Lulusan belum ada</td>
                     </tr>
                 @endif
             </tbody>

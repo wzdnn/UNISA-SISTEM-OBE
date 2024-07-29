@@ -92,6 +92,9 @@
                         Kode BK
                     </th>
                     <th scope="col" class="px-6 py-3 ">
+                        Muatan
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
                         Unit
                     </th>
                     @if (Auth::user()->role == 'admin')
@@ -106,7 +109,9 @@
                     @foreach ($akKurikulumSubBk as $key => $akKurikulumSubBks)
                         <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ ($akKurikulumSubBk->currentPage() - 1) * $akKurikulumSubBk->perPage() + $key + 1 }}
+                                {{-- {{ ($akKurikulumSubBk->currentPage() - 1) * $akKurikulumSubBk->perPage() + $key + 1 }} --}}
+                                {{-- {{ $loop->iteration }} --}}
+                                {{ $akKurikulumSubBks->id }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $akKurikulumSubBks->kode_subbk }}
@@ -120,6 +125,9 @@
                             <td class="px-6 py-4">
                                 {{ $akKurikulumSubBks->ak_kdbk }}
                                 {{ $akKurikulumSubBks->ak_bk }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $akKurikulumSubBks->jenismuatan }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $akKurikulumSubBks->kurikulum }} {{ $akKurikulumSubBks->tahun }}
@@ -155,8 +163,15 @@
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
+            // MergeGridCells('#mytable', 7, false);
+
+            MergeGridCells('#mytable', 8, false);
+            MergeGridCells('#mytable', 7, false);
+            MergeGridCells('#mytable', 5, false);
+            MergeGridCells('#mytable', 4, false);
+            MergeGridCells('#mytable', 3, false);
+            MergeGridCells('#mytable', 2, false);
             MergeGridCells('#mytable', 1, false);
-            MergeGridCells('#mytable', 6, false);
 
         });
 

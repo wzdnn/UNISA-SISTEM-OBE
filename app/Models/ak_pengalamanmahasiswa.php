@@ -10,6 +10,7 @@ class ak_pengalamanmahasiswa extends Model
     use HasFactory;
 
     protected $table = 'ak_pengalamanmahasiswa';
+    protected $guarded = ['id'];
     protected $fillable = [
         'pengalaman_mahasiswa'
     ];

@@ -80,6 +80,22 @@
                         </select>
                     </div>
                 </div>
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="muatan" class="text-sm text-gray-500">
+                            Muatan
+                        </label>
+                        <select id="muatan" name="kdmuatan[]" multiple data-live-search="true" class="form-control">
+                            {{-- @foreach ($ak_kurikulum_pl as $pl)
+                                <option value="{{ $pl->id }}">{{ $pl->kode_pl }} {{ $pl->profile_lulusan }}</option>
+                            @endforeach --}}
+
+                            @foreach ($muatan as $m)
+                                <option value="{{ $m->kdmuatan }}">{{ $m->jenismuatan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="py-3">
                     <button type="submit"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
@@ -94,6 +110,7 @@
     <script>
         $(document).ready(function() {
             $('#bahan_kajian').select2();
+            $('#muatan').select2();
         });
     </script>
 @endpush

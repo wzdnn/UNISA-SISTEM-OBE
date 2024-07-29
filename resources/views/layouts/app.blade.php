@@ -15,25 +15,15 @@
 
     @stack('style')
 
+    @livewireStyles
+
     <title>SISTEM OBE | UNIVERSITAS 'AISYIYAH YOGYAKARTA</title>
 </head>
 
 <body class="bg-gray-100" x-data="sidebar()" @resize.window="handleResize()">
-    {{-- @include('layouts.sidenavbar')
-    @include('layouts.navbar') --}}
 
-    {{-- <div class="px-5 py-5 w-full max-h-screen">
-        @yield('body')
-    </div> --}}
-    {{-- <div class="main-body sm:ml-64 sm:mt-11 ">
-            <div class="">
-                <div class="p-4 min-height ">
-                @yield('body')
-            </div>
-        </div>
-    </div> --}}
 
-    <div x-data="{ sidebarOpen: true }" class="flex overflow-x-hidden mt-[-24px]">
+    <div x-data="{ sidebarOpen: true }" class="flex overflow-x mt-[-24px]">
         @include('layouts.sidenavbar3')
         <div class="flex-1">
             @include('layouts.navbar2')
@@ -44,10 +34,9 @@
     </div>
 
     {{--  --}}
-    <script
-        src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-        defer
-    ></script>
+    @livewireScripts
+
+    {{-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script> --}}
     @stack('script')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
@@ -58,8 +47,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
     </script>
-
-
 </body>
 
 </html>

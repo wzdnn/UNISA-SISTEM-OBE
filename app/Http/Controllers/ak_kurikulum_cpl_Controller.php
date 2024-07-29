@@ -77,6 +77,7 @@ class ak_kurikulum_cpl_Controller extends Controller
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
                 })
+                ->orderBy('id')
                 ->paginate(10);
 
             $kdkurikulum = DB::table("ak_kurikulum")

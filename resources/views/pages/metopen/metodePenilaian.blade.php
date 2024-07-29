@@ -26,7 +26,7 @@
             <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Metode Penilaian</h1>
         </div>
         <div class="flex items-center">
-            @if (Auth::user()->role == 'admin')
+            @if (Auth::user()->leveling !== 4)
                 <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
                     class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
@@ -40,17 +40,6 @@
             @endif
         </div>
 
-
-        {{-- @extends('layouts.app')
-
-@section('body') --}}
-        {{-- <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-gray-700">Metode Penilaian</h1>
-        <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-            class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button">
-            Tambah Metode Penilaian
-        </button> --}}
 
         <!-- Main modal -->
         <div id="defaultModal" tabindex="-1" aria-hidden="true"
@@ -86,6 +75,9 @@
 
     </div>
     <hr />
+    <div class="px-3 py-2">
+        <h3 class="text-red-600 font-bold">*Jika Ingin Menghapus Harap Hubungi Admin</h3>
+    </div>
 
     <div class="relative py-3">
         <table class="w-full text-sm text-center  text-gray-500">
@@ -97,9 +89,11 @@
                     <th scope="col" class="px-6 py-3 text-left ">
                         Metode Penilaian
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left ">
-                        Action
-                    </th>
+                    @if (Auth::user()->leveling !== 4)
+                        <th scope="col" class="px-6 py-3 text-left ">
+                            Action
+                        </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -112,14 +106,20 @@
                             <td class="px-6 py-4">
                                 {{ $metopens->metode_penilaian }}
                             </td>
-                            <td class="px-6 py-4">
-                                <a href="{{ route('delete.metopen', ['id' => $metopens->id]) }}"
+                            @if (Auth::user()->leveling !== 4)
+                                <td class="px-6 py-4">
+                                    {{-- <a href="{{ route('delete.metopen', ['id' => $metopens->id]) }}"
                                     onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
                                     <button
                                         class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                             class="fa-solid fa-trash"></i></button>
-                                </a>
-                            </td>
+                                </a> --}}
+
+                                    <button disabled
+                                        class="bg-red-600  text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 @else

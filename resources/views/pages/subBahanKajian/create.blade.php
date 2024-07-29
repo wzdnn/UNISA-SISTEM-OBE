@@ -34,7 +34,7 @@
 
         </ol>
     </nav>
-<br>
+    <br>
     <div class="text-center">
         <h1 class="font-bold text-2xl mb-0 text-gray-700">Tambah Sub Bahan Kajian</h1>
     </div>
@@ -92,6 +92,20 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="muatan" class="text-sm text-gray-500">
+                            Muatan
+                        </label>
+                        <select id="muatan" name="kdmuatan[]" multiple data-live-search="true" class="form-control">
+                            {{-- @foreach ($ak_kurikulum_pl as $pl)
+                                <option value="{{ $pl->id }}">{{ $pl->kode_pl }} {{ $pl->profile_lulusan }}</option>
+                            @endforeach --}}
+
+                            @foreach ($muatan as $m)
+                                <option value="{{ $m->kdmuatan }}">{{ $m->jenismuatan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="py-3 text-center mx-auto">
                     <button type="submit"
@@ -115,6 +129,7 @@
         $(document).ready(function() {
             $('#unit').select2();
             $('#bahan_kajian').select2();
+            $('#muatan').select2();
         });
     </script>
 @endpush

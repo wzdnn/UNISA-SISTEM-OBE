@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportNilai;
+use App\Imports\ImportNilai;
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_penilaian;
+use App\Models\exportNilaiModel;
 use App\Models\gabung_metopen_cpmk;
 use App\Models\gabung_mk_cpmk;
 use App\Models\gabung_nilai_metopen;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\metode_penilaian;
+use App\Models\PenilaianFileUpload;
+use App\Models\v_persenplo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class metodePenilaianController extends Controller
@@ -43,6 +51,8 @@ class metodePenilaianController extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
 
+            $tipeLensa = DB::table('tipelensa')->get();
+
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
@@ -58,6 +68,8 @@ class metodePenilaianController extends Controller
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->distinct()
                 ->paginate(15);
+
+            $tipeLensa = DB::table('tipelensa')->get();
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -83,6 +95,8 @@ class metodePenilaianController extends Controller
                 })
                 ->orderBy("kdmatakuliah")
                 ->paginate(15);
+
+            $tipeLensa = DB::table('tipelensa')->get();
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -143,7 +157,7 @@ class metodePenilaianController extends Controller
         // });
 
 
-        return view('pages.metopen.index', compact('matakuliah', 'kdkurikulum', 'tahunAkademik'));
+        return view('pages.metopen.index', compact('matakuliah', 'kdkurikulum', 'tahunAkademik', 'tipeLensa'));
     }
 
     public function postIndex(Request $request)
@@ -293,7 +307,9 @@ class metodePenilaianController extends Controller
         gabung_nilai_metopen::create([
             'id_gabung_metopen' => $request->tgsinput_id,
             'keterangan' => $request->keterangan,
-            'kdtahunakademik' => $request->tahunakademik
+            'kdtahunakademik' => $request->tahunakademik,
+            'idlensa' => $request->idlensa,
+            'idtipelensa' => $request->idtipelensa
 
         ]);
 
@@ -316,20 +332,7 @@ class metodePenilaianController extends Controller
     public function listNilai(int $id, Request $request)
     {
 
-
-
-
-        $list = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "mk.matakuliah")
-            ->where("id_gabung_metopen", '=', $id)
-            ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
-            ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
-            ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
-            ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
-            ->first();
-
-
-        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik")
+        $list = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "mk.matakuliah", "gabung_nilai_metopen.kdtahunakademik")
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -337,21 +340,32 @@ class metodePenilaianController extends Controller
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
+            ->first();
+
+
+        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "gabung_nilai_metopen.kdtahunakademik", "tahunakademik", "idlensa", "tl.tipelensa", "url")
+            ->where("id_gabung_metopen", '=', $id)
+            ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
+            ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+            ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
+            ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
+            ->leftJoin("tipelensa as tl", "tl.id", "=", "gabung_nilai_metopen.idtipelensa")
+            ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
             ->paginate(15);
 
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
             ->get();
 
-
         $arrayTahun = [];
         foreach ($tahunAkademik as $data) {
-            array_push($arrayTahun, $data->tahunakademik);
+            array_push($arrayTahun, $data->kdtahunakademik);
         }
 
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayTahun)) {
-                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik")
+                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik", "gabung_nilai_metopen.kdtahunakademik")
                     ->where("id_gabung_metopen", '=', $id)
                     ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
                     ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -359,7 +373,7 @@ class metodePenilaianController extends Controller
                     ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
                     ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
                     ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
-                    ->where("tahunakademik", "=", $request->filter)
+                    ->where("gabung_nilai_metopen.kdtahunakademik", "=", $request->filter)
                     ->paginate(15);
             }
         }
@@ -369,6 +383,13 @@ class metodePenilaianController extends Controller
         return view('pages.metopen.list', compact('listNilai', 'tahunAkademik', 'list'));
     }
 
+    public function listNilaiDelete(int $kdjenisnilai)
+    {
+        DB::table('gabung_nilai_metopen')->where("kdjenisnilai", $kdjenisnilai)->delete();
+
+        return redirect()->back()->with('success', 'berhasil hapus list');
+    }
+
     public function listNilaiPost(Request $request)
     {
         DB::select('call sistem_obe.kopi_mhs(?,?,?,?)', [$request->kdmatakuliah_, $request->kdtahunakademik_, $request->kelas_, $request->kdjenisnilai_]);
@@ -376,7 +397,14 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', 'Mahasiswa berhasil ditambah');
     }
 
-    public function penilaian(int $id)
+    public function ambilNilai(Request $request, int $id)
+    {
+        DB::select('call sistem_obe.isinilai_dari_lensa(?)', [$id]);
+
+        return redirect()->back()->with('success', "Nilai Berhasil Di-Ambil");
+    }
+
+    public function penilaian(int $id, string $kdtahunakademik)
     {
 
         // dd('test');
@@ -392,6 +420,7 @@ class metodePenilaianController extends Controller
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
             ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->where("krs.kdtahunakademik", "=", $kdtahunakademik)
             ->where("gnm.kdjenisnilai", "=", $id)
             ->first();
         // ->all();
@@ -405,7 +434,6 @@ class metodePenilaianController extends Controller
         // straight_join ak_mahasiswa mhs on mhs.kdmahasiswa = krs.kdmahasiswa
         // straight_join pt_person per on per.kdperson = mhs.kdperson
         // straight_join gabung_nilai_metopen gnm on gnm.kdjenisnilai = p.kdjenisnilai");
-
         // dd($test);
 
         $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai")
@@ -414,16 +442,62 @@ class metodePenilaianController extends Controller
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
             ->where("gnm.kdjenisnilai", "=", $id)
+            ->where("krs.kdtahunakademik", "=", $kdtahunakademik)
+            ->orderby('nim')
             ->get();
         // ->toSql();
+
+        $viewnilai = exportNilaiModel::where("kdjenisnilai", "=", $id);
+
+        $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
         // $penilaian = ak_penilaian::all();
 
         // dd($penilaian);
+        // dd($viewnilai);
 
         // dd($kelas, $penilaian);
 
-        return view('pages.metopen.tugas', compact('penilaian', 'kelas'));
+        return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
+    }
+
+    public function penilaianUploadPost(Request $request, $id, $tahun)
+    {
+        $request->validate([
+            'file' => ["required", "max:2000"]
+        ]);
+
+        try {
+            $folder = rand();
+
+            $file = \Illuminate\Support\Str::random() . '-' . $request->file('file')->getClientOriginalName();
+
+            // save to db
+            PenilaianFileUpload::create([
+                'folder' => $folder,
+                'file' => $file,
+                'jenisNilai_id' => $id,
+                'tahunAkademik_id' => $tahun
+            ]);
+
+            Storage::putFileAs("public/rubik/$folder", $request->file('file'), $file);
+
+            return redirect(url()->previous())->with('success', 'rubik berhasil di up');
+        } catch (Throwable $th) {
+            dd($th->getMessage());
+        }
+        return dd($request->all(), $id, $tahun);
+    }
+
+    public function penilaianUploadDelete($id, $tahun, $id_file)
+    {
+        $file = PenilaianFileUpload::findOrFail($id_file);
+
+        Storage::deleteDirectory("public/rubik/" . $file->folder);
+
+        $file->delete();
+
+        return redirect(url()->previous())->with('success', 'berhasil hapus');
     }
 
     public function postPenilaian(Request $request)
@@ -459,8 +533,10 @@ class metodePenilaianController extends Controller
         }
     }
 
-    public function finalNilai(int $id)
+    public function finalNilai(int $id, Request $request)
     {
+
+        // dd($request->filter);
 
         $matakuliah = ak_matakuliah::select("matakuliah", "batasNilai", "namalengkap", "gelarbelakang")
             ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
@@ -511,7 +587,37 @@ class metodePenilaianController extends Controller
             ->distinct()
             ->get();
 
-        $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?)', [$id]);
+        $tahunAkademik = DB::table('ak_tahunakademik')
+            ->where("isAktif", "=", 1)
+            ->get();
+
+
+        $arrayTahun = [];
+        foreach ($tahunAkademik as $data) {
+            array_push($arrayTahun, $data->kdtahunakademik);
+        }
+
+
+
+        $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?,?)', [$id, $request->filter]);
+        $nilai = json_decode(json_encode($tabularNilai), true);
+        foreach ($nilai as $key => $value) {
+            $loop = 1;
+            foreach ($value as $urutanData => $data) {
+                if ($loop <= 5) {
+                    $mahasiswa[$key][] = $data;
+                } else {
+                    $mahasiswa[$key][5][$urutanData] = $data;
+                }
+                $loop++;
+            }
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayTahun)) {
+                $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?,?)', [$id, $request->filter]);
+            }
+        }
 
         $persentaseLulus = DB::select('call sistem_obe.total_lulus(?)', [$id]);
         foreach ($persentaseLulus as $key => $item) {
@@ -520,48 +626,339 @@ class metodePenilaianController extends Controller
             }
         }
 
-        $plo = DB::select('call sistem_obe.persenplo(?)', [$id]);
+        // CPL
 
-        // foreach ($plo as $kunci => $tem) {
-        //     foreach ($tem as $kun => $kuncis) {
-        //         $persenplo[] = $kuncis;
-        //     }
-        // }
+        $plo = DB::select('call sistem_obe.persenplo(?,?)', [$id, $request->filter]);
 
-        $persenplo = json_decode(json_encode($plo), true);
+        $plofinal = json_decode(json_encode($plo), true);
 
-        // dd(collect($persentaseLulus)->toArray());
+        // CPMK
 
+        $cpmk = DB::select('call sistem_obe.persencpmk(?,?)', [$id, $request->filter]);
+        $cpmkfinal = json_decode(json_encode($cpmk), true);
 
-        $nilai = json_decode(json_encode($tabularNilai), true);
+        // dd($cpmkfinal);
 
 
-        foreach ($nilai as $key => $value) {
+        $persenplo = DB::table('v_persenplo')->where("kdmatakuliah", "=", $id)->get();
+
+        $kelulusanpermahasiswa = [];
+        foreach ($persenplo as $key => $value) {
+            $kelulusanpermahasiswa[$value->kdkrsnilai] = (array_key_exists($value->kdkrsnilai, $kelulusanpermahasiswa) ? $kelulusanpermahasiswa[$value->kdkrsnilai] : 1) && $value->statuslulus;
+        }
+
+
+
+        return view('pages.metopen.final', compact('tahunAkademik', 'mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'persenplo', 'kelulusanpermahasiswa', 'cpmkfinal'));
+    }
+
+    public function rekapSemester(int $id, Request $request)
+    {
+
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
+                ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
+                ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
+                ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+                ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->where("kdtahunakademik", $id)
+                ->orderBy("gmc.id", "asc")
+                ->orderBy("ak_matakuliah_cpmk.id", "asc")
+                ->distinct()
+                ->get();
+
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+        } else {
+            $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
+                ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
+                ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
+                ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+                ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->where("ak.kdunitkerja", Auth::user()->kdunit)
+                ->where("kdtahunakademik", $id)
+                ->orderBy("gmc.id", "asc")
+                ->orderBy("ak_matakuliah_cpmk.id", "asc")
+                ->distinct()
+                ->get();
+
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+        }
+
+        $arrayTahun = [];
+        foreach ($tahunAkademik as $data) {
+            array_push($arrayTahun, $data->kdtahunakademik);
+        }
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $rekapSemester = DB::select('call sistem_obe.rekap_semester(?,?)', [$id, $request->filter]);
+            }
+        }
+
+        $rekapSemester = DB::select('call sistem_obe.rekap_semester(?,?)', [$id, $request->filter]);
+        $rekap = json_decode(json_encode($rekapSemester), true);
+        foreach ($rekap as $key => $value) {
             $loop = 1;
             foreach ($value as $urutanData => $data) {
-                if ($loop <= 4) {
+                if ($loop <= 6) {
                     $mahasiswa[$key][] = $data;
                 } else {
-                    $mahasiswa[$key][4][] = $data;
+                    $mahasiswa[$key][6][$urutanData] = $data;
                 }
                 $loop++;
             }
         }
-        // dd($tabularNilai);
 
-        foreach ($mahasiswa as $key => $mhs) {
-            $gagal = false;
-            foreach ($mhs[4] as $nilai) {
-                if ($nilai < $matakuliah->batasNilai) {
-                    $gagal = true;
-                    break;
-                }
+        $rekapCpl = DB::select('call sistem_obe.rekap_semester_cpl(?,?)', [$id, $request->filter]);
+        $cpl = json_decode(json_encode($rekapCpl), true);
+
+        $statistik = [];
+        foreach ($cpl[0] as $key => $item) {
+            if (substr($key, 0, 15) == 'ketercapaiancpl') {
+                $statistik['label'][] = $key;
+                $statistik['score'][] = $item;
             }
-            array_push($mahasiswa[$key], $gagal);
         }
 
-        // return dd($mahasiswa);
+        // dd($statistik);
 
-        return view('pages.metopen.final', compact('mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'nilaiAkhir', 'persenplo'));
+        return view('pages.metopen.rekapSemester', compact('tahunAkademik', 'rekapSemester', 'tabel', 'mahasiswa', 'kdkurikulum', 'cpl', 'statistik'));
+    }
+
+    public function rekapMahasiswaGet(Request $request)
+    {
+        $rekapMahasiswa = DB::select('call sistem_obe.rekap_cpl_mahasiswa(?,?)', [$request->nim, null]);
+        $rekap = json_decode(json_encode($rekapMahasiswa), true);
+
+        $statistik = [];
+        foreach ($rekap[0] as $key => $item) {
+            if (substr($key, 0, 15) == 'ketercapaiancpl') {
+                $statistik['label'][] = $key;
+                $statistik['score'][] = $item;
+            }
+        }
+
+        // dd($rekap);
+
+        return view("pages.rekap.rekapMahasiswa", compact('rekap', 'statistik'));
+    }
+
+    public function exportNilai($id, $kdtahunakademik)
+    {
+
+        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
+            ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
+            ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
+            ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
+            ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+            ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
+            ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->where("gnm.kdjenisnilai", "=", $id)
+            ->where("gnm.kdtahunakademik", "=", $kdtahunakademik)
+            ->first();
+        // return Excel::download(new ExportNilai, "nilai.xlsx");
+
+        return (new ExportNilai($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
+    }
+
+    public function importNilai(Request $request, $id)
+    {
+        // dd($request->file('file'));
+
+        Excel::import(new ImportNilai, $request->file('file'));
+
+        return redirect()->back();
+    }
+
+    public function rekap(Request $request)
+    {
+
+        $rekap = DB::table('ak_tahunakademik as ata')
+            ->where("isAktif", 1)
+            ->get();
+
+
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
+                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->where("isObe", 1)
+                ->orderBy('kdtamasuk', 'asc')
+                ->get();
+        } else {
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
+                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->where("ak.kdunitkerja", Auth::user()->kdunit)
+                ->where("isObe", 1)
+                ->get();
+        }
+
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $rekap = DB::table('ak_tahunakademik as ata')
+                    ->where("isAktif", 1)
+                    ->get();
+
+                $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
+                    ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                    ->join("ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                    ->where("ak.kurikulum", $request->filter)
+                    ->where("isObe", 1)
+                    ->get();
+            }
+        }
+
+        // dd($rekapTahunanIndex);
+        return view('pages.rekap.index', compact('rekap', 'rekapTahunanIndex', 'kdkurikulum'));
+    }
+
+    public function rekapTahunan(Request $request, int $id)
+    {
+
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+            $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
+                ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
+                ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
+                ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+                ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->whereRaw("(kdtahunakademik = concat($id, '1') or kdtahunakademik = concat($id, '2'))")
+                ->orderBy("gmc.id", "asc")
+                ->orderBy("ak_matakuliah_cpmk.id", "asc")
+                ->distinct()
+                ->get();
+
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+        } else {
+            $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
+                ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
+                ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
+                ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+                ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
+                ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->where("ak.kdunitkerja", Auth::user()->kdunit)
+                ->whereRaw("(kdtahunakademik = concat($id, '1') or kdtahunakademik = concat($id, '2'))")
+                ->orderBy("gmc.id", "asc")
+                ->orderBy("ak_matakuliah_cpmk.id", "asc")
+                ->distinct()
+                ->get();
+
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+        }
+
+
+        $arrayTahun = [];
+        foreach ($tahunAkademik as $data) {
+            array_push($arrayTahun, $data->kdtahunakademik);
+        }
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $rekapTahunan = DB::select('call sistem_obe.rekap_tahunan(?,?)', [$id, $request->filter]);
+            }
+        }
+
+        $rekapTahunan = DB::select('call sistem_obe.rekap_tahunan(?,?)', [$id, $request->filter]);
+        $rekap = json_decode(json_encode($rekapTahunan), true);
+        foreach ($rekap as $key => $value) {
+            $loop = 1;
+            foreach ($value as $urutanData => $data) {
+                if ($loop <= 6) {
+                    $mahasiswa[$key][] = $data;
+                } else {
+                    $mahasiswa[$key][6][$urutanData] = $data;
+                }
+                $loop++;
+            }
+        }
+
+        // dd($tabel);
+        // dd($rekapTahunan);
+
+        return view('pages.rekap.rekapTahunan', compact('rekapTahunan', 'tabel', 'tahunAkademik', 'mahasiswa', 'kdkurikulum'));
     }
 }

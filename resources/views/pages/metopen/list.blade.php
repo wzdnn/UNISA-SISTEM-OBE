@@ -44,7 +44,7 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Tahun Akademik</option>
                 @foreach ($tahunAkademik as $item)
-                    <option value="{{ $item->tahunakademik }}" @selected(request()->filter == $item->tahunakademik)>{{ $item->tahunakademik }}
+                    <option value="{{ $item->kdtahunakademik }}" @selected(request()->filter == $item->kdtahunakademik)>{{ $item->tahunakademik }}
                     </option>
                 @endforeach
             </select>
@@ -60,6 +60,16 @@
         @endif
     </div>
 
+    <div>
+        <p class="text-red-600 flex py-2 ml-3 mb-2 font-bold text-xl">*Apabila ingin mengubah nilai, tidak perlu menghapus
+            list
+            dan
+            mengulang,
+            tetapi
+            hanya
+            perlu menginput datanya kembali</p>
+    </div>
+
     {{-- Isian Tabel Tahun Akademik --}}
     <table class="w-full text-sm text-center  text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -72,6 +82,12 @@
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Tahun Akademik
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Id Lensa
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Tipe Lensa
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Action
@@ -92,11 +108,23 @@
                     <td class="px-6 py-4">
                         {{ $value->tahunakademik }}
                     </td>
+                    <td class="px-6 py-4">
+
+                        <a href="{{ $value->url }}{{ $value->idlensa }}" target="blank_">
+
+                            {{ $value->idlensa }}
+                        </a>
+
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ $value->tipelensa }}
+                    </td>
                     <td class="flex space-x-1 px-6 py-4">
                         <button data-modal-target="popup-modal" id="btnTambah" data-modal-toggle="popup-modal"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            class="text-white items-center justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                             data-id-target="{{ $value->kjn }}" type="button">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            Isi Mahasiswa
+                            {{-- <i class="fa fa-plus" aria-hidden="true"></i> --}}
                             {{-- Isi Penilaian --}}
                         </button>
 
@@ -120,12 +148,15 @@
                                         <div class="p-4">
                                             <!-- Modal content -->
                                             <div class="relative bg-white rounded-lg dark:bg-gray-700">
-                                                <h1 class="font-bold text-2xl mb-0">Penilaian</h1>
+                                                <h1 class="font-bold text-2xl mb-0">Isi Mahasiswa</h1>
+                                                <h3 class="font-medium text-l mb-0 mt-3">Silahkan pilih kelas dan tahun
+                                                    akademik
+                                                    untuk mengisi mahasiswa kedalam {{ $value->keterangan }}</h3>
                                                 <!-- Modal body -->
                                                 <form action="{{ route('copy.mhs', ['id' => $value->kjn]) }}"
                                                     method="POST">
                                                     @csrf
-                                                    <div class="flex flex-col py-4">
+                                                    <div class="flex flex-col py-2">
                                                         <input type="hidden" name="kdmatakuliah_" id="kdmatakuliah_"
                                                             value="{{ $value->mkd }}">
                                                         <input type="hidden" name="kdjenisnilai_" id="kdjenisnilai_"
@@ -168,15 +199,69 @@
                                 </div>
                             </div>
                         </div>
+                        @if (!($value->idlensa == 0))
+                            <button data-modal-target="ambilNilai-modal" id="btnTambah"
+                                data-modal-toggle="ambilNilai-modal"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                data-id-target="{{ $value->kjn }}" type="button">
+                                Ambil Nilai Dari Lensa
+                            </button>
+                            <div>
+                                <div id="ambilNilai-modal" tabindex="-1"
+                                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div class="relative p-4 w-auto max-w-md max-h-full">
+                                        <div class="relative bg-white rounded-lg shadow ">
+                                            <button type="button"
+                                                class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
+                                                data-modal-hide="ambilNilai-modal">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                                <span class="sr-only">Close modal</span>
+                                            </button>
+                                            <div class="p-4">
+                                                <div class="relative bg-white rounded-lg dark:bg-gray-700">
+                                                    <form action="{{ route('ambil.nilai', ['id' => $value->kjn]) }}"
+                                                        method="POST">
+                                                        @csrf
 
-                        <a href="{{ route('index.penilaian', ['id' => $value->kjn]) }}">
+                                                        <h1 class="font-bold text-center text-2xl mb-0">Anda Yakin Ingin
+                                                            Mengambil
+                                                            Nilai Dari Lensa?</h1>
+                                                        <button data-modal-hide="ambilNilai-modal" type="submit"
+                                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-2 py-2 text-center">
+                                                            Submit
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <a
+                            href="{{ route('index.penilaian', ['id' => $value->kjn, 'kdtahunakademik' => $value->kdtahunakademik]) }}">
                             <button id="btnDetail"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                 type="button">
-                                <i class="fa fa-book" aria-hidden="true"></i>
+                                {{-- <i class="fa fa-book" aria-hidden="true"></i> --}}
+                                Detail
                             </button>
                         </a>
 
+
+                        <a href="{{ route('list.delete', ['kdjenisnilai' => $value->kjn]) }}"
+                            onclick="return confirm('Apakah Anda yakin ingin menghapus data? list data yang sudah dihapus akan menghapus data nilai yang sudah diinputkan juga');">
+                            <button
+                                class="bg-red-600 hover:bg-red-800 text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"><i
+                                    class="fa-solid fa-trash"></i></button>
+                        </a>
 
                     </td>
                 </tr>

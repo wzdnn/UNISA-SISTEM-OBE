@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ak_kurikulum_sub_bk;
+use App\Models\ak_muatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
         // $akKurikulumSubBk = ak_kurikulum_sub_bk::all();
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
-                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun", "jenismuatan", "gabung_sbk_muatan.id as sbmid")
                 ->join(
                     "ak_kurikulum_bks",
                     "ak_kurikulum_bks.id",
@@ -28,13 +29,26 @@ class ak_kurikulum_sub_bk_controller extends Controller
                     "=",
                     "ak_kurikulum_sub_bks.kdkurikulum"
                 )
+                ->join(
+                    "gabung_sbk_muatan",
+                    "gabung_sbk_muatan.id_subbk",
+                    "=",
+                    "ak_kurikulum_sub_bks.id"
+                )
+                ->join(
+                    "ak_muatan",
+                    "ak_muatan.kdmuatan",
+                    "=",
+                    "gabung_sbk_muatan.kdmuatan"
+                )
+                ->distinct()
                 ->paginate(10);
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
         } elseif (auth()->user()->leveling == 3) {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
-                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun", "jenismuatan", "gabung_sbk_muatan.id as sbmid")
                 ->join(
                     "ak_kurikulum_bks",
                     "ak_kurikulum_bks.id",
@@ -48,7 +62,20 @@ class ak_kurikulum_sub_bk_controller extends Controller
                     "ak_kurikulum_sub_bks.kdkurikulum"
                 )
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->leftJoin(
+                    "gabung_sbk_muatan",
+                    "gabung_sbk_muatan.id_subbk",
+                    "=",
+                    "ak_kurikulum_sub_bks.id"
+                )
+                ->leftJoin(
+                    "ak_muatan",
+                    "ak_muatan.kdmuatan",
+                    "=",
+                    "gabung_sbk_muatan.kdmuatan"
+                )
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->distinct()
                 ->paginate(10);
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
@@ -57,7 +84,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
                 ->get();
         } else {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
-                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun", "jenismuatan", "gabung_sbk_muatan.id as sbmid")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -74,7 +101,22 @@ class ak_kurikulum_sub_bk_controller extends Controller
                     "=",
                     "ak_kurikulum_sub_bks.kdkurikulum"
                 )
+                ->leftJoin(
+                    "gabung_sbk_muatan",
+                    "gabung_sbk_muatan.id_subbk",
+                    "=",
+                    "ak_kurikulum_sub_bks.id"
+                )
+                ->leftJoin(
+                    "ak_muatan",
+                    "ak_muatan.kdmuatan",
+                    "=",
+                    "gabung_sbk_muatan.kdmuatan"
+                )
+                ->distinct()
                 ->paginate(10);
+
+            // dd($akKurikulumSubBk);
 
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where(function ($query) {
@@ -93,7 +135,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayKurikulum)) {
                 $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
-                    ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                    ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun", "jenismuatan", "gabung_sbk_muatan.id as sbmid")
                     ->join(
                         "ak_kurikulum_bks",
                         "ak_kurikulum_bks.id",
@@ -105,6 +147,18 @@ class ak_kurikulum_sub_bk_controller extends Controller
                         "ak_kurikulum.kdkurikulum",
                         "=",
                         "ak_kurikulum_sub_bks.kdkurikulum"
+                    )
+                    ->leftJoin(
+                        "gabung_sbk_muatan",
+                        "gabung_sbk_muatan.id_subbk",
+                        "=",
+                        "ak_kurikulum_sub_bks.id"
+                    )
+                    ->leftJoin(
+                        "ak_muatan",
+                        "ak_muatan.kdmuatan",
+                        "=",
+                        "gabung_sbk_muatan.kdmuatan"
                     )
                     ->where("ak_kurikulum.isObe", '=', 1)
                     ->where("kurikulum", "=", $request->filter)
@@ -150,7 +204,11 @@ class ak_kurikulum_sub_bk_controller extends Controller
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->where("isObe", '=', 1)
             ->get();
-        return view('pages.subBahanKajian.create', compact('akKurikulumBk', 'akKurikulum'));
+
+
+        $muatan = ak_muatan::all();
+
+        return view('pages.subBahanKajian.create', compact('akKurikulumBk', 'akKurikulum', 'muatan'));
     }
 
     public function store(Request $request)
@@ -160,7 +218,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
             'sub_bk',
         ]);
 
-        ak_kurikulum_sub_bk::create([
+        $subbk = ak_kurikulum_sub_bk::create([
             'kode_subbk' => $request->kode_subbk,
             'sub_bk' => $request->sub_bk,
             'referensi' => $request->referensi,
@@ -168,6 +226,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
             'kdkurikulum' => $request->unit
         ]);
 
+        $subbk->SBKtoMuatan()->attach($request->input('kdmuatan'));
 
         return redirect()->route('sub-bk.index')->with('success', 'Sub Bahan Kajian berhasil ditambah');
     }
@@ -185,19 +244,50 @@ class ak_kurikulum_sub_bk_controller extends Controller
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
         $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
-        return view('pages.subBahanKajian.edit', compact('subBkEdit', 'akKurikulumBk'));
+
+        $muatan = ak_muatan::all();
+
+        return view('pages.subBahanKajian.edit', compact('subBkEdit', 'akKurikulumBk', 'muatan'));
     }
 
     public function update(Request $request, int $id)
     {
-        $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
-        $subBkEdit->update([
-            'kode_subbk' => $request->kode_subbk,
-            'sub_bk' => $request->sub_bk,
-            'referensi' => $request->referensi,
-            'id' => $request->bahan_kajian
-        ]);
-        return redirect()->route('sub-bk.index')->with('success', 'Sub BK Berhasil Disunting');
+
+        $muatanSelect = [];
+        if ($request->has('kdmuatan')) {
+            foreach ($request->input("kdmuatan") as $key => $value) {
+                if (!is_numeric($value)) {
+                    return redirect()->back()->with("failed", "inputan tidak valid");
+                } else {
+                    array_push($muatanSelect, $value);
+                }
+            }
+        }
+
+        try {
+
+            $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
+            DB::beginTransaction();
+
+            $subBkEdit->update([
+                'kode_subbk' => $request->kode_subbk,
+                'sub_bk' => $request->sub_bk,
+                'referensi' => $request->referensi,
+                'id' => $request->bahan_kajian
+            ]);
+
+            if (count($muatanSelect) > 0) {
+                $subBkEdit->SBKtoMuatan()->sync($muatanSelect);
+            } else {
+                $subBkEdit->SBKtoMuatan()->detach();
+            }
+
+            DB::commit();
+            return redirect()->route('sub-bk.index')->with('success', 'Sub BK Berhasil Disunting');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with("failed", "gagal update Sub BK pada Matkul" . $th->getMessage());
+        }
     }
 
     public function delete(int $id)

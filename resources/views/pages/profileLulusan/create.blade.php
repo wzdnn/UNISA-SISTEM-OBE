@@ -17,7 +17,7 @@
                         <path
                             d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                     </svg>
-                    Profile Lulusan
+                    Profil Lulusan
                 </a>
             </li>
             <li aria-current="page">
@@ -27,7 +27,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="m1 9 4-4-4-4" />
                     </svg>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Tambah Profile
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Tambah Profil
                         Lulusan</span>
                 </div>
             </li>
@@ -36,7 +36,7 @@
 
     <br>
     <div class="text-center">
-        <h1 class="font-bold text-2xl mb-0 text-dark-700">Tambah Profile Lulusan</h1>
+        <h1 class="font-bold text-2xl mb-0 text-dark-700">Tambah Profil Lulusan</h1>
     </div>
 
     {{-- <hr/> --}}
@@ -62,7 +62,7 @@
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" " required value="{{ old('profile_lulusan') }}" />
                         <label for="profile_lulusan"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Profile
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Profil
                             Lulusan</label>
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
@@ -71,7 +71,7 @@
                             placeholder=" " required value="{{ old('deskripsi_profile') }}" />
                         <label for="deskripsi_profile"
                             class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Deskripsi
-                            Profile</label>
+                            Profil</label>
                     </div>
                     <div class="flex flex-col z-0 w-full mb-6 group">
                         <label for="unit" class="text-sm text-gray-500">

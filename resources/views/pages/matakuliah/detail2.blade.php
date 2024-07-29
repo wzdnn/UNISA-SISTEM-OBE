@@ -80,13 +80,7 @@
                 </div>
                 <hr />
                 <div class="grid md:grid-cols-2">
-                    <div class="relative z-0 px-3 py-3">
-                        <label for="akses_media" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Akses
-                            Media</label>
-                        <input type="text" name="akses_media" id="akses_media"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder=" " value="{{ old('akses_media') ?? $mkSubBk->akses_media }}">
-                    </div>
+
                     <div class="relative z-0 px-3 py-3 ">
                         <label for="batasNilai" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Batas
                             Nilai</label>
@@ -95,21 +89,7 @@
                             placeholder=" " value="{{ old('batasNilai') ?? $mkSubBk->batasNilai }}">
                     </div>
                 </div>
-                <div class="grid md:grid-cols-2">
-                    <div class="relative z-0 px-3 py-3 ">
-                        <label for="luring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
-                        <input type="text" name="luring" id="luring"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                            placeholder=" " value="{{ old('luring') ?? $mkSubBk->luring }}">
-                    </div>
-                    <div class="relative z-0 px-3 py-3 ">
-                        <label for="daring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
-                        <input type="text" name="daring" id="daring"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                            placeholder=" " value="{{ old('daring') ?? $mkSubBk->daring }}">
-                    </div>
-                </div>
-                <div>
+                <div class="grid">
                     <div class="relative z-0 px-3 py-3">
                         <label for="deskripsi_mk" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Deskripsi
                             Matakuliah</label>
@@ -119,37 +99,6 @@
                     </div>
                 </div>
 
-                {{-- Pengalaman Belajar Pada Mahasiswa --}}
-                <div class="grid">
-                    <div class="relative z-0 px-3">
-                        <label for="" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Pengalaman
-                            Belajar Mahasiswa</label>
-                    </div>
-                    <div class="relative z-0 px-3">
-                        <label for=""
-                            class="block mb-2 text-sm font-medium text-gray-900 uppercase">Sinkron</label>
-                        <select class="w-auto" id="pengalamanSelectSinkron" name="pengalamanSelectSinkron[]"
-                            multiple="multiple">
-                            @foreach ($mkPengalaman as $item)
-                                <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanSinkron))>
-                                    {{ $item->pengalaman_mahasiswa }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="relative z-0 px-3 py-1">
-                        <label for=""
-                            class="block mb-2 py-1 text-sm font-medium text-gray-900 uppercase">Asinkron</label>
-                        <select class="w-auto" id="pengalamanSelectAsinkron" name="pengalamanSelectAsinkron[]"
-                            multiple="multiple">
-                            @foreach ($mkPengalaman as $item)
-                                <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanAsinkron))>
-                                    {{ $item->pengalaman_mahasiswa }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
 
                 <div class="flex justify-center">
                     <button
@@ -169,6 +118,187 @@
             </form>
         </div>
 
+
+        <div class="mt-3 px-3 bg-white border border-gray-200 rounded-lg shadow-lg justify-between">
+
+            {{-- Header 2nd Card --}}
+            <div class="flex px-3 py-2 mt-3 justify-between">
+                <div class="flex flex-col">
+                    <form method="GET" class="rounded">
+                        @csrf
+                        <select name="filter" id="">
+                            @foreach ($filter['filter'] as $item)
+                                <option value="{{ $item }}" @selected($item == $filter['latest'])>
+                                    {{ $item }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                            type="submit">Filter</button>
+                    </form>
+
+                    @if (request()->search != null && request()->key != null)
+                        <div class="my-3">
+                            <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="flex">
+                    <a href="{{ route('timeline.index', ['id' => $mkSubBk->kdmatakuliah]) }}">
+                        <button
+                            class="flex items-center mr-2 bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Timeline
+                            Matakuliah</button>
+                    </a>
+
+                    <a href="{{ route('detail.index', ['id' => $mkSubBk->kdmatakuliah]) }}">
+                        <button
+                            class="flex items-center bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah
+                            Detail Matakuliah</button>
+                    </a>
+                </div>
+            </div>
+            <hr />
+
+            <div class="grid">
+                <div class="relative z-0 px-3 py-3">
+                    <label for="akses_media" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Akses
+                        Media</label>
+                    <input type="text" name="akses_media" id="akses_media"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        disabled placeholder=" " value="{{ $akses->linkakses ?? '' }}">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3">
+                <div class="relative z-0 px-3 py-3 ">
+                    <label for="luring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
+                    <input type="text" name="luring" id="luring"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                        disabled placeholder=" " value="{{ $akses->luring ?? '' }}%">
+                </div>
+                <div class="relative z-0 px-3 py-3 ">
+                    <label for="daring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
+                    <input type="text" name="daring" id="daring"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                        disabled placeholder=" " value="{{ $akses->daring ?? '' }}%">
+                </div>
+                <div class="relative z-0 px-3 py-3 ">
+                    <label for="blended" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Blended</label>
+                    <input type="text" name="blended" id="blended"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                        disabled placeholder=" " value="{{ $akses->blended ?? '' }}%">
+                </div>
+            </div>
+
+            {{-- Pengalaman Belajar Pada Mahasiswa --}}
+            <div class="grid">
+                <div class="relative z-0 px-3">
+                    <label for="" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Pengalaman
+                        Belajar Mahasiswa</label>
+                </div>
+                <div class=" z-0 px-3 ">
+                    <label for="" class="block mb-2 text-sm font-medium text-gray-900 uppercase">Sinkron</label>
+
+                    @foreach ($pengalamanSinkron as $ps)
+                        <div class="flex justify-between  mt-2">
+                            @foreach ($ps->sinkron_pivot as $sinkron)
+                                {{ $loop->iteration }}. {{ $sinkron->pengalaman_mahasiswa }}
+
+                                <a href="{{ route('pengalaman-sinkron.delete', ['id' => $ps->id]) }}"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
+                                <br />
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+                <div class=" z-0 px-3 py-1">
+                    <label for=""
+                        class="block mb-2 py-1 text-sm font-medium text-gray-900 uppercase">Asinkron</label>
+
+                    @foreach ($pengalamanAsinkron as $pas)
+                        <div class="flex justify-between  mt-2">
+                            @foreach ($pas->asinkron_pivot as $asinkron)
+                                {{ $loop->iteration }}. {{ $asinkron->pengalaman_mahasiswa }}
+                                <a href="{{ route('pengalaman-asinkron.delete', ['id' => $pas->id]) }}"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
+                                <br />
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="relative z-0 px-3 py-3">
+                    <label for="akses_media" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Referensi
+                        Materi</label>
+
+                </div>
+                <div class="px-3 ">
+                    <div class="">
+                        <h3 class="font-semibold text-md">Utama</h3>
+                        <hr />
+
+                        @foreach ($referensiUtama as $utama)
+                            <div class="flex justify-between mr-40 mt-2">
+                                {{ $loop->iteration }}. {{ $utama->referensi }}
+                                <a href="{{ route('delete.referensi.utama', ['id' => $utama->id]) }}"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
+                            </div>
+                        @endforeach
+
+                    </div>
+                    <div class="py-3">
+                        <h3 class="font-semibold text-md">Tambahan</h3>
+                        <hr />
+
+                        @foreach ($referensiTambahan as $tambahan)
+                            <div class="flex justify-between mr-40 mt-2">
+                                {{ $loop->iteration }}. {{ $tambahan->referensi }}
+                                <a href="{{ route('delete.referensi.tambahan', ['id' => $tambahan->id]) }}"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
+                            </div>
+                        @endforeach
+
+                    </div>
+                    <div class="py-3">
+                        <h3 class="font-semibold text-md">Luaran</h3>
+                        <hr />
+
+                        @foreach ($referensiLuaran as $luaran)
+                            <div class="flex justify-between mr-40 mt-2">
+                                {{ $loop->iteration }}. {{ $luaran->referensi }}
+                                <a href="{{ route('delete.referensi.luaran', ['id' => $luaran->id]) }}"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </a>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <br />
         <hr />
     </div>
@@ -179,7 +309,8 @@
 
         </div>
         <a href="{{ route('mk.subbk', ['id' => $mkSubBk->kdmatakuliah]) }}" class="px-3 py-3"><button
-                class=" bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola Sub
+                class=" bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola
+                Sub
                 Bahan
                 Kajian
             </button>

@@ -43,6 +43,9 @@ Route::get('/tampilan', function () {
     return view('pages.matkul');
 });
 
+Route::get('/test/{id}/testing', function ($id) {
+    return $id;
+})->name('testing');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UserController::class, 'test']);
@@ -132,8 +135,6 @@ Route::middleware(['auth'])->group(function () {
 
     // CPMK
 
-    // Route::get('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkCreate'])->name('create.cpmk');
-    // Route::post('/cpmkCreate{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('create.cpmk.post');
 
 
     Route::get('/list-cpmk', [ak_kurikulum_cpmk_controller::class, 'cpmkList'])->name('list.cpmk');
@@ -146,10 +147,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::post('/cpmk-store', [ak_kurikulum_cpmk_controller::class, 'cpmkStore'])->name('store.cpmk');
-    // Route::get('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkShow'])->name('show.cpmk');
-    // Route::post('/cpmkShow/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkMapping'])->name('show.cpmk.post');
-    // Route::get('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditGet'])->name('edit.cpmk');
-    // Route::post('/cpmkEdit/{id}', [ak_kurikulum_cpmk_controller::class, 'cpmkEditPOST'])->name('edit.cpmk.post');
+
 
 
     // MATAKULIAH
@@ -158,17 +156,59 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matakuliah/Create', [ak_matakuliah_controller::class, 'mkCreate'])->name('create.mk');
     Route::post('/matakuliah/Store', [ak_matakuliah_controller::class, 'mkStore'])->name('store.mk');
 
-    Route::post('/matakuliah/copyMK', [ak_matakuliah_controller::class, 'copyMatakuliah'])->name('copy.mk');
+    // Route::post('/matakuliah/copyMK', [ak_matakuliah_controller::class, 'copyMatakuliah'])->name('copy.mk');
 
-    Route::get('/detail-mk/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
-    Route::post('/detail-mk/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
-    Route::get('/detail-mk/{id}/sub-bk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
-    Route::post('/detail-mk/{id}/sub-bk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
+    Route::get('/matakuliah/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
+    Route::post('/matakuliah/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
+    Route::get('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
+    Route::post('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
 
-    Route::get('/detail-mk/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
-    Route::post('/detail-mk/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
-    Route::get('/detail-mk/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
-    Route::post('/detail-mk/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+    Route::get('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
+    Route::post('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
+    Route::get('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
+    Route::post('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
+
+
+    route::get('/matakuliah/{id}/detail', [ak_matakuliah_controller::class, 'detailIndex'])->name('detail.index');
+
+    route::post('/matakuliah/{id}/detail/store', [ak_matakuliah_controller::class, 'detailStore'])->name('detail.store');
+
+    route::get('/matakuliah/delete-pengalaman-sinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanSinkron'])->name('pengalaman-sinkron.delete');
+    route::get('/matakuliah/delete-pengalaman-asinkron/{id}', [ak_matakuliah_controller::class, 'deletePengalamanAsinkron'])->name('pengalaman-asinkron.delete');
+
+
+    //Delete referensi pada Detail-MK
+    Route::get('/deleteReferensiUtama/{id}', [ak_matakuliah_controller::class, 'deleteReferensiUtama'])->name('delete.referensi.utama');
+    Route::get('/deleteReferensiTambahan/{id}', [ak_matakuliah_controller::class, 'deleteReferensiTambahan'])->name('delete.referensi.tambahan');
+    Route::get('/deleteReferensiLuaran/{id}', [ak_matakuliah_controller::class, 'deleteReferensiLuaran'])->name('delete.referensi.luaran');
+
+
+    //Timeline Matakuliah
+    route::get('/matakuliah/{id}/timeline', [ak_matakuliah_controller::class, 'timeline'])->name('timeline.index');
+    route::get('/matakuliah/{id}/timeline/create', [ak_matakuliah_controller::class, 'createTimeline'])->name('timeline.create');
+    route::get('/matakuliah/{id}/timeline/edit/{kdtimeline}', [ak_matakuliah_controller::class, 'editTimeline'])->name('timeline.edit');
+    route::post('/timeline/store', [ak_matakuliah_controller::class, 'storeTimeline'])->name('timeline.store');
+    route::get('/timeline/{id}/delete', [ak_matakuliah_controller::class, 'deleteTimeline'])->name('timeline.delete');
+    route::post('/timeline/{id}/update', [ak_matakuliah_controller::class, 'updateTimeline'])->name('timeline.update');
+
+    // RPS Matakuliah
+    route::get('/matakuliah/{id}/rps', [ak_matakuliah_controller::class, 'rps'])->name('rps.index');
+
+    //Struktur Program Matakuliah
+    route::get('/struktur-program', [ak_matakuliah_controller::class, 'strukturProgramIndex'])->name('sp.index');
+    route::get('/struktur-program/create', [ak_matakuliah_controller::class, 'strukturProgramCreate'])->name('sp.create');
+    route::post('/struktur-program/store', [ak_matakuliah_controller::class, 'strukturProgramStore'])->name('sp.store');
+
+    // Materi Pembelajaran Pada SUBBK
+    Route::post('/materiStore', [ak_matakuliah_controller::class, 'storeMateri'])->name('store.materi');
+    Route::get('/matakuliah/{id}/sub-bk/{sub}/materi/{materi}', [ak_matakuliah_controller::class, 'indexMateri'])->name('index.materi');
+    Route::post('/matakuliah/{id}/sub-bk/{sub}/materi/{materi}', [ak_matakuliah_controller::class, 'postsubbkSKS']);
+
+
+    // Matakuliah - SUBBK
+    Route::get('/matakuliah/{id}/sub-bk/{sub}', [ak_matakuliah_controller::class, 'subbkCPMK'])->name('subbk.cpmk'); // kelola subbk cpmk
+    Route::get('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'kelolacpmk'])->name('subbk.cpmk.kelola'); // kelola subbk cpmk
+    Route::post('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
 
 
     // detail Subbk-CPMK
@@ -207,11 +247,33 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/metode-penilaian/tugas/{id}', [metodePenilaianController::class, 'tugasIndex'])->name('tugas.metopen');
     Route::get('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilai'])->name('list.metopen');
     Route::post('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilaiPost'])->name('copy.mhs');
+    Route::post('/ambil-nilai/{id}', [metodePenilaianController::class, 'ambilNilai'])->name('ambil.nilai');
+
+    // Delete List Penilaian
+
+    route::get('/list-penilaian/{kdjenisnilai}/delete', [metodePenilaianController::class, 'listNilaiDelete'])->name('list.delete');
 
     // Penilaian
-    Route::get('/penilaian/{id}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');
-    Route::post('/penilaian/{id}', [metodePenilaianController::class, 'postPenilaian'])->name('post.nilai');
+    Route::get('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'penilaian'])->name('index.penilaian');
+    Route::post('/penilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'postPenilaian'])->name('post.nilai');
+
+    // Penilaian - rubrik
+    Route::post('/penilaian/{id}/{kdtahunakademik}/rubik/upload', [metodePenilaianController::class, 'penilaianUploadPost'])->name('rubik.post');
+    Route::get('/penilaian/{id}/{kdtahunakademik}/rubik/delete/{file_id}', [metodePenilaianController::class, 'penilaianUploadDelete'])->name('rubik.delete');
+
+    // Cetak Penilaian
+    Route::get('/cetakPenilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'exportNilai'])->name('export.nilai');
+
+    // Import Penilaian
+    Route::post('/importPenilaian/{id}/{kdtahunakademik}', [metodePenilaianController::class, 'importNilai'])->name('import.nilai');
 
     // Final Penilaian
     Route::get('/matkul-nilai/{id}', [metodePenilaianController::class, 'finalNilai'])->name('matkul.nilai');
+
+    // Rekap 
+    Route::get('/rekap', [metodePenilaianController::class, 'rekap'])->name('rekap.index');
+    Route::get('/rekap-semester/{id}', [metodePenilaianController::class, 'rekapSemester'])->name('rekap.semester');
+    Route::get('/rekap-tahunan/{id}', [metodePenilaianController::class, 'rekapTahunan'])->name('rekap.tahunan');
+    Route::get('/rekap-mahasiswa', [metodePenilaianController::class, 'rekapMahasiswaGet'])->name('rekap.mahasiswa.get');
+    // Route::post('/rekap-mahasiswa/{nim}', [metodePenilaianController::class, 'rekapMahasiswaPost'])->name('rekap.mahasiswa.post');
 });

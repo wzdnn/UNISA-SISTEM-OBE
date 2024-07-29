@@ -1,0 +1,155 @@
+@extends('layouts.app')
+
+@push('style')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endpush
+
+<br>
+@section('body')
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
+                Rekap Semester</h1>
+        </div>
+    </div>
+
+    <div class="flex flex-col">
+        <form method="GET" class="rounded">
+            {{-- @csrf --}}
+            <select name="filter" id="" class="rounded">
+                <option value="null">Kurikulum</option>
+                @foreach ($kdkurikulum as $item)
+                    <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>{{ $item->kurikulum }}</option>
+                @endforeach
+            </select>
+            {{-- <input type="text" name="search" class=" rounded"> --}}
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                type="submit">Filter</button>
+        </form>
+
+        @if (request()->search != null && request()->key != null)
+            <div class="my-3">
+                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+            </div>
+        @endif
+    </div>
+
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-3 py-1">
+                        No
+                    </th>
+                    <th scope="col" class="px-3 py-1">
+                        Tahun
+                    </th>
+                    <th scope="col" class="px-3 py-1">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($rekap as $rekapindex)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $loop->iteration }}
+                        </th>
+                        <td class="px-3 py-2">
+
+                            {{ $rekapindex->tahunakademik }} <br />
+
+                        </td>
+                        <td class="px-3 py-2">
+                            <a href="{{ route('rekap.semester', ['id' => $rekapindex->kdtahunakademik]) }}">
+
+                                <button id="btnDetail"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    type="button">
+                                    <i class="fa fa-book" aria-hidden="true"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    {{-- Rekap Tahunan --}}
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
+                Rekap Tahunan</h1>
+        </div>
+    </div>
+
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-3 py-1">
+                        No
+                    </th>
+                    <th scope="col" class="px-3 py-1">
+                        Tahun
+                    </th>
+                    <th scope="col" class="px-3 py-1">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($rekapTahunanIndex as $rekaptahunan)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $loop->iteration }}
+                        </th>
+                        <td class="px-3 py-2">
+
+                            {{ $rekaptahunan->tahun }} <br />
+
+                        </td>
+                        <td class="px-3 py-2">
+                            <a href="{{ route('rekap.tahunan', ['id' => $rekaptahunan->tahun]) }}">
+
+                                <button id="btnDetail"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    type="button">
+                                    <i class="fa fa-book" aria-hidden="true"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    {{-- Rekap Mahasiswa --}}
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
+                Rekap Mahasiswa
+            </h1>
+        </div>
+    </div>
+    <div class="relative">
+        <div class="px-5 ">
+
+            <a href="{{ route('rekap.mahasiswa.get') }}">
+                <button
+                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <i class="fa fa-search mr-2" aria-hidden="true"></i>
+                    Cari Mahasiswa
+                </button>
+            </a>
+
+
+
+        </div>
+
+    </div>
+@endsection

@@ -15,6 +15,8 @@ class gabung_nilai_metopen extends Model
     protected $fillable = [
         'id_gabung_metopen',
         'keterangan',
-        'kdtahunakademik'
+        'kdtahunakademik',
+        'idlensa',
+        'idtipelensa'
     ];
 }

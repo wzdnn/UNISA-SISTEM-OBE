@@ -65,7 +65,7 @@
                     </div>
                     <div class="flex flex-col z-0 w-full mb-6 group">
                         <label for="pl" class="text-sm text-gray-500">
-                            Profile Lulusan
+                            Profil Lulusan
                         </label>
                         <select id="pl" name="kdpl[]" multiple data-live-search="true" class="form-control">
                             @foreach ($ak_kurikulum_pl as $pl)

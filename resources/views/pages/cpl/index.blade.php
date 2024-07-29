@@ -90,7 +90,7 @@
                         No.
                     </th>
                     <th scope="col" class="px-6 py-3 ">
-                        Profile Lulusan
+                        Profil Lulusan
                     </th>
                     <th scope="col" class="px-6 py-3 ">
                         Kode CPL
@@ -144,7 +144,11 @@
                                 {{ $akKurikulumCpls->cpl }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $akKurikulumCpls->deskripsi_cpl }}
+                                @if ($akKurikulumCpls->id_cpl_univ != null)
+                                    {{ $akKurikulumCpls->deskripsi_cpl }} (Universitas)
+                                @else
+                                    {{ $akKurikulumCpls->deskripsi_cpl }} {{ $akKurikulumCpls->id_cpl_univ }}
+                                @endif
                             </td>
                             <td class=" px-6 py-4 ">
                                 {{ $akKurikulumCpls->aspek }}
@@ -166,7 +170,7 @@
                                     </a>
                                     <a href="{{ route('cpl.delete', ['id' => $akKurikulumCpls->id]) }}"
                                         onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
-                                          <button
+                                        <button
                                             class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                                 class="fa-solid fa-trash"></i></button>
                                     </a>

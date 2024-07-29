@@ -117,9 +117,11 @@
                     <th scope="col" class="w-10 ">
                         Unit
                     </th>
-
                     <th scope="col" class="px-6 py-3 ">
                         Action
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        RPS
                     </th>
                 </tr>
             </thead>
@@ -224,6 +226,13 @@
                                                     class="fa fa-folder" aria-hidden="true"></i></button>
                                         </a>
                                     </td>
+                                    <td class="px-6 py-4">
+                                        <a href="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}">
+                                            <button type="button"
+                                                class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                                    class="fa fa-print" aria-hidden="true"></i></button>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         @else
@@ -282,6 +291,13 @@
                                                 class="fa fa-folder" aria-hidden="true"></i></button>
                                     </a>
                                 </td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}">
+                                        <button type="button"
+                                            class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
+                                                class="fa fa-print" aria-hidden="true"></i></button>
+                                    </a>
+                                </td>
                             </tr>
                         @endif
                     @endforeach
@@ -299,6 +315,7 @@
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
+            MergeGridCells('#mytable', 15, false);
             MergeGridCells('#mytable', 14, false);
             MergeGridCells('#mytable', 13, false);
             MergeGridCells('#mytable', 12, false);

@@ -30,4 +30,9 @@ class ak_kurikulum_sub_bk extends Model
     {
         return $this->belongsToMany(ak_matakuliah::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'kdmatakuliah', 'ak_kurikulum_sub_bk_id')->withPivot('id');
     }
+
+    public function SBKtoMuatan()
+    {
+        return $this->belongsToMany(ak_muatan::class, 'gabung_sbk_muatan', 'id_subbk', 'kdmuatan')->withPivot('id');
+    }
 }

@@ -10,6 +10,7 @@
     <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
+
                 <a href="{{ route('index.aspek') }}"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
                     <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -26,7 +27,7 @@
             <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Aspek</h1>
         </div>
         <div class="flex items-center">
-            @if (Auth::user()->role == 'admin')
+            @if (Auth::user()->leveling !== 4)
                 <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
                     class="block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
@@ -90,6 +91,11 @@
     </div>
     <hr />
 
+
+    <div class="px-3 py-2">
+        <h3 class="text-red-600 font-bold">*Jika Ingin Menghapus Harap Hubungi Admin</h3>
+    </div>
+
     <div class="relative py-3">
         <table class="w-full text-sm text-center  text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -100,7 +106,7 @@
                     <th scope="col" class="px-6 py-3 text-left ">
                         Aspek
                     </th>
-                    @if (Auth::user()->role == 'admin')
+                    @if (Auth::user()->leveling !== 4)
                         <th scope="col" class="px-6 py-3 text-left ">
                             Action
                         </th>
@@ -118,15 +124,18 @@
                             <td class="px-6 py-4">
                                 {{ $aspeks->aspek }}
                             </td>
-                            @if (Auth::user()->role == 'admin')
+                            @if (Auth::user()->leveling !== 4)
                                 <td class="px-6 py-4">
 
-                                    <a href="{{ route('delete.aspek', ['id' => $aspeks->id]) }}"
+                                    {{-- <a href="{{ route('delete.aspek', ['id' => $aspeks->id]) }}"
                                         onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
                                         <button
                                             class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                                class="fa-solid fa-trash"></i></button>
-                                    </a>
+                                                class="fa-solid fa-trash disabled"></i></button>
+                                    </a> --}}
+                                    <button disabled
+                                        class="bg-red-600  text-white rounded px-2 text-md font-semibold p-1"><i
+                                            class="fa-solid fa-trash "></i></button>
                                 </td>
                             @endif
                         </tr>
