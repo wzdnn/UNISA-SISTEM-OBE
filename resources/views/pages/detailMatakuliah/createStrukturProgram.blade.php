@@ -65,7 +65,7 @@
                         <label for="dosen1" class="text-sm text-gray-500">
                             Dosen Utama
                         </label>
-                        <select id="dosen1" name="dosen1" class="form-control">
+                        <select id="dosen1" name="dosen1[]" multiple data-live-search="true" class="form-control">
                             @foreach ($dosen1 as $dos1)
                                 <option value="{{ $dos1->kdperson }}"> {{ $dos1->namalengkap }} {{ $dos1->gelarbelakang }}
                                 </option>
@@ -76,7 +76,7 @@
                         <label for="dosen2" class="text-sm text-gray-500">
                             Dosen Pelaporan PDDIKTI
                         </label>
-                        <select id="dosen2" name="dosen2" class="form-control">
+                        <select id="dosen2" name="dosen2[]" multiple data-live-search="true" class="form-control">
                             @foreach ($dosen2 as $dos1)
                                 <option value="{{ $dos1->kdperson }}"> {{ $dos1->namalengkap }} {{ $dos1->gelarbelakang }}
                                 </option>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="keterangan" id="keterangan"
+                        <input type="text" name="keterangan" id="keterangan" required
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" " value="{{ old('keterangan') }}" />
                         <label for="keterangan"
@@ -97,94 +97,251 @@
                 {{-- break section 1 --}}
                 <hr />
 
-                <div class="grid md:grid-cols-2 md:gap-6">
+                <div class="grid md:grid-cols-2 md:gap-6 mt-3">
                     <div class="relative z-0   mb-6 group">
-                        <input type="number" name="teori" id="teori"
-                            class="block py-2.5 px-0   text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="teori"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Teori(KT)</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teori</label>
+                        <select id="teori" name="teori"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
                     </div>
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="pertemuan_kt" id="pertemuan_kt"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="pertemuan_kt"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah
-                            Pertemuan</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_kt" name="pertemuan_kt"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
 
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="tutorial" id="tutorial"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="tutorial"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tutorial(KP/T)</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Tutorial</label>
+                        <select id="tutorial" name="tutorial"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
                     </div>
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="pertemuan_kp" id="pertemuan_kp"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="pertemuan_kp"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah
-                            Pertemuan</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_kp" name="pertemuan_kp"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="seminar" id="seminar"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="seminar"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Seminar(S)</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Seminar</label>
+                        <select id="seminar" name="seminar"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
                     </div>
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="pertemuan_s" id="pertemuan_s"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="pertemuan_s"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah
-                            Pertemuan</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_s" name="pertemuan_s"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
 
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="praktikum" id="praktikum"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="praktikum"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Praktikum(P)</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Praktikum</label>
+                        <select id="praktikum" name="praktikum"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
                     </div>
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="pertemuan_p" id="pertemuan_p"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="pertemuan_p"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah
-                            Pertemuan</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_p" name="pertemuan_p"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="praktik" id="praktik"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="praktik"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Praktik(Pr)</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Praktik</label>
+                        <select id="praktik" name="praktik"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
                     </div>
                     <div class="relative z-0  mb-6 group">
-                        <input type="number" name="pertemuan_pr" id="pertemuan_pr"
-                            class="block py-2.5 px-0  text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " value="" />
                         <label for="pertemuan_pr"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah
-                            Pertemuan</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_pr" name="pertemuan_pr"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
                     </div>
                 </div>
+
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="relative z-0  mb-6 group">
+                        <label for="belajar_mandiri"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Belajar Mandiri</label>
+                        <select id="belajar_mandiri" name="belajar_mandiri"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
+                    </div>
+                    <div class="relative z-0  mb-6 group">
+                        <label for="pertemuan_bm"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_bm" name="pertemuan_bm"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="relative z-0  mb-6 group">
+                        <label for="skill_lab" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Skill
+                            Lab</label>
+                        <select id="skill_lab" name="skill_lab"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
+                    </div>
+                    <div class="relative z-0  mb-6 group">
+                        <label for="pertemuan_sl"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_sl" name="pertemuan_sl"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="relative z-0  mb-6 group">
+                        <label for="studio"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Studio</label>
+                        <select id="studio" name="studio"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Pilih Sks</option>
+                            <option value=0>0</option>
+                            <option value=0.5>0.5</option>
+                            <option value=1>1</option>
+                            <option value=1.5>1.5</option>
+                            <option value=2>2</option>
+                            <option value=2.5>2.5</option>
+                            <option value=3>3</option>
+                        </select>
+                    </div>
+                    <div class="relative z-0  mb-6 group">
+                        <label for="pertemuan_studio"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
+                        <select id="pertemuan_studio" name="pertemuan_studio"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Jumlah Pertemuan</option>
+                            <option value=0>0</option>
+                            <option value=4>4</option>
+                            <option value=8>8</option>
+                            <option value=12>12</option>
+                            <option value=16>16</option>
+                        </select>
+                    </div>
+                </div>
+
 
                 <hr />
                 <br />
@@ -203,13 +360,13 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="hidden flex-col z-0 w-full mb-6 group">
+                    <div class="flex flex-col z-0 w-full mb-6 group">
                         <label for="kurikulum" class="text-sm text-gray-500">
                             Kurikulum
                         </label>
                         <select id="kurikulum" name="kurikulum" class="form-control ">
                             @foreach ($kurikulum as $k)
-                                <option value="{{ $k->kdkurikulum }}"> {{ $k->kurikulum }}
+                                <option value="{{ $k->kdkurikulum }}"> {{ $k->kurikulum }} {{ $k->tahun }}
                                 </option>
                             @endforeach
                         </select>

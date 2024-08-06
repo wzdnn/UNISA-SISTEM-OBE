@@ -12,6 +12,7 @@ class gabung_nilai_metopen extends Model
 
     use HasFactory;
     protected $table = "gabung_nilai_metopen";
+    protected $primaryKey = "kdjenisnilai";
     protected $fillable = [
         'id_gabung_metopen',
         'keterangan',

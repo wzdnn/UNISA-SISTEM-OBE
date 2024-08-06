@@ -14,4 +14,17 @@ class ak_strukturprogram extends Model
     protected $guarded = [
         'kdstrukturprogram'
     ];
+
+    protected $primaryKey = "kdstrukturprogram";
+
+
+    public function struktur_utama()
+    {
+        return $this->belongsToMany(pt_person::class, 'ak_matakuliah_dosen_utama', 'kdstrukturprogram', 'kdperson', 'kdstrukturprogram', 'kdperson');
+    }
+
+    public function struktur_pelaporan()
+    {
+        return $this->belongsToMany(pt_person::class, 'ak_matakuliah_dosen_pelaporan', 'kdstrukturprogram', 'kdperson', 'kdstrukturprogram', 'kdperson');
+    }
 }

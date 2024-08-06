@@ -460,6 +460,14 @@ class organisasiMkController extends Controller
         return redirect()->route('organisasi.mk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 
+    public function temaDelete(int $id)
+    {
+        $tema = tema::findOrFail($id);
+        $tema->delete();
+
+        return redirect()->back();
+    }
+
     public function copyMatakuliah(Request $request)
     {
         DB::select('call sistem_obe.copy_mk_univ(?,?)', [$request->unitUniv, $request->unitProdi]);

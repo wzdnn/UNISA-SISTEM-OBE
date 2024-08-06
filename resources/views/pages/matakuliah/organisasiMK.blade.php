@@ -264,6 +264,10 @@
                     <td class="w-full text-left">
                         @foreach ($tema8 as $value)
                             &#x2022; {{ $value->tema }}
+
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -491,6 +495,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema7 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -716,6 +723,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema6 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -943,6 +953,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema5 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1171,6 +1184,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema4 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1397,6 +1413,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema3 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1580,7 +1599,8 @@
                                         @csrf
                                         <input type="hidden" name="semester" value="3">
                                         <input type="hidden" name="ispilihan" value="2">
-                                        <select class="w-[41vw]" id="mkselect3-2" name="mkselect[]" multiple="multiple">
+                                        <select class="w-[41vw]" id="mkselect3-2" name="mkselect[]"
+                                            multiple="multiple">
                                             @foreach ($matakuliah as $item)
                                                 <option value="{{ $item->kdmatakuliah }}">
                                                     {{ $item->kodematakuliah }} {{ $item->matakuliah }}
@@ -1623,6 +1643,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema2 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 
@@ -1853,6 +1876,9 @@
                     <td class="w-[50vw] text-left">
                         @foreach ($tema1 as $value)
                             &#x2022; {{ $value->tema }}
+                            <a href="{{ route('delete.tema', ['id' => $value->id]) }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                             <br />
                         @endforeach
 

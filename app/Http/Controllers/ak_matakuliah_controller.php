@@ -8,6 +8,8 @@ use App\Models\ak_kurikulum_sub_bk;
 use App\Models\ak_kurikulum_sub_bk_materi;
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
+use App\Models\ak_matakuliah_dosen_pelaporan;
+use App\Models\ak_matakuliah_dosen_utama;
 use App\Models\ak_matakuliah_referensi_luaran;
 use App\Models\ak_matakuliah_referensi_tambahan;
 use App\Models\ak_matakuliah_referensi_utama;
@@ -26,6 +28,7 @@ use App\Models\gabung_matakuliah_subbk;
 use App\Models\gabung_subbk_cpmk;
 use App\Models\mk_sub_bk;
 use App\Models\rekomendasisks;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +46,12 @@ class ak_matakuliah_controller extends Controller
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
+                ->when($request->input("filter-kurikulum") != null or $request->input("filter-kurikulum") != null, function ($query) use ($request) {
+                    $query->where("ak_matakuliah.kdkurikulum", $request->input("filter-kurikulum"));
+                })
+                ->when($request->input("filter-matakuliah") != null or $request->input("filter-matakuliah") != null, function ($query) use ($request) {
+                    $query->where("ak_matakuliah.matakuliah", $request->input("filter-matakuliah"));
+                })
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
 
@@ -54,8 +63,13 @@ class ak_matakuliah_controller extends Controller
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->where(function ($query) {
-                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit);
+                })
+                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
+                    $query->where("ak_matakuliah.kdkurikulum", $request->input('filter-kurikulum'));
+                })
+                ->when($request->input('filter-matakuliah') != null or $request->input('filter-matakuliah') != null, function ($query) use ($request) {
+                    $query->where("ak_matakuliah.matakuliah", $request->input("filter-matakuliah"));
                 })
                 ->orderBy('kdmatakuliah', 'asc')
                 ->paginate(10);
@@ -78,16 +92,16 @@ class ak_matakuliah_controller extends Controller
 
 
 
-        if ($request->has("filter")) {
-            if (in_array($request->filter, $arrayKurikulum)) {
-                $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-                    ->where("ak_kurikulum.isObe", '=', 1)
-                    ->where("kurikulum", "=", $request->filter)
-                    ->orderBy('kdmatakuliah', 'asc')
-                    ->paginate(10);
-            }
-        }
+        // if ($request->has("filter")) {
+        //     if (in_array($request->filter, $arrayKurikulum)) {
+        //         $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+        //             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        //             ->where("ak_kurikulum.isObe", '=', 1)
+        //             ->where("kurikulum", "=", $request->filter)
+        //             ->orderBy('kdmatakuliah', 'asc')
+        //             ->paginate(10);
+        //     }
+        // }
 
 
         // return dd($matakuliah);
@@ -325,8 +339,6 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->batasNilai = $request->input('batasNilai');
             $mkSubBk->deskripsi_mk = $request->input('deskripsi_mk');
             $mkSubBk->akses_media = $request->input('akses_media');
-            $mkSubBk->luring = $request->input('luring');
-            $mkSubBk->daring = $request->input('daring');
 
             if (count($pengalamanSelectSinkron) > 0) {
                 $mkSubBk->pengalamanSinkron()->sync($pengalamanSelectSinkron);
@@ -1438,9 +1450,18 @@ class ak_matakuliah_controller extends Controller
     }
 
 
+    public function pdfGet()
+    {
+        $data = ['title' => 'testing PDF'];
+        $pdf = Pdf::loadView('matakuliah.rps', $data);
+        return $pdf->download('rps.pdf');
+    }
+
     // Struktur Program MK
     public function strukturProgramIndex(Request $request)
     {
+
+
 
         $kurikulum = DB::table("ak_kurikulum")
             ->where("isObe", "=", 1)
@@ -1458,49 +1479,64 @@ class ak_matakuliah_controller extends Controller
 
         ];
 
-        $strukturprogram = db::table('ak_strukturprogram as s')
-            ->select("*", "p1.namalengkap as dosen1", "p2.namalengkap as dosen2", "p1.gelarbelakang as gbdos1", "p2.gelarbelakang as gbdos2", "s.keterangan as ket")
-            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 's.kdmatakuliah')
-            ->join('pt_person as p1', 'p1.kdperson', 's.kdperson_dosen_utama')
-            ->join('pt_person as p2', 'p2.kdperson', 's.kdperson_dosen_pelaporan')
-            ->join('ak_dosen as dos1', 'dos1.kdperson', 'p1.kdperson')
-            ->join('ak_dosen as dos2', 'dos2.kdperson', 'p2.kdperson')
-            ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 's.kdkurikulum')
-            ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 's.kdtahunakademik')
-            ->where("kur.kdunitkerja", Auth::user()->kdunit)
-            ->get();
+
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+            $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
+                ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
+                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
+                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
+                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
+                })
+                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
+                })
+                ->limit(10)
+                ->get();
+            // ->first();
+
+            $kurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
 
 
-        $tahunAkademik = DB::table('ak_tahunakademik')
-            ->where("isAktif", "=", 1)
-            ->get();
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
+        } else {
+            $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
+                ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
+                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
+                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
+                ->where("kur.kdunitkerja", Auth::user()->kdunit)
+                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
+                })
+                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
+                })
+                ->limit(10)
+                ->get();
+            // ->first();
 
 
-        $arrayTahun = [];
-        foreach ($tahunAkademik as $data) {
-            array_push($arrayTahun, $data->kdtahunakademik);
+            $kurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
         }
-
-        if ($request->has("filter")) {
-            if (in_array($request->filter, $arrayTahun)) {
-                $strukturprogram = db::table('ak_strukturprogram as s')
-                    ->select("*", "p1.namalengkap as dosen1", "p2.namalengkap as dosen2", "p1.gelarbelakang as gbdos1", "p2.gelarbelakang as gbdos2", "s.keterangan as ket")
-                    ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 's.kdmatakuliah')
-                    ->join('pt_person as p1', 'p1.kdperson', 's.kdperson_dosen_utama')
-                    ->join('pt_person as p2', 'p2.kdperson', 's.kdperson_dosen_pelaporan')
-                    ->join('ak_dosen as dos1', 'dos1.kdperson', 'p1.kdperson')
-                    ->join('ak_dosen as dos2', 'dos2.kdperson', 'p2.kdperson')
-                    ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 's.kdkurikulum')
-                    ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 's.kdtahunakademik')
-                    ->where("kur.kdunitkerja", Auth::user()->kdunit)
-                    ->where("s.kdtahunakademik", $request->filter)
-                    ->get();
-            }
-        }
-
         // dd($strukturprogram);
 
-        return view('pages.detailMatakuliah.strukturProgramIndex', compact('filter', 'kurikulum', 'strukturprogram', 'tahunAkademik', 'arrayTahun'));
+        return view('pages.detailMatakuliah.strukturProgramIndex', compact('filter', 'kurikulum', 'strukturprogram', 'tahunAkademik', 'kurikulum'));
     }
 
     public function strukturProgramCreate()
@@ -1522,12 +1558,12 @@ class ak_matakuliah_controller extends Controller
 
         $dosen1 = DB::table('ak_dosen as ad')
             ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->where('kdunitkerja', Auth::user()->kdunit)
+            ->orderBy('namalengkap', 'asc')
             ->get();
 
         $dosen2 = DB::table('ak_dosen as ad')
             ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->where('kdunitkerja', Auth::user()->kdunit)
+            ->orderBy('namalengkap', 'asc')
             ->get();
 
         // return dd($tahunAkademik);
@@ -1538,25 +1574,132 @@ class ak_matakuliah_controller extends Controller
 
     public function strukturProgramStore(Request $request)
     {
-        $struktur = ak_strukturprogram::create([
-            'kdmatakuliah' => $request->kdmatakuliah,
-            'keterangan' => $request->keterangan,
-            'kdperson_dosen_utama' => $request->dosen1,
-            'kdperson_dosen_pelaporan' => $request->dosen2,
-            'teori' => $request->teori,
-            'pertemuan_kt' => $request->pertemuan_kt,
-            'tutorial' => $request->tutorial,
-            'pertemuan_kp' => $request->pertemuan_kp,
-            'seminar' => $request->seminar,
-            'pertemuan_s' => $request->pertemuan_s,
-            'praktikum' => $request->praktikum,
-            'pertemuan_p' => $request->pertemuan_p,
-            'praktik' => $request->praktik,
-            'pertemuan_pr' => $request->pertemuan_pr,
-            'kdkurikulum' => $request->kurikulum,
-            'kdtahunakademik' => $request->tahunakademik
-        ]);
 
+
+        try {
+            DB::beginTransaction();
+
+            $request->validate([
+                'teori' => ['nullable'],
+                'pertemuan_kt' => ['nullable'],
+                'tutorial' => ['nullable'],
+                'pertemuan_kp' => ['nullable'],
+                'seminar' => ['nullable'],
+                'pertemuan_s' => ['nullable'],
+                'praktikum' => ['nullable'],
+                'pertemuan_p' => ['nullable'],
+                'praktik' => ['nullable'],
+                'pertemuan_pr' => ['nullable'],
+                'belajar_mandiri' => ['nullable'],
+                'pertemuan_bm' => ['nullable'],
+                'skill_lab' => ['nullable'],
+                'pertemuan_sl' => ['nullable'],
+                'studio' => ['nullable'],
+                'pertemuan_studio' => ['nullable'],
+            ]);
+
+            $struktur = ak_strukturprogram::create([
+                'kdmatakuliah' => $request->kdmatakuliah,
+                'keterangan' => $request->keterangan,
+                'teori' => $request->teori,
+                'pertemuan_kt' => $request->pertemuan_kt,
+                'tutorial' => $request->tutorial,
+                'pertemuan_kp' => $request->pertemuan_kp,
+                'seminar' => $request->seminar,
+                'pertemuan_s' => $request->pertemuan_s,
+                'praktikum' => $request->praktikum,
+                'pertemuan_p' => $request->pertemuan_p,
+                'praktik' => $request->praktik,
+                'pertemuan_pr' => $request->pertemuan_pr,
+                'belajar_mandiri' => $request->belajar_mandiri,
+                'pertemuan_bm' => $request->pertemuan_bm,
+                'skill_lab' => $request->skill_lab,
+                'pertemuan_sl' => $request->pertemuan_sl,
+                'studio' => $request->studio,
+                'pertemuan_studio' => $request->pertemuan_studio,
+                'kdkurikulum' => $request->kurikulum,
+                'kdtahunakademik' => $request->tahunakademik
+            ]);
+
+            foreach ($request->input('dosen1') as $dosenUtama) {
+                DB::table('ak_matakuliah_dosen_utama')->insert([
+                    "kdstrukturprogram" => $struktur->kdstrukturprogram,
+                    "kdperson" => $dosenUtama
+                ]);
+            }
+
+            foreach ($request->input('dosen2') as $dosenPelapor) {
+                DB::table('ak_matakuliah_dosen_pelaporan')->insert([
+                    "kdstrukturprogram" => $struktur->kdstrukturprogram,
+                    "kdperson" => $dosenPelapor
+                ]);
+            }
+
+
+            DB::commit();
+            return back();
+        } catch (Throwable $th) {
+            DB::rollBack();
+            // return dd($th);
+        }
+
+        // dd($struktur);
         return redirect()->back()->with('success', 'berhasil menambahkan struktur Program');
+    }
+
+    public function strukturProgramDelete(int $id)
+    {
+        $struktur = ak_strukturprogram::findOrFail($id);
+
+        $dosenUtama = ak_matakuliah_dosen_utama::where('kdstrukturprogram', $id)->get();
+
+        $dosenPelaporan = ak_matakuliah_dosen_pelaporan::where('kdstrukturprogram', $id)->get();
+
+        $struktur->delete();
+
+        foreach ($dosenUtama as $du) {
+
+            $du->delete();
+        }
+
+        foreach ($dosenPelaporan as $dp) {
+
+            $dp->delete();
+        }
+
+        return redirect()->back()->with('success', 'Berhasil menghapus struktur program');
+    }
+
+    public function strukturProgramEdit(int $id)
+    {
+
+
+        $kurikulum = DB::table("ak_kurikulum")
+            ->where("isObe", "=", 1)
+            ->where("kdunitkerja", Auth::user()->kdunit)
+            ->get();
+
+        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
+
+        $tahunAkademik = DB::table('ak_tahunakademik')
+            ->where("isAktif", "=", 1)
+            ->get();
+
+        $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
+            ->where("kdunitkerja", Auth::user()->kdunit)->get();
+
+        $dosen1 = DB::table('ak_dosen as ad')
+            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+            ->orderBy('namalengkap', 'asc')
+            ->get();
+
+        $dosen2 = DB::table('ak_dosen as ad')
+            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+            ->orderBy('namalengkap', 'asc')
+            ->get();
+
+        // return dd($tahunAkademik);
+
+        return view('pages.detailMatakuliah.editStrukturProgram', compact('filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2'));
     }
 }

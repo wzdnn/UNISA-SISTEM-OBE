@@ -33,12 +33,20 @@
             {{-- Filter Tahun Akademik --}}
             <div class="flex flex-col">
                 <form method="GET" class="rounded">
-                    @csrf
-                    <select name="filter" id="" class="rounded">
+                    <select name="filter-tahun" id="" class="rounded">
                         <option value="null">Tahun Akademik</option>
                         @foreach ($tahunAkademik as $item)
                             <option value="{{ $item->kdtahunakademik }}" @selected(request()->filter == $item->kdtahunakademik)>
                                 {{ $item->tahunakademik }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <select name="filter-kurikulum" id="" class="rounded">
+                        <option value="null">Kurikulum</option>
+                        @foreach ($kurikulum as $item)
+                            <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>
+                                {{ $item->kurikulum }} {{ $item->tahun }}
                             </option>
                         @endforeach
                     </select>
@@ -109,10 +117,31 @@
                         Jumlah Pertemuan
                     </th>
                     <th scope="col" class="px-6 py-3 ">
-                        NIDN/NIDK
+                        Belajar Mandiri (BL)
                     </th>
                     <th scope="col" class="px-6 py-3 ">
+                        Jumlah Pertemuan
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Skill Lab (SL)
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Jumlah Pertemuan
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Studio(st)
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Jumlah Pertemuan
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        NIDN/NIDK Dosen Utama
+                    </th>
+                    <th scope="col" class="px-6 py-3 w-auto">
                         Dosen Utama
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        NIDN/NIDK Dosen Pelaporan
                     </th>
                     <th scope="col" class="px-6 py-3 ">
                         Dosen Pelaporan PDDIKTI *
@@ -125,6 +154,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3 ">
                         Kurikulum
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Action
                     </th>
                 </tr>
             </thead>
@@ -175,22 +207,70 @@
                                 {{ $s->pertemuan_pr }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $s->nidn }}
+                                {{ $s->belajar_mandiri }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $s->dosen1 }} {{ $s->gbdos1 }}
+                                {{ $s->pertemuan_bm }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $s->dosen2 }} {{ $s->gbdos2 }}
+                                {{ $s->skill_lab }}
                             </td>
                             <td class="px-6 py-4">
+                                {{ $s->pertemuan_sl }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $s->studio }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $s->pertemuan_studio }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @foreach ($s->struktur_utama as $su)
+                                    <p>
+                                        &#8226; {{ $su->person_utama[0]->utama_dosen[0]->nidn }}
+                                    </p>
+                                    </br>
+                                @endforeach
+
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @foreach ($s->struktur_utama as $su)
+                                    <p>
+                                        &#8226; {{ $su->namalengkap }} {{ $su->gelarbelakang }}
+                                    </p>
+                                    </br>
+                                @endforeach
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @foreach ($s->struktur_pelaporan as $sp)
+                                    <p> &#8226; {{ $sp->person_pelaporan[0]->pelaporan_dosen[0]->nidn }}</p> </br>
+                                @endforeach
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @foreach ($s->struktur_pelaporan as $sp)
+                                    <p>
+                                        &#8226; {{ $sp->namalengkap }} {{ $sp->gelarbelakang }}
+                                    </p>
+                                    </br>
+                                @endforeach
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $s->ket }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $s->tahunakademik }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $s->kurikulum }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('sp.delete', ['id' => $s->kdstrukturprogram]) }}"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                    <button
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

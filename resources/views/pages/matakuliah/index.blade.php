@@ -51,27 +51,33 @@
             </a>
         @endif
     </div> --}}
-    <div class="flex flex-col">
-        <form method="GET" class="rounded">
-            {{-- @csrf --}}
-            <select name="filter" id="" class="rounded">
-                <option value="null">Kurikulum</option>
-                @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
-                @endforeach
-            </select>
-            {{-- <input type="text" name="search" class=" rounded"> --}}
-            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
-                type="submit">Filter</button>
-        </form>
+    <div class="flex justify-between px-2 pt-5">
+        <div class="flex flex-col">
+            <form method="GET" class="rounded ">
+                {{-- @csrf --}}
+                <select name="filter-kurikulum" id="" class="rounded">
+                    <option value="null">Kurikulum</option>
+                    @foreach ($kdkurikulum as $item)
+                        <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                    @endforeach
+                </select>
 
-        @if (request()->search != null && request()->key != null)
-            <div class="my-3">
-                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
-            </div>
-        @endif
+                <input type="search" name="filter-matakuliah"
+                    class="w-full p-3 text-sm text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Search Matakuliah" />
+
+                <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                    type="submit">Filter</button>
+            </form>
+
+            @if (request()->search != null && request()->key != null)
+                <div class="my-3">
+                    <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+                </div>
+            @endif
+        </div>
+        <hr />
     </div>
-    <hr />
 
     <div class="relative py-3">
 
@@ -292,7 +298,8 @@
                                     </a>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}">
+                                    <a href="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}" target="blank_"
+                                        rel="noopener noreferrer">
                                         <button type="button"
                                             class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
                                                 class="fa fa-print" aria-hidden="true"></i></button>

@@ -193,11 +193,13 @@ Route::middleware(['auth'])->group(function () {
 
     // RPS Matakuliah
     route::get('/matakuliah/{id}/rps', [ak_matakuliah_controller::class, 'rps'])->name('rps.index');
+    route::get('/get-pdf', [ak_matakuliah_controller::class, 'pdfGet'])->name('get.pdf');
 
     //Struktur Program Matakuliah
     route::get('/struktur-program', [ak_matakuliah_controller::class, 'strukturProgramIndex'])->name('sp.index');
     route::get('/struktur-program/create', [ak_matakuliah_controller::class, 'strukturProgramCreate'])->name('sp.create');
     route::post('/struktur-program/store', [ak_matakuliah_controller::class, 'strukturProgramStore'])->name('sp.store');
+    route::get('/struktur-program/{id}/delete', [ak_matakuliah_controller::class, 'strukturProgramDelete'])->name('sp.delete');
 
     // Materi Pembelajaran Pada SUBBK
     Route::post('/materiStore', [ak_matakuliah_controller::class, 'storeMateri'])->name('store.materi');
@@ -224,6 +226,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/copy-matakuliah', [organisasiMkController::class, 'copyMatakuliah'])->name('copy.mk');
 
     Route::post('/tema-store', [organisasiMkController::class, 'temaSTORE'])->name('store.tema');
+    route::get('/tema-delete/{id}', [organisasiMkController::class, 'temaDelete'])->name('delete.tema');
 
     Route::get('/reset/{id}', [organisasiMkController::class, 'semesterOrigin'])->name('reset.mk');
 
@@ -248,6 +251,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilai'])->name('list.metopen');
     Route::post('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilaiPost'])->name('copy.mhs');
     Route::post('/ambil-nilai/{id}', [metodePenilaianController::class, 'ambilNilai'])->name('ambil.nilai');
+    Route::post('/list-update/{id}', [metodePenilaianController::class, 'listNilaiUpdate'])->name('update.list');
 
     // Delete List Penilaian
 

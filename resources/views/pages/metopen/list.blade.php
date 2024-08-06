@@ -263,6 +263,101 @@
                                     class="fa-solid fa-trash"></i></button>
                         </a>
 
+                        <button data-modal-target="edit-modal" id="btnTambah" data-modal-toggle="edit-modal"
+                            class="text-white items-center justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            data-id-target="{{ $value->kjn }}" type="button">
+                            Edit
+                            {{-- <i class="fa fa-plus" aria-hidden="true"></i> --}}
+                            {{-- Isi Penilaian --}}
+                        </button>
+
+                        {{-- Model Start --}}
+                        {{-- @include('include.flash-massage') --}}
+                        <div>
+                            <div id="edit-modal" tabindex="-1"
+                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div class="relative p-4 w-auto max-w-md max-h-full">
+                                    <div class="relative bg-white rounded-lg shadow ">
+                                        <button type="button"
+                                            class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
+                                            data-modal-hide="edit-modal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                        <div class="p-4">
+                                            <!-- Modal content -->
+                                            <div class="relative bg-white rounded-lg dark:bg-gray-700">
+                                                <h1 class="font-bold text-2xl mb-0 mb-4">Edit</h1>
+                                                <!-- Modal body -->
+                                                <form action="{{ route('update.list', ['id' => $value->kjn]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <div class="flex flex-col py-2">
+                                                        <input type="hidden" name="kdjenisnilai" id="kdjenisnilai_">
+                                                    </div>
+                                                    <div class="grid md:grid-cols-2 md:gap-6">
+                                                        <div class="col-span-2 mb-2">
+                                                            <label for="keterangan"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
+                                                            <input type="text" name="keterangan" id="keterangan"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                placeholder="" value="{{ $value->keterangan }}">
+                                                        </div>
+                                                        <div class="col-span-2 mb-2">
+                                                            <label for="tahunakademik"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun
+                                                                Akademik</label>
+                                                            <select id="tahunakademik" name="tahunakademik"
+                                                                class="form-control">
+                                                                @foreach ($tahunAkademik as $ta)
+                                                                    <option value="{{ $ta->kdtahunakademik }}">
+                                                                        {{ $ta->tahunakademik }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid md:grid-cols-2 md:gap-6">
+                                                        <div class="relative z-0 w-full mb-6 group">
+                                                            <label for="idlensa"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Id
+                                                                Lensa</label>
+                                                            <input type="text" name="idlensa" id="idlensa"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                                                value="{{ $value->idlensa ?? '' }}">
+                                                        </div>
+                                                        <div class="flex flex-col z-0 w-full mb-6 group">
+                                                            <label for="idtipelensa" class="text-sm text-gray-500">
+                                                                Tipe Tugas
+                                                            </label>
+                                                            <select id="idtipelensa" name="idtipelensa"
+                                                                class="form-control">
+                                                                @foreach ($tipeLensa as $tl)
+                                                                    <option value="{{ $tl->id }}">
+                                                                        {{ $tl->tipelensa }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <button data-modal-hide="edit-modal" type="submit"
+                                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-2 py-2 text-center">
+                                                        Submit
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
             @endforeach

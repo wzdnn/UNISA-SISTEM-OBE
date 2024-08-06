@@ -17,8 +17,6 @@ class ak_matakuliah extends Model
         'isObe',
         'batasNilai',
         'deskripsi_mk',
-        'luring',
-        'daring',
         'akses_media'
     ];
 
