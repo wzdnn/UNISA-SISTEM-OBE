@@ -60,7 +60,6 @@
     <div class="my-3 mx-auto max-w-4xl">
         <div class=" px-3 bg-white border border-gray-200 rounded-lg shadow-lg justify-between">
             <div class="px-3 py-3 mt-3">
-
                 <div class="flex flex-col">
                     <form method="GET" class="rounded">
                         @csrf
@@ -95,7 +94,7 @@
                                 <label for="akses_media" class="block mb-2 text-lg font-bold text-gray-900 uppercase">Akses
                                     Media</label>
                                 <input type="text" name="akses_media" id="akses_media"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                                     placeholder=" " value="{{ $akses->linkakses ?? '' }}">
                             </div>
                         </div>
@@ -106,21 +105,21 @@
                             <label for="luring"
                                 class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
                             <input type="text" name="luring" id="luring"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
                                 placeholder=" ">
                         </div>
                         <div class="relative z-0 px-3 py-3 ">
                             <label for="daring"
                                 class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
                             <input type="text" name="daring" id="daring"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
                                 placeholder=" ">
                         </div>
                         <div class="relative z-0 px-3 py-3 ">
                             <label for="blended"
                                 class="block mb-2 text-sm font-bold text-gray-900 uppercase">Blended</label>
                             <input type="text" name="blended" id="blended"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
                                 placeholder=" ">
                         </div>
                     </div>
@@ -141,6 +140,7 @@
                                     id="pengalamanSelectSinkron" name="pengalamanSelectSinkron[]" multiple="multiple">
                                     @foreach ($mkPengalaman as $item)
                                         <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanSinkron))>
+
                                             {{ $item->pengalaman_mahasiswa }}
                                         </option>
                                     @endforeach
@@ -155,6 +155,7 @@
                                     id="pengalamanSelectAsinkron" name="pengalamanSelectAsinkron[]" multiple="multiple">
                                     @foreach ($mkPengalaman as $item)
                                         <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanAsinkron))>
+
                                             {{ $item->pengalaman_mahasiswa }}
                                         </option>
                                     @endforeach
@@ -162,6 +163,29 @@
                             </div>
                         </div>
                     </div>
+                    <div class="flex justify-center mt-3">
+                        <button
+                            class="flex items-center bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-sm font-semibold p-2"
+                            type="submit">
+                            SUBMIT
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class=" px-3 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg justify-between">
+            <div class="px-3 py-3 mt-3">
+
+                <form action="{{ route('detail.referensi.store', ['id' => $matakuliah->kdmatakuliah]) }}" method="POST">
+                    @csrf
+
+                    <input type="hidden" name="filter-form" value="<?= $request->get('filter') ?>">
 
                     <div>
                         <h3 class="px-3 py-3 font-bold text-lg">Tambah Referensi Pada Matakuliah</h3>
@@ -215,7 +239,6 @@
                         </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

@@ -114,15 +114,18 @@
         <div>
             <h3 class="font-bold text-2xl text-blue-800">Materi Pembelajaran</h3>
             @foreach ($materi as $mp)
-                <a
-                    href="{{ route('index.materi', ['id' => $mp->kdmatakuliah, 'sub' => $mp->id_gabung, 'materi' => $mp->kdmateri]) }}">
-                    <div class="hover:text-blue-300 my-2">
-
-                        <p class="font-medium text-lg">
-                            {{ $loop->iteration }}. {{ $mp->materi_pembelajaran }}
-                        </p>
-                    </div>
-                </a>
+                <div class="relative py-2">
+                    <a href="{{ route('index.materi', ['id' => $mp->kdmatakuliah, 'sub' => $mp->id_gabung, 'materi' => $mp->kdmateri]) }}"
+                        class="hover:text-blue-300 text-2xl font-semibold px-2">
+                        {{ $loop->iteration }}. {{ $mp->materi_pembelajaran }}
+                    </a>
+                    <a href="{{ route('delete.materi', ['materi' => $mp->kdmateri]) }}"
+                        onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                        <button class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </a>
+                </div>
             @endforeach
         </div>
 
@@ -130,7 +133,7 @@
     <div class="w-auto px-3 bg-white border border-gray-200 rounded shadow-sm justify-between mb-3">
 
         <div class="py-2">
-            <h2 class="font-bold text-2xl  text-blue-800">CPMKS</h2>
+            <h2 class="font-bold text-2xl  text-blue-800">CPMK</h2>
             <hr />
             <br />
             <a href="{{ route('subbk.cpmk.kelola', ['id' => $id, 'sub' => $sub]) }}" class="mb-5"><button

@@ -166,4 +166,45 @@
         </tbody>
     </table>
 </div>
+
+<div class="flex items-center justify-between py-5 px-5">
+    <div class="flex items-center">
+        <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
+            Grafik Statistik Ketercapaian CPL
+        </h1>
+    </div>
+</div>
+
+<div class="max-w-md items-center py-2  " id="chart">
+</div>
 @endsection
+
+@push('script')
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    var options = {
+        series: [{
+            data: @json($statistik['score'] ?? null)
+        }],
+        chart: {
+            type: 'bar',
+            height: 550
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 4,
+                borderRadiusApplication: 'end',
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            categories: @json($statistik['label'] ?? null),
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
+@endpush

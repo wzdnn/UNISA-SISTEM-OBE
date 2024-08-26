@@ -38,36 +38,26 @@
             @endif
         </div>
     </div>
-    {{-- @extends('layouts.app')
 
-@section('body') --}}
-    {{-- <div class="flex items-center justify-between py-5 px-5 mx-10">
-        <h1 class="font-bold text-2xl mb-0 text-gray-700">Matakuliah</h1>
-        @if (Auth::user()->role == 'admin')
-            <a href="{{ route('create.mk') }}">
-                <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah
-                    Matakuliah
-                </button>
-            </a>
-        @endif
-    </div> --}}
     <div class="flex justify-between px-2 pt-5">
         <div class="flex flex-col">
             <form method="GET" class="rounded ">
                 {{-- @csrf --}}
                 <select name="filter-kurikulum" id="" class="rounded">
-                    <option value="null">Kurikulum</option>
+                    <option value="">Kurikulum</option>
                     @foreach ($kdkurikulum as $item)
-                        <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                        <option value="{{ $item->kdkurikulum }}" @selected(request()->input('filter-kurikulum') == $item->kdkurikulum)>{{ $item->kurikulum }}
+                            {{ $item->tahun }}
+                        </option>
                     @endforeach
                 </select>
 
                 <input type="search" name="filter-matakuliah"
                     class="w-full p-3 text-sm text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search Matakuliah" />
+                    placeholder="Search Matakuliah" value="{{ request()->input('filter-matakuliah') }}" />
 
                 <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
-                    type="submit">Filter</button>
+                    type="submit">Cari</button>
             </form>
 
             @if (request()->search != null && request()->key != null)
@@ -233,6 +223,68 @@
                                         </a>
                                     </td>
                                     <td class="px-6 py-4">
+
+                                        {{-- <button id="tgsTambah" data-modal-target="{{ $value->kdmatakuliah }}"
+                                            data-modal-toggle="{{ $value->kdmatakuliah }}"
+                                            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                            type="button">
+                                            <i class="fa fa-print" aria-hidden="true"></i>
+                                        </button>
+
+                                        <div id="{{ $value->kdmatakuliah }}" tabindex="-1" aria-hidden="true"
+                                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                            <div class="relative p-4 w-full max-w-md max-h-full">
+                                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                    <div
+                                                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                            Pilih Tahun Akademik
+                                                        </h3>
+                                                        <button type="button"
+                                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                            data-modal-toggle="{{ $value->kdmatakuliah }}">
+                                                            <svg class="w-3 h-3" aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 14 14">
+                                                                <path stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                            </svg>
+                                                            <span class="sr-only">Close modal</span>
+                                                        </button>
+                                                    </div>
+                                                    <form class="p-4 md:p-5"
+                                                        action="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}">
+                                                        <div class="grid gap-4 mb-4 grid-cols-2">
+
+                                                            <input type="text" name="tgsinput_id" id="tgsinput_id"
+                                                                value="{{ $value->kdmatakuliah }}">
+
+                                                            <div class="col-span-2 sm:col-span-1">
+                                                                <label for="keterangan"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun
+                                                                    Akademik</label>
+                                                                <select id="tahunakademik" name="tahunakademik"
+                                                                    class="form-control">
+                                                                    @foreach ($tahunAkademik as $tahunakademik)
+                                                                        <option
+                                                                            value="{{ $tahunakademik->kdtahunakademik }}">
+                                                                            {{ $tahunakademik->tahunakademik }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            Submit
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div> --}}
+
+
                                         <a href="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}">
                                             <button type="button"
                                                 class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 "><i
@@ -298,6 +350,66 @@
                                     </a>
                                 </td>
                                 <td class="px-6 py-4">
+                                    {{-- <button id="tgsTambah" data-modal-target="{{ $value->kdmatakuliah }}"
+                                        data-modal-toggle="{{ $value->kdmatakuliah }}"
+                                        class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        type="button">
+                                        <i class="fa fa-print" aria-hidden="true"></i>
+                                    </button>
+
+                                    <div id="{{ $value->kdmatakuliah }}" tabindex="-1" aria-hidden="true"
+                                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative p-4 w-full max-w-md max-h-full">
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <div
+                                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                        Pilih Tahun Akademik
+                                                    </h3>
+                                                    <button type="button"
+                                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                        data-modal-toggle="crud-modal">
+                                                        <svg class="w-3 h-3" aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
+                                                </div>
+                                                <form class="p-4 md:p-5">
+                                                    <div class="grid gap-4 mb-4 grid-cols-2">
+
+                                                        <input type="text" name="tgsinput_id" id="tgsinput_id"
+                                                            value="{{ $value->kdmatakuliah }}">
+
+                                                        <div class="col-span-2 sm:col-span-1">
+
+
+                                                            <label for="tahunakademik"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun
+                                                                Akademik</label>
+                                                            <select id="tahunakademik" name="tahunakademik"
+                                                                class="form-control">
+                                                                @foreach ($tahunAkademik as $tahunakademik)
+                                                                    <option value="{{ $tahunakademik->kdtahunakademik }}">
+                                                                        {{ $tahunakademik->tahunakademik }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+                                                    <button type="submit"
+                                                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                        Submit
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+
                                     <a href="{{ route('rps.index', ['id' => $value->kdmatakuliah]) }}" target="blank_"
                                         rel="noopener noreferrer">
                                         <button type="button"
@@ -385,3 +497,16 @@
         }
     </script>
 @endsection
+
+@push('script')
+    <script>
+        const tgsTambah = document.querySelectorAll("#tgsTambah");
+        tgsTambah.forEach(e => {
+            e.addEventListener("click", () => {
+                console.log(e.getAttribute('data-id-target'))
+                const targetInput = document.getElementById('tgsinput_id');
+                targetInput.value = e.getAttribute('data-id-target');
+            })
+        })
+    </script>
+@endpush

@@ -141,31 +141,28 @@
                             Pembelajaran,
                             serta Alokasi
                             Waktu</td>
-                        <td class="border px-4 py-2"></td>
-                        <td class="border px-4 py-2 font-bold" colspan="6">Bahan Kajian</td>
-                        <td class="border px-4 py-2 font-bold" colspan="3">Bentuk Pembelajaran</td>
-                        <td class="border px-4 py-2 font-bold" colspan="3">Metode Pembelajaran</td>
-                        <td class="border px-4 py-2 font-bold" colspan="3">Alokasi Waktu</td>
+                        <td class="border px-4 py-2" colspan="2"></td>
+                        <td class="border px-4 py-2 font-bold" colspan="4">Bahan Kajian dan Materi Pembelajaran</td>
+                        <td class="border px-4 py-2 font-bold" colspan="5">Metode Pembelajaran</td>
+                        <td class="border px-4 py-2 font-bold" colspan="4">Bentuk Pembelajaran/Alokasi Waktu</td>
                     </tr>
-                    @foreach ($relation as $relasi)
+                    @foreach ($timeline as $tl)
                         <tr>
                             <td class="border px-4 py-2">
 
                             </td>
-                            <td class="border px-4 py-2 ">
-                                {{ $relasi->kode_cpmk ?? '' }}
+                            <td class="border px-4 py-2 " colspan="2">
+                                {{ $tl->kode_cpmk ?? '' }}
                             </td>
-                            <td class="border px-4 py-2" colspan="6">
-                                {{ $relasi->kode_subbk ?? '' }} - {{ $relasi->sub_bk ?? '' }}
+                            <td class="border px-4 py-2" colspan="4">
+                                {{ $tl->kode_subbk ?? '' }} {{ $tl->materi_pembelajaran ?? '' }}
                             </td>
-                            <td class="border px-4 py-2" colspan="3">
-                                -
+                            <td class="border px-4 py-2" colspan="5">
+                                {{ $tl->metodepembelajaran ?? '' }}
                             </td>
-                            <td class="border px-4 py-2" colspan="3">
-                                {{ $relasi->metodepembelajaran ?? '' }}
-                            </td>
-                            <td class="border px-4 py-2" colspan="3">
-                                -
+
+                            <td class="border px-4 py-2" colspan="4">
+                                {{ $tl->jeniskuliah ?? '' }}
                             </td>
                         </tr>
                     @endforeach
@@ -199,7 +196,7 @@
                         </td>
                         <td colspan="3" class=" border px-4 py-2">Luring : {{ $aksesmedia->luring ?? '' }}%</td>
                         <td colspan="3" class=" border px-4 py-2">Daring : {{ $aksesmedia->daring ?? '' }}%</td>
-                        <td colspan="3" class=" border px-4 py-2">Blended : :{{ $aksesmedia->blended ?? '' }}%
+                        <td colspan="3" class=" border px-4 py-2">Blended : {{ $aksesmedia->blended ?? '' }}%
                         </td>
                     </tr>
                     <tr>
@@ -263,8 +260,7 @@
         </div>
 
         <div class="my-1 w-full mx-auto rounded">
-            <table class="w-full border-collapse border text-sm rounded text-gray-500" id="mytable" name="mytable"
-                style="border: 1 !important">
+            <table class="w-full border-collapse border text-sm rounded text-gray-500" style="border: 1 !important">
                 <thead class="text-xs text-gray-700 uppercase bg-white">
                     <tr class="border text-left">
                         <th scope="col" class="px-6 py-3 ">

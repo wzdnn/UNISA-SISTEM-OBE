@@ -293,6 +293,12 @@
                                     <ul class="hidden flex-col py-0 pl-2 border-l border-green-300 ml-1 "
                                         id="dropdown-cpmk">
                                         <li>
+                                            <a href="{{ route('subcpmk.index') }}"
+                                                class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">
+                                                Sub CPMK
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="{{ route('list.cpmk') }}"
                                                 class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">List
                                                 CPMK</a>

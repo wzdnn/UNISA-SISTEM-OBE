@@ -46,14 +46,7 @@ class ak_matakuliah_controller extends Controller
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
-                ->when($request->input("filter-kurikulum") != null or $request->input("filter-kurikulum") != null, function ($query) use ($request) {
-                    $query->where("ak_matakuliah.kdkurikulum", $request->input("filter-kurikulum"));
-                })
-                ->when($request->input("filter-matakuliah") != null or $request->input("filter-matakuliah") != null, function ($query) use ($request) {
-                    $query->where("ak_matakuliah.matakuliah", $request->input("filter-matakuliah"));
-                })
-                ->orderBy('kdmatakuliah', 'asc')
-                ->paginate(10);
+                ->orderBy('kdmatakuliah', 'asc');
 
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
@@ -65,14 +58,7 @@ class ak_matakuliah_controller extends Controller
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit);
                 })
-                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
-                    $query->where("ak_matakuliah.kdkurikulum", $request->input('filter-kurikulum'));
-                })
-                ->when($request->input('filter-matakuliah') != null or $request->input('filter-matakuliah') != null, function ($query) use ($request) {
-                    $query->where("ak_matakuliah.matakuliah", $request->input("filter-matakuliah"));
-                })
-                ->orderBy('kdmatakuliah', 'asc')
-                ->paginate(10);
+                ->orderBy('kdmatakuliah', 'asc');
 
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where(function ($query) {
@@ -83,28 +69,26 @@ class ak_matakuliah_controller extends Controller
                 ->get();
         }
 
+        // dd($request->input('filter-kurikulum'));
 
+        // excecute sql
+        $matakuliah = $matakuliah
+            ->when($request->input('filter-matakuliah') != '' || $request->input('filter-matakuliah') != null, function ($query) use ($request) {
+                $query->where('matakuliah', 'like', "%" . $request->input("filter-matakuliah") . "%");
+            })
+            ->when($request->input('filter-kurikulum') != null || $request->input('filter-kurikulum') != '', function ($query) use ($request) {
+                $query->where("ak_matakuliah.kdkurikulum", $request->input('filter-kurikulum'));
+            })
+            ->paginate(10);
+
+
+        // dd($request->input('filter-matakuliah'), $matakuliah);
 
         $arrayKurikulum = [];
         foreach ($kdkurikulum as $data) {
             array_push($arrayKurikulum, $data->kurikulum);
         }
 
-
-
-        // if ($request->has("filter")) {
-        //     if (in_array($request->filter, $arrayKurikulum)) {
-        //         $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-        //             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-        //             ->where("ak_kurikulum.isObe", '=', 1)
-        //             ->where("kurikulum", "=", $request->filter)
-        //             ->orderBy('kdmatakuliah', 'asc')
-        //             ->paginate(10);
-        //     }
-        // }
-
-
-        // return dd($matakuliah);
 
         return view('pages.matakuliah.index', compact('matakuliah', 'kdkurikulum'));
     }
@@ -180,38 +164,13 @@ class ak_matakuliah_controller extends Controller
 
         $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
 
-        // $mkPengalaman = ak_pengalamanmahasiswa::with('pengalamanSinkron', 'pengalamanAsinkron')->get();
 
-        // $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-        //     ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
-        //     ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
-        //     ->get();
-
-        // $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-        //     ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
-        //     ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
-        //     ->get();
-
-        // $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-        //     ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
-        //     ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
-        //     ->get();
-
-        // $akses = gabung_matakuliah_akses::where('mk.kdmatakuliah', '=', $id)
-        //     ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
-        //     ->join("ak_aksesmedia as akses", "akses.kdakses", "=", "gabung_matakuliah_akses.kdakses")
-        //     ->first();
 
 
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
             ->get();
 
-
-        // $arrayTahun = [];
-        // foreach ($tahunAkademik as $data) {
-        //     array_push($arrayTahun, $data->kdtahunakademik);
-        // }
 
         if ($request->has("filter")) {
             $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
@@ -239,6 +198,7 @@ class ak_matakuliah_controller extends Controller
                 ->with('sinkron_pivot')
                 ->where("kdtahunakademik", "=", $request->filter)
                 ->paginate(15);
+
 
             $pengalamanAsinkron = gabung_matakuliah_pengalaman_asinkron::where('mk.kdmatakuliah', "=", $id)
                 ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
@@ -292,33 +252,14 @@ class ak_matakuliah_controller extends Controller
                 ->first();
         }
 
+        // dd($pengalamanSinkron);
 
         return view('pages.matakuliah.detail2', compact('mkSubBk', 'rekomendasiSKS', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'tahunAkademik', 'pengalamanSinkron', 'pengalamanAsinkron', 'akses', 'filter', 'kelompok'));
     }
 
     public function postsubbkDetail(int $id, Request $request)
     {
-        $pengalamanSelectSinkron = [];
-        if ($request->has('pengalamanSelectSinkron')) {
-            foreach ($request->input("pengalamanSelectSinkron") as $key => $value) {
-                if (!is_numeric($value)) {
-                    return redirect()->back()->with("failed", "inputan tidak valid");
-                } else {
-                    array_push($pengalamanSelectSinkron, $value);
-                }
-            }
-        }
 
-        $pengalamanSelectAsinkron = [];
-        if ($request->has('pengalamanSelectAsinkron')) {
-            foreach ($request->input("pengalamanSelectAsinkron") as $key => $value) {
-                if (!is_numeric($value)) {
-                    return redirect()->back()->with("failed", "inputan tidak valid");
-                } else {
-                    array_push($pengalamanSelectAsinkron, $value);
-                }
-            }
-        }
 
 
         $request->validate([
@@ -340,17 +281,6 @@ class ak_matakuliah_controller extends Controller
             $mkSubBk->deskripsi_mk = $request->input('deskripsi_mk');
             $mkSubBk->akses_media = $request->input('akses_media');
 
-            if (count($pengalamanSelectSinkron) > 0) {
-                $mkSubBk->pengalamanSinkron()->sync($pengalamanSelectSinkron);
-            } else {
-                $mkSubBk->pengalamanSinkron()->detach();
-            }
-
-            if (count($pengalamanSelectAsinkron) > 0) {
-                $mkSubBk->pengalamanAsinkron()->sync($pengalamanSelectAsinkron);
-            } else {
-                $mkSubBk->pengalamanAsinkron()->detach();
-            }
 
             $mkSubBk->save();
 
@@ -457,6 +387,15 @@ class ak_matakuliah_controller extends Controller
         // dd($detail);
 
         return view('pages.matakuliah.detail-subbk-materi', compact('subbk', 'id', 'detail', 'mkSubBk'));
+    }
+
+    public function deleteMateri(int $materi)
+    {
+        $subbkMateri = ak_kurikulum_sub_bk_materi::findOrFail($materi);
+
+        $subbkMateri->delete();
+
+        return redirect()->back()->with('success', 'data berhasil dihapus');
     }
 
     public function storeMateri(Request $request)
@@ -864,6 +803,8 @@ class ak_matakuliah_controller extends Controller
         }
 
 
+
+
         // dd($akses);
 
         // dd($referensiUtama, $referensiLuaran, $referensiTambahan);
@@ -879,7 +820,7 @@ class ak_matakuliah_controller extends Controller
             $id_pengalamanAsinkron[] = $data->id;
         }
 
-        // dd($id_pengalamanSinkron);
+        // dd($pengalamanSinkron);
 
         $matakuliah = ak_matakuliah::findOrFail($id);
 
@@ -900,27 +841,7 @@ class ak_matakuliah_controller extends Controller
 
         // Pengalaman Start
 
-        $pengalamanSelectSinkron = [];
-        if ($request->has('pengalamanSelectSinkron')) {
-            foreach ($request->input("pengalamanSelectSinkron") as $key => $value) {
-                if (!is_numeric($value)) {
-                    return redirect()->back()->with("failed", "inputan tidak valid");
-                } else {
-                    array_push($pengalamanSelectSinkron, $value);
-                }
-            }
-        }
 
-        $pengalamanSelectAsinkron = [];
-        if ($request->has('pengalamanSelectAsinkron')) {
-            foreach ($request->input("pengalamanSelectAsinkron") as $key => $value) {
-                if (!is_numeric($value)) {
-                    return redirect()->back()->with("failed", "inputan tidak valid");
-                } else {
-                    array_push($pengalamanSelectAsinkron, $value);
-                }
-            }
-        }
 
         // return dd($pengalamanSelectSinkron);
 
@@ -934,6 +855,30 @@ class ak_matakuliah_controller extends Controller
 
         try {
             DB::beginTransaction();
+
+
+            $pengalamanSelectSinkron = [];
+            if ($request->has('pengalamanSelectSinkron') != '' || $request->has('pengalamanSelectSinkron') != null) {
+                foreach ($request->input("pengalamanSelectSinkron") as $key => $value) {
+                    if (!is_numeric($value)) {
+                        return redirect()->back()->with("failed", "inputan tidak valid");
+                    } else {
+                        array_push($pengalamanSelectSinkron, $value);
+                    }
+                }
+            }
+
+            $pengalamanSelectAsinkron = [];
+            if ($request->has('pengalamanSelectAsinkron') != '' || $request->has('pengalamanSelectAsinkron') != null) {
+                foreach ($request->input("pengalamanSelectAsinkron") as $key => $value) {
+                    if (!is_numeric($value)) {
+                        return redirect()->back()->with("failed", "inputan tidak valid");
+                    } else {
+                        array_push($pengalamanSelectAsinkron, $value);
+                    }
+                }
+            }
+
 
 
             if ($request->input("akses_media") != '' || $request->input("akses_media") != null) {
@@ -951,6 +896,69 @@ class ak_matakuliah_controller extends Controller
                     "kdtahunakademik" => $kdTahunAkademim
                 ]);
             }
+
+
+
+            // Sinkron
+            if (count($pengalamanSelectSinkron) > 0) {
+                DB::table("gabung_matakuliah_pengalaman_sinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
+                    ->whereNotIn("id_pengalaman", $pengalamanSelectSinkron)
+                    ->where("kdtahunakademik", $kdTahunAkademim)
+                    ->delete();
+
+                foreach ($pengalamanSelectSinkron as $data) {
+                    DB::table("gabung_matakuliah_pengalaman_sinkron")->insert([
+                        "kdmatakuliah" => $mkSubBk->kdmatakuliah,
+                        "id_pengalaman" => $data,
+                        "kdtahunakademik" => $kdTahunAkademim
+                    ]);
+                }
+            } else {
+                // delete all where = mk
+                DB::table("gabung_matakuliah_pengalaman_sinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
+                    ->where("kdtahunakademik", $kdTahunAkademim)
+                    ->delete();
+            }
+
+            // Asynsc
+            if (count($pengalamanSelectAsinkron) > 0) {
+                DB::table("gabung_matakuliah_pengalaman_asinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
+                    ->whereNotIn("id_pengalaman", $pengalamanSelectAsinkron)
+                    ->where("kdtahunakademik", $kdTahunAkademim)
+                    ->delete();
+
+                foreach ($pengalamanSelectAsinkron as $data) {
+                    DB::table("gabung_matakuliah_pengalaman_asinkron")->insert([
+                        "kdmatakuliah" => $mkSubBk->kdmatakuliah,
+                        "id_pengalaman" => $data,
+                        "kdtahunakademik" => $kdTahunAkademim
+                    ]);
+                }
+            } else {
+                // delete all where = mk
+                DB::table("gabung_matakuliah_pengalaman_asinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
+                    ->where("kdtahunakademik", $kdTahunAkademim)
+                    ->delete();
+            }
+
+
+            DB::commit();
+            return back();
+        } catch (Throwable $th) {
+            DB::rollBack();
+
+            return dd($th);
+        }
+    }
+
+    public function detailReferensiStore(Request $request, int $id)
+    {
+        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
+
+        $kdTahunAkademim = $request->has("filter-form") ? $request->input('filter-form') : $filter->kdtahunakademik;
+
+        try {
+            // DB::transaction();
 
             // ============================== Referensi Start ====================================
 
@@ -1004,53 +1012,11 @@ class ak_matakuliah_controller extends Controller
             }
             // =========================== REFERENSI END =============================
 
-            // Sinkron
-            if (count($pengalamanSelectSinkron) > 0) {
-                DB::table("gabung_matakuliah_pengalaman_sinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
-                    ->whereNotIn("id_pengalaman", $pengalamanSelectSinkron)
-                    ->where("kdtahunakademik", $kdTahunAkademim)
-                    ->delete();
 
-                foreach ($pengalamanSelectSinkron as $data) {
-                    DB::table("gabung_matakuliah_pengalaman_sinkron")->insert([
-                        "kdmatakuliah" => $mkSubBk->kdmatakuliah,
-                        "id_pengalaman" => $data,
-                        "kdtahunakademik" => $kdTahunAkademim
-                    ]);
-                }
-            } else {
-                // delete all where = mk
-                DB::table("gabung_matakuliah_pengalaman_sinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
-                    ->where("kdtahunakademik", $kdTahunAkademim)
-                    ->delete();
-            }
-
-            // Asynsc
-            if (count($pengalamanSelectAsinkron) > 0) {
-                DB::table("gabung_matakuliah_pengalaman_asinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
-                    ->whereNotIn("id_pengalaman", $pengalamanSelectAsinkron)
-                    ->where("kdtahunakademik", $kdTahunAkademim)
-                    ->delete();
-
-                foreach ($pengalamanSelectAsinkron as $data) {
-                    DB::table("gabung_matakuliah_pengalaman_asinkron")->insert([
-                        "kdmatakuliah" => $mkSubBk->kdmatakuliah,
-                        "id_pengalaman" => $data,
-                        "kdtahunakademik" => $kdTahunAkademim
-                    ]);
-                }
-            } else {
-                // delete all where = mk
-                DB::table("gabung_matakuliah_pengalaman_asinkron")->where("kdmatakuliah", $mkSubBk->kdmatakuliah)
-                    ->where("kdtahunakademik", $kdTahunAkademim)
-                    ->delete();
-            }
-
-
-            DB::commit();
+            // DB::commit();
             return back();
         } catch (Throwable $th) {
-            DB::rollBack();
+            DB::rollback();
 
             return dd($th);
         }
@@ -1126,180 +1092,6 @@ class ak_matakuliah_controller extends Controller
         return redirect()->back()->with('success', 'sukses hapus');
     }
 
-    //Timeline matakuliah
-
-    public function timeline(int $id)
-    {
-
-        $matakuliah = ak_matakuliah::findOrFail($id);
-
-        $timeline = ak_timeline::join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
-            ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
-            ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', 'ak_timeline.kdmateri')
-            ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
-            ->join('ak_kurikulum_sub_bks as subbk', 'subbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
-            ->join('ak_metodepembelajaran as amp', 'amp.id', '=', 'ak_timeline.kdmetopem')
-            ->join('pt_person as pp', 'pp.kdperson', '=', 'ak_timeline.kdperson')
-            ->join('ak_dosen as dos', 'dos.kdperson', '=', 'pp.kdperson')
-            ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
-            ->where('mksbk.kdmatakuliah', $id)
-            ->get();
-
-        // dd($timeline);
-
-        return view('pages.detailMatakuliah.timeline', compact('matakuliah', 'timeline'));
-    }
-
-
-    public function createTimeline(int $id)
-    {
-
-        $matakuliah = ak_matakuliah::findOrFail($id);
-
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
-
-        $cpmk = ak_matakuliah_cpmk::join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
-            ->where('kdmatakuliah', $id)
-            ->get();
-
-        // $materi = ak_kurikulum_sub_bk::join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "=", "ak_kurikulum_sub_bks.kdkurikulum")
-        //     ->where("ak_kurikulum.kdunitkerja", Auth::user()->kdunit)
-        //     ->get();
-
-        $materi = ak_kurikulum_sub_bk_materi::join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'ak_kurikulum_sub_bk_materi.id_gabung')
-            ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
-            ->where('mksbk.kdmatakuliah', $id)
-            ->get();
-
-        $jeniskuliah = DB::table('ak_jeniskuliah')
-            ->get();
-
-        $metopem = DB::table('ak_metodepembelajaran')->get();
-
-        $dosen = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->where('kdunitkerja', Auth::user()->kdunit)
-            ->get();
-
-        $tahunAkademik = DB::table('ak_tahunakademik')
-            ->where("isAktif", "=", 1)
-            ->get();
-
-        // dd($materi);
-
-        return view('pages.detailMatakuliah.createTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik'));
-    }
-
-    public function storeTimeline(Request $request)
-    {
-        $request->validate([
-            "mingguke"
-        ]);
-
-        $timeline = ak_timeline::create([
-            'mingguke' => $request->mingguke,
-            'kdcpmk' => $request->kdcpmk,
-            'kdmetopem' => $request->kdmetopem,
-            'kdtahunakademik' => $request->tahunakademik,
-            'kdmatakuliah' => $request->kdmatakuliah,
-            'kdperson' => $request->kdperson,
-            'kdjeniskuliah' => $request->kdjeniskuliah,
-            'kdmateri' => $request->kdmateri
-        ]);
-
-
-        // dd($timeline);
-
-        return redirect()->back()->with('success', 'Timeline berhasil ditambahkan');
-    }
-
-    public function deleteTimeline(int $id)
-    {
-        $timeline = ak_timeline::where('kdtimeline', $id);
-
-        if (!$timeline) {
-            return abort(404);
-        }
-
-        $timeline->delete();
-
-        return redirect()->back()->with('success', 'Berhasil menghapus data');
-    }
-
-    public function editTimeline(int $id, int $kdtimeline)
-    {
-        $matakuliah = ak_matakuliah::findOrFail($id);
-
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
-
-        $cpmk = ak_matakuliah_cpmk::join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
-            ->where('kdmatakuliah', $id)
-            ->get();
-
-        $materi = ak_kurikulum_sub_bk::join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "=", "ak_kurikulum_sub_bks.kdkurikulum")
-            ->where("ak_kurikulum.kdunitkerja", Auth::user()->kdunit)
-            ->get();
-
-        $jeniskuliah = DB::table('ak_jeniskuliah')
-            ->get();
-
-        $metopem = DB::table('ak_metodepembelajaran')->get();
-
-        $dosen = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->where('kdunitkerja', Auth::user()->kdunit)
-            ->get();
-
-        $tahunAkademik = DB::table('ak_tahunakademik')
-            ->where("isAktif", "=", 1)
-            ->get();
-
-        $timeline = ak_timeline::where('kdtimeline', $kdtimeline)->first();
-
-        // dd($timeline);
-
-        return view('pages.detailMatakuliah.editTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'timeline'));
-    }
-
-    public function updateTimeline(Request $request, int $id)
-    {
-        try {
-
-            $timeline = ak_timeline::where('kdtimeline', $id);
-
-            DB::beginTransaction();
-            $timeline->update([
-                'mingguke' => $request->mingguke,
-                'kdcpmk' => $request->kdcpmk,
-                'kdmetopem' => $request->kdmetopem,
-                'kdtahunakademik' => $request->tahunakademik,
-                'kdmatakuliah' => $request->kdmatakuliah,
-                'kdperson' => $request->kdperson,
-                'kdjeniskuliah' => $request->kdjeniskuliah,
-                'kdsubbk' => $request->kdsubbk
-            ]);
-
-            DB::commit();
-            return redirect()->back()->with('succes', "Berhasil Updated Timeline");
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect()->back()->with("failed", "Gagal Update Timeline" . $th->getMessage());
-        }
-    }
-
-
-    public function testing(int $id)
-    {
-
-        $mkSubBk = ak_matakuliah::with('MKtoSub_bk', 'pengalamanSinkron', 'pengalamanAsinkron')->findOrFail($id);
-
-        dd($mkSubBk);
-
-        return view('pages.aspek.index', compact('mkSubBk'));
-    }
-
-
-
     // Belum dipakai
     // mapping metode pembelajaran index
     public function kelolaPembelajaran(int $id)
@@ -1348,358 +1140,10 @@ class ak_matakuliah_controller extends Controller
         }
     }
 
-    public function rps(int $id)
-    {
-        $matakuliah = ak_matakuliah::findOrFail($id);
-
-        $cpl = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
-            ->select('kode_cpl', 'deskripsi_cpl')
-            ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', "=", "amsb.id")
-            ->join('ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk', 'cplcpmk.ak_kurikulum_cpmk_id', '=', 'gsc.id_cpmk')
-            ->join('ak_kurikulum_cpls as cpl', 'cpl.id', '=', 'cplcpmk.ak_kurikulum_cpl_id')
-            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'cplcpmk.ak_kurikulum_cpmk_id')
-            ->where('kdmatakuliah', $id)
-            ->distinct()
-            ->get();
-
-        $cpmk = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
-            ->select('kode_cpmk', 'cpmk')
-            ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', "=", "amsb.id")
-            ->join('ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk', 'cplcpmk.ak_kurikulum_cpmk_id', '=', 'gsc.id_cpmk')
-            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'cplcpmk.ak_kurikulum_cpmk_id')
-            ->where('kdmatakuliah', $id)
-            ->distinct()
-            ->get();
-
-        // dd($cplcpmk);
-
-        $asinkron = gabung_matakuliah_pengalaman_asinkron::select('pengalaman_mahasiswa')
-            ->join('ak_pengalamanmahasiswa as apm', 'apm.id', '=', "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
-            ->where('kdmatakuliah', $id)
-            ->get();
-
-        $sinkron = gabung_matakuliah_pengalaman_sinkron::select('pengalaman_mahasiswa')
-            ->join('ak_pengalamanmahasiswa as apm', 'apm.id', '=', "gabung_matakuliah_pengalaman_sinkron.id_pengalaman")
-            ->where('kdmatakuliah', $id)
-            ->get();
-
-        $aksesmedia = DB::table('gabung_matakuliah_akses as gma')
-            ->join('ak_aksesmedia as am', 'am.kdakses', '=', 'gma.kdakses')
-            ->where('kdmatakuliah', $id)
-            // ->get();
-            ->first();
-        // $aksesmedia = gabung_matakuliah_akses::first();
-
-        // dd($aksesmedia);
-
-        $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
-            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
-            ->get();
-
-        $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
-            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
-            ->get();
-
-        $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
-            ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
-            ->get();
-
-        // Timeline section
-        $timeline = ak_timeline::join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
-            ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
-            ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', '=', 'ak_timeline.kdmateri')
-            ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
-            ->join('ak_kurikulum_sub_bks as subbk', 'subbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
-            ->join('ak_metodepembelajaran as amp', 'amp.id', '=', 'ak_timeline.kdmetopem')
-            ->join('pt_person as pp', 'pp.kdperson', '=', 'ak_timeline.kdperson')
-            ->join('ak_dosen as dos', 'dos.kdperson', '=', 'pp.kdperson')
-            ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
-            ->where('mksbk.kdmatakuliah', $id)
-            ->get();
-
-        // dd($timeline);
-
-        $relation = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as mksbk')
-            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'mksbk.kdmatakuliah')
-            ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', 'mksbk.id')
-            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'gsc.id_cpmk')
-            ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
-            ->join('gabung_cpmk_pembelajarans as gcp', 'gcp.id_gabung_cpmk', 'gsc.id')
-            ->join('ak_metodepembelajaran as mp', 'mp.id', 'gcp.id_pembelajaran')
-            ->where('mk.kdmatakuliah', $id)
-            ->get();
-
-        // dd($relation);
-
-        // dd('test');
-
-        $metodebobot = DB::table('ak_matakuliah_cpmk as amc')
-            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
-            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'amc.id_cpmk')
-            ->join('gabung_metopen_cpmks as gmc', 'gmc.id_gabung_cpmk', 'amc.id')
-            ->join('metode_penilaians as mp', 'mp.id', 'gmc.id_metopen')
-            ->where('mk.kdmatakuliah', $id)
-            ->get();
-
-        // return dd($metodebobot);
-
-        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot'));
-    }
-
-
     public function pdfGet()
     {
         $data = ['title' => 'testing PDF'];
         $pdf = Pdf::loadView('matakuliah.rps', $data);
         return $pdf->download('rps.pdf');
-    }
-
-    // Struktur Program MK
-    public function strukturProgramIndex(Request $request)
-    {
-
-
-
-        $kurikulum = DB::table("ak_kurikulum")
-            ->where("isObe", "=", 1)
-            ->get();
-
-        // $strukturProgram = ak_strukturprogram::all();
-
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "asc")->get();
-        $filterLatest = $filter->last();
-        $kelompok = $filter->groupBy("kdtahunakademik")->toArray();
-
-        $filter = [
-            "latest" => $filterLatest->kdtahunakademik,
-            "filter" => array_keys($kelompok)
-
-        ];
-
-
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
-            $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
-                ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
-                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
-                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
-                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
-                })
-                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
-                })
-                ->limit(10)
-                ->get();
-            // ->first();
-
-            $kurikulum = DB::table("ak_kurikulum")
-                ->where("isObe", "=", 1)
-                ->get();
-
-
-            $tahunAkademik = DB::table('ak_tahunakademik')
-                ->where("isAktif", "=", 1)
-                ->get();
-        } else {
-            $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
-                ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
-                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
-                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
-                ->where("kur.kdunitkerja", Auth::user()->kdunit)
-                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
-                })
-                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
-                })
-                ->limit(10)
-                ->get();
-            // ->first();
-
-
-            $kurikulum = DB::table("ak_kurikulum")
-                ->where(function ($query) {
-                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-                })
-                ->where("isObe", "=", 1)
-                ->get();
-
-            $tahunAkademik = DB::table('ak_tahunakademik')
-                ->where("isAktif", "=", 1)
-                ->get();
-        }
-        // dd($strukturprogram);
-
-        return view('pages.detailMatakuliah.strukturProgramIndex', compact('filter', 'kurikulum', 'strukturprogram', 'tahunAkademik', 'kurikulum'));
-    }
-
-    public function strukturProgramCreate()
-    {
-
-        $kurikulum = DB::table("ak_kurikulum")
-            ->where("isObe", "=", 1)
-            ->where("kdunitkerja", Auth::user()->kdunit)
-            ->get();
-
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
-
-        $tahunAkademik = DB::table('ak_tahunakademik')
-            ->where("isAktif", "=", 1)
-            ->get();
-
-        $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
-            ->where("kdunitkerja", Auth::user()->kdunit)->get();
-
-        $dosen1 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->orderBy('namalengkap', 'asc')
-            ->get();
-
-        $dosen2 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->orderBy('namalengkap', 'asc')
-            ->get();
-
-        // return dd($tahunAkademik);
-
-        return view('pages.detailMatakuliah.createStrukturProgram', compact('filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2'));
-    }
-
-
-    public function strukturProgramStore(Request $request)
-    {
-
-
-        try {
-            DB::beginTransaction();
-
-            $request->validate([
-                'teori' => ['nullable'],
-                'pertemuan_kt' => ['nullable'],
-                'tutorial' => ['nullable'],
-                'pertemuan_kp' => ['nullable'],
-                'seminar' => ['nullable'],
-                'pertemuan_s' => ['nullable'],
-                'praktikum' => ['nullable'],
-                'pertemuan_p' => ['nullable'],
-                'praktik' => ['nullable'],
-                'pertemuan_pr' => ['nullable'],
-                'belajar_mandiri' => ['nullable'],
-                'pertemuan_bm' => ['nullable'],
-                'skill_lab' => ['nullable'],
-                'pertemuan_sl' => ['nullable'],
-                'studio' => ['nullable'],
-                'pertemuan_studio' => ['nullable'],
-            ]);
-
-            $struktur = ak_strukturprogram::create([
-                'kdmatakuliah' => $request->kdmatakuliah,
-                'keterangan' => $request->keterangan,
-                'teori' => $request->teori,
-                'pertemuan_kt' => $request->pertemuan_kt,
-                'tutorial' => $request->tutorial,
-                'pertemuan_kp' => $request->pertemuan_kp,
-                'seminar' => $request->seminar,
-                'pertemuan_s' => $request->pertemuan_s,
-                'praktikum' => $request->praktikum,
-                'pertemuan_p' => $request->pertemuan_p,
-                'praktik' => $request->praktik,
-                'pertemuan_pr' => $request->pertemuan_pr,
-                'belajar_mandiri' => $request->belajar_mandiri,
-                'pertemuan_bm' => $request->pertemuan_bm,
-                'skill_lab' => $request->skill_lab,
-                'pertemuan_sl' => $request->pertemuan_sl,
-                'studio' => $request->studio,
-                'pertemuan_studio' => $request->pertemuan_studio,
-                'kdkurikulum' => $request->kurikulum,
-                'kdtahunakademik' => $request->tahunakademik
-            ]);
-
-            foreach ($request->input('dosen1') as $dosenUtama) {
-                DB::table('ak_matakuliah_dosen_utama')->insert([
-                    "kdstrukturprogram" => $struktur->kdstrukturprogram,
-                    "kdperson" => $dosenUtama
-                ]);
-            }
-
-            foreach ($request->input('dosen2') as $dosenPelapor) {
-                DB::table('ak_matakuliah_dosen_pelaporan')->insert([
-                    "kdstrukturprogram" => $struktur->kdstrukturprogram,
-                    "kdperson" => $dosenPelapor
-                ]);
-            }
-
-
-            DB::commit();
-            return back();
-        } catch (Throwable $th) {
-            DB::rollBack();
-            // return dd($th);
-        }
-
-        // dd($struktur);
-        return redirect()->back()->with('success', 'berhasil menambahkan struktur Program');
-    }
-
-    public function strukturProgramDelete(int $id)
-    {
-        $struktur = ak_strukturprogram::findOrFail($id);
-
-        $dosenUtama = ak_matakuliah_dosen_utama::where('kdstrukturprogram', $id)->get();
-
-        $dosenPelaporan = ak_matakuliah_dosen_pelaporan::where('kdstrukturprogram', $id)->get();
-
-        $struktur->delete();
-
-        foreach ($dosenUtama as $du) {
-
-            $du->delete();
-        }
-
-        foreach ($dosenPelaporan as $dp) {
-
-            $dp->delete();
-        }
-
-        return redirect()->back()->with('success', 'Berhasil menghapus struktur program');
-    }
-
-    public function strukturProgramEdit(int $id)
-    {
-
-
-        $kurikulum = DB::table("ak_kurikulum")
-            ->where("isObe", "=", 1)
-            ->where("kdunitkerja", Auth::user()->kdunit)
-            ->get();
-
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "desc")->first();
-
-        $tahunAkademik = DB::table('ak_tahunakademik')
-            ->where("isAktif", "=", 1)
-            ->get();
-
-        $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
-            ->where("kdunitkerja", Auth::user()->kdunit)->get();
-
-        $dosen1 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->orderBy('namalengkap', 'asc')
-            ->get();
-
-        $dosen2 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            ->orderBy('namalengkap', 'asc')
-            ->get();
-
-        // return dd($tahunAkademik);
-
-        return view('pages.detailMatakuliah.editStrukturProgram', compact('filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2'));
     }
 }

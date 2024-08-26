@@ -8,7 +8,8 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>{{ $item->kurikulum }}</option>
+                    <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>{{ $item->kurikulum }}
+                        {{ $item->tahun }}</option>
                 @endforeach
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
@@ -166,7 +167,7 @@
 <div class="flex items-center justify-between py-5 px-5">
     <div class="flex items-center">
         <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
-            Grafik Statistik Ketercapaian CPL
+            Grafik Statistik Ketercapaian CPMK
         </h1>
     </div>
 </div>

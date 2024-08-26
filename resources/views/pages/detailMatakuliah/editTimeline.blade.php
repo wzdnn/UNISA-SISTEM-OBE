@@ -84,7 +84,7 @@
                         <label for="materi" class="text-sm text-gray-500">
                             Materi
                         </label>
-                        <select id="kdsubbk" name="kdsubbk" class="form-control">
+                        <select id="kdmateri" name="kdmateri" class="form-control">
                             @foreach ($materi as $m)
                                 <option value="{{ $m->id }}">{{ $m->kode_subbk }} {{ $m->sub_bk }}</option>
                             @endforeach
@@ -167,7 +167,7 @@
 @push('script')
     <script>
         $(document).ready(function() {
-            $('#kdsubbk').select2();
+            $('#kdmateri').select2();
             $('#kdcpmk').select2();
             $('#kdjeniskuliah').select2();
             $('#kdperson').select2();

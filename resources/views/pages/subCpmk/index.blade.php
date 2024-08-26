@@ -1,0 +1,207 @@
+@extends('layouts.app')
+
+@push('style')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endpush
+<br>
+@section('body')
+    <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('subcpmk.index') }}"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path
+                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                    </svg>
+                    Sub CPMK
+                </a>
+            </li>
+    </nav>
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">Sub CPMK</h1>
+        </div>
+        <div class="flex items-center">
+            @if (Auth::user()->role == 'admin')
+                <a href="{{ route('subcpmk.create') }}">
+                    <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6 inline-block mr-1">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Sub CPMK</button>
+                </a>
+            @endif
+        </div>
+    </div>
+    <div class="flex flex-col">
+        <form method="GET" class="rounded">
+            {{-- @csrf --}}
+            <select name="filter" id="" class="rounded">
+                <option value="null">Kurikulum</option>
+                @foreach ($kurikulum as $item)
+                    <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                @endforeach
+            </select>
+            {{-- <input type="text" name="search" class=" rounded"> --}}
+            <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
+                type="submit">Filter</button>
+        </form>
+
+        @if (request()->search != null && request()->key != null)
+            <div class="my-3">
+                <h2 class="fs-5">Key : {{ request()->key }}, Search : {{ request()->search }}</h2>
+            </div>
+        @endif
+    </div>
+    <hr />
+
+    <div class="relative py-3">
+        <table id="mytable" class="w-full text-sm text-center  text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr class="text-left">
+                    <th scope="col" class="px-6 py-3 w-[50px]">
+                        No.
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Kode sub CPMK
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Sub CPMK
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Kode CPMK
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
+                        Unit
+                    </th>
+                    @if (Auth::user()->role == 'admin')
+                        <th scope="col" class="px-6 py-3 ">
+                            Action
+                        </th>
+                    @endif
+                </tr>
+            </thead>
+            <tbody>
+                @if ($sub_cpmk->count() > 0)
+                    @foreach ($sub_cpmk as $key => $sub_cpmks)
+                        <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{-- {{ $sub_cpmks->kdsubcpmk }} --}}
+                                {{ $loop->iteration }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $sub_cpmks->kode_subcpmk }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $sub_cpmks->sub_cpmk }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $sub_cpmks->kode_cpmk }} {{ $sub_cpmks->cpmk }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $sub_cpmks->kurikulum }}
+                            </td>
+                            @if (Auth::user()->role == 'admin')
+                                <td class="px-6 py-4 flex flex-row space-x-1">
+                                    <a href="{{ route('subcpmk.edit', ['id' => $sub_cpmks->kdsubcpmk]) }}">
+                                        <button
+                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-regular fa-pen-to-square"></i></button>
+                                    </a>
+                                    <a href="{{ route('subpcmk.delete', ['id' => $sub_cpmks->kdsubcpmk]) }}"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                        <button
+                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td class="justify-center text-center" colspan="7">Sub CPMK belum ada</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+        {{ $sub_cpmk->withQueryString()->links() ?? '' }}
+        <hr />
+    </div>
+    <script>
+        //on load
+        $(function() {
+            // MergeGridCells('#mytable', 1, false);
+            // MergeGridCells('#mytable', 7, false);
+
+            MergeGridCells('#mytable', 8, false);
+            MergeGridCells('#mytable', 7, false);
+            MergeGridCells('#mytable', 5, false);
+            MergeGridCells('#mytable', 4, false);
+            MergeGridCells('#mytable', 3, false);
+            MergeGridCells('#mytable', 2, false);
+            MergeGridCells('#mytable', 1, false);
+
+        });
+
+        function MergeGridCells(table_id, dimension_col, is_alternate_color) {
+            let i = 0;
+            // first_instance holds the first instance of identical td
+            // first_instance menyimpan kata yang sama
+            let first_instance = null;
+            // how many identical td?
+            // berapa baris yang sama?
+            let rowspan = 1;
+            let first_text = '';
+            // iterate through rows
+            // loop untuk setiap baris
+            $(table_id + ' > tbody  > tr').each(function() {
+
+                // find the td of the correct column (determined by the dimension_col set above)
+                // ambil teks (sesuai dengan kolom ke-dimension_col)
+                let dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+                let text = btoa(dimension_td[0].innerHTML.trim());
+
+                if (first_instance == null) {
+                    // must be the first row
+                    // baris pertama
+                    first_instance = dimension_td;
+                    first_text = text;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                } else if (text == first_text) {
+                    // the current td is identical to the previous
+                    // baris ini sama dengan baris sebelumnya
+                    // remove the current td
+                    // delete baris ini
+                    dimension_td.remove();
+                    ++rowspan;
+                    // increment the rowspan attribute of the first instance
+                    // baris ini di merge dengan sebelumnya dengan cara menaikkan rowspan baris pertama yang sama sampai dengan baris ini
+                    first_instance.attr('rowspan', rowspan);
+                    painting(is_alternate_color, first_instance, i);
+                } else {
+                    // this cell is different from the last, stop previous rowspan
+                    // baris ini berbeda dengan yang sebelumnya, hentikan proses merger sebelumnya
+                    first_instance = dimension_td;
+                    first_text = text;
+                    rowspan = 1;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                }
+
+            });
+        }
+
+        function painting(is_alternate_color, instance, i) {
+            if (is_alternate_color)
+                instance.attr('style', 'background-color: ' + ((i % 2 == 0) ? '#FFFFB6' : '#ff9da4'));
+        }
+    </script>
+@endsection

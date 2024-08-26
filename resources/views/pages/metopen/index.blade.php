@@ -45,6 +45,11 @@
                     <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
             </select>
+
+            <input type="search" name="filter-matakuliah"
+                class="w-full p-3 text-sm text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Search Matakuliah" value="{{ request()->input('filter-matakuliah') }}" />
+
             {{-- <input type="text" name="search" class=" rounded"> --}}
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
                 type="submit">Filter</button>
