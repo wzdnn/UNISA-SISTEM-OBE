@@ -140,7 +140,6 @@
                                     id="pengalamanSelectSinkron" name="pengalamanSelectSinkron[]" multiple="multiple">
                                     @foreach ($mkPengalaman as $item)
                                         <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pengalamanSinkron))>
-
                                             {{ $item->pengalaman_mahasiswa }}
                                         </option>
                                     @endforeach

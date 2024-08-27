@@ -39,10 +39,12 @@
     <div class="flex flex-col">
         <form method="GET" class="rounded">
             {{-- @csrf --}}
-            <select name="filter" id="" class="rounded">
-                <option value="null">Kurikulum</option>
+            <select name="filter-kurikulum" id="" class="rounded">
+                <option value="">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                    <option value="{{ $item->kdkurikulum }}" @selected(request()->input('filter-kurikulum') == $item->kdkurikulum)>{{ $item->kurikulum }}
+                        {{ $item->tahun }}
+                    </option>
                 @endforeach
             </select>
 

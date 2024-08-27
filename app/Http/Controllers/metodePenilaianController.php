@@ -125,24 +125,6 @@ class metodePenilaianController extends Controller
         }
 
 
-        // searching belum disamakan dengan metode kd unit
-        if ($request->has("filter")) {
-            if (in_array($request->filter, $arrayKurikulum)) {
-
-                $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
-                    ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
-                    ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
-                    ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
-                    ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
-                    ->where("ak_kurikulum.isObe", '=', 1)
-                    ->distinct()
-                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
-                    ->where("kurikulum", "=", $request->filter)
-                    ->paginate(15);
-            }
-        }
-
-
         return view('pages.metopen.index', compact('matakuliah', 'kdkurikulum', 'tahunAkademik', 'tipeLensa'));
     }
 
@@ -437,7 +419,7 @@ class metodePenilaianController extends Controller
             ->where("gnm.kdjenisnilai", "=", $id)
             ->first();
 
-        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai")
+        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai", "path_laporan", "path_foto")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
@@ -452,7 +434,7 @@ class metodePenilaianController extends Controller
 
         $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
-
+        // dd($penilaian);
 
         return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }

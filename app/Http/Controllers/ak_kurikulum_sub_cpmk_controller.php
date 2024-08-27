@@ -12,20 +12,48 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
-        $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
-            ->paginate(10);
 
-        $kurikulum = DB::table("ak_kurikulum")
-            ->where(function ($query) {
-                $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                    ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-            })
-            ->where("isObe", "=", 1)
-            ->get();
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+            $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
+                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
+                ->paginate(10);
 
+            $kurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+        } else {
+            $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
+                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->paginate(10);
+
+            $kurikulum = DB::table("ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+        }
+
+        $arrayKurikulum = [];
+        foreach ($kurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
+                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
+                    ->where('kurikulum', $request->filter)
+                    ->paginate(10);
+            }
+        }
 
         // dd($sub_cpmk);
         return view('pages.subCpmk.index', compact('sub_cpmk', 'kurikulum'));

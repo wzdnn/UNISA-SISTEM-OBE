@@ -45,8 +45,10 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Kurikulum</option>
                 @foreach ($kurikulum as $item)
-                    <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}
+                        {{ $item->tahun }}</option>
                 @endforeach
+            </select>
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
