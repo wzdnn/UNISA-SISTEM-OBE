@@ -9,16 +9,8 @@ class ak_timeline extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        "kdmatakuliah",
-        "mingguke",
-        "kdtahunakademik",
-        "kdcpmk",
-        "kdmateri",
-        "kdmetopem",
-        "kdperson",
-        "kdjeniskuliah"
-    ];
+    protected $guarded = ['kdtimeline'];
 
     protected $table = 'ak_timeline';
+    protected $primaryKey = 'kdtimeline';
 }

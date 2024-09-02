@@ -481,33 +481,21 @@ class metodePenilaianController extends Controller
     public function postPenilaian(Request $request)
     {
         $request->validate([
-            'kdpenilaian' => ['required', 'numeric'],
             'nilai' => ['required', 'numeric']
         ]);
 
-        // abort_if($nilai, 404, 'data kosong');
-
         try {
-
             DB::beginTransaction();
 
-            // $nilai = ak_penilaian::where('kdpenilaian', $request->input('kdpenilaian'))->first();
-
             $nilai = ak_penilaian::findOrFail($request->input("kdpenilaian"));
-
-            // $nilai->nilai = $request->input('nilai');
-
             $nilai->update(['nilai' => $request->input('nilai')]);
-
-            $nilai->save();
 
             DB::commit();
 
-
-            return redirect()->back()->with('success', 'berhasil menambah nilai');
+            return response()->json(['success' => true]);
         } catch (Throwable $th) {
-            dd($th);
-            return redirect()->back()->with('failed', 'gagal menambah nilai. Error: ' . $th->getMessage());
+            DB::rollBack();
+            return response()->json(['success' => false, 'error' => $th->getMessage()], 500);
         }
     }
 

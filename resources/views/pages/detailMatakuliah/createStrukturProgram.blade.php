@@ -67,7 +67,8 @@
                         </label>
                         <select id="dosen1" name="dosen1[]" multiple data-live-search="true" class="form-control">
                             @foreach ($dosen1 as $dos1)
-                                <option value="{{ $dos1->kdperson }}"> {{ $dos1->namalengkap }} {{ $dos1->gelarbelakang }}
+                                <option value="{{ $dos1->kdperson }}">{{ $dos1->gelardepan }} {{ $dos1->namalengkap }}
+                                    {{ $dos1->gelarbelakang }}
                                 </option>
                             @endforeach
                         </select>
@@ -78,7 +79,8 @@
                         </label>
                         <select id="dosen2" name="dosen2[]" multiple data-live-search="true" class="form-control">
                             @foreach ($dosen2 as $dos1)
-                                <option value="{{ $dos1->kdperson }}"> {{ $dos1->namalengkap }} {{ $dos1->gelarbelakang }}
+                                <option value="{{ $dos1->kdperson }}">{{ $dos1->gelardepan }} {{ $dos1->namalengkap }}
+                                    {{ $dos1->gelarbelakang }}
                                 </option>
                             @endforeach
                         </select>
@@ -103,7 +105,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teori</label>
                         <select id="teori" name="teori"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -118,7 +120,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_kt" name="pertemuan_kt"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
@@ -135,7 +137,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Tutorial</label>
                         <select id="tutorial" name="tutorial"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -150,12 +152,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_kp" name="pertemuan_kp"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>
@@ -166,7 +168,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Seminar</label>
                         <select id="seminar" name="seminar"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -181,12 +183,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_s" name="pertemuan_s"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>
@@ -198,7 +200,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Praktikum</label>
                         <select id="praktikum" name="praktikum"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -213,12 +215,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_p" name="pertemuan_p"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>
@@ -230,7 +232,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Praktik</label>
                         <select id="praktik" name="praktik"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -245,12 +247,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_pr" name="pertemuan_pr"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>
@@ -262,7 +264,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Belajar Mandiri</label>
                         <select id="belajar_mandiri" name="belajar_mandiri"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -277,12 +279,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_bm" name="pertemuan_bm"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>
@@ -293,7 +295,7 @@
                             Lab</label>
                         <select id="skill_lab" name="skill_lab"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -308,12 +310,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_sl" name="pertemuan_sl"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>
@@ -324,7 +326,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Studio</label>
                         <select id="studio" name="studio"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Pilih Sks</option>
+                            <option selected value=0>Pilih Sks</option>
                             <option value=0>0</option>
                             <option value=0.5>0.5</option>
                             <option value=1>1</option>
@@ -339,12 +341,12 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Pertemuan</label>
                         <select id="pertemuan_studio" name="pertemuan_studio"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Jumlah Pertemuan</option>
+                            <option selected value=0>Jumlah Pertemuan</option>
                             <option value=0>0</option>
                             <option value=4>4</option>
                             <option value=8>8</option>
                             <option value=12>12</option>
-                            <option value=13>
+                            <option value=13>13</option>
                             <option value=16>16</option>
                         </select>
                     </div>

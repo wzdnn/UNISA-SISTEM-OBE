@@ -72,7 +72,7 @@
                             </path>
                         </svg>
                     </div>
-                    <a href="{{ route('pl.index') }}"
+                    <a href="{{ route('pl.index', ['filter' => request()->input('filter')]) }}"
                         class="inline-block w-full py-2 pl-8 pr-4 text-md rounded hover:bg-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-300">Profil
                         Lulusan</a>
                 </li>
@@ -94,7 +94,7 @@
                             </path>
                         </svg>
                     </div>
-                    <a href="{{ route('cplr.index') }}"
+                    <a href="{{ route('cplr.index', ['filter' => request()->input('filter')]) }}"
                         class="inline-block w-full py-2 pl-8 pr-4 text-md rounded hover:bg-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-300">Referensi
                         Capaian Lulusan</a>
                 </li>
@@ -205,12 +205,12 @@
                     <div class=" pl-4">
                         <ul class="hidden flex-col py-0 pl-2 border-l border-green-300 ml-1 " id="dropdown-BK">
                             <li>
-                                <a href="{{ route('bk.index') }}"
+                                <a href="{{ route('bk.index', ['filter' => request()->input('filter')]) }}"
                                     class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">Bahan
                                     Kajian</a>
                             </li>
                             <li>
-                                <a href="{{ route('sub-bk.index') }}"
+                                <a href="{{ route('sub-bk.index', ['filter' => request()->input('filter')]) }}"
                                     class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">Sub-Bahan
                                     Kajian</a>
                             </li>
@@ -293,18 +293,18 @@
                                     <ul class="hidden flex-col py-0 pl-2 border-l border-green-300 ml-1 "
                                         id="dropdown-cpmk">
                                         <li>
-                                            <a href="{{ route('subcpmk.index') }}"
+                                            <a href="{{ route('subcpmk.index', ['filter' => request()->input('filter')]) }}"
                                                 class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">
                                                 Sub CPMK
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ route('list.cpmk') }}"
+                                            <a href="{{ route('list.cpmk', ['filter' => request()->input('filter')]) }}"
                                                 class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">List
                                                 CPMK</a>
                                         </li>
                                         <li>
-                                            <a href="{{ route('peta.cpmk') }}"
+                                            <a href="{{ route('peta.cpmk', ['filter' => request()->input('filter')]) }}"
                                                 class="inline-block w-full px-4 py-2 text-sm rounded text-[#F4FAF8] hover:bg-green-300 hover:green-800 focus:outline-none focus:ring-1 focus:ring-green-500 hover:text-green-800 ">Peta
                                                 CPL-CPMK</a>
                                         </li>
@@ -386,7 +386,7 @@
                                         </path>
                                     </svg>
                                 </div>
-                                <a href="{{ route('organisasi.mk') }}"
+                                <a href="{{ route('organisasi.mk', ['filter' => request()->input('filter')]) }}"
                                     class="inline-block w-full py-2 pl-8 pr-4 text-md rounded hover:bg-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-300">
 
                                     <span class="flex-1 whitespace-nowrap">Organisasi Matakuliah</span>
@@ -516,7 +516,7 @@
                                         </path>
                                     </svg>
                                 </div>
-                                <a href="{{ route('rekap.index') }}"
+                                <a href="{{ route('rekap.index', ['filter' => request()->input('filter')]) }}"
                                     class="inline-block w-full py-2 pl-8 pr-4 rounded hover:bg-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-300">
 
                                     <span class="flex-1 whitespace-nowrap">Rekap</span>

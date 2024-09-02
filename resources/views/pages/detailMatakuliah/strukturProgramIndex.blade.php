@@ -61,7 +61,8 @@
                     </div>
                 @endif
             </div>
-
+        </div>
+        <div class="flex justify-start px-2 pt-5">
             <a href="{{ route('sp.create') }}">
                 <button
                     class="flex items-center bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">Tambah
@@ -264,13 +265,23 @@
                                 {{ $s->kurikulum }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('sp.delete', ['id' => $s->kdstrukturprogram]) }}"
-                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
-                                    <button
-                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </a>
+                                <div class="flex flex-row space-x-1">
+
+                                    <a href="{{ route('sp.delete', ['id' => $s->kdstrukturprogram]) }}"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
+                                        <button
+                                            class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </a>
+
+                                    <a href="{{ route('sp.edit', ['id' => $s->kdstrukturprogram]) }}">
+                                        <button
+                                            class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -282,5 +293,7 @@
 
             </tbody>
         </table>
+        {{ $strukturprogram->links() }}
+        </hr>
     </div>
 @endsection

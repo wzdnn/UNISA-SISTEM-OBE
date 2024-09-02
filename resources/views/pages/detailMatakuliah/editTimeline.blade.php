@@ -36,6 +36,19 @@
                         {{ $matakuliah->kodematakuliah }} {{ $matakuliah->matakuliah }}</a>
                 </div>
             </li>
+
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <a href="{{ route('timeline.index', ['id' => $matakuliah->kdmatakuliah]) }}"
+                        class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 ">Timeline Matakuliah</a>
+                </div>
+            </li>
+
             <li aria-current="page">
                 <div class="flex items-center">
                     <svg class="w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +64,7 @@
     </nav>
 
     <div class="text-center py-2">
-        <h1 class="font-bold text-2xl mb-0">Tambah Timeline Pembelajaran Mingguan</h1>
+        <h1 class="font-bold text-2xl mb-0">Edit Timeline Pembelajaran Mingguan</h1>
     </div>
 
     <div class="my-3 mx-auto max-w-4xl">
@@ -86,7 +99,9 @@
                         </label>
                         <select id="kdmateri" name="kdmateri" class="form-control">
                             @foreach ($materi as $m)
-                                <option value="{{ $m->id }}">{{ $m->kode_subbk }} {{ $m->sub_bk }}</option>
+                                <option value="{{ $m->kdmateri }}" @selected(in_array($m->kdmateri, $id_materi))>{{ $m->kode_subbk }}
+                                    {{ $m->materi_pembelajaran }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -97,7 +112,8 @@
                         </label>
                         <select id="kdmetopem" name="kdmetopem" class="form-control">
                             @foreach ($metopem as $mp)
-                                <option value="{{ $mp->id }}"> {{ $mp->metodepembelajaran }}</option>
+                                <option value="{{ $mp->id }}" @selected(in_array($mp->id, $id_metopem))>
+                                    {{ $mp->metodepembelajaran }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -111,7 +127,9 @@
                         </label>
                         <select id="kdperson" name="kdperson" class="form-control">
                             @foreach ($dosen as $dos)
-                                <option value="{{ $dos->kdperson }}"> {{ $dos->namalengkap }} {{ $dos->gelarbelakang }}
+                                <option value="{{ $dos->kdperson }}"@selected(in_array($dos->kdperson, $id_dosen))>{{ $dos->gelardepan }}
+                                    {{ $dos->namalengkap }}
+                                    {{ $dos->gelarbelakang }}
                                 </option>
                             @endforeach
                         </select>
@@ -123,7 +141,8 @@
                         </label>
                         <select id="kdjeniskuliah" name="kdjeniskuliah" class="form-control">
                             @foreach ($jeniskuliah as $jeniskuliahs)
-                                <option value="{{ $jeniskuliahs->kdjeniskuliah }}"> {{ $jeniskuliahs->jeniskuliah }}
+                                <option value="{{ $jeniskuliahs->kdjeniskuliah }}"@selected(in_array($jeniskuliahs->kdjeniskuliah, $id_jeniskuliah))>
+                                    {{ $jeniskuliahs->jeniskuliah }}
                                 </option>
                             @endforeach
                         </select>
@@ -138,11 +157,22 @@
                         </label>
                         <select id="tahunakademik" name="tahunakademik" class="form-control">
                             @foreach ($tahunAkademik as $ta)
-                                <option value="{{ $ta->kdtahunakademik }}">{{ $ta->tahunakademik }}
+                                <option value="{{ $ta->kdtahunakademik }}"@selected(in_array($ta->kdtahunakademik, $id_tahunakademik))>
+                                    {{ $ta->tahunakademik }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="keterangan" id="keterangan"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ $timeline->keterangan }}" />
+                        <label for="keterangan"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
+                    </div>
+
+
                     <input type="text" hidden value="{{ $matakuliah->kdmatakuliah }}" name="kdmatakuliah"
                         id="kdmatakuliah" />
 

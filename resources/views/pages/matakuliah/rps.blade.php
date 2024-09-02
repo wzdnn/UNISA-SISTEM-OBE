@@ -59,7 +59,7 @@
                             Kode Matakuliah
                         </td>
                         <td class="border px-4 py-2">
-                            Nama Blok
+                            Nama Matakuliah
                         </td>
                         <td class="border px-4 py-2" colspan="5">
                             Bobot (SKS)
@@ -79,7 +79,7 @@
                             {{ $matakuliah->kodematakuliah }}
                         </td>
                         <td class="border px-4 py-2">
-
+                            {{ $matakuliah->matakuliah }}
                         </td>
                         <td class="border px-4 py-2">
                             Teori

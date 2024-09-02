@@ -65,13 +65,16 @@
                         @csrf
                         <select name="filter" id="">
                             @foreach ($filter['filter'] as $item)
-                                <option value="{{ $item }}" @selected($item == $filter['latest'])>{{ $item }}
+                                <option value="{{ $item }}" {{ $item == $selectedFilter ? 'selected' : '' }}>
+                                    {{ $item }}
                                 </option>
                             @endforeach
                         </select>
                         {{-- <input type="text" name="search" class=" rounded"> --}}
                         <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
-                            type="submit">Filter</button>
+                            type="submit">
+                            Filter
+                        </button>
                     </form>
 
                     @if (request()->search != null && request()->key != null)
@@ -106,21 +109,21 @@
                                 class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
                             <input type="text" name="luring" id="luring"
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                                placeholder=" ">
+                                placeholder=" " value="{{ $akses->luring ?? '' }}">
                         </div>
                         <div class="relative z-0 px-3 py-3 ">
                             <label for="daring"
                                 class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
                             <input type="text" name="daring" id="daring"
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                                placeholder=" ">
+                                placeholder=" " value="{{ $akses->daring ?? '' }}">
                         </div>
                         <div class="relative z-0 px-3 py-3 ">
                             <label for="blended"
                                 class="block mb-2 text-sm font-bold text-gray-900 uppercase">Blended</label>
                             <input type="text" name="blended" id="blended"
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
-                                placeholder=" ">
+                                placeholder=" " value="{{ $akses->blended ?? '' }}">
                         </div>
                     </div>
 

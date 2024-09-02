@@ -21,7 +21,8 @@ class timeline_controller extends Controller
 
         $matakuliah = ak_matakuliah::findOrFail($id);
 
-        $timeline = ak_timeline::join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
+        $timeline = ak_timeline::select('ak_timeline.keterangan', 'mingguke', 'kode_cpmk', 'kode_subbk', 'materi_pembelajaran', 'namalengkap', 'gelarbelakang', 'jeniskuliah', 'kdtimeline', 'metodepembelajaran')
+            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
             ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
             ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', 'ak_timeline.kdmateri')
             ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
@@ -30,7 +31,8 @@ class timeline_controller extends Controller
             ->join('pt_person as pp', 'pp.kdperson', '=', 'ak_timeline.kdperson')
             ->join('ak_dosen as dos', 'dos.kdperson', '=', 'pp.kdperson')
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
-            ->where('mksbk.kdmatakuliah', $id)
+            ->where('ak_timeline.kdmatakuliah', $id)
+            // ->toSql();
             ->get();
 
         // dd($timeline);
@@ -64,8 +66,8 @@ class timeline_controller extends Controller
 
         $metopem = DB::table('ak_metodepembelajaran')->get();
 
-        $dosen = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+        $dosen = DB::table('simptt.ak_dosen as ad')
+            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             // ->where('kdunitkerja', Auth::user()->kdunit)
             ->get();
 
@@ -92,7 +94,8 @@ class timeline_controller extends Controller
             'kdmatakuliah' => $request->kdmatakuliah,
             'kdperson' => $request->kdperson,
             'kdjeniskuliah' => $request->kdjeniskuliah,
-            'kdmateri' => $request->kdmateri
+            'kdmateri' => $request->kdmateri,
+            'keterangan' => $request->keterangan
         ]);
 
 
@@ -124,17 +127,21 @@ class timeline_controller extends Controller
             ->where('kdmatakuliah', $id)
             ->get();
 
-        $materi = ak_kurikulum_sub_bk::join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "=", "ak_kurikulum_sub_bks.kdkurikulum")
-            ->where("ak_kurikulum.kdunitkerja", Auth::user()->kdunit)
+        $materi = ak_kurikulum_sub_bk_materi::join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'ak_kurikulum_sub_bk_materi.id_gabung')
+            ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
+            ->where('mksbk.kdmatakuliah', $id)
             ->get();
+        // ->toSql();
+
+        // dd($materi);
 
         $jeniskuliah = DB::table('ak_jeniskuliah')
             ->get();
 
         $metopem = DB::table('ak_metodepembelajaran')->get();
 
-        $dosen = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+        $dosen = DB::table('simptt.ak_dosen as ad')
+            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             // ->where('kdunitkerja', Auth::user()->kdunit)
             ->get();
 
@@ -144,34 +151,53 @@ class timeline_controller extends Controller
 
         $timeline = ak_timeline::where('kdtimeline', $kdtimeline)->first();
 
+        $id_cpmk = [];
+        $id_jeniskuliah = [];
+        $id_materi = [];
+        $id_metopem = [];
+        $id_tahunakademik = [];
+        $id_dosen = [];
+
+        $id_mk = [];
+
+
+        if ($timeline) {
+            $id_cpmk[] = $timeline->kdcpmk;
+            $id_jeniskuliah[] = $timeline->kdjeniskuliah;
+            $id_materi[] = $timeline->kdmateri;
+            $id_metopem[] = $timeline->kdmetopem;
+            $id_tahunakademik[] = $timeline->kdtahunakademik;
+            $id_dosen[] = $timeline->kdperson;
+        }
+
+        if ($matakuliah) {
+            $id_mk[] = $matakuliah->kdmatakuliah;
+        }
+
         // dd($timeline);
 
-        return view('pages.detailMatakuliah.editTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'timeline'));
+        return view('pages.detailMatakuliah.editTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk'));
     }
 
     public function updateTimeline(Request $request, int $id)
     {
-        try {
 
-            $timeline = ak_timeline::where('kdtimeline', $id);
+        $timeline = ak_timeline::where('kdtimeline', $id)->first();
 
-            DB::beginTransaction();
-            $timeline->update([
-                'mingguke' => $request->mingguke,
-                'kdcpmk' => $request->kdcpmk,
-                'kdmetopem' => $request->kdmetopem,
-                'kdtahunakademik' => $request->tahunakademik,
-                'kdmatakuliah' => $request->kdmatakuliah,
-                'kdperson' => $request->kdperson,
-                'kdjeniskuliah' => $request->kdjeniskuliah,
-                'kdmateri' => $request->kdmateri
-            ]);
+        $timeline->update([
+            'mingguke' => $request->mingguke,
+            'kdcpmk' => $request->kdcpmk,
+            'kdmetopem' => $request->kdmetopem,
+            'kdtahunakademik' => $request->tahunakademik,
+            'kdmatakuliah' => $request->kdmatakuliah,
+            'kdperson' => $request->kdperson,
+            'kdjeniskuliah' => $request->kdjeniskuliah,
+            'kdmateri' => $request->kdmateri,
+            'keterangan' => $request->keterangan
+        ]);
 
-            DB::commit();
-            return redirect()->back()->with('succes', "Berhasil Updated Timeline");
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect()->back()->with("failed", "Gagal Update Timeline" . $th->getMessage());
-        }
+        // dd($timeline);
+
+        return redirect()->route("timeline.index", ['id' => $timeline->kdmatakuliah]);
     }
 }

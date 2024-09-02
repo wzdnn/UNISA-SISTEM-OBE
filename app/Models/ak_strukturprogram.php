@@ -10,11 +10,9 @@ class ak_strukturprogram extends Model
     use HasFactory;
 
     protected $table = "ak_strukturprogram";
-
     protected $guarded = [
         'kdstrukturprogram'
     ];
-
     protected $primaryKey = "kdstrukturprogram";
 
 

@@ -38,7 +38,7 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>{{ $item->kurikulum }}</option>
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
                 @endforeach
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
@@ -80,7 +80,7 @@
 
                         </td>
                         <td class="px-3 py-2">
-                            <a href="{{ route('rekap.semester', ['id' => $rekapindex->kdtahunakademik]) }}">
+                            <a href="{{ route('rekap.semester.index', ['id' => $rekapindex->kdtahunakademik]) }}">
 
                                 <button id="btnDetail"
                                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

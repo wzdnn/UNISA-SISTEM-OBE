@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class rekap_controller extends Controller
 {
-    public function rekapSemester(int $id, Request $request)
+    public function rekapSemester(int $id, Request $request, int $semester)
     {
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
@@ -24,6 +25,7 @@ class rekap_controller extends Controller
                 ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
                 ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
                 ->where("kdtahunakademik", $id)
+                ->where("semester", $semester)
                 ->orderBy("gmc.id", "asc")
                 ->orderBy("ak_matakuliah_cpmk.id", "asc")
                 ->distinct()
@@ -49,6 +51,7 @@ class rekap_controller extends Controller
                 ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
                 ->where("ak.kdunitkerja", Auth::user()->kdunit)
                 ->where("kdtahunakademik", $id)
+                ->where("semester", $semester)
                 ->orderBy("gmc.id", "asc")
                 ->orderBy("ak_matakuliah_cpmk.id", "asc")
                 ->distinct()
@@ -79,11 +82,11 @@ class rekap_controller extends Controller
 
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayKurikulum)) {
-                $rekapSemester = DB::select('call sistem_obe.rekap_semester(?,?)', [$id, $request->filter]);
+                $rekapSemester = DB::select('call sistem_obe.rekap_semester(?,?,?)', [$id, $request->filter, $semester]);
             }
         }
 
-        $rekapSemester = DB::select('call sistem_obe.rekap_semester(?,?)', [$id, $request->filter]);
+        $rekapSemester = DB::select('call sistem_obe.rekap_semester(?,?,?)', [$id, $request->filter, $semester]);
         $rekap = json_decode(json_encode($rekapSemester), true);
         foreach ($rekap as $key => $value) {
             $loop = 1;
@@ -97,7 +100,7 @@ class rekap_controller extends Controller
             }
         }
 
-        $rekapCpmk = DB::select('call sistem_obe.rekap_semester_cpmk(?,?)', [$id, $request->filter]);
+        $rekapCpmk = DB::select('call sistem_obe.rekap_semester_cpmk(?,?,?)', [$id, $request->filter, $semester]);
         $cpmk = json_decode(json_encode($rekapCpmk), true);
 
         $statistik = [];
@@ -195,6 +198,18 @@ class rekap_controller extends Controller
 
         // dd($rekapTahunanIndex);
         return view('pages.rekap.index', compact('rekap', 'rekapTahunanIndex', 'kdkurikulum'));
+    }
+
+    public function indexSemester(int $id)
+    {
+        $tahunAkademik = DB::table('ak_tahunakademik as ata')
+            ->where("isAktif", 1)
+            ->where('kdtahunakademik', $id)
+            ->first();
+
+        $semester = ak_matakuliah::select('semester')->distinct()->get();
+
+        return view("pages.rekap.index-semester", compact('semester', 'tahunAkademik'));
     }
 
     public function rekapTahunan(Request $request, int $id)

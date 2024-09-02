@@ -76,6 +76,9 @@
                         Minggu Ke-
                     </th>
                     <th scope="col" class="px-6 py-3 ">
+                        Keterangan
+                    </th>
+                    <th scope="col" class="px-6 py-3 ">
                         CPMK
                     </th>
                     <th scope="col" class="px-6 py-3 ">
@@ -105,6 +108,9 @@
                             {{ $t->mingguke }}
                         </td>
                         <td class="px-6 py-4">
+                            {{ $t->keterangan }}
+                        </td>
+                        <td class="px-6 py-4">
                             {{ $t->kode_cpmk }}
                         </td>
                         <td class="px-6 py-4">
@@ -121,7 +127,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <a
-                                href="{{ route('timeline.edit', ['id' => $t->kdmatakuliah, 'kdtimeline' => $t->kdtimeline]) }}">
+                                href="{{ route('timeline.edit', ['id' => $matakuliah->kdmatakuliah, 'kdtimeline' => $t->kdtimeline]) }}">
                                 <button
                                     class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"><i
                                         class="fa-regular fa-pen-to-square"></i></button>

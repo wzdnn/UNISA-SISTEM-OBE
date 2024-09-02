@@ -125,7 +125,8 @@
                         </label>
                         <select id="kdperson" name="kdperson" class="form-control">
                             @foreach ($dosen as $dos)
-                                <option value="{{ $dos->kdperson }}"> {{ $dos->namalengkap }} {{ $dos->gelarbelakang }}
+                                <option value="{{ $dos->kdperson }}">{{ $dos->gelardepan }} {{ $dos->namalengkap }}
+                                    {{ $dos->gelarbelakang }}
                                 </option>
                             @endforeach
                         </select>
@@ -160,6 +161,15 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="keterangan" id="keterangan"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " value="{{ old('keterangan') }}" />
+                        <label for="keterangan"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
+                    </div>
+
                     <input type="text" hidden value="{{ $matakuliah->kdmatakuliah }}" name="kdmatakuliah"
                         id="kdmatakuliah" />
 

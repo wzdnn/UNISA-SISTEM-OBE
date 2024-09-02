@@ -159,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('/matakuliah/copyMK', [ak_matakuliah_controller::class, 'copyMatakuliah'])->name('copy.mk');
 
-    Route::get('/matakuliah/{id}', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
+    Route::get('/matakuliah/{id}/', [ak_matakuliah_controller::class, 'subbkDetail'])->name('detail.mk'); // detail MK
     Route::post('/matakuliah/{id}', [ak_matakuliah_controller::class, 'postsubbkDetail'])->name('post.detail.mk'); // detail MK
     Route::get('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'kelolaSubBK'])->name('mk.subbk'); // kelola subbk
     Route::post('/matakuliah/{id}/sub-bk', [ak_matakuliah_controller::class, 'postkelolaSubBK']);
@@ -170,7 +170,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/matakuliah/{id}/sub-bk/{sub}/kelola-cpmk', [ak_matakuliah_controller::class, 'postkelolacpmk']);
 
 
-    route::get('/matakuliah/{id}/detail', [ak_matakuliah_controller::class, 'detailIndex'])->name('detail.index');
+    route::get('/matakuliah/{id}/detail/', [ak_matakuliah_controller::class, 'detailIndex'])->name('detail.index');
 
     route::post('/matakuliah/{id}/detail/store', [ak_matakuliah_controller::class, 'detailStore'])->name('detail.store');
     route::post('/matakuliah/{id}/detail-referensi/store', [ak_matakuliah_controller::class, 'detailReferensiStore'])->name('detail.referensi.store');
@@ -207,6 +207,8 @@ Route::middleware(['auth'])->group(function () {
     route::get('/struktur-program/create', [strukturProgram_controller::class, 'strukturProgramCreate'])->name('sp.create');
     route::post('/struktur-program/store', [strukturProgram_controller::class, 'strukturProgramStore'])->name('sp.store');
     route::get('/struktur-program/{id}/delete', [strukturProgram_controller::class, 'strukturProgramDelete'])->name('sp.delete');
+    route::get('/struktur-program/{id}/edit', [strukturProgram_controller::class, 'strukturProgramEdit'])->name('sp.edit');
+    route::post('/struktur-program/{id}/update', [strukturProgram_controller::class, 'strukturProgramUpdate'])->name('sp.update');
 
     // Materi Pembelajaran Pada SUBBK
     Route::post('/materiStore', [ak_matakuliah_controller::class, 'storeMateri'])->name('store.materi');
@@ -284,7 +286,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Rekap 
     Route::get('/rekap', [rekap_controller::class, 'rekap'])->name('rekap.index');
-    Route::get('/rekap-semester/{id}', [rekap_controller::class, 'rekapSemester'])->name('rekap.semester');
+    Route::get('/rekap-semester/{id}', [rekap_controller::class, 'indexSemester'])->name('rekap.semester.index');
+    Route::get('/rekap-semester/{id}/result/{semester}', [rekap_controller::class, 'rekapSemester'])->name('rekap.semester');
     Route::get('/rekap-tahunan/{id}', [rekap_controller::class, 'rekapTahunan'])->name('rekap.tahunan');
     Route::get('/rekap-mahasiswa', [rekap_controller::class, 'rekapMahasiswaGet'])->name('rekap.mahasiswa.get');
     // Route::post('/rekap-mahasiswa/{nim}', [rekap_controller::class, 'rekapMahasiswaPost'])->name('rekap.mahasiswa.post');

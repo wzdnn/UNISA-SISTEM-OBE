@@ -128,13 +128,16 @@
                         @csrf
                         <select name="filter" id="">
                             @foreach ($filter['filter'] as $item)
-                                <option value="{{ $item }}" @selected($item == $filter['latest'])>
+                                <option value="{{ $item }}" {{ $item == $selectedFilter ? 'selected' : '' }}>
                                     {{ $item }}
                                 </option>
                             @endforeach
                         </select>
+                        {{-- <input type="text" name="search" class=" rounded"> --}}
                         <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
-                            type="submit">Filter</button>
+                            type="submit">
+                            Filter
+                        </button>
                     </form>
 
                     @if (request()->search != null && request()->key != null)

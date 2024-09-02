@@ -47,8 +47,8 @@ class strukturProgram_controller extends Controller
                 ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
                     $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
                 })
-                ->limit(10)
-                ->get();
+                ->paginate(10);
+            // ->get();
             // ->first();
 
             $kurikulum = DB::table("ak_kurikulum")
@@ -72,8 +72,8 @@ class strukturProgram_controller extends Controller
                 ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
                     $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
                 })
-                ->limit(10)
-                ->get();
+                ->paginate(10);
+            // ->get();
             // ->first();
 
 
@@ -111,13 +111,13 @@ class strukturProgram_controller extends Controller
         $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
             ->where("kdunitkerja", Auth::user()->kdunit)->get();
 
-        $dosen1 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+        $dosen1 = DB::table('simptt.ak_dosen as ad')
+            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             ->orderBy('namalengkap', 'asc')
             ->get();
 
-        $dosen2 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+        $dosen2 = DB::table('simptt.ak_dosen as ad')
+            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             ->orderBy('namalengkap', 'asc')
             ->get();
 
@@ -130,72 +130,45 @@ class strukturProgram_controller extends Controller
     public function strukturProgramStore(Request $request)
     {
 
+        $request->validate([
+            'teori'
+        ]);
 
-        try {
-            DB::beginTransaction();
+        $struktur = ak_strukturprogram::create([
+            'kdmatakuliah' => $request->kdmatakuliah,
+            'keterangan' => $request->keterangan,
+            'teori' => $request->teori,
+            'pertemuan_kt' => $request->pertemuan_kt,
+            'tutorial' => $request->tutorial,
+            'pertemuan_kp' => $request->pertemuan_kp,
+            'seminar' => $request->seminar,
+            'pertemuan_s' => $request->pertemuan_s,
+            'praktikum' => $request->praktikum,
+            'pertemuan_p' => $request->pertemuan_p,
+            'praktik' => $request->praktik,
+            'pertemuan_pr' => $request->pertemuan_pr,
+            'belajar_mandiri' => $request->belajar_mandiri,
+            'pertemuan_bm' => $request->pertemuan_bm,
+            'skill_lab' => $request->skill_lab,
+            'pertemuan_sl' => $request->pertemuan_sl,
+            'studio' => $request->studio,
+            'pertemuan_studio' => $request->pertemuan_studio,
+            'kdkurikulum' => $request->kurikulum,
+            'kdtahunakademik' => $request->tahunakademik
+        ]);
 
-            $request->validate([
-                'teori' => ['nullable'],
-                'pertemuan_kt' => ['nullable'],
-                'tutorial' => ['nullable'],
-                'pertemuan_kp' => ['nullable'],
-                'seminar' => ['nullable'],
-                'pertemuan_s' => ['nullable'],
-                'praktikum' => ['nullable'],
-                'pertemuan_p' => ['nullable'],
-                'praktik' => ['nullable'],
-                'pertemuan_pr' => ['nullable'],
-                'belajar_mandiri' => ['nullable'],
-                'pertemuan_bm' => ['nullable'],
-                'skill_lab' => ['nullable'],
-                'pertemuan_sl' => ['nullable'],
-                'studio' => ['nullable'],
-                'pertemuan_studio' => ['nullable'],
+        foreach ($request->input('dosen1') as $dosenUtama) {
+            DB::table('ak_matakuliah_dosen_utama')->insert([
+                "kdstrukturprogram" => $struktur->kdstrukturprogram,
+                "kdperson" => $dosenUtama
             ]);
+        }
 
-            $struktur = ak_strukturprogram::create([
-                'kdmatakuliah' => $request->kdmatakuliah,
-                'keterangan' => $request->keterangan,
-                'teori' => $request->teori,
-                'pertemuan_kt' => $request->pertemuan_kt,
-                'tutorial' => $request->tutorial,
-                'pertemuan_kp' => $request->pertemuan_kp,
-                'seminar' => $request->seminar,
-                'pertemuan_s' => $request->pertemuan_s,
-                'praktikum' => $request->praktikum,
-                'pertemuan_p' => $request->pertemuan_p,
-                'praktik' => $request->praktik,
-                'pertemuan_pr' => $request->pertemuan_pr,
-                'belajar_mandiri' => $request->belajar_mandiri,
-                'pertemuan_bm' => $request->pertemuan_bm,
-                'skill_lab' => $request->skill_lab,
-                'pertemuan_sl' => $request->pertemuan_sl,
-                'studio' => $request->studio,
-                'pertemuan_studio' => $request->pertemuan_studio,
-                'kdkurikulum' => $request->kurikulum,
-                'kdtahunakademik' => $request->tahunakademik
+        foreach ($request->input('dosen2') as $dosenPelapor) {
+            DB::table('ak_matakuliah_dosen_pelaporan')->insert([
+                "kdstrukturprogram" => $struktur->kdstrukturprogram,
+                "kdperson" => $dosenPelapor
             ]);
-
-            foreach ($request->input('dosen1') as $dosenUtama) {
-                DB::table('ak_matakuliah_dosen_utama')->insert([
-                    "kdstrukturprogram" => $struktur->kdstrukturprogram,
-                    "kdperson" => $dosenUtama
-                ]);
-            }
-
-            foreach ($request->input('dosen2') as $dosenPelapor) {
-                DB::table('ak_matakuliah_dosen_pelaporan')->insert([
-                    "kdstrukturprogram" => $struktur->kdstrukturprogram,
-                    "kdperson" => $dosenPelapor
-                ]);
-            }
-
-
-            DB::commit();
-            return back();
-        } catch (Throwable $th) {
-            DB::rollBack();
-            // return dd($th);
         }
 
         // dd($struktur);
@@ -228,6 +201,7 @@ class strukturProgram_controller extends Controller
     public function strukturProgramEdit(int $id)
     {
 
+        $strukturProgram = ak_strukturprogram::where('kdstrukturprogram', $id)->first();
 
         $kurikulum = DB::table("ak_kurikulum")
             ->where("isObe", "=", 1)
@@ -243,18 +217,129 @@ class strukturProgram_controller extends Controller
         $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
             ->where("kdunitkerja", Auth::user()->kdunit)->get();
 
-        $dosen1 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+        $dosen1 = DB::table('simptt.ak_dosen as ad')
+            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             ->orderBy('namalengkap', 'asc')
             ->get();
 
-        $dosen2 = DB::table('ak_dosen as ad')
-            ->join('pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
+        $dosen2 = DB::table('simptt.ak_dosen as ad')
+            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             ->orderBy('namalengkap', 'asc')
             ->get();
 
-        // return dd($tahunAkademik);
+        $sp = ak_strukturprogram::where('kdstrukturprogram', $id)->first();
 
-        return view('pages.detailMatakuliah.editStrukturProgram', compact('filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2'));
+        $dosenPelaporan = ak_matakuliah_dosen_pelaporan::where('ak_matakuliah_dosen_pelaporan.kdstrukturprogram', $id)->get();
+        $dosenUtama = ak_matakuliah_dosen_utama::where('ak_matakuliah_dosen_utama.kdstrukturprogram', $id)->get();
+
+
+        $id_Mk = [];
+        $id_tahunAkademik = [];
+        $id_kurikulum = [];
+        $id_DUtama = [];
+        $id_DPelaporan = [];
+
+        foreach ($dosenUtama as $dataU) {
+            $id_DUtama[] = $dataU->kdperson;
+        }
+
+        foreach ($dosenPelaporan as $dataP) {
+            $id_DPelaporan[] = $dataP->kdperson;
+        }
+
+        if ($sp) {
+            $id_Mk[] = $sp->kdmatakuliah;
+            $id_tahunAkademik[] = $sp->kdtahunakademik;
+            $id_kurikulum[] = $sp->kdkurikulum;
+        }
+
+
+        // dd($dosenUtama);
+
+        return view('pages.detailMatakuliah.EditStrukturProgram', compact('strukturProgram', 'filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2', 'dosenUtama', 'dosenPelaporan', 'id_DUtama', 'id_DPelaporan', 'id_Mk', 'id_tahunAkademik', 'id_kurikulum'));
+    }
+
+    public function strukturProgramUpdate(Request $request, int $id)
+    {
+        $struktur = ak_strukturprogram::where('kdstrukturprogram', $id)->first();
+
+        $DPelaporan = ak_matakuliah_dosen_pelaporan::where('ak_matakuliah_dosen_pelaporan.kdstrukturprogram', $id)->get();
+
+        $DUtama = ak_matakuliah_dosen_utama::where('ak_matakuliah_dosen_utama.kdstrukturprogram', $id)->get();
+
+
+        $dosenU = [];
+        $dosenP = [];
+
+        if ($struktur) {
+            $struktur->update([
+                'kdmatakuliah' => $request->kdmatakuliah,
+                'keterangan' => $request->keterangan,
+                'teori' => $request->teori,
+                'pertemuan_kt' => $request->pertemuan_kt,
+                'tutorial' => $request->tutorial,
+                'pertemuan_kp' => $request->pertemuan_kp,
+                'seminar' => $request->seminar,
+                'pertemuan_s' => $request->pertemuan_s,
+                'praktikum' => $request->praktikum,
+                'pertemuan_p' => $request->pertemuan_p,
+                'praktik' => $request->praktik,
+                'pertemuan_pr' => $request->pertemuan_pr,
+                'belajar_mandiri' => $request->belajar_mandiri,
+                'pertemuan_bm' => $request->pertemuan_bm,
+                'skill_lab' => $request->skill_lab,
+                'pertemuan_sl' => $request->pertemuan_sl,
+                'studio' => $request->studio,
+                'pertemuan_studio' => $request->pertemuan_studio,
+                'kdkurikulum' => $request->kurikulum,
+                'kdtahunakademik' => $request->tahunakademik
+            ]);
+
+            // Handle dosen utama updates and deletions
+            $inputDosen1 = $request->input('dosen1', []);
+            foreach ($DUtama as $index => $dosenUtama) {
+                if (isset($inputDosen1[$index])) {
+                    $dosenUtama->update([
+                        'kdstrukturprogram' => $struktur->kdstrukturprogram,
+                        'kdperson' => $inputDosen1[$index]
+                    ]);
+                } else {
+                    $dosenUtama->delete();
+                }
+            }
+
+            // Create new dosen utama if more are selected
+            for ($i = count($DUtama); $i < count($inputDosen1); $i++) {
+                ak_matakuliah_dosen_utama::create([
+                    'kdstrukturprogram' => $struktur->kdstrukturprogram,
+                    'kdperson' => $inputDosen1[$i]
+                ]);
+            }
+
+            // Handle dosen pelaporan updates and deletions
+            $inputDosen2 = $request->input('dosen2', []);
+            foreach ($DPelaporan as $index => $dosenPelaporan) {
+                if (isset($inputDosen2[$index])) {
+                    $dosenPelaporan->update([
+                        'kdstrukturprogram' => $struktur->kdstrukturprogram,
+                        'kdperson' => $inputDosen2[$index]
+                    ]);
+                } else {
+                    $dosenPelaporan->delete();
+                }
+            }
+
+            // Create new dosen pelaporan if more are selected
+            for ($i = count($DPelaporan); $i < count($inputDosen2); $i++) {
+                ak_matakuliah_dosen_pelaporan::create([
+                    'kdstrukturprogram' => $struktur->kdstrukturprogram,
+                    'kdperson' => $inputDosen2[$i]
+                ]);
+            }
+        }
+
+        // dd($request->input('dosen1'), $request->input('dosen2'));
+
+        return redirect()->back()->with('success', 'Data Berhasil di-Update');
     }
 }
