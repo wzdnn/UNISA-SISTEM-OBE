@@ -20,7 +20,9 @@ class ak_matakuliah extends Model
         'akses_media'
     ];
 
-    protected $table = 'ak_matakuliah';
+    protected $guarded = ['kdmatakuliah'];
+
+    protected $table = 'simptt.ak_matakuliah';
     protected $primaryKey = "kdmatakuliah";
 
     public function MKtoSBKread()

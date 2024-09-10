@@ -11,6 +11,7 @@ use App\Models\ak_timeline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class timeline_controller extends Controller
 {
@@ -33,13 +34,13 @@ class timeline_controller extends Controller
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
             ->where('ak_timeline.kdmatakuliah', $id)
             // ->toSql();
+            ->orderBy('mingguke', 'asc')
             ->get();
 
         // dd($timeline);
 
         return view('pages.detailMatakuliah.timeline', compact('matakuliah', 'timeline'));
     }
-
 
     public function createTimeline(int $id)
     {
@@ -64,7 +65,11 @@ class timeline_controller extends Controller
         $jeniskuliah = DB::table('ak_jeniskuliah')
             ->get();
 
-        $metopem = DB::table('ak_metodepembelajaran')->get();
+        $metopem = DB::table('ak_metodepembelajaran as mp')
+            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.id")
+            ->join("gabung_subbk_cpmks as gsc", "gsc.id", "gcp.id_gabung_cpmk")
+            ->distinct()
+            ->get();
 
         $dosen = DB::table('simptt.ak_dosen as ad')
             ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
@@ -75,9 +80,25 @@ class timeline_controller extends Controller
             ->where("isAktif", "=", 1)
             ->get();
 
-        // dd($materi);
+        // dd($metopem);
 
         return view('pages.detailMatakuliah.createTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik'));
+    }
+
+    public function getMetodePembelajaranByCpmk($cpmk_id)
+    {
+        \Log::info('CPMK ID: ' . $cpmk_id);
+
+        $metopem = DB::table('ak_metodepembelajaran as mp')
+            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.id")
+            ->join("gabung_subbk_cpmks as gsc", "gsc.id", "gcp.id_gabung_cpmk")
+            ->where("gsc.id_cpmk", $cpmk_id)
+            ->select('mp.id', 'metodepembelajaran')
+            ->get();
+
+        \Log::info('Metode Pembelajaran: ' . $metopem->toJson());
+
+        return response()->json($metopem);
     }
 
     public function storeTimeline(Request $request)

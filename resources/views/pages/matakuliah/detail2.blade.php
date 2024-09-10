@@ -35,9 +35,8 @@
             </li>
         </ol>
     </nav>
-
-
     <br>
+
     <div class="text-center">
         <h1 class="font-bold text-2xl mb-0 text-dark-700">Detail Matakuliah</h1>
     </div>
@@ -93,12 +92,11 @@
                     <div class="relative z-0 px-3 py-3">
                         <label for="deskripsi_mk" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Deskripsi
                             Matakuliah</label>
-                        <input type="text" name="deskripsi_mk" id="deskripsi_mk"
+                        <textarea name="deskripsi_mk" id="deskripsi_mk"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                            placeholder=" " value="{{ old('deskripsi_mk') ?? $mkSubBk->deskripsi_mk }}">
+                            placeholder=" ">{{ old('deskripsi_mk') ?? $mkSubBk->deskripsi_mk }}</textarea>
                     </div>
                 </div>
-
 
                 <div class="flex justify-center">
                     <button
@@ -113,8 +111,6 @@
                         </svg>
                     </button>
                 </div>
-
-
             </form>
         </div>
 
@@ -202,19 +198,21 @@
                 </div>
                 <div class=" z-0 px-3 ">
                     <label for="" class="block mb-2 text-sm font-medium text-gray-900 uppercase">Sinkron</label>
+                    @php $iteration = 1; @endphp
 
                     @foreach ($pengalamanSinkron as $ps)
-                        <div class="flex justify-between  mt-2">
+                        <div class="flex justify-between mt-2">
                             @foreach ($ps->sinkron_pivot as $sinkron)
-                                {{ $loop->iteration }}. {{ $sinkron->pengalaman_mahasiswa }}
-
+                                {{ $iteration }}. {{ $sinkron->pengalaman_mahasiswa }}
                                 <a href="{{ route('pengalaman-sinkron.delete', ['id' => $ps->id]) }}"
                                     onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
                                     <button
-                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1"><i
-                                            class="fa-solid fa-trash"></i></button>
+                                        class="bg-red-600 hover:bg-red-800 text-white rounded px-2 text-md font-semibold p-1">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </a>
                                 <br />
+                                @php $iteration++; @endphp
                             @endforeach
                         </div>
                     @endforeach
@@ -223,10 +221,12 @@
                     <label for=""
                         class="block mb-2 py-1 text-sm font-medium text-gray-900 uppercase">Asinkron</label>
 
+                    @php $iteration = 1; @endphp
+
                     @foreach ($pengalamanAsinkron as $pas)
                         <div class="flex justify-between  mt-2">
                             @foreach ($pas->asinkron_pivot as $asinkron)
-                                {{ $loop->iteration }}. {{ $asinkron->pengalaman_mahasiswa }}
+                                {{ $iteration }}. {{ $asinkron->pengalaman_mahasiswa }}
                                 <a href="{{ route('pengalaman-asinkron.delete', ['id' => $pas->id]) }}"
                                     onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
                                     <button
@@ -234,6 +234,7 @@
                                             class="fa-solid fa-trash"></i></button>
                                 </a>
                                 <br />
+                                @php $iteration++; @endphp
                             @endforeach
                         </div>
                     @endforeach
@@ -306,40 +307,36 @@
         <hr />
     </div>
 
-    <div>
-        <div class="my-3 px-3 py-3">
-            <h2 class="font-bold text-2xl mb-0 text-blue-800">Sub BK</h2>
-
-        </div>
-        <a href="{{ route('mk.subbk', ['id' => $mkSubBk->kdmatakuliah]) }}" class="px-3 py-3"><button
-                class=" bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola
-                Sub
-                Bahan
-                Kajian
-            </button>
-        </a>
-        <hr />
-        <br />
-        <table class="w-screen text-sm  text-gray-500 ">
-            <thead class="text-xs text-gray-700 uppercase">
-                <tr>
-                    <th scope="col" class="text-left">
-
-                        @foreach ($mkSubBk->MKtoSub_bk as $item)
+    <div class="my-3 mx-auto max-w-4xl">
+        <div class=" px-3 bg-white border border-gray-200 rounded-lg shadow-lg justify-between">
+            <div>
+                <div class="px-3 py-3">
+                    <h2 class="font-bold text-2xl mb-0 text-blue-800">Sub BK</h2>
+                    <hr />
+                </div>
+                <a href="{{ route('mk.subbk', ['id' => $mkSubBk->kdmatakuliah]) }}" class="px-3 py-1"><button
+                        class=" bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola
+                        Sub
+                        Bahan
+                        Kajian
+                    </button>
+                </a>
+                <div class="px-3 mb-3">
+                    @foreach ($mkSubBk->MKtoSub_bk as $item)
+                        <div class="flex justify-between mr-40 mt-2 font-bold">
+                            &#x2022; {{ $item->kode_subbk }} {{ $item->sub_bk }}
                             <a
                                 href="{{ route('subbk.cpmk', ['id' => $mkSubBk->kdmatakuliah, 'sub' => $item->pivot->id]) }}">
-                                <div class="p-3 hover:text-blue-300">
-                                    <button
-                                        class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-2">
-                                        &#x2022; {{ $item->kode_subbk }} {{ $item->sub_bk }}
-                                    </button>
-                                </div>
+                                <button
+                                    class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i></button>
+
                             </a>
-                        @endforeach
-                    </th>
-                </tr>
-            </thead>
-        </table>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- <h2 class="text-lg font-medium my-8">Sub BK</h2> --}}

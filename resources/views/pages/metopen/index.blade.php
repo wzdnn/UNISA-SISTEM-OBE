@@ -8,6 +8,11 @@
 
 <br>
 @section('body')
+    @if (session('warning'))
+        <div class="alert alert-warning">
+            {{ session('warning') }}
+        </div>
+    @endif
     <nav class="flex px-5 py-3 bg-white shadow-md mb-3" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
@@ -265,8 +270,13 @@
                                             </div>
                                         </div>
 
-                                        <a href="{{ route('list.metopen', ['id' => $value->gmcid]) }}"
+                                        {{-- <a href="{{ route('list.metopen', ['id' => $value->gmcid]) }}"
                                             class="hover:text-blue-600">
+                                            <i class="fa fa-list" aria-hidden="true"></i>
+                                        </a> --}}
+
+                                        <a href="{{ route('list.metopen', ['id' => $value->gmcid]) }}"
+                                            class="list-metopen-link" data-gmcid="{{ $value->gmcid }}">
                                             <i class="fa fa-list" aria-hidden="true"></i>
                                         </a>
 
@@ -407,5 +417,27 @@
                 targetInput.value = e.getAttribute('data-id-target');
             })
         })
+    </script>
+
+    <script>
+        document.querySelectorAll('.list-metopen-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                let gmcId = this.getAttribute('data-gmcid');
+
+                // Perform an AJAX call to check if data exists
+                fetch(`/check-data/${gmcId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.exists) {
+                            event.preventDefault(); // Stop navigation
+                            alert(
+                                'Peringatan !! belum ada data keterangan, silahkan input data terlebih dahulu !!');
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Error:', error);
+                    });
+            });
+        });
     </script>
 @endpush

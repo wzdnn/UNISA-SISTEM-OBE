@@ -19,7 +19,8 @@
             <select name="filter" id="" class="rounded">
                 <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
-                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}</option>
+                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}
+                        {{ $item->tahun }}</option>
                 @endforeach
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
@@ -62,7 +63,7 @@
                                 {{ $loop->iteration }}
                             </td>
                             <td class="px-6 py-4 text-left">
-                                {{ $value->kode_cpl }} {{ $value->cpl }}
+                                {{ $value->id }} {{ $value->kode_cpl }} {{ $value->cpl }}
                             </td>
                             <td class="px-6 py-4 text-left">
                                 {{-- @foreach ($value->CPMKtoCPL as $cplcpmk)

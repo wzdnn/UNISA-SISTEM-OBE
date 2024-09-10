@@ -74,29 +74,25 @@
                 <div class="grid md:grid-cols-2 md:gap-6 my-2">
                     <div class="relative z-0 w-full mb-6 group">
                         <input type="text" name="mingguke" id="mingguke"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" " value="{{ old('mingguke') }}" />
                         <label for="mingguke"
                             class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Minggu
                             ke-</label>
                     </div>
                     <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="cpmk" class="text-sm text-gray-500">
-                            CPMK
-                        </label>
+                        <label for="cpmk" class="text-sm text-gray-500">CPMK</label>
                         <select id="kdcpmk" name="kdcpmk" class="form-control">
+                            <option selected>Silahkan Pilih CPMK</option>
                             @foreach ($cpmk as $c)
                                 <option value="{{ $c->id }}">{{ $c->kode_cpmk }} {{ $c->cpmk }}</option>
                             @endforeach
                         </select>
                     </div>
-
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="materi" class="text-sm text-gray-500">
-                            Materi
-                        </label>
+                        <label for="materi" class="text-sm text-gray-500">Materi</label>
                         <select id="kdmateri" name="kdmateri" class="form-control">
                             @foreach ($materi as $m)
                                 <option value="{{ $m->kdmateri }}">{{ $m->kode_subbk }} {{ $m->materi_pembelajaran }}
@@ -104,18 +100,12 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="metode_pembelajaran" class="text-sm text-gray-500">
-                            Metode Pembelajaran
-                        </label>
+                        <label for="metode_pembelajaran" class="text-sm text-gray-500">Metode Pembelajaran</label>
                         <select id="kdmetopem" name="kdmetopem" class="form-control">
-                            @foreach ($metopem as $mp)
-                                <option value="{{ $mp->id }}"> {{ $mp->metodepembelajaran }}</option>
-                            @endforeach
+                            <!-- Options will be dynamically loaded here -->
                         </select>
                     </div>
-
                 </div>
 
                 <div class="grid md:grid-cols-2 md:gap-6">
@@ -143,10 +133,7 @@
                             @endforeach
                         </select>
                     </div>
-
                 </div>
-
-
 
                 <div class="grid md:grid-cols-2 md:gap-6">
 
@@ -200,6 +187,36 @@
             $('#kdperson').select2();
             $('#kdmetopem').select2();
             $('#tahunakademik').select2();
+
+            $('#kdcpmk').on("select2:select", function() {
+                var cpmk_id = $(this).val();
+
+                $.ajax({
+                    url: '{{ url('/get-metodepembelajaran') }}/' + cpmk_id,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data); // For debugging
+
+                        var metodePembelajaranDropdown = $('#kdmetopem');
+                        metodePembelajaranDropdown.empty(); // Clear existing options
+
+                        var uniqueOptions = new Set(); // To track unique options
+
+                        $.each(data, function(key, value) {
+                            if (!uniqueOptions.has(value
+                                .id)) { // Check if option is unique
+                                metodePembelajaranDropdown.append('<option value="' +
+                                    value.id + '">' + value.metodepembelajaran +
+                                    '</option>');
+                                uniqueOptions.add(value.id); // Mark option as added
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error: ', status, error);
+                    }
+                });
+            });
         });
     </script>
 @endpush

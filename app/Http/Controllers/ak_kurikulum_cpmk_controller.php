@@ -15,7 +15,7 @@ class ak_kurikulum_cpmk_controller extends Controller
     public function cpmkIndex(Request $request)
     {
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 0) {
             $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
                 ->join(
@@ -50,6 +50,26 @@ class ak_kurikulum_cpmk_controller extends Controller
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
+                ->get();
+
+            $cpm = ak_kurikulum_cpmk::all();
+        } elseif (auth()->user()->leveling == 2) {
+            $CPMK = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
+                ->select('ak_kurikulum_cpls.*', 'ak_kurikulum.*')
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpls.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where('ak_kurikulum.kdkurikulum', 67)
+                ->orderBy('ak_kurikulum_cpls.id')
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->where('kdkurikulum', 67)
                 ->get();
 
             $cpm = ak_kurikulum_cpmk::all();
@@ -128,7 +148,7 @@ class ak_kurikulum_cpmk_controller extends Controller
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42) {
             $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
                 ->join(
                     "ak_kurikulum",
@@ -156,6 +176,23 @@ class ak_kurikulum_cpmk_controller extends Controller
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->where("isObe", "=", 1)
+                ->get();
+        } elseif (auth()->user()->leveling == 2) {
+            $listCPMK = ak_kurikulum_cpmk::with(['CPMKtoCPL'])
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_cpmks.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("ak_kurikulum.kdkurikulum", 67)
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("ak_kurikulum.kdkurikulum", 67)
                 ->where("isObe", "=", 1)
                 ->get();
         } else {

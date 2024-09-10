@@ -32,9 +32,9 @@
 
     {{-- Kop Dibawah Header --}}
     <div class="flex flex-col py-5">
-        <h1 class="font-bold text-2xl mb-0 ">{{ $list->metode_penilaian }}</h1>
-        <h3 class="font-medium text-xl mb-0 ">{{ $list->kode_cpmk }} | {{ $list->matakuliah }} </h3>
-        <h3 class="font-semibold text-xl mb-0">Bobot CPMK : {{ $list->bobot }}%</h3>
+        <h1 class="font-bold text-2xl mb-0 ">{{ $list->metode_penilaian ?? '' }}</h1>
+        <h3 class="font-medium text-xl mb-0 ">{{ $list->kode_cpmk ?? '' }} | {{ $list->matakuliah ?? '' }} </h3>
+        <h3 class="font-semibold text-xl mb-0">Bobot CPMK : {{ $list->bobot ?? '' }}%</h3>
     </div>
 
     {{-- Filter Tahun Akademik --}}

@@ -17,14 +17,18 @@ class UserController extends Controller
 
     public function postLogin(Request $request)
     {
+        // Validasi input
         $request->validate([
             'email' => ['required', 'email'],
             'password' => 'required'
         ]);
 
-
-        if (Auth::attempt(['email' => $request->input("email"), 'password' => $request->input("password")])) {
-            return redirect('/');
+        // Jika login berhasil
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect('/');  // Redirect ke halaman home jika login berhasil
+        } else {
+            // Jika login gagal (email atau password salah), beri pesan error dan kembali ke form login
+            return back()->withErrors(['login_error' => 'Email atau Password salah'])->withInput();
         }
     }
 

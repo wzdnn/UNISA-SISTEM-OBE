@@ -15,7 +15,7 @@ class ak_kurikulum_pl_Controller extends Controller
     {
         // $akKurikulumPl = ak_kurikulum_pl::all();
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42) {
             $akKurikulumPl = DB::table('ak_kurikulum_pls')
                 ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
                 ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
@@ -38,6 +38,19 @@ class ak_kurikulum_pl_Controller extends Controller
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
+                ->get();
+        } elseif (auth()->user()->leveling == 2) {
+            $akKurikulumPl = DB::table('ak_kurikulum_pls')
+                ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
+                ->leftJoin("ak_kurikulum", "ak_kurikulum_pls.kdkurikulum", "=", "ak_kurikulum.kdkurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where('ak_kurikulum.kdkurikulum', 67)
+                ->orderBy(('ak_kurikulum_pls.id'))
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->where('kdkurikulum', 67)
                 ->get();
         } else {
             $akKurikulumPl = DB::table('ak_kurikulum_pls')

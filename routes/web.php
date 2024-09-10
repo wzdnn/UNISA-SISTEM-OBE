@@ -193,6 +193,8 @@ Route::middleware(['auth'])->group(function () {
     route::get('/timeline/{id}/delete', [timeline_controller::class, 'deleteTimeline'])->name('timeline.delete');
     route::post('/timeline/{id}/update', [timeline_controller::class, 'updateTimeline'])->name('timeline.update');
 
+    route::get('/get-metodepembelajaran/{cpmk_id}', [timeline_controller::class, 'getMetodePembelajaranByCpmk'])->name('get-metodepembelajaran');
+
     // RPS Matakuliah
     route::get('/matakuliah/{id}/rps/{semester}/preview', [rps_controller::class, 'rps'])->name('rps.preview');
     route::get('/matakuliah/{id}/rps/index', [rps_controller::class, 'index'])->name('rps.index');
@@ -258,6 +260,7 @@ Route::middleware(['auth'])->group(function () {
     // Tugas
 
     Route::get('/metode-penilaian/tugas/{id}', [metodePenilaianController::class, 'tugasIndex'])->name('tugas.metopen');
+    Route::get('/check-data/{gmcId}', [metodePenilaianController::class, 'checkData']);
     Route::get('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilai'])->name('list.metopen');
     Route::post('/list-penilaian/{id}', [metodePenilaianController::class, 'listNilaiPost'])->name('copy.mhs');
     Route::post('/ambil-nilai/{id}', [metodePenilaianController::class, 'ambilNilai'])->name('ambil.nilai');

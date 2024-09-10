@@ -89,7 +89,15 @@
 
                     <input type="hidden" name="filter-form" value="<?= $request->get('filter') ?>">
 
-
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li class="text-red-600 font-bold">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <div>
                         <div class="grid">
@@ -105,22 +113,22 @@
 
                     <div class="grid md:grid-cols-3">
                         <div class="relative z-0 px-3 py-3 ">
-                            <label for="luring"
-                                class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring</label>
+                            <label for="luring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Luring
+                                (%)</label>
                             <input type="text" name="luring" id="luring"
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
                                 placeholder=" " value="{{ $akses->luring ?? '' }}">
                         </div>
                         <div class="relative z-0 px-3 py-3 ">
-                            <label for="daring"
-                                class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring</label>
+                            <label for="daring" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Daring
+                                (%)</label>
                             <input type="text" name="daring" id="daring"
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
                                 placeholder=" " value="{{ $akses->daring ?? '' }}">
                         </div>
                         <div class="relative z-0 px-3 py-3 ">
-                            <label for="blended"
-                                class="block mb-2 text-sm font-bold text-gray-900 uppercase">Blended</label>
+                            <label for="blended" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Blended
+                                (%)</label>
                             <input type="text" name="blended" id="blended"
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5"
                                 placeholder=" " value="{{ $akses->blended ?? '' }}">
@@ -384,6 +392,32 @@
     <script>
         $(document).ready(function() {
             $('#pengalamanSelectAsinkron').select2();
+        });
+    </script>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            const luring = document.querySelector('input[name="luring"]').value;
+            const daring = document.querySelector('input[name="daring"]').value;
+            const blended = document.querySelector('input[name="blended"]').value;
+
+            let errorMessage = '';
+
+            if (luring && luring > 100) {
+                errorMessage += 'Persentase dari Luring tidak boleh lebih dari 100.\n';
+            }
+
+            if (daring && daring > 100) {
+                errorMessage += 'Persentase dari Daring tidak boleh lebih dari 100.\n';
+            }
+
+            if (blended && blended > 100) {
+                errorMessage += 'Persentase dari Blended tidak boleh lebih dari 100.\n';
+            }
+
+            if (errorMessage) {
+                alert(errorMessage);
+                event.preventDefault(); // Stop form submission
+            }
         });
     </script>
 @endpush

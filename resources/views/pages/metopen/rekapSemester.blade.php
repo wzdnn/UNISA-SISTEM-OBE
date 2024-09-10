@@ -207,6 +207,17 @@
             bar: {
                 borderRadius: 4,
                 borderRadiusApplication: 'end',
+                colors: {
+                    ranges: [{
+                        from: 0,
+                        to: 60,
+                        color: '#FF0000'
+                    }, {
+                        from: 61,
+                        to: 100,
+                        color: '#00E396'
+                    }]
+                }
             }
         },
         dataLabels: {
@@ -214,6 +225,10 @@
         },
         xaxis: {
             categories: @json($statistik['label'] ?? null),
+        },
+        yaxis: {
+            min: 0,
+            max: 100
         }
     };
 

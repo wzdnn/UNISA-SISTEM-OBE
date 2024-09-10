@@ -35,10 +35,10 @@ class strukturProgram_controller extends Controller
         ];
 
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42) {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
@@ -59,10 +59,36 @@ class strukturProgram_controller extends Controller
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
                 ->get();
+        } elseif (auth()->user()->leveling == 2) {
+            $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
+                ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
+                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
+                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
+                ->where("kur.kdkurikulum", 67)
+                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
+                })
+                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
+                })
+                ->paginate(10);
+            // ->get();
+            // ->first();
+
+            $kurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->where("ak_kurikulum.kdkurikulum", 67)
+                ->get();
+
+
+            $tahunAkademik = DB::table('ak_tahunakademik')
+                ->where("isAktif", "=", 1)
+                ->get();
         } else {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->where("kur.kdunitkerja", Auth::user()->kdunit)

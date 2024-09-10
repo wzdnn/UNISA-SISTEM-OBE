@@ -15,7 +15,7 @@ class rekap_controller extends Controller
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
             $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
-                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
                 ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
                 ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
                 ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
@@ -40,7 +40,7 @@ class rekap_controller extends Controller
                 ->get();
         } else {
             $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
-                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
                 ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
                 ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
                 ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
@@ -106,14 +106,33 @@ class rekap_controller extends Controller
         $statistik = [];
         foreach ($cpmk[0] as $key => $item) {
             if (substr($key, 0, 16) == 'ketercapaiancpmk') {
-                $statistik['label'][] = $key;
-                $statistik['score'][] = $item;
+                // Extract just the CPMK part, e.g., ketercapaiancpmk1 => CPMK 1
+                $label = substr($key, 17);
+                $statistik[] = [
+                    'label' => $label,
+                    'score' => number_format((float)$item, 2) // Format the score to 2 decimal places
+                ];
             }
         }
 
+        // Sort the $statistik array by the 'label' key in ascending order
+        usort($statistik, function ($a, $b) {
+            // Extract the numeric part from the labels to sort numerically (CPMK 1, CPMK 2, etc.)
+            return intval(substr($a['label'], 5)) <=> intval(substr($b['label'], 5));
+        });
+
+        // Separate the sorted labels and scores into separate arrays
+        $sortedLabels = array_column($statistik, 'label');
+        $sortedScores = array_column($statistik, 'score');
+
         // dd($statistik);
 
-        return view('pages.metopen.rekapSemester', compact('tahunAkademik', 'rekapSemester', 'tabel', 'mahasiswa', 'kdkurikulum', 'cpmk', 'statistik'));
+        return view('pages.metopen.rekapSemester', [
+            'statistik' => [
+                'label' => $sortedLabels,
+                'score' => $sortedScores
+            ]
+        ], compact('tahunAkademik', 'rekapSemester', 'tabel', 'mahasiswa', 'kdkurikulum', 'cpmk', 'statistik'));
     }
 
     public function rekapMahasiswaGet(Request $request)
@@ -124,14 +143,35 @@ class rekap_controller extends Controller
         $statistik = [];
         foreach ($rekap[0] as $key => $item) {
             if (substr($key, 0, 15) == 'ketercapaiancpl') {
-                $statistik['label'][] = $key;
-                $statistik['score'][] = $item;
+                // Extract just the CPMK part, e.g., ketercapaiancpl => CPMK 1
+                $label = substr($key, 16);
+                $statistik[] = [
+                    'label' => $label,
+                    'score' => number_format((float)$item, 2) // Format the score to 2 decimal places
+                ];
             }
         }
 
+        // Sort the $statistik array by the 'label' key in ascending order
+        usort($statistik, function ($a, $b) {
+            // Extract the numeric part from the labels to sort numerically (CPMK 1, CPMK 2, etc.)
+            return intval(substr($a['label'], 5)) <=> intval(substr($b['label'], 5));
+        });
+
+        // Separate the sorted labels and scores into separate arrays
+        $sortedLabels = array_column($statistik, 'label');
+        $sortedScores = array_column($statistik, 'score');
+
+        // dd($statistik);
+
         // dd($rekap);
 
-        return view("pages.rekap.rekapMahasiswa", compact('rekap', 'statistik'));
+        return view("pages.rekap.rekapMahasiswa", [
+            'statistik' => [
+                'label' => $sortedLabels,
+                'score' => $sortedScores
+            ]
+        ], compact('rekap', 'statistik'));
     }
 
     public function rekap(Request $request)
@@ -217,7 +257,7 @@ class rekap_controller extends Controller
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
             $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
-                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
                 ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
                 ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
                 ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
@@ -240,7 +280,7 @@ class rekap_controller extends Controller
                 ->get();
         } else {
             $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
-                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
                 ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
                 ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
                 ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
@@ -305,15 +345,33 @@ class rekap_controller extends Controller
         $statistik = [];
         foreach ($cpl[0] as $key => $item) {
             if (substr($key, 0, 15) == 'ketercapaiancpl') {
-                $statistik['label'][] = $key;
-                $statistik['score'][] = $item;
+                // Extract just the CPMK part, e.g., ketercapaiancpl => CPMK 1
+                $label = substr($key, 16);
+                $statistik[] = [
+                    'label' => $label,
+                    'score' => number_format((float)$item, 2) // Format the score to 2 decimal places
+                ];
             }
         }
 
-        // dd($statistik);
-        // dd($tabel);
-        // dd($rekapTahunan);
+        // Sort the $statistik array by the 'label' key in ascending order
+        usort($statistik, function ($a, $b) {
+            // Extract the numeric part from the labels to sort numerically (CPMK 1, CPMK 2, etc.)
+            return intval(substr($a['label'], 5)) <=> intval(substr($b['label'], 5));
+        });
 
-        return view('pages.rekap.rekapTahunan', compact('rekapTahunan', 'tabel', 'tahunAkademik', 'mahasiswa', 'kdkurikulum', 'statistik', 'cpl'));
+        // Separate the sorted labels and scores into separate arrays
+        $sortedLabels = array_column($statistik, 'label');
+        $sortedScores = array_column($statistik, 'score');
+
+        // dd($statistik);
+
+
+        return view('pages.rekap.rekapTahunan', [
+            'statistik' => [
+                'label' => $sortedLabels,
+                'score' => $sortedScores
+            ]
+        ], compact('rekapTahunan', 'tabel', 'tahunAkademik', 'mahasiswa', 'kdkurikulum', 'statistik', 'cpl'));
     }
 }

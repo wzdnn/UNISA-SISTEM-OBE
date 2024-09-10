@@ -14,7 +14,7 @@ class ak_kurikulum_sub_bk_controller extends Controller
     public function index(Request $request)
     {
         // $akKurikulumSubBk = ak_kurikulum_sub_bk::all();
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42) {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
                 ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun", "jenismuatan", "gabung_sbk_muatan.id as sbmid")
                 ->join(
@@ -81,6 +81,42 @@ class ak_kurikulum_sub_bk_controller extends Controller
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
+                ->get();
+        } elseif (auth()->user()->leveling == 2) {
+            $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')
+                ->select("ak_kurikulum_sub_bks.*", "ak_kurikulum_bks.bahan_kajian as ak_bk", "ak_kurikulum_bks.kode_bk as ak_kdbk", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun", "jenismuatan", "gabung_sbk_muatan.id as sbmid")
+                ->join(
+                    "ak_kurikulum_bks",
+                    "ak_kurikulum_bks.id",
+                    "=",
+                    "ak_kurikulum_sub_bks.kdbk"
+                )
+                ->join(
+                    "ak_kurikulum",
+                    "ak_kurikulum.kdkurikulum",
+                    "=",
+                    "ak_kurikulum_sub_bks.kdkurikulum"
+                )
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->leftJoin(
+                    "gabung_sbk_muatan",
+                    "gabung_sbk_muatan.id_subbk",
+                    "=",
+                    "ak_kurikulum_sub_bks.id"
+                )
+                ->leftJoin(
+                    "ak_muatan",
+                    "ak_muatan.kdmuatan",
+                    "=",
+                    "gabung_sbk_muatan.kdmuatan"
+                )
+                ->where('ak_kurikulum.kdkurikulum', 67)
+                ->distinct()
+                ->paginate(10);
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->where('kdkurikulum', 67)
                 ->get();
         } else {
             $akKurikulumSubBk = DB::table('ak_kurikulum_sub_bks')

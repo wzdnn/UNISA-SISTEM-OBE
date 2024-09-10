@@ -7,48 +7,76 @@ use Illuminate\Support\Facades\Auth;
 
 class loginController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return view("login.index");
     }
 
+    // function login(Request $request)
+    // {
+    //     // proses validasi
+    //     $request->validate([
+    //         'email'=>'required',
+    //         'password'=>'required',
+    //     ]);
+
+
+    //     $infologin = [
+    //         'email'=> $request->email,
+    //         'password'=> $request->password,
+    //     ];
+
+
+    //     if(Auth::attempt($infologin)){
+    //         if(Auth::user()->role == 'admin'){
+    //             return redirect('dashboard');
+    //             // echo "sukses";
+    //             // exit();
+    //         } elseif (Auth::user()->role == 'universitas'){
+    //             return redirect('universitas');
+    //         } elseif (Auth::user()->role == 'prodi'){
+    //             return redirect('prodi');
+    //         }
+
+
+    //     } else {
+    //         return redirect('')->withErrors('Username dan password yang dimasukkan tidak sesuai')->withInput();
+    //     }
+
+    // }
     function login(Request $request)
     {
-        // proses validasi
+        // Validation: Ensure both email and password are entered
         $request->validate([
-            'email'=>'required',
-            'password'=>'required',
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-
+        // Prepare login credentials
         $infologin = [
-            'email'=> $request->email,
-            'password'=> $request->password,
+            'email' => $request->email,
+            'password' => $request->password,
         ];
 
-
-        if(Auth::attempt($infologin)){
-            if(Auth::user()->role == 'admin'){
+        // Attempt to login
+        if (Auth::attempt($infologin)) {
+            // Check user role and redirect accordingly
+            if (Auth::user()->role == 'admin') {
                 return redirect('dashboard');
-                // echo "sukses";
-                // exit();
-            } elseif (Auth::user()->role == 'universitas'){
+            } elseif (Auth::user()->role == 'universitas') {
                 return redirect('universitas');
-            } elseif (Auth::user()->role == 'prodi'){
+            } elseif (Auth::user()->role == 'prodi') {
                 return redirect('prodi');
             }
-
-
         } else {
-            return redirect('')->withErrors('Username dan password yang dimasukkan tidak sesuai')->withInput();
+            // Incorrect credentials
+            return back()->withErrors(['login_error' => 'Username dan password yang dimasukkan tidak sesuai'])->withInput();
         }
-
-
     }
 
-    function logout() {
+    function logout()
+    {
         Auth::logout();
         return redirect('/');
     }
 }
-
-
