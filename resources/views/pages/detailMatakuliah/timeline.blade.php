@@ -68,59 +68,56 @@
     <div class="my-1 w-full mx-auto rounded">
         <table class="w-full text-sm rounded text-gray-500" id="mytable" name="mytable" style="border: 1 !important">
             <thead class="text-xs text-gray-700 uppercase bg-white">
-                <tr class="text-left">
-                    <th scope="col" class="px-6 py-3 ">
-                        No.
-                    </th>
-                    <th scope="col" class="px-6 py-3 ">
+                <tr class="">
+                    <th scope="col" class="px-6 py-3 text-center">
                         Minggu Ke-
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 text-left">
                         Keterangan
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 text-left">
                         CPMK
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 text-left">
                         Materi
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 text-left">
                         Metode Pembelajaran
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 text-left">
                         Dosen
                     </th>
-                    <th scope="col" class="px-6 py-3 ">
+                    <th scope="col" class="px-6 py-3 text-left">
                         Bentuk Pembelajaran
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 text-center">
                         Action
                     </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($timeline as $key => $t)
-                    <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left">
-                        <td class="px-6 py-4">
-                            {{ $loop->iteration }}
-                        </td>
-                        <td class="px-6 py-4">
+                    <tr class="{{ $key % 2 == 0 ? 'bg-gray-100' : 'bg-gray-50' }} border-b text-left font-bold">
+                        <td class="px-6 py-4 text-center">
                             {{ $t->mingguke }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-left">
                             {{ $t->keterangan }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-left">
                             {{ $t->kode_cpmk }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-left">
                             {{ $t->kode_subbk }} {{ $t->materi_pembelajaran }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-left">
                             {{ $t->metodepembelajaran }}
                         </td>
-                        <td class="px-6 py-4">
-                            {{ $t->namalengkap }} {{ $t->gelarbelakang }}
+                        <td class="flex text-left whitespace-nowrap px-6 py-4">
+                            @foreach ($timelineWithDosenKelas->where('kdtimeline', $t->kdtimeline) as $dosenKelas)
+                                {{ $dosenKelas->gelardepan }} {{ $dosenKelas->namalengkap }}
+                                {{ $dosenKelas->gelarbelakang }} - ({{ $dosenKelas->kelas }}) <br />
+                            @endforeach
                         </td>
                         <td class="px-6 py-4">
                             {{ $t->jeniskuliah }}
@@ -145,4 +142,65 @@
         </table>
     </div>
     </div>
+    <script>
+        //on load
+        $(function() {
+            MergeGridCells('#mytable', 1, false);
+            // MergeGridCells('#mytable', 1, false);
+        });
+
+        function MergeGridCells(table_id, dimension_col, is_alternate_color) {
+            let i = 0;
+            // first_instance holds the first instance of identical td
+            // first_instance menyimpan kata yang sama
+            let first_instance = null;
+            // how many identical td?
+            // berapa baris yang sama?
+            let rowspan = 1;
+            let first_text = '';
+            // iterate through rows
+            // loop untuk setiap baris
+            $(table_id + ' > tbody  > tr').each(function() {
+
+                // find the td of the correct column (determined by the dimension_col set above)
+                // ambil teks (sesuai dengan kolom ke-dimension_col)
+                let dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+                let text = btoa(dimension_td[0].innerHTML.trim());
+
+                if (first_instance == null) {
+                    // must be the first row
+                    // baris pertama
+                    first_instance = dimension_td;
+                    first_text = text;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                } else if (text == first_text) {
+                    // the current td is identical to the previous
+                    // baris ini sama dengan baris sebelumnya
+                    // remove the current td
+                    // delete baris ini
+                    dimension_td.remove();
+                    ++rowspan;
+                    // increment the rowspan attribute of the first instance
+                    // baris ini di merge dengan sebelumnya dengan cara menaikkan rowspan baris pertama yang sama sampai dengan baris ini
+                    first_instance.attr('rowspan', rowspan);
+                    painting(is_alternate_color, first_instance, i);
+                } else {
+                    // this cell is different from the last, stop previous rowspan
+                    // baris ini berbeda dengan yang sebelumnya, hentikan proses merger sebelumnya
+                    first_instance = dimension_td;
+                    first_text = text;
+                    rowspan = 1;
+                    i++;
+                    painting(is_alternate_color, first_instance, i);
+                }
+
+            });
+        }
+
+        function painting(is_alternate_color, instance, i) {
+            if (is_alternate_color)
+                instance.attr('style', 'background-color: ' + ((i % 2 == 0) ? '#FFFFB6' : '#ff9da4'));
+        }
+    </script>
 @endsection

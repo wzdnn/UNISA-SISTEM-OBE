@@ -201,26 +201,26 @@ class ak_matakuliah_controller extends Controller
 
         if ($request->has("filter")) {
             $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
                 ->where("kdtahunakademik", "=", $request->filter)
                 ->paginate(15);
 
             $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
                 ->where("kdtahunakademik", "=", $request->filter)
                 ->paginate(15);
 
             $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
                 ->where("kdtahunakademik", "=", $request->filter)
                 ->paginate(15);
 
 
             $pengalamanSinkron = gabung_matakuliah_pengalaman_sinkron::where('mk.kdmatakuliah', "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
                 // ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_sinkron.id_pengalaman")
                 ->with('sinkron_pivot')
                 ->where("kdtahunakademik", "=", $request->filter)
@@ -228,52 +228,52 @@ class ak_matakuliah_controller extends Controller
 
 
             $pengalamanAsinkron = gabung_matakuliah_pengalaman_asinkron::where('mk.kdmatakuliah', "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
                 // ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
                 ->with('asinkron_pivot')
                 ->where("kdtahunakademik", "=", $request->filter)
                 ->paginate(15);
 
             $akses = gabung_matakuliah_akses::where('mk.kdmatakuliah', '=', $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
                 ->join("ak_aksesmedia as akses", "akses.kdakses", "=", "gabung_matakuliah_akses.kdakses")
                 ->where("kdtahunakademik", "=", " $request->filter")
                 ->first();
         } else {
             $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $pengalamanSinkron = gabung_matakuliah_pengalaman_sinkron::where('mk.kdmatakuliah', "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
                 // ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_sinkron.id_pengalaman")
                 ->with('sinkron_pivot')
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $pengalamanAsinkron = gabung_matakuliah_pengalaman_asinkron::where('mk.kdmatakuliah', "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
                 // ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
                 ->with('asinkron_pivot')
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $akses = gabung_matakuliah_akses::where('mk.kdmatakuliah', '=', $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
                 ->join("ak_aksesmedia as akses", "akses.kdakses", "=", "gabung_matakuliah_akses.kdakses")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->first();
@@ -740,37 +740,37 @@ class ak_matakuliah_controller extends Controller
         $mkPengalaman = ak_pengalamanmahasiswa::with('pengalamanSinkron', 'pengalamanAsinkron')->get();
 
         if ($request->has("filter")) {
-            $pengalamanSinkron = gabung_matakuliah_pengalaman_sinkron::join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
+            $pengalamanSinkron = gabung_matakuliah_pengalaman_sinkron::join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
                 ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_sinkron.id_pengalaman")
                 ->where("mk.kdmatakuliah", "=", $id)
                 ->where("kdtahunakademik", "=", $request->filter) // Ensure correct table prefix
                 ->paginate(15);
 
-            $pengalamanAsinkron = gabung_matakuliah_pengalaman_asinkron::join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
+            $pengalamanAsinkron = gabung_matakuliah_pengalaman_asinkron::join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
                 ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
                 ->where("mk.kdmatakuliah", "=", $id)
                 ->where("kdtahunakademik", "=", $request->filter) // Ensure correct table prefix
                 ->paginate(15);
 
-            $referensiUtama = ak_matakuliah_referensi_utama::join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+            $referensiUtama = ak_matakuliah_referensi_utama::join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
                 ->where("mk.kdmatakuliah", "=", $id)
                 ->where("kdtahunakademik", "=", $request->filter) // Ensure correct table prefix
                 ->get();
 
-            $referensiTambahan = ak_matakuliah_referensi_tambahan::join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+            $referensiTambahan = ak_matakuliah_referensi_tambahan::join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
                 ->where("mk.kdmatakuliah", "=", $id)
                 ->where("kdtahunakademik", "=", $request->filter) // Ensure correct table prefix
                 ->get();
 
-            $referensiLuaran = ak_matakuliah_referensi_luaran::join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+            $referensiLuaran = ak_matakuliah_referensi_luaran::join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
                 ->where("mk.kdmatakuliah", "=", $id)
                 ->where("kdtahunakademik", "=", $request->filter) // Ensure correct table prefix
                 ->get();
 
-            $akses = gabung_matakuliah_akses::join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
+            $akses = gabung_matakuliah_akses::join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
                 ->join("ak_aksesmedia as akses", "akses.kdakses", "=", "gabung_matakuliah_akses.kdakses")
                 ->where("mk.kdmatakuliah", "=", $id)
                 ->where("kdtahunakademik", "=", $request->filter) // Ensure correct table prefix
@@ -789,37 +789,37 @@ class ak_matakuliah_controller extends Controller
         } else {
 
             $pengalamanSinkron = gabung_matakuliah_pengalaman_sinkron::where('mk.kdmatakuliah', "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_sinkron.kdmatakuliah")
                 ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_sinkron.id_pengalaman")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $pengalamanAsinkron = gabung_matakuliah_pengalaman_asinkron::where('mk.kdmatakuliah', "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_pengalaman_asinkron.kdmatakuliah")
                 ->join("ak_pengalamanmahasiswa as pm", "pm.id", "=", "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->paginate(15);
 
             $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->get();
 
             $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->get();
 
             $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
                 ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->get();
 
             $akses = gabung_matakuliah_akses::where('mk.kdmatakuliah', '=', $id)
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
+                ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "gabung_matakuliah_akses.kdmatakuliah")
                 ->join("ak_aksesmedia as akses", "akses.kdakses", "=", "gabung_matakuliah_akses.kdakses")
                 ->where("kdtahunakademik", $filterData["latest"])
                 ->first();
@@ -892,36 +892,37 @@ class ak_matakuliah_controller extends Controller
             }
 
 
-            if ($request->input("akses_media") != '' || $request->input("akses_media") != null) {
-                // Check if an entry for this matakuliah and tahunakademik already exists in gabung_matakuliah_akses
+            if ($request->has('akses_media')) {
                 $existingAccess = gabung_matakuliah_akses::where('kdmatakuliah', $id)
                     ->where('kdtahunakademik', $kdTahunAkademim)
                     ->first();
 
-                // If the record exists, update it
+                $luring = $request->filled('luring') ? $request->input('luring') : null;
+                $daring = $request->filled('daring') ? $request->input('daring') : null;
+                $blended = $request->filled('blended') ? $request->input('blended') : null;
+
                 if ($existingAccess) {
                     $akses_media = ak_aksesmedia::where('kdakses', $existingAccess->kdakses)->first();
                     if ($akses_media) {
                         $akses_media->update([
-                            'linkakses' => $request->input("akses_media")
+                            'linkakses' => $request->input('akses_media')
                         ]);
                     }
 
                     $existingAccess->update([
-                        'luring' => $request->input("luring"),
-                        'daring' => $request->input("daring"),
-                        'blended' => $request->input("blended")
+                        'luring' => $luring,
+                        'daring' => $daring,
+                        'blended' => $blended,
                     ]);
                 } else {
-                    // Insert a new akses_media and related access entry
                     $akses_media = ak_aksesmedia::create([
-                        'linkakses' => $request->input("akses_media") ?? ''
+                        'linkakses' => $request->input('akses_media') ?? ''
                     ]);
 
-                    gabung_matakuliah_akses::insert([
-                        'luring' => $request->input("luring"),
-                        'daring' => $request->input("daring"),
-                        'blended' => $request->input("blended"),
+                    gabung_matakuliah_akses::create([
+                        'luring' => $luring,
+                        'daring' => $daring,
+                        'blended' => $blended,
                         "kdmatakuliah" => $id,
                         "kdakses" => $akses_media->kdakses,
                         "kdtahunakademik" => $kdTahunAkademim

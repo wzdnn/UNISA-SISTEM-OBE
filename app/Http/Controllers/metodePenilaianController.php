@@ -339,7 +339,7 @@ class metodePenilaianController extends Controller
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
@@ -350,7 +350,7 @@ class metodePenilaianController extends Controller
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->leftJoin("tipelensa as tl", "tl.id", "=", "gabung_nilai_metopen.idtipelensa")
@@ -375,7 +375,7 @@ class metodePenilaianController extends Controller
                     ->where("id_gabung_metopen", '=', $id)
                     ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
                     ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-                    ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+                    ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
                     ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
                     ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
                     ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
@@ -394,7 +394,7 @@ class metodePenilaianController extends Controller
 
         try {
 
-            $listUpdate = gabung_nilai_metopen::findOrFail($request->input("kdjenisnilai"));
+            $listUpdate = gabung_nilai_metopen::findOrFail($request->input("kdjenisnilai_"));
 
             $listUpdate->update([
                 "keterangan" => $request->keterangan,
@@ -407,7 +407,7 @@ class metodePenilaianController extends Controller
             return redirect()->back();
         } catch (Throwable $th) {
             DB::rollBack();
-            dd($th->getMessage());
+            // dd($th->getMessage());
 
             return redirect()->back();
         }
@@ -442,7 +442,7 @@ class metodePenilaianController extends Controller
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
             ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
@@ -469,7 +469,7 @@ class metodePenilaianController extends Controller
 
         $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
-        // dd($penilaian);
+        // dd($kelas);
 
         return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }
@@ -575,7 +575,7 @@ class metodePenilaianController extends Controller
 
 
         $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl")
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
             ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
             ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
@@ -661,7 +661,7 @@ class metodePenilaianController extends Controller
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
             ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")

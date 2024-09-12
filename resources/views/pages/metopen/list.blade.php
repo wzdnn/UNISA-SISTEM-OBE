@@ -298,7 +298,8 @@
                                                     method="POST">
                                                     @csrf
                                                     <div class="flex flex-col py-2">
-                                                        <input type="hidden" name="kdjenisnilai" id="kdjenisnilai_">
+                                                        <input type="hidden" value="{{ $value->kjn }}"
+                                                            name="kdjenisnilai_" id="kdjenisnilai_">
                                                     </div>
                                                     <div class="grid md:grid-cols-2 md:gap-6">
                                                         <div class="col-span-2 mb-2">

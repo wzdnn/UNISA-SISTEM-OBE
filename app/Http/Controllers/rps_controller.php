@@ -97,6 +97,7 @@ class rps_controller extends Controller
             ->where('ak_timeline.kdtahunakademik', $semester)
             ->orderBy('mingguke', 'asc')
             ->get();
+        // ->toSql();
 
         // dd($timeline);
 

@@ -81,12 +81,13 @@
                             ke-</label>
                     </div>
                     <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="cpmk" class="text-sm text-gray-500">
-                            CPMK
-                        </label>
+                        <label for="cpmk" class="text-sm text-gray-500">CPMK</label>
                         <select id="kdcpmk" name="kdcpmk" class="form-control">
+                            <option selected>Silahkan Pilih CPMK</option>
                             @foreach ($cpmk as $c)
-                                <option value="{{ $c->id }}">{{ $c->kode_cpmk }} {{ $c->cpmk }}</option>
+                                <option value="{{ $c->id }}" {{ $timeline->kdcpmk == $c->id ? 'selected' : '' }}>
+                                    {{ $c->kode_cpmk }} {{ $c->cpmk }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -107,13 +108,14 @@
                     </div>
 
                     <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="metode_pembelajaran" class="text-sm text-gray-500">
-                            Metode Pembelajaran
-                        </label>
+                        <label for="metode_pembelajaran" class="text-sm text-gray-500">Metode Pembelajaran</label>
                         <select id="kdmetopem" name="kdmetopem" class="form-control">
+                            <!-- Options will be dynamically loaded here -->
                             @foreach ($metopem as $mp)
-                                <option value="{{ $mp->id }}" @selected(in_array($mp->id, $id_metopem))>
-                                    {{ $mp->metodepembelajaran }}</option>
+                                <option value="{{ $mp->id }}"
+                                    {{ $timeline->kdmetopem == $mp->id ? 'selected' : '' }}>
+                                    {{ $mp->metodepembelajaran }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -121,15 +123,15 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="dosen" class="text-sm text-gray-500">
-                            Dosen
+
+                    <div class=" flex flex-col z-0 w-full mb-6 group">
+                        <label for="tahunakademik" class="text-sm text-gray-500">
+                            Tahun Akademik
                         </label>
-                        <select id="kdperson" name="kdperson" class="form-control">
-                            @foreach ($dosen as $dos)
-                                <option value="{{ $dos->kdperson }}"@selected(in_array($dos->kdperson, $id_dosen))>{{ $dos->gelardepan }}
-                                    {{ $dos->namalengkap }}
-                                    {{ $dos->gelarbelakang }}
+                        <select id="tahunakademik" name="tahunakademik" class="form-control">
+                            @foreach ($tahunAkademik as $ta)
+                                <option value="{{ $ta->kdtahunakademik }}"@selected(in_array($ta->kdtahunakademik, $id_tahunakademik))>
+                                    {{ $ta->tahunakademik }}
                                 </option>
                             @endforeach
                         </select>
@@ -151,19 +153,6 @@
 
                 <div class="grid md:grid-cols-2 md:gap-6">
 
-                    <div class=" flex flex-col z-0 w-full mb-6 group">
-                        <label for="tahunakademik" class="text-sm text-gray-500">
-                            Tahun Akademik
-                        </label>
-                        <select id="tahunakademik" name="tahunakademik" class="form-control">
-                            @foreach ($tahunAkademik as $ta)
-                                <option value="{{ $ta->kdtahunakademik }}"@selected(in_array($ta->kdtahunakademik, $id_tahunakademik))>
-                                    {{ $ta->tahunakademik }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <div class="relative z-0 w-full mb-6 group">
                         <input type="text" name="keterangan" id="keterangan"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none   focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -177,6 +166,60 @@
                         id="kdmatakuliah" />
 
                 </div>
+
+                <hr />
+                <div>
+                    <div class="px-3 py-3">
+                        <label for="dosenkelas"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tambah Dosen</label>
+                        <button type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mb-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            id="btnTambahDosen">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <div class="targetDosen">
+                            @foreach ($timeline_gabung as $item)
+                                <div class="form-input">
+                                    <label for="dosen-select-{{ $loop->index }}"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dosen</label>
+                                    <select
+                                        class="dosen-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                        name="dosen[]">
+                                        <option value="">Select Dosen</option>
+                                        @foreach ($dosen as $dosenOption)
+                                            <option value="{{ $dosenOption->kdper }}"
+                                                {{ $dosenOption->kdper == $item->kdperson ? 'selected' : '' }}>
+                                                {{ $dosenOption->gelardepan }} {{ $dosenOption->namalengkap }}
+                                                {{ $dosenOption->gelarbelakang }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <label for="kelas-select-{{ $loop->index }}"
+                                        class="block pt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Kelas</label>
+                                    <select
+                                        class="kelas-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                        name="kelas[]">
+                                        <option value="">Select Kelas</option>
+                                        @foreach ($kelas as $kelasOption)
+                                            <option value="{{ $kelasOption->kdkelas }}"
+                                                {{ $kelasOption->kdkelas == $item->kdkelas ? 'selected' : '' }}>
+                                                {{ $kelasOption->kelas }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <button type="button"
+                                        class="btnDeleteDosen text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mt-3 mb-3 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800"
+                                        data-kdperson="{{ $item->kdperson }}" data-kdtimeline="{{ $kdtimeline }}"
+                                        data-matkul-id="{{ $matakuliah->kdmatakuliah }}">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="flex justify-center">
                     <button type="submit"
@@ -196,6 +239,176 @@
 
 @push('script')
     <script>
+        let kelasData = @json($kelas);
+        let dosenData = @json($dosen);
+
+        const btnTambahDosen = document.getElementById('btnTambahDosen')
+        const targetDosen = document.querySelector('.targetDosen')
+
+        function ml(tagName, props, nest) {
+            var el = document.createElement(tagName);
+            if (props) {
+                for (var name in props) {
+                    if (name.indexOf("on") === 0) {
+                        el.addEventListener(name.substr(2).toLowerCase(), props[name], false)
+                    } else {
+                        el.setAttribute(name, props[name]);
+                    }
+                }
+            }
+            if (!nest) {
+                return el;
+            }
+            return nester(el, nest)
+        }
+
+        function nester(el, n) {
+            if (typeof n === "string") {
+                var t = document.createTextNode(n);
+                el.appendChild(t);
+            } else if (n instanceof Array) {
+                for (var i = 0; i < n.length; i++) {
+                    if (typeof n[i] === "string") {
+                        var t = document.createTextNode(n[i]);
+                        el.appendChild(t);
+                    } else if (n[i] instanceof Node) {
+                        el.appendChild(n[i]);
+                    }
+                }
+            } else if (n instanceof Node) {
+                el.appendChild(n)
+            }
+            return el;
+        }
+
+        // Function to populate the select options
+        function populateSelectOptions(data, defaultOption, type) {
+            const options = [ml('option', {
+                value: ''
+            }, defaultOption)]; // Add a default option
+
+            data.forEach(item => {
+                if (type === 'kelas') {
+                    options.push(ml('option', {
+                        value: item.kdkelas
+                    }, item.kelas));
+                } else if (type === 'dosen') {
+                    let dosenName = `${item.gelardepan || ''} ${item.namalengkap} ${item.gelarbelakang || ''}`
+                        .trim();
+                    options.push(ml('option', {
+                        value: item.kdper
+                    }, dosenName));
+                }
+            });
+
+            return options;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Select2 for existing selects
+            $('.dosen-select').select2({
+                placeholder: 'Silahkan Pilih Dosen',
+                allowClear: true
+            });
+            $('.kelas-select').select2({
+                placeholder: 'Silahkan Pilih Kelas',
+                allowClear: true
+            });
+
+            // Event delegation: Attach click event to the parent container .targetDosen
+            document.querySelector('.targetDosen').addEventListener('click', function(event) {
+                if (event.target.classList.contains('btnDeleteDosen') || event.target.closest(
+                        '.btnDeleteDosen')) {
+                    let button = event.target.closest('.btnDeleteDosen'); // Get the clicked button
+                    let container = button.closest('.form-input');
+                    let kdperson = button.getAttribute('data-kdperson'); // Dosen's id
+                    let kdtimeline = button.getAttribute('data-kdtimeline'); // Timeline id
+                    let matkulId = button.getAttribute('data-matkul-id'); // Matakuliah id
+
+                    if (confirm('Are you sure you want to delete this dosen?')) {
+                        // Send AJAX request to delete dosen
+                        fetch(`/matakuliah/${matkulId}/timeline/${kdtimeline}/dosen/${kdperson}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                        .getAttribute('content'),
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    container.remove(); // Remove the Dosen's input from the DOM
+                                    alert('Dosen deleted successfully');
+                                } else {
+                                    alert('Failed to delete dosen');
+                                }
+                            }).catch(error => {
+                                console.error('Error:', error);
+                                alert('Failed to delete dosen');
+                            });
+                    }
+                }
+            });
+
+            // Add a new input field dynamically with searchable Dosen select
+            document.getElementById('btnTambahDosen').addEventListener('click', function() {
+                let container = ml('div', {
+                    class: 'form-input'
+                }, [ // Dosen Label and Select
+                    ml('div', {
+                        class: 'mb-3'
+                    }, [
+                        ml('label', {
+                            for: 'dosen-select',
+                            class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                        }, 'Dosen'), // Dosen Label
+                        ml('select', {
+                            class: 'dosen-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
+                            name: 'dosen[]',
+                            id: 'dosen-select'
+                        }, populateSelectOptions(dosenData, 'Select Dosen', 'dosen'))
+                    ]),
+
+                    // Kelas Label and Select
+                    ml('div', {
+                        class: 'mb-3'
+                    }, [
+                        ml('label', {
+                            for: 'kelas-select',
+                            class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                        }, 'Kelas'), // Kelas Label
+                        ml('select', {
+                            class: 'kelas-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
+                            name: 'kelas[]',
+                            id: 'kelas-select'
+                        }, populateSelectOptions(kelasData, 'Select Kelas', 'kelas'))
+                    ])
+                ]);
+
+                const btnDelete = document.createElement('button');
+                btnDelete.setAttribute('type', 'button');
+                btnDelete.setAttribute('class',
+                    'btnDeleteDosen text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mt-3 mb-3 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800'
+                );
+                btnDelete.innerHTML = '<i class="fa fa-trash" aria-hidden="true"></i>';
+                container.append(btnDelete);
+                document.querySelector('.targetDosen').append(container);
+
+                // Initialize Select2 for the new selects
+                $('.dosen-select').select2({
+                    placeholder: 'Silahkan Pilih Dosen',
+                    allowClear: true
+                });
+                $('.kelas-select').select2({
+                    placeholder: 'Silahkan Pilih Kelas',
+                    allowClear: true
+                });
+            });
+        });
+        console.log(kelasData);
+        console.log(dosenData);
+    </script>
+
+    <script>
         $(document).ready(function() {
             $('#kdmateri').select2();
             $('#kdcpmk').select2();
@@ -203,6 +416,52 @@
             $('#kdperson').select2();
             $('#kdmetopem').select2();
             $('#tahunakademik').select2();
+
+            $('#kdcpmk').on("select2:select", function() {
+                var cpmk_id = $(this).val();
+
+                $.ajax({
+                    url: '{{ url('/get-metodepembelajaran') }}/' + cpmk_id,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data); // For debugging
+
+                        var metodePembelajaranDropdown = $('#kdmetopem');
+                        metodePembelajaranDropdown.empty(); // Clear existing options
+
+                        var uniqueOptions = new Set(); // To track unique options
+
+                        $.each(data, function(key, value) {
+                            if (!uniqueOptions.has(value
+                                    .id)) { // Check if option is unique
+                                metodePembelajaranDropdown.append(
+                                    '<option value="' +
+                                    value.id + '">' +
+                                    value.metodepembelajaran +
+                                    '</option>'
+                                );
+                                uniqueOptions.add(value.id); // Mark option as added
+                            }
+                        });
+
+                        // After populating, set the selected value if it exists
+                        var selectedMetodePembelajaran = '{{ $timeline->kdmetopem }}';
+                        if (selectedMetodePembelajaran) {
+                            metodePembelajaranDropdown.val(selectedMetodePembelajaran).trigger(
+                                'change');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error: ', status, error);
+                    }
+                });
+            });
+
+            // Ensure the initial selected value is set on page load
+            var initialSelectedMetodePembelajaran = '{{ $timeline->kdmetopem }}';
+            if (initialSelectedMetodePembelajaran) {
+                $('#kdmetopem').val(initialSelectedMetodePembelajaran).trigger('change');
+            }
         });
     </script>
 @endpush

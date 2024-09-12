@@ -189,9 +189,13 @@ Route::middleware(['auth'])->group(function () {
     route::get('/matakuliah/{id}/timeline', [timeline_controller::class, 'timeline'])->name('timeline.index');
     route::get('/matakuliah/{id}/timeline/create', [timeline_controller::class, 'createTimeline'])->name('timeline.create');
     route::get('/matakuliah/{id}/timeline/edit/{kdtimeline}', [timeline_controller::class, 'editTimeline'])->name('timeline.edit');
-    route::post('/timeline/store', [timeline_controller::class, 'storeTimeline'])->name('timeline.store');
+    route::post('/matakuliah/{id}/timeline/create', [timeline_controller::class, 'storeTimeline'])->name('timeline.store');
     route::get('/timeline/{id}/delete', [timeline_controller::class, 'deleteTimeline'])->name('timeline.delete');
     route::post('/timeline/{id}/update', [timeline_controller::class, 'updateTimeline'])->name('timeline.update');
+
+    Route::delete('/matakuliah/{id}/timeline/{kdtimeline}/dosen/{kdperson}', [timeline_controller::class, 'deleteDosen'])->name('timeline.deleteDosen');
+
+    Route::get('/get-metodepembelajaran/{cpmk_id}', [timeline_controller::class, 'getMetodePembelajaran']);
 
     route::get('/get-metodepembelajaran/{cpmk_id}', [timeline_controller::class, 'getMetodePembelajaranByCpmk'])->name('get-metodepembelajaran');
 
