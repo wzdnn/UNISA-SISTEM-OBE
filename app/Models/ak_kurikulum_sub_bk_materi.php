@@ -16,4 +16,9 @@ class ak_kurikulum_sub_bk_materi extends Model
     //     'kdtahunakademik',
     //     'materi_pembelajaran'
     // ];
+
+    public function gabungMatakuliah()
+    {
+        return $this->belongsTo(gabung_matakuliah_subbk::class, 'id', 'id_gabung');
+    }
 }

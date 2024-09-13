@@ -58,6 +58,13 @@
                 <p>{{ $subbk->subbk->kode_subbk }} {{ $subbk->subbk->sub_bk }}</p>
             </div>
         </div>
+        <div class="flex py-2">
+            <h2 class="font-bold text-md">
+                Total Menit Terakumulasi Dalam Satu Matakuliah: <span
+                    id="total_terakumulasi">{{ $totalAccumulatedTime }}</span> /
+                {{ $total_waktu }}
+            </h2>
+        </div>
     </div>
     <div class="w-auto px-3 bg-white border border-gray-200 rounded shadow-sm justify-between mb-3">
         @include('include.flash-massage')
@@ -158,6 +165,62 @@
 @endsection
 
 @push('script')
+    <script>
+        // Ambil nilai total waktu yang diperbolehkan dan total akumulasi waktu dari backend
+        const totalWaktu = {{ $total_waktu }};
+        const totalAccumulatedTime = {{ $totalAccumulatedTime }};
+
+        // Fungsi untuk menghitung total waktu input
+        function hitungAkumulasiWaktu() {
+            // Ambil nilai dari setiap input field
+            const kuliah = parseInt(document.getElementById('kuliah').value) || 0;
+            const tutorial = parseInt(document.getElementById('tutorial').value) || 0;
+            const seminar = parseInt(document.getElementById('seminar').value) || 0;
+            const praktikum = parseInt(document.getElementById('praktikum').value) || 0;
+            const skillLab = parseInt(document.getElementById('skill_lab').value) || 0;
+            const fieldLab = parseInt(document.getElementById('field_lab').value) || 0;
+            const praktik = parseInt(document.getElementById('praktik').value) || 0;
+            const penugasan = parseInt(document.getElementById('penugasan').value) || 0;
+            const belajarMandiri = parseInt(document.getElementById('belajar_mandiri').value) || 0;
+
+            // Hitung total akumulasi dari semua input field
+            const totalInput = kuliah + tutorial + seminar + praktikum + skillLab + fieldLab + praktik + penugasan +
+                belajarMandiri;
+
+            // Update nilai total terakumulasi dari backend (dari controller)
+            const totalAkhir = totalAccumulatedTime; // Menambah input baru dengan total akumulasi sebelumnya
+            const totalTerakumulasiElement = document.getElementById('total_terakumulasi');
+            const totalMateriElement = document.getElementById('total_materi');
+
+            // Update total input materi yang diakumulasi dari form
+            totalMateriElement.innerText = totalInput;
+
+            // Tampilkan hasil akumulasi di elemen yang diinginkan
+            totalTerakumulasiElement.innerText = totalAkhir;
+
+            // Cek apakah total akumulasi melebihi total waktu yang diperbolehkan
+            if (totalAkhir > totalWaktu) {
+                totalTerakumulasiElement.style.color = 'red'; // Ubah warna menjadi merah
+            } else {
+                totalTerakumulasiElement.style.color = 'black'; // Kembalikan ke warna hitam
+            }
+        }
+
+        // Tambahkan event listener ke setiap input untuk memantau perubahan
+        document.getElementById('kuliah').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('tutorial').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('seminar').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('praktikum').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('skill_lab').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('field_lab').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('praktik').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('penugasan').addEventListener('input', hitungAkumulasiWaktu);
+        document.getElementById('belajar_mandiri').addEventListener('input', hitungAkumulasiWaktu);
+
+        // Panggil fungsi saat halaman pertama kali dimuat
+        hitungAkumulasiWaktu();
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#subbk').select2();

@@ -67,6 +67,7 @@ class timeline_controller extends Controller
 
         $cpmk = ak_matakuliah_cpmk::join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
             ->where('kdmatakuliah', $id)
+            // ->toSql();
             ->get();
 
         // $materi = ak_kurikulum_sub_bk::join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "=", "ak_kurikulum_sub_bks.kdkurikulum")
@@ -101,7 +102,7 @@ class timeline_controller extends Controller
             ->where("isAktif", "=", 1)
             ->get();
 
-        // dd($dosen);
+        // dd($cpmk);
 
         return view('pages.detailMatakuliah.createTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'kelas'));
     }

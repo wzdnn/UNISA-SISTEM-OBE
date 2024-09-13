@@ -20,4 +20,9 @@ class gabung_matakuliah_subbk extends Model
     {
         return $this->belongsToMany(ak_kurikulum_cpmk::class, "gabung_subbk_cpmks", "id_gabung_subbk", "id_cpmk")->withPivot("id");
     }
+
+    public function subbkMateri()
+    {
+        return $this->hasMany(ak_kurikulum_sub_bk_materi::class, 'id_gabung', 'id');
+    }
 }

@@ -38,7 +38,7 @@ class strukturProgram_controller extends Controller
         if (auth()->user()->kdunit == 42) {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
@@ -62,7 +62,7 @@ class strukturProgram_controller extends Controller
         } elseif (auth()->user()->leveling == 2) {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->where("kur.kdkurikulum", 67)
@@ -88,7 +88,7 @@ class strukturProgram_controller extends Controller
         } else {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->where("kur.kdunitkerja", Auth::user()->kdunit)

@@ -90,14 +90,19 @@ class rps_controller extends Controller
             ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
             ->join('ak_kurikulum_sub_bks as subbk', 'subbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
             ->join('ak_metodepembelajaran as amp', 'amp.id', '=', 'ak_timeline.kdmetopem')
-            ->join('pt_person as pp', 'pp.kdperson', '=', 'ak_timeline.kdperson')
-            ->join('ak_dosen as dos', 'dos.kdperson', '=', 'pp.kdperson')
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
             ->where('mksbk.kdmatakuliah', $id)
             ->where('ak_timeline.kdtahunakademik', $semester)
             ->orderBy('mingguke', 'asc')
             ->get();
         // ->toSql();
+
+        $timelineWithDosenKelas = ak_timeline::join('gabung_timeline_dosen as gtd', 'gtd.kdtimeline', '=', 'ak_timeline.kdtimeline')
+            ->join('simptt.ak_dosen as dosen', 'dosen.kdperson', '=', 'gtd.kdperson')
+            ->join('simptt.pt_person as pp', 'pp.kdperson', '=', 'dosen.kdperson')
+            ->join('ak_kelas as kelas', 'kelas.kdkelas', '=', 'gtd.kdkelas')
+            ->where('ak_timeline.kdmatakuliah', $id)
+            ->get();
 
         // dd($timeline);
 
@@ -125,7 +130,7 @@ class rps_controller extends Controller
 
         // return dd($metodebobot);
 
-        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot'));
+        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
     }
 
     public function index(Request $request, int $id)

@@ -305,7 +305,10 @@
                                     {{ $t->metodepembelajaran ?? '' }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $t->namalengkap ?? '' }} {{ $t->gelarbelakang ?? '' }}
+                                    @foreach ($timelineWithDosenKelas->where('kdtimeline', $t->kdtimeline) as $dosenKelas)
+                                        {{ $dosenKelas->gelardepan }} {{ $dosenKelas->namalengkap }}
+                                        {{ $dosenKelas->gelarbelakang }} - ({{ $dosenKelas->kelas }}) <br />
+                                    @endforeach
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $t->jeniskuliah ?? '' }}

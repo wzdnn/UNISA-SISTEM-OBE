@@ -380,7 +380,55 @@ class ak_matakuliah_controller extends Controller
         }
     }
 
+    public function getTotalAccumulatedTime(int $id_gabung)
+    {
+        $subbkRecords = ak_kurikulum_sub_bk_materi::where('id_gabung', $id_gabung)->get();
 
+        $totalAccumulatedTime = $subbkRecords->reduce(function ($carry, $subbk) {
+            return $carry +
+                ($subbk->kuliah ?? 0) +
+                ($subbk->tutorial ?? 0) +
+                ($subbk->seminar ?? 0) +
+                ($subbk->praktikum ?? 0) +
+                ($subbk->skill_lab ?? 0) +
+                ($subbk->field_lab ?? 0) +
+                ($subbk->praktik ?? 0) +
+                ($subbk->penugasan ?? 0) +
+                ($subbk->belajar_mandiri ?? 0);
+        }, 0);
+
+        return $totalAccumulatedTime;
+    }
+
+    public function getTotalAccumulatedTimeByMatakuliah($kdmatakuliah)
+    {
+        // Cari gabungan matakuliah berdasarkan kdmatakuliah
+        $gabungMatakuliah = gabung_matakuliah_subbk::where('kdmatakuliah', $kdmatakuliah)->get();
+
+        // Ambil semua materi terkait yang berhubungan dengan kdmatakuliah tersebut
+        $totalAccumulatedTime = 0;
+
+        foreach ($gabungMatakuliah as $gabung) {
+            // Cari semua subbk terkait id_gabung dari gabung_matakuliah_subbk
+            $subbkRecords = $gabung->subbkMateri;
+
+            // Hitung total waktu akumulasi dari semua subbk
+            $totalAccumulatedTime += $subbkRecords->reduce(function ($carry, $subbk) {
+                return $carry +
+                    ($subbk->kuliah ?? 0) +
+                    ($subbk->tutorial ?? 0) +
+                    ($subbk->seminar ?? 0) +
+                    ($subbk->praktikum ?? 0) +
+                    ($subbk->skill_lab ?? 0) +
+                    ($subbk->field_lab ?? 0) +
+                    ($subbk->praktik ?? 0) +
+                    ($subbk->penugasan ?? 0) +
+                    ($subbk->belajar_mandiri ?? 0);
+            }, 0);
+        }
+
+        return $totalAccumulatedTime;
+    }
 
 
     // detail sub bk dan cpmk
@@ -400,9 +448,13 @@ class ak_matakuliah_controller extends Controller
         if (!$subbk) {
             return abort(404);
         }
+
+        $totalAccumulatedTime = $this->getTotalAccumulatedTimeByMatakuliah($id);
+
+        $total_waktu = 2700 * $mkSubBk->sks;
         // dd($materi);
 
-        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk', 'mkSubBk', 'materi', 'tahunAkademik'));
+        return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk', 'mkSubBk', 'materi', 'tahunAkademik', 'total_waktu', 'totalAccumulatedTime'));
     }
 
     public function indexMateri(int $id, int $sub, int $materi)
@@ -414,9 +466,17 @@ class ak_matakuliah_controller extends Controller
 
         $subbk = ak_kurikulum_sub_bk_materi::where('kdmateri', $materi)->first();
 
+        // Get the id_gabung from the subbk record or another relevant place
+        $id_gabung = $subbk->id_gabung;
+
+        $totalAccumulatedTime = $this->getTotalAccumulatedTimeByMatakuliah($id);
+
+        $total_waktu = 2700 * $mkSubBk->sks;
+
+
         // dd($detail);
 
-        return view('pages.matakuliah.detail-subbk-materi', compact('subbk', 'id', 'detail', 'mkSubBk'));
+        return view('pages.matakuliah.detail-subbk-materi', compact('subbk', 'id', 'detail', 'mkSubBk', 'total_waktu', 'totalAccumulatedTime'));
     }
 
     public function deleteMateri(int $materi)
@@ -457,8 +517,37 @@ class ak_matakuliah_controller extends Controller
         ]);
 
         try {
-            // $subbk = mk_sub_bk::where('kdmatakuliah', '=', $id)->where('id', '=', $sub)->first();
             $subbk = ak_kurikulum_sub_bk_materi::where('kdmateri', $materi)->first();
+
+            // Fetch existing total accumulated time
+            $existingTotal = $subbk->kuliah + $subbk->tutorial + $subbk->seminar + $subbk->praktikum +
+                $subbk->skill_lab + $subbk->field_lab + $subbk->praktik + $subbk->penugasan +
+                $subbk->belajar_mandiri;
+
+            // Calculate new total input from the request
+            $newInput = ($request->input('kuliah') ?? 0) +
+                ($request->input('tutorial') ?? 0) +
+                ($request->input('seminar') ?? 0) +
+                ($request->input('praktikum') ?? 0) +
+                ($request->input('skill_lab') ?? 0) +
+                ($request->input('field_lab') ?? 0) +
+                ($request->input('praktik') ?? 0) +
+                ($request->input('penugasan') ?? 0) +
+                ($request->input('belajar_mandiri') ?? 0);
+
+            // Calculate the total accumulated time including new inputs
+            $totalInput = $existingTotal + $newInput;
+
+            // Get total waktu
+            $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->where('kdmatakuliah', '=', $id)->first();
+            $total_waktu = 2700 * $mkSubBk->sks;
+
+            // Check if the new total exceeds the allowed maximum time
+            if ($totalInput > $total_waktu) {
+                return redirect()->back()->withErrors([
+                    'total' => "Total waktu yang diinput ($totalInput menit) melebihi batas maksimum ($total_waktu menit)."
+                ])->withInput();
+            }
 
             $subbk->materi_pembelajaran = $request->input('materi_pembelajaran');
             $subbk->kuliah = $request->input('kuliah');
