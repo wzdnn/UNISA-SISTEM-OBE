@@ -42,6 +42,7 @@ class timeline_controller extends Controller
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
             ->where('ak_timeline.kdmatakuliah', $id)
             ->orderBy('mingguke', 'asc')
+            // ->toSql();
             ->get();
 
 
@@ -50,9 +51,10 @@ class timeline_controller extends Controller
             ->join('simptt.pt_person as pp', 'pp.kdperson', '=', 'dosen.kdperson')
             ->join('ak_kelas as kelas', 'kelas.kdkelas', '=', 'gtd.kdkelas')
             ->where('ak_timeline.kdmatakuliah', $id)
+            // ->toSql();
             ->get();
 
-        // dd($timeline);
+        // dd($timelineWithDosenKelas);
 
 
         return view('pages.detailMatakuliah.timeline', compact('matakuliah', 'timeline', 'timelineWithDosenKelas'));

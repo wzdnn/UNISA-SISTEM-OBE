@@ -117,7 +117,7 @@ class ak_kurikulum_cpmk_controller extends Controller
                     )
                     ->where("ak_kurikulum.isObe", '=', 1)
                     ->where("kurikulum", "=", $request->filter)
-                    ->orderBy('id', 'asc')
+                    ->orderBy('kode_cpl', 'asc')
                     ->paginate(10);
             }
         }
@@ -156,6 +156,7 @@ class ak_kurikulum_cpmk_controller extends Controller
                     "=",
                     "ak_kurikulum_cpmks.kdkurikulum"
                 )
+                ->orderBy('ak_kurikulum_cpls.id')
                 ->paginate(10);
 
             $kdkurikulum = DB::table("ak_kurikulum")

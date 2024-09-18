@@ -283,6 +283,8 @@ class ak_kurikulum_sub_bk_controller extends Controller
 
         $muatan = ak_muatan::all();
 
+        // dd($subBkEdit);
+
         return view('pages.subBahanKajian.edit', compact('subBkEdit', 'akKurikulumBk', 'muatan'));
     }
 
@@ -300,30 +302,27 @@ class ak_kurikulum_sub_bk_controller extends Controller
             }
         }
 
-        try {
 
-            $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
-            DB::beginTransaction();
+        $subBkEdit = ak_kurikulum_sub_bk::findOrFail($id);
 
-            $subBkEdit->update([
-                'kode_subbk' => $request->kode_subbk,
-                'sub_bk' => $request->sub_bk,
-                'referensi' => $request->referensi,
-                'id' => $request->bahan_kajian
-            ]);
 
-            if (count($muatanSelect) > 0) {
-                $subBkEdit->SBKtoMuatan()->sync($muatanSelect);
-            } else {
-                $subBkEdit->SBKtoMuatan()->detach();
-            }
+        $subBkEdit->update([
+            'kode_subbk' => $request->kode_subbk,
+            'sub_bk' => $request->sub_bk,
+            'referensi' => $request->referensi,
+            'kdbk' => $request->bahan_kajian,
+            'id' => $request->bahan_kajian
+        ]);
 
-            DB::commit();
-            return redirect()->route('sub-bk.index')->with('success', 'Sub BK Berhasil Disunting');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect()->back()->with("failed", "gagal update Sub BK pada Matkul" . $th->getMessage());
+        if (count($muatanSelect) > 0) {
+            $subBkEdit->SBKtoMuatan()->sync($muatanSelect);
+        } else {
+            $subBkEdit->SBKtoMuatan()->detach();
         }
+
+        // dd($subBkEdit);
+
+        return redirect()->route('sub-bk.index')->with('success', 'Sub BK Berhasil Disunting');
     }
 
     public function delete(int $id)

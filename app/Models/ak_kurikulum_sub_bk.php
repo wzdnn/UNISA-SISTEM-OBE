@@ -17,6 +17,8 @@ class ak_kurikulum_sub_bk extends Model
         'kdkurikulum'
     ];
 
+    protected $guarded = ['id'];
+
     public function SBKtoMK()
     {
         return $this->belongsToMany(ak_matakuliah::class, 'ak_matakuliah_ak_kurikulum_sub_bk', 'ak_kurikulum_sub_bk_id', 'kdmatakuliah')->withTimestamps();

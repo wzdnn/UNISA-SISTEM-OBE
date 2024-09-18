@@ -149,16 +149,17 @@
             </a>
             <hr />
         </div>
-        <div class="">
+        <div class="py-2">
             @foreach ($subbk->cpmks as $item)
-                <a
-                    href="{{ route('cpmkPembelajaran.index', ['id' => $subbk->kdmatakuliah, 'sub' => $item->pivot->id_gabung_subbk, 'id_cpmk' => $item->pivot->id]) }}">
-                    <div class=" hover:text-blue-300 my-2">
-                        <button class=" px-2 text-md font-semibold p-2">
-                            &#x2022; {{ $item->kode_cpmk }} {{ $item->cpmk }}
-                        </button>
-                    </div>
-                </a>
+                <div class="flex justify-between mr-40 mt-2 font-bold">
+                    &#x2022; {{ $item->kode_cpmk }} {{ $item->cpmk }}
+                    <a
+                        href="{{ route('cpmkPembelajaran.index', ['id' => $subbk->kdmatakuliah, 'sub' => $item->pivot->id_gabung_subbk, 'id_cpmk' => $item->pivot->id]) }}">
+                        <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1">
+                            <i class="fa fa-pencil" aria-hidden="true"></i></button>
+
+                    </a>
+                </div>
             @endforeach
         </div>
     </div>

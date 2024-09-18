@@ -47,7 +47,7 @@
                 </thead>
                 <tbody>
                     <tr class="border ">
-                        <td colspan="15" class="bg-blue-100">
+                        <td colspan="17" class="bg-blue-100">
                             <h3 class="text-center font-semibold text-lg uppercase">rencana
                                 pembelajaran
                                 semester (RPS)
@@ -61,8 +61,8 @@
                         <td class="border px-4 py-2">
                             Nama Matakuliah
                         </td>
-                        <td class="border px-4 py-2" colspan="5">
-                            Bobot (SKS)
+                        <td class="border px-4 py-2" colspan="9">
+                            Alokasi Waktu (Menit)
                         </td>
                         <td class="border px-4 py-2" colspan="2">
                             Semester
@@ -82,19 +82,31 @@
                             {{ $matakuliah->matakuliah }}
                         </td>
                         <td class="border px-4 py-2">
-                            Teori
-                        </td>
-                        <td class="border px-4 py-2">
-                            Seminar
+                            Kuliah
                         </td>
                         <td class="border px-4 py-2">
                             Tutorial
                         </td>
                         <td class="border px-4 py-2">
-                            Praktikum / Skill Lab
+                            Seminar
+                        </td>
+                        <td class="border px-4 py-2">
+                            Praktikum
+                        </td>
+                        <td class="border px-4 py-2">
+                            Skill Lab
+                        </td>
+                        <td class="border px-4 py-2">
+                            Field Lab
                         </td>
                         <td class="border px-4 py-2">
                             Praktik
+                        </td>
+                        <td class="border px-4 py-2">
+                            Penugasan
+                        </td>
+                        <td class="border px-4 py-2">
+                            Belajar Mandiri
                         </td>
                         <td class="border px-4 py-2" colspan="2">
                             {{ $matakuliah->semester }}
@@ -104,6 +116,47 @@
                         </td>
                         <td class="border px-4 py-2" colspan="4">
                             -
+                        </td>
+                    </tr>
+                    <tr class="text-center justify-center font-bold">
+                        <td class="border px-4 py-2 font-bold">
+
+                        </td>
+                        <td class="border px-4 py-2">
+
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['kuliah'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['tutorial'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['seminar'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['praktikum'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['skill_lab'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['field_lab'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['praktik'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['penugasan'] }}
+                        </td>
+                        <td class="border px-4 py-2">
+                            {{ $waktu['belajar_mandiri'] }}
+                        </td>
+                        <td class="border px-4 py-2" colspan="2">
+                        </td>
+                        <td class="border px-4 py-2" colspan="2">
+                        </td>
+                        <td class="border px-4 py-2" colspan="4">
                         </td>
                     </tr>
                     <tr>
@@ -142,7 +195,8 @@
                             serta Alokasi
                             Waktu</td>
                         <td class="border px-4 py-2" colspan="2"></td>
-                        <td class="border px-4 py-2 font-bold" colspan="4">Bahan Kajian dan Materi Pembelajaran</td>
+                        <td class="border px-4 py-2 font-bold" colspan="4">Bahan Kajian dan Materi Pembelajaran
+                        </td>
                         <td class="border px-4 py-2 font-bold" colspan="5">Metode Pembelajaran</td>
                         <td class="border px-4 py-2 font-bold" colspan="4">Bentuk Pembelajaran/Alokasi Waktu</td>
                     </tr>
@@ -161,8 +215,57 @@
                                 {{ $tl->metodepembelajaran ?? '' }}
                             </td>
 
-                            <td class="border px-4 py-2" colspan="4">
-                                {{ $tl->jeniskuliah ?? '' }}
+                            <td class="border px-4 py-2 font-bold" colspan="4">
+                                {{ $tl->jeniskuliah ?? '' }} /
+                                @switch($tl->kdjeniskuliah)
+                                    @case('4')
+                                        {{-- Replace '1' with the actual code for 'kuliah' --}}
+                                        {{ $tl->kuliah ?? '' }}
+                                    @break
+
+                                    @case('2')
+                                        {{-- Replace '2' with the actual code for 'tutorial' --}}
+                                        {{ $tl->tutorial ?? '' }}
+                                    @break
+
+                                    @case('8')
+                                        {{-- Replace '3' with the actual code for 'seminar' --}}
+                                        {{ $tl->seminar ?? '' }}
+                                    @break
+
+                                    @case('1')
+                                        {{-- Replace '4' with the actual code for 'praktik' --}}
+                                        {{ $tl->praktik ?? '' }}
+                                    @break
+
+                                    @case('13')
+                                        {{-- Replace '5' with the actual code for 'skill_lab' --}}
+                                        {{ $tl->skill_lab ?? '' }}
+                                    @break
+
+                                    @case('52')
+                                        {{-- Replace '6' with the actual code for 'field_lab' --}}
+                                        {{ $tl->field_lab ?? 'a' }}
+                                    @break
+
+                                    @case('7')
+                                        {{-- Replace '7' with the actual code for 'penugasan' --}}
+                                        {{ $tl->penugasan ?? '' }}
+                                    @break
+
+                                    @case('15')
+                                        {{-- Replace '8' with the actual code for 'belajar_mandiri' --}}
+                                        {{ $tl->belajar_mandiri ?? '' }}
+                                    @break
+
+                                    @case('3')
+                                        {{-- Replace '8' with the actual code for 'belajar_mandiri' --}}
+                                        {{ $tl->praktikum ?? '' }}
+                                    @break
+
+                                    @default
+                                        <!-- Handle default case or show nothing -->
+                                @endswitch menit
                             </td>
                         </tr>
                     @endforeach
@@ -233,18 +336,18 @@
                         <td colspan="15" class="border px-4 py-2">
                             <p class="font-bold">Referensi Utama :</p>
                             @foreach ($referensiUtama as $utama)
-                                {{ $loop->iteration ?? '' }}. {{ $utama->referensi ?? '' }}
+                                {{ $loop->iteration ?? '' }}. {{ $utama->referensi ?? '' }} <br />
                             @endforeach
                             <br />
                             <p class="font-bold">Referensi Tambahan :</p>
                             @foreach ($referensiTambahan as $tambahan)
-                                {{ $loop->iteration ?? '' }}. {{ $tambahan->referensi ?? '' }}
+                                {{ $loop->iteration ?? '' }}. {{ $tambahan->referensi ?? '' }} <br />
                             @endforeach
                             <br />
 
                             <p class="font-bold">Referensi Luaran :</p>
                             @foreach ($referensiLuaran as $luaran)
-                                {{ $loop->iteration ?? '' }}. {{ $luaran->referensi ?? '' }}
+                                {{ $loop->iteration ?? '' }}. {{ $luaran->referensi ?? '' }} <br />
                             @endforeach
                             <br />
                         </td>
@@ -268,6 +371,9 @@
                         </th>
                         <th scope="col" class="px-6 py-3 ">
                             Minggu Ke-
+                        </th>
+                        <th scope="col" class="px-6 py-3 ">
+                            Keterangan
                         </th>
                         <th scope="col" class="px-6 py-3 ">
                             CPMK
@@ -294,6 +400,9 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $t->mingguke ?? '' }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $t->keterangan ?? '' }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $t->kode_cpmk ?? '' }}

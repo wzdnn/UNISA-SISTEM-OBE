@@ -69,13 +69,13 @@
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5 "
                             placeholder=" " value="{{ old('sks') ?? $mkSubBk->sks }}">
                     </div>
-                    <div class="relative z-0 px-3 py-3">
+                    {{-- <div class="relative z-0 px-3 py-3">
                         <label for="rekomendasiSKS" class="block mb-2 text-sm font-bold text-gray-900 uppercase">Rekomendasi
                             SKS</label>
                         <input type="text"
                             class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5 "
                             placeholder=" " disabled value="{{ $rekomendasiSKS[0]->rekomendasisksjam ?? '' }}">
-                    </div>
+                    </div> --}}
                 </div>
                 <hr />
                 <div class="grid md:grid-cols-2">

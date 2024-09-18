@@ -9,6 +9,7 @@ use App\Models\ak_matakuliah_referensi_utama;
 use App\Models\ak_timeline;
 use App\Models\gabung_matakuliah_pengalaman_asinkron;
 use App\Models\gabung_matakuliah_pengalaman_sinkron;
+use App\Models\gabung_matakuliah_subbk;
 use App\Models\RpsFileUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,47 @@ use Throwable;
 
 class rps_controller extends Controller
 {
+    public function getTotalAccumulatedTimeByMatakuliah($kdmatakuliah)
+    {
+        // Cari gabungan matakuliah berdasarkan kdmatakuliah
+        $gabungMatakuliah = gabung_matakuliah_subbk::where('kdmatakuliah', $kdmatakuliah)->get();
+
+        // Inisialisasi array untuk akumulasi waktu berdasarkan field
+        $totalTimes = [
+            'kuliah' => 0,
+            'tutorial' => 0,
+            'seminar' => 0,
+            'praktikum' => 0,
+            'skill_lab' => 0,
+            'field_lab' => 0,
+            'praktik' => 0,
+            'penugasan' => 0,
+            'belajar_mandiri' => 0,
+        ];
+
+        foreach ($gabungMatakuliah as $gabung) {
+            // Cari semua subbk terkait id_gabung dari gabung_matakuliah_subbk
+            $subbkRecords = $gabung->subbkMateri;
+
+            // Hitung total waktu per field
+            foreach ($subbkRecords as $subbk) {
+                $totalTimes['kuliah'] += $subbk->kuliah ?? 0;
+                $totalTimes['tutorial'] += $subbk->tutorial ?? 0;
+                $totalTimes['seminar'] += $subbk->seminar ?? 0;
+                $totalTimes['praktikum'] += $subbk->praktikum ?? 0;
+                $totalTimes['skill_lab'] += $subbk->skill_lab ?? 0;
+                $totalTimes['field_lab'] += $subbk->field_lab ?? 0;
+                $totalTimes['praktik'] += $subbk->praktik ?? 0;
+                $totalTimes['penugasan'] += $subbk->penugasan ?? 0;
+                $totalTimes['belajar_mandiri'] += $subbk->belajar_mandiri ?? 0;
+            }
+        }
+
+        // dd($totalTimes); // Menampilkan akumulasi waktu per field
+
+        return $totalTimes;
+    }
+
     public function rps(int $id, int $semester)
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
@@ -66,21 +108,22 @@ class rps_controller extends Controller
         // dd($aksesmedia);
 
         $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
             ->where('kdtahunakademik', $semester)
             ->get();
 
         $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
             ->where('kdtahunakademik', $semester)
             ->get();
 
         $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
             ->where('kdtahunakademik', $semester)
+            // ->toSql();
             ->get();
 
         // Timeline section
@@ -107,7 +150,7 @@ class rps_controller extends Controller
         // dd($timeline);
 
         $relation = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as mksbk')
-            ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'mksbk.kdmatakuliah')
+            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'mksbk.kdmatakuliah')
             ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', 'mksbk.id')
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'gsc.id_cpmk')
             ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
@@ -116,12 +159,12 @@ class rps_controller extends Controller
             ->where('mk.kdmatakuliah', $id)
             ->get();
 
-        // dd($relation);
+        // dd($referensiLuaran);
 
         // dd('test');
 
         $metodebobot = DB::table('ak_matakuliah_cpmk as amc')
-            ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
+            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'amc.id_cpmk')
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id_gabung_cpmk', 'amc.id')
             ->join('metode_penilaians as mp', 'mp.id', 'gmc.id_metopen')
@@ -130,7 +173,11 @@ class rps_controller extends Controller
 
         // return dd($metodebobot);
 
-        return view('pages.matakuliah.rps', compact('matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
+        $waktu = $this->getTotalAccumulatedTimeByMatakuliah($id);
+
+        // dd($waktu);
+
+        return view('pages.matakuliah.rps', compact('waktu', 'matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
     }
 
     public function index(Request $request, int $id)

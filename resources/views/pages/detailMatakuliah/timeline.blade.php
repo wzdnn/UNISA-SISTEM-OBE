@@ -70,7 +70,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-white">
                 <tr class="">
                     <th scope="col" class="px-6 py-3 text-center">
-                        Minggu Ke-
+                        Minggu Ke- (Pertemuan ke-)
                     </th>
                     <th scope="col" class="px-6 py-3 text-left">
                         Keterangan

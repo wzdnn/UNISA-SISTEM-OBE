@@ -63,7 +63,7 @@
                                 {{ $loop->iteration }}
                             </td>
                             <td class="px-6 py-4 text-left">
-                                {{ $value->id }} {{ $value->kode_cpl }} {{ $value->cpl }}
+                                {{ $value->kode_cpl }} {{ $value->cpl }}
                             </td>
                             <td class="px-6 py-4 text-left">
                                 {{-- @foreach ($value->CPMKtoCPL as $cplcpmk)

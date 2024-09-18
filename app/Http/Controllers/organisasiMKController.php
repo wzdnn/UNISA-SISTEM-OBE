@@ -35,7 +35,7 @@ class organisasiMkController extends Controller
         // return dd($semester_2_sks);
 
         //matakuliah
-        $matakuliah = DB::table('simptt.ak_matakuliah')
+        $matakuliah = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where('ak_matakuliah.semester', '=', 0)
@@ -163,7 +163,7 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 8
-        $semester8_0 = DB::table('simptt.ak_matakuliah')
+        $semester8_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 8)
@@ -174,7 +174,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester8_1 = DB::table('simptt.ak_matakuliah')
+        $semester8_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 8)
@@ -185,7 +185,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester8_2 = DB::table('simptt.ak_matakuliah')
+        $semester8_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 8)
@@ -199,7 +199,7 @@ class organisasiMkController extends Controller
 
 
         // Semester 7
-        $semester7_0 = DB::table('simptt.ak_matakuliah')
+        $semester7_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 7)
@@ -210,7 +210,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester7_1 = DB::table('simptt.ak_matakuliah')
+        $semester7_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 7)
@@ -221,7 +221,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester7_2 = DB::table('simptt.ak_matakuliah')
+        $semester7_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 7)
@@ -234,7 +234,7 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 6
-        $semester6_0 = DB::table('simptt.ak_matakuliah')
+        $semester6_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 6)
@@ -245,7 +245,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester6_1 = DB::table('simptt.ak_matakuliah')
+        $semester6_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 6)
@@ -256,7 +256,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester6_2 = DB::table('simptt.ak_matakuliah')
+        $semester6_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 6)
@@ -269,7 +269,7 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 5
-        $semester5_0 = DB::table('simptt.ak_matakuliah')
+        $semester5_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 5)
@@ -280,7 +280,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester5_1 = DB::table('simptt.ak_matakuliah')
+        $semester5_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 5)
@@ -291,7 +291,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester5_2 = DB::table('simptt.ak_matakuliah')
+        $semester5_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 5)
@@ -304,7 +304,7 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 4
-        $semester4_0 = DB::table('simptt.ak_matakuliah')
+        $semester4_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 4)
@@ -315,7 +315,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester4_1 = DB::table('simptt.ak_matakuliah')
+        $semester4_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 4)
@@ -326,7 +326,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester4_2 = DB::table('simptt.ak_matakuliah')
+        $semester4_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 4)
@@ -340,7 +340,7 @@ class organisasiMkController extends Controller
 
 
         // Semester 3
-        $semester3_0 = DB::table('simptt.ak_matakuliah')
+        $semester3_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 3)
@@ -351,7 +351,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester3_1 = DB::table('simptt.ak_matakuliah')
+        $semester3_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 3)
@@ -362,7 +362,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester3_2 = DB::table('simptt.ak_matakuliah')
+        $semester3_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 3)
@@ -375,7 +375,7 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 2
-        $semester2_0 = DB::table('simptt.ak_matakuliah')
+        $semester2_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 2)
@@ -386,7 +386,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester2_1 = DB::table('simptt.ak_matakuliah')
+        $semester2_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 2)
@@ -397,7 +397,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester2_2 = DB::table('simptt.ak_matakuliah')
+        $semester2_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 2)
@@ -411,7 +411,7 @@ class organisasiMkController extends Controller
 
 
         // Semester 1
-        $semester1_0 = DB::table('simptt.ak_matakuliah')
+        $semester1_0 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 1)
@@ -422,7 +422,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester1_1 = DB::table('simptt.ak_matakuliah')
+        $semester1_1 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 1)
@@ -433,7 +433,7 @@ class organisasiMkController extends Controller
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester1_2 = DB::table('simptt.ak_matakuliah')
+        $semester1_2 = DB::table('ak_matakuliah')
             ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
             ->where("ak_matakuliah.semester", '=', 1)

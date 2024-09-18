@@ -43,7 +43,7 @@ class ak_matakuliah_controller extends Controller
     {
 
         if (auth()->user()->kdunit == 42) {
-            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK.subbkMateri')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->orderBy('kdmatakuliah', 'asc');
@@ -52,7 +52,7 @@ class ak_matakuliah_controller extends Controller
                 ->where("isObe", "=", 1)
                 ->get();
         } elseif (auth()->user()->leveling == 2) {
-            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK.subbkMateri')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->where('ak_kurikulum.kdkurikulum', 67)
@@ -63,7 +63,7 @@ class ak_matakuliah_controller extends Controller
                 ->where('ak_kurikulum.kdkurikulum', 67)
                 ->get();
         } else {
-            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK.subbkMateri')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->where(function ($query) {
@@ -80,7 +80,6 @@ class ak_matakuliah_controller extends Controller
                 ->get();
         }
 
-        // dd($request->input('filter-kurikulum'));
 
         // excecute sql
         $matakuliah = $matakuliah
@@ -91,10 +90,45 @@ class ak_matakuliah_controller extends Controller
                 $query->where("ak_matakuliah.kdkurikulum", $request->input('filter-kurikulum'));
             })
             ->paginate(10);
-        // ->toSql();
+        // ->first();
+        // dd($matakuliah);
 
+        // Menghitung akumulasi waktu secara terpisah untuk setiap kategori
+        foreach ($matakuliah as $mk) {
+            // Initialize array untuk menyimpan total waktu per kategori
+            $accumulatedTimes = [
+                'kuliah' => 0,
+                'tutorial' => 0,
+                'seminar' => 0,
+                'praktikum' => 0,
+                'skill_lab' => 0,
+                'field_lab' => 0,
+                'praktik' => 0,
+                'penugasan' => 0,
+                'belajar_mandiri' => 0
+            ];
 
-        // dd($request->input('filter-matakuliah'), $matakuliah);
+            // Pastikan relasi tidak null
+            foreach ($mk->GetAllidSubBK ?? [] as $subbk) {
+                foreach ($subbk->subbkMAteri ?? [] as $materi) {
+                    // dump($materi->kuliah, $materi->tutorial, $materi->seminar, $materi->praktikum, $materi->skill_lab, $materi->field_lab, $materi->praktik, $materi->penugasan, $materi->belajar_mandiri);
+
+                    $accumulatedTimes['kuliah'] += $materi->kuliah ?? 0;
+                    $accumulatedTimes['tutorial'] += $materi->tutorial ?? 0;
+                    $accumulatedTimes['seminar'] += $materi->seminar ?? 0;
+                    $accumulatedTimes['praktikum'] += $materi->praktikum ?? 0;
+                    $accumulatedTimes['skill_lab'] += $materi->skill_lab ?? 0;
+                    $accumulatedTimes['field_lab'] += $materi->field_lab ?? 0;
+                    $accumulatedTimes['praktik'] += $materi->praktik ?? 0;
+                    $accumulatedTimes['penugasan'] += $materi->penugasan ?? 0;
+                    $accumulatedTimes['belajar_mandiri'] += $materi->belajar_mandiri ?? 0;
+                }
+            }
+
+            // Simpan akumulasi waktu per kategori ke dalam properti matakuliah
+            $mk->accumulatedTimes = $accumulatedTimes;
+            // dd($mk->GetAllidSubBK);
+        }
 
         $arrayKurikulum = [];
         foreach ($kdkurikulum as $data) {
@@ -102,7 +136,7 @@ class ak_matakuliah_controller extends Controller
         }
 
 
-        return view('pages.matakuliah.index', compact('matakuliah', 'kdkurikulum'));
+        return view('pages.matakuliah.index', compact('matakuliah', 'kdkurikulum', 'accumulatedTimes'));
     }
 
     // tambah data
@@ -159,17 +193,6 @@ class ak_matakuliah_controller extends Controller
     public function subbkDetail(int $id, Request $request)
     {
 
-        // dd('test');
-        // $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "asc")->get();
-        // $filterLatest = $filter->last();
-        // $kelompok = $filter->groupBy("kdtahunakademik")->toArray();
-
-        // $filter = [
-        //     "latest" => $filterLatest->kdtahunakademik,
-        //     "filter" => array_keys($kelompok)
-
-        // ];
-
 
         $filter = ak_tahunakademik::where("isaktif", 1)
             ->orderBy("kdtahunakademik", "asc")
@@ -187,7 +210,7 @@ class ak_matakuliah_controller extends Controller
 
         // dd($filter);
 
-        $rekomendasiSKS = DB::select('call sistem_obe.rekomendasi_sks(?, 144, ?)', [Auth::user()->kdunit, $id]);
+        // $rekomendasiSKS = DB::select('call sistem_obe.rekomendasi_sks(?, 144, ?)', [Auth::user()->kdunit, $id]);
 
         $mkSubBk = ak_matakuliah::with('MKtoSub_bk')->findOrFail($id);
 
@@ -284,7 +307,7 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.detail2', [
             'filter' => $filterData,
             'selectedFilter' => $selectedFilter
-        ], compact('mkSubBk', 'rekomendasiSKS', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'tahunAkademik', 'pengalamanSinkron', 'pengalamanAsinkron', 'akses', 'filter', 'kelompok'));
+        ], compact('mkSubBk', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'tahunAkademik', 'pengalamanSinkron', 'pengalamanAsinkron', 'akses', 'filter', 'kelompok'));
     }
 
     public function postsubbkDetail(int $id, Request $request)
@@ -384,20 +407,50 @@ class ak_matakuliah_controller extends Controller
     {
         $subbkRecords = ak_kurikulum_sub_bk_materi::where('id_gabung', $id_gabung)->get();
 
-        $totalAccumulatedTime = $subbkRecords->reduce(function ($carry, $subbk) {
-            return $carry +
-                ($subbk->kuliah ?? 0) +
-                ($subbk->tutorial ?? 0) +
-                ($subbk->seminar ?? 0) +
-                ($subbk->praktikum ?? 0) +
-                ($subbk->skill_lab ?? 0) +
-                ($subbk->field_lab ?? 0) +
-                ($subbk->praktik ?? 0) +
-                ($subbk->penugasan ?? 0) +
-                ($subbk->belajar_mandiri ?? 0);
-        }, 0);
+        // Initialize an array to store the accumulated times for each component
+        $accumulatedTimes = [
+            'kuliah' => 0,
+            'tutorial' => 0,
+            'seminar' => 0,
+            'praktikum' => 0,
+            'skill_lab' => 0,
+            'field_lab' => 0,
+            'praktik' => 0,
+            'penugasan' => 0,
+            'belajar_mandiri' => 0
+        ];
 
-        return $totalAccumulatedTime;
+        // Calculate each component separately
+        foreach ($subbkRecords as $subbk) {
+            $accumulatedTimes['kuliah'] += $subbk->kuliah ?? 0;
+            $accumulatedTimes['tutorial'] += $subbk->tutorial ?? 0;
+            $accumulatedTimes['seminar'] += $subbk->seminar ?? 0;
+            $accumulatedTimes['praktikum'] += $subbk->praktikum ?? 0;
+            $accumulatedTimes['skill_lab'] += $subbk->skill_lab ?? 0;
+            $accumulatedTimes['field_lab'] += $subbk->field_lab ?? 0;
+            $accumulatedTimes['praktik'] += $subbk->praktik ?? 0;
+            $accumulatedTimes['penugasan'] += $subbk->penugasan ?? 0;
+            $accumulatedTimes['belajar_mandiri'] += $subbk->belajar_mandiri ?? 0;
+        }
+
+        // Return the accumulated times for each component
+        return $accumulatedTimes;
+
+
+        //     $totalAccumulatedTime = $subbkRecords->reduce(function ($carry, $subbk) {
+        //         return $carry +
+        //             ($subbk->kuliah ?? 0) +
+        //             ($subbk->tutorial ?? 0) +
+        //             ($subbk->seminar ?? 0) +
+        //             ($subbk->praktikum ?? 0) +
+        //             ($subbk->skill_lab ?? 0) +
+        //             ($subbk->field_lab ?? 0) +
+        //             ($subbk->praktik ?? 0) +
+        //             ($subbk->penugasan ?? 0) +
+        //             ($subbk->belajar_mandiri ?? 0);
+        //     }, 0);
+
+        //     return $totalAccumulatedTime;
     }
 
     public function getTotalAccumulatedTimeByMatakuliah($kdmatakuliah)
@@ -449,10 +502,12 @@ class ak_matakuliah_controller extends Controller
             return abort(404);
         }
 
+        $accumulatedTime = $this->getTotalAccumulatedTime($sub);
+
         $totalAccumulatedTime = $this->getTotalAccumulatedTimeByMatakuliah($id);
 
         $total_waktu = 2700 * $mkSubBk->sks;
-        // dd($materi);
+        // dd($accumulatedTime);
 
         return view('pages.matakuliah.detail-subbk', compact('id', 'sub', 'subbk', 'mkSubBk', 'materi', 'tahunAkademik', 'total_waktu', 'totalAccumulatedTime'));
     }
@@ -469,12 +524,14 @@ class ak_matakuliah_controller extends Controller
         // Get the id_gabung from the subbk record or another relevant place
         $id_gabung = $subbk->id_gabung;
 
+        $totalPerMateri = $this->getTotalAccumulatedTime($sub);
+
         $totalAccumulatedTime = $this->getTotalAccumulatedTimeByMatakuliah($id);
 
         $total_waktu = 2700 * $mkSubBk->sks;
 
 
-        // dd($detail);
+        // dd($totalPerMateri);
 
         return view('pages.matakuliah.detail-subbk-materi', compact('subbk', 'id', 'detail', 'mkSubBk', 'total_waktu', 'totalAccumulatedTime'));
     }
