@@ -198,6 +198,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-metodepembelajaran/{cpmk_id}', [timeline_controller::class, 'getMetodePembelajaran']);
 
     route::get('/get-metodepembelajaran/{cpmk_id}', [timeline_controller::class, 'getMetodePembelajaranByCpmk'])->name('get-metodepembelajaran');
+    route::get('/get-subcpmk/{cpmk_id}', [timeline_controller::class, 'getSubCpmkByCpmk'])->name('get-subcpmk');
 
     // RPS Matakuliah
     route::get('/matakuliah/{id}/rps/{semester}/preview', [rps_controller::class, 'rps'])->name('rps.preview');

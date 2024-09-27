@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ak_kurikulum_sub_bk;
 use App\Models\ak_kurikulum_sub_bk_materi;
+use App\Models\ak_kurikulum_sub_cpmk;
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_tahunakademik;
@@ -27,6 +28,8 @@ class timeline_controller extends Controller
             'ak_timeline.keterangan',
             'mingguke',
             'kode_cpmk',
+            'kode_subcpmk',
+            'sub_cpmk',
             'kode_subbk',
             'materi_pembelajaran',
             'jeniskuliah',
@@ -34,11 +37,12 @@ class timeline_controller extends Controller
             'metodepembelajaran'
         )
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
+            ->leftJoin('ak_kurikulum_sub_cpmk as subcpmk', 'subcpmk.kdsubcpmk', 'ak_timeline.kdsubcpmk')
             ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
             ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', 'ak_timeline.kdmateri')
             ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
             ->join('ak_kurikulum_sub_bks as subbk', 'subbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
-            ->join('ak_metodepembelajaran as amp', 'amp.id', '=', 'ak_timeline.kdmetopem')
+            ->join('simptt.ak_metodepembelajaran as amp', 'amp.kdmetodepembelajaran', '=', 'ak_timeline.kdmetopem')
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
             ->where('ak_timeline.kdmatakuliah', $id)
             ->orderBy('mingguke', 'asc')
@@ -84,8 +88,8 @@ class timeline_controller extends Controller
         $jeniskuliah = DB::table('ak_jeniskuliah')
             ->get();
 
-        $metopem = DB::table('ak_metodepembelajaran as mp')
-            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.id")
+        $metopem = DB::table('simptt.ak_metodepembelajaran as mp')
+            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.kdmetodepembelajaran")
             ->join("gabung_subbk_cpmks as gsc", "gsc.id", "gcp.id_gabung_cpmk")
             ->distinct()
             ->get();
@@ -113,16 +117,28 @@ class timeline_controller extends Controller
     {
         \Log::info('CPMK ID: ' . $cpmk_id);
 
-        $metopem = DB::table('ak_metodepembelajaran as mp')
-            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.id")
+        $metopem = DB::table('simptt.ak_metodepembelajaran as mp')
+            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.kdmetodepembelajaran")
             ->join("gabung_subbk_cpmks as gsc", "gsc.id", "gcp.id_gabung_cpmk")
             ->where("gsc.id_cpmk", $cpmk_id)
-            ->select('mp.id', 'metodepembelajaran')
+            ->select('mp.kdmetodepembelajaran', 'metodepembelajaran')
             ->get();
 
         \Log::info('Metode Pembelajaran: ' . $metopem->toJson());
 
         return response()->json($metopem);
+    }
+
+    public function getSubCpmkByCpmk($cpmk_id)
+    {
+        $subCpmk = DB::table('ak_kurikulum_sub_cpmk as subcpmk')
+            ->join("gabung_cpmk_subcpmk as gcs", "gcs.id_subcpmk", "subcpmk.kdsubcpmk")
+            ->join('gabung_subbk_cpmks as gsc', "gsc.id", "gcs.id_gabung_cpmk")
+            ->where("gsc.id_cpmk", $cpmk_id)
+            ->select("subcpmk.kdsubcpmk", "subcpmk.kode_subcpmk", "subcpmk.sub_cpmk")
+            ->get();
+
+        return response()->json($subCpmk);
     }
 
     public function storeTimeline(Request $request, int $id)
@@ -139,6 +155,7 @@ class timeline_controller extends Controller
             'kdmatakuliah' => $request->kdmatakuliah,
             'kdjeniskuliah' => $request->kdjeniskuliah,
             'kdmateri' => $request->kdmateri,
+            'kdsubcpmk' => $request->kdsubcpmk,
             'keterangan' => $request->keterangan
         ]);
 
@@ -178,14 +195,15 @@ class timeline_controller extends Controller
     public function getMetodePembelajaran($cpmk_id)
     {
         // Fetch `metode_pembelajaran` related to the selected `CPMK`
-        $metodePembelajaran = DB::table('ak_metodepembelajaran as mp')
-            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.id")
+        $metodePembelajaran = DB::table('simptt.ak_metodepembelajaran as mp')
+            ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.kdmetodepembelajaran")
             ->join("gabung_subbk_cpmks as gsc", "gsc.id", "gcp.id_gabung_cpmk")
             ->where("gsc.id_cpmk", $cpmk_id)
-            ->select('mp.id', 'metodepembelajaran')
+            ->select('mp.kdmetodepembelajaran', 'metodepembelajaran')
             ->get();
 
         return response()->json($metodePembelajaran);
+        dd($metodePembelajaran);
     }
 
     public function editTimeline(int $id, int $kdtimeline)
@@ -209,7 +227,12 @@ class timeline_controller extends Controller
         $jeniskuliah = DB::table('ak_jeniskuliah')
             ->get();
 
-        $metopem = DB::table('ak_metodepembelajaran')->get();
+        $metopem = DB::table('simptt.ak_metodepembelajaran')->get();
+
+        $subCpmk = ak_kurikulum_sub_cpmk::with('subcpmk_get') // Load the relation directly
+            ->join("simptt.ak_kurikulum", "ak_kurikulum_sub_cpmk.kdkurikulum", "=", "simptt.ak_kurikulum.kdkurikulum")
+            ->where('kdunitkerja', '=', auth()->user()->kdunit)
+            ->get();
 
         $dosen = DB::table('simptt.ak_dosen as ad')
             ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
@@ -239,6 +262,7 @@ class timeline_controller extends Controller
         $id_jeniskuliah = [];
         $id_materi = [];
         $id_metopem = [];
+        $id_subcpmk = [];
         $id_tahunakademik = [];
         $id_dosen = [];
 
@@ -252,6 +276,7 @@ class timeline_controller extends Controller
             $id_metopem[] = $timeline->kdmetopem;
             $id_tahunakademik[] = $timeline->kdtahunakademik;
             $id_dosen[] = $timeline->kdperson;
+            $id_subcpmk[] = $timeline->kdsubcpmk;
         }
 
         if ($matakuliah) {
@@ -260,7 +285,7 @@ class timeline_controller extends Controller
 
         // dd($timeline_gabung);
 
-        return view('pages.detailMatakuliah.editTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk', 'dosen', 'kelas', 'timeline_gabung', 'kdtimeline'));
+        return view('pages.detailMatakuliah.editTimeline', compact('subCpmk', 'matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk', 'dosen', 'kelas', 'timeline_gabung', 'kdtimeline'));
     }
 
     public function deleteDosen($id, $kdtimeline, $kdperson)
@@ -290,6 +315,7 @@ class timeline_controller extends Controller
             'mingguke' => $request->mingguke,
             'kdcpmk' => $request->kdcpmk,
             'kdmetopem' => $request->kdmetopem,
+            'kdsubcpmk' => $request->kdsubcpmk,
             'kdtahunakademik' => $request->tahunakademik,
             'kdmatakuliah' => $request->kdmatakuliah,
             'kdjeniskuliah' => $request->kdjeniskuliah,

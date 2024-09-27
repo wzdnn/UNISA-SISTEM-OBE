@@ -106,8 +106,7 @@
                 @foreach ($rubik as $item)
                     <tr class="text-left">
                         <td class="pl-4">{{ $item->file }}</td>
-                        <td class="pl-2"><a href="{{ asset('storage/rubik') . '/' . $item->folder . '/' . $item->file }}"
-                                target="__blank">
+                        <td class="pl-2"><a href="{{ asset('storage/rubik') . '/' . $item->file }}" target="_blank">
                                 <button type="submit"
                                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center">View</button></a>
 

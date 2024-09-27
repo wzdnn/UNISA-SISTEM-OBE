@@ -79,6 +79,9 @@
                         CPMK
                     </th>
                     <th scope="col" class="px-6 py-3 text-left">
+                        Sub CPMK
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left">
                         Materi
                     </th>
                     <th scope="col" class="px-6 py-3 text-left">
@@ -104,8 +107,11 @@
                         <td class="px-6 py-4 text-left">
                             {{ $t->keterangan }}
                         </td>
-                        <td class="px-6 py-4 text-left">
+                        <td class="px-6 py-4 text-left whitespace-nowrap">
                             {{ $t->kode_cpmk }}
+                        </td>
+                        <td class="px-6 py-4 text-left whitespace-nowrap">
+                            {{ $t->kode_subcpmk ?? '' }} {{ $t->sub_cpmk ?? '' }}
                         </td>
                         <td class="px-6 py-4 text-left">
                             {{ $t->kode_subbk }} {{ $t->materi_pembelajaran }}

@@ -23,7 +23,7 @@ class rekap_controller extends Controller
                 ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
                 ->where("kdtahunakademik", $id)
                 ->where("semester", $semester)
                 ->orderBy("gmc.id", "asc")
@@ -35,7 +35,7 @@ class rekap_controller extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
         } else {
@@ -48,7 +48,7 @@ class rekap_controller extends Controller
                 ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
                 ->where("ak.kdunitkerja", Auth::user()->kdunit)
                 ->where("kdtahunakademik", $id)
                 ->where("semester", $semester)
@@ -61,7 +61,7 @@ class rekap_controller extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -185,18 +185,18 @@ class rekap_controller extends Controller
 
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
 
             $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
                 ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
-                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
                 ->where("isObe", 1)
                 ->orderBy('kdtamasuk', 'asc')
                 ->get();
         } else {
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -206,7 +206,7 @@ class rekap_controller extends Controller
 
             $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
                 ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
-                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
                 ->where("ak.kdunitkerja", Auth::user()->kdunit)
                 ->where("isObe", 1)
                 ->orderBy('kdtamasuk', 'asc')
@@ -229,7 +229,7 @@ class rekap_controller extends Controller
 
                 $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
                     ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
-                    ->join("ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                    ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
                     ->where("ak.kurikulum", $request->filter)
                     ->where("isObe", 1)
                     ->get();
@@ -265,7 +265,7 @@ class rekap_controller extends Controller
                 ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
                 ->whereRaw("(kdtahunakademik = concat($id, '1') or kdtahunakademik = concat($id, '2'))")
                 ->orderBy("gmc.id", "asc")
                 ->orderBy("ak_matakuliah_cpmk.id", "asc")
@@ -288,7 +288,7 @@ class rekap_controller extends Controller
                 ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
                 ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-                ->join("ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
                 ->where("ak.kdunitkerja", Auth::user()->kdunit)
                 ->whereRaw("(kdtahunakademik = concat($id, '1') or kdtahunakademik = concat($id, '2'))")
                 ->orderBy("gmc.id", "asc")
@@ -299,7 +299,7 @@ class rekap_controller extends Controller
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
                 ->get();
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);

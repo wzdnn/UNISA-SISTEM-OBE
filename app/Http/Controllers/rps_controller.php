@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\ak_matakuliah;
+use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_matakuliah_referensi_luaran;
 use App\Models\ak_matakuliah_referensi_tambahan;
 use App\Models\ak_matakuliah_referensi_utama;
+use App\Models\ak_strukturprogram;
+use App\Models\ak_tahunakademik;
 use App\Models\ak_timeline;
 use App\Models\gabung_matakuliah_pengalaman_asinkron;
 use App\Models\gabung_matakuliah_pengalaman_sinkron;
@@ -64,6 +67,21 @@ class rps_controller extends Controller
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
 
+        $fakultas = DB::table('simptt.pt_unitkerja as prodi')
+            ->select('fakultas.unitkerja as ukfakultas', 'jenjang', 'deskripsi')
+            ->join('simptt.pt_unitkerja as fakultas', 'fakultas.kdunitkerja', 'prodi.kdunitkerjapj')
+            ->join('simptt.ak_programstudi as studi', 'studi.kdunitkerja', 'prodi.kdunitkerja')
+            ->join('simptt.pt_jenjangpendidikan as jenjang', 'jenjang.kdjenjang', 'studi.kdjenjang')
+            ->where("prodi.kdunitkerja", '=', Auth::user()->kdunit)
+            ->first();
+
+        $tahunAkademik = ak_tahunakademik::where("isAktif", "=", 1)
+            ->where('kdtahunakademik', $semester)
+            ->first();
+
+        // dd($tahunAkademik);
+
+
         $cpl = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
             ->select('kode_cpl', 'deskripsi_cpl')
             ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', "=", "amsb.id")
@@ -75,7 +93,7 @@ class rps_controller extends Controller
             ->get();
 
         $cpmk = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
-            ->select('kode_cpmk', 'cpmk')
+            ->select('cpmk.id as cpmk_id', 'kode_cpmk', 'cpmk')
             ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', "=", "amsb.id")
             ->join('ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk', 'cplcpmk.ak_kurikulum_cpmk_id', '=', 'gsc.id_cpmk')
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'cplcpmk.ak_kurikulum_cpmk_id')
@@ -83,7 +101,7 @@ class rps_controller extends Controller
             ->distinct()
             ->get();
 
-        // dd($cplcpmk);
+        // dd($tabel);
 
         $asinkron = gabung_matakuliah_pengalaman_asinkron::select('pengalaman_mahasiswa')
             ->join('ak_pengalamanmahasiswa as apm', 'apm.id', '=', "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
@@ -103,24 +121,22 @@ class rps_controller extends Controller
             ->where('kdtahunakademik', $semester)
             // ->get();
             ->first();
-        // $aksesmedia = gabung_matakuliah_akses::first();
 
-        // dd($aksesmedia);
 
         $referensiUtama = ak_matakuliah_referensi_utama::where("mk.kdmatakuliah", "=", $id)
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_utama.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_utama.id_referensi")
             ->where('kdtahunakademik', $semester)
             ->get();
 
         $referensiTambahan = ak_matakuliah_referensi_tambahan::where("mk.kdmatakuliah", "=", $id)
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_tambahan.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_tambahan.id_referensi")
             ->where('kdtahunakademik', $semester)
             ->get();
 
         $referensiLuaran = ak_matakuliah_referensi_luaran::where("mk.kdmatakuliah", "=", $id)
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
             ->where('kdtahunakademik', $semester)
             // ->toSql();
@@ -128,17 +144,20 @@ class rps_controller extends Controller
 
         // Timeline section
         $timeline = ak_timeline::join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
+            ->leftJoin('ak_kurikulum_sub_cpmk as subcpmk', 'subcpmk.kdsubcpmk', 'ak_timeline.kdsubcpmk')
             ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
             ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', '=', 'ak_timeline.kdmateri')
             ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
             ->join('ak_kurikulum_sub_bks as subbk', 'subbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
-            ->join('ak_metodepembelajaran as amp', 'amp.id', '=', 'ak_timeline.kdmetopem')
+            ->join('simptt.ak_metodepembelajaran as amp', 'amp.kdmetodepembelajaran', '=', 'ak_timeline.kdmetopem')
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
             ->where('mksbk.kdmatakuliah', $id)
             ->where('ak_timeline.kdtahunakademik', $semester)
             ->orderBy('mingguke', 'asc')
             ->get();
         // ->toSql();
+
+        $strukturProgram = ak_strukturprogram::where('ak_strukturprogram.kdmatakuliah', $id)->where('ak_strukturprogram.kdtahunakademik', $semester)->first();
 
         $timelineWithDosenKelas = ak_timeline::join('gabung_timeline_dosen as gtd', 'gtd.kdtimeline', '=', 'ak_timeline.kdtimeline')
             ->join('simptt.ak_dosen as dosen', 'dosen.kdperson', '=', 'gtd.kdperson')
@@ -150,12 +169,12 @@ class rps_controller extends Controller
         // dd($timeline);
 
         $relation = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as mksbk')
-            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'mksbk.kdmatakuliah')
+            ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'mksbk.kdmatakuliah')
             ->join('gabung_subbk_cpmks as gsc', 'gsc.id_gabung_subbk', 'mksbk.id')
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'gsc.id_cpmk')
             ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
             ->leftJoin('gabung_cpmk_pembelajarans as gcp', 'gcp.id_gabung_cpmk', 'gsc.id')
-            ->leftJoin('ak_metodepembelajaran as mp', 'mp.id', 'gcp.id_pembelajaran')
+            ->leftJoin('simptt.ak_metodepembelajaran as mp', 'mp..kdmetodepembelajaran', 'gcp.id_pembelajaran')
             ->where('mk.kdmatakuliah', $id)
             ->get();
 
@@ -163,21 +182,42 @@ class rps_controller extends Controller
 
         // dd('test');
 
+        // ver 3
         $metodebobot = DB::table('ak_matakuliah_cpmk as amc')
-            ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
+            ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
+            ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'mk.kdkurikulum')
+            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'amc.id_cpmk')
+            ->join('gabung_metopen_cpmks as gmc', 'gmc.id_gabung_cpmk', 'amc.id')
+            ->join('metode_penilaians as mp', 'mp.id', 'gmc.id_metopen')
+            ->where('mk.kdmatakuliah', $id)
+            ->select(
+                'gmc.id_gabung_cpmk',
+                'gmc.id_metopen',
+                'mp.metode_penilaian',
+                'gmc.bobot',
+                'amc.id_cpmk',
+                'cpmk.kode_cpmk'
+            )
+            ->orderBy('mp.metode_penilaian') // Optional, to group by metode_penilaian in view
+            ->get()
+            ->groupBy('metode_penilaian');
+
+        $bobot = DB::table('ak_matakuliah_cpmk as amc')
+            ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
+            ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'mk.kdkurikulum')
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'amc.id_cpmk')
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id_gabung_cpmk', 'amc.id')
             ->join('metode_penilaians as mp', 'mp.id', 'gmc.id_metopen')
             ->where('mk.kdmatakuliah', $id)
             ->get();
 
-        // return dd($metodebobot);
+        // dd($metodebobot);
 
         $waktu = $this->getTotalAccumulatedTimeByMatakuliah($id);
 
         // dd($waktu);
 
-        return view('pages.matakuliah.rps', compact('waktu', 'matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
+        return view('pages.matakuliah.rps', compact('waktu', 'bobot', 'tahunAkademik', 'fakultas', 'strukturProgram', 'matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
     }
 
     public function index(Request $request, int $id)
@@ -226,7 +266,7 @@ class rps_controller extends Controller
                 'kdtahunakademik' => $tahun
             ]);
 
-            Storage::putFileAs("public/rps-rubrik/$folder", $request->file('file'), $file);
+            Storage::putFileAs("public/rps-rubrik/", $request->file('file'), $file);
 
             return redirect(url()->previous())->with('success', 'rubik berhasil di up');
         } catch (Throwable $th) {

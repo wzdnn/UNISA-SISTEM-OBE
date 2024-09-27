@@ -30,12 +30,14 @@
                         </th>
                         <th class="border px-4 py-2" colspan="7">
                             <h2 class="font-bold">Universitas 'Aisyiyah Yogyakarta</h2>
-                            <h3 class="font-medium text-sm">Fakultas</h3>
-                            <h3 class="font-medium text-sm">
+                            <h3 class="font-medium ">{{ $fakultas->ukfakultas }}</h3>
+                            <h3 class="font-medium ">
                                 {{ auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja }}
                             </h3>
-                            <h3 class="font-medium text-sm">Program: Sarjana</h3>
-                            <h3 class="font-medium text-sm">Tahun Akademik</h3>
+                            <h3 class="font-medium text-sm">Program: {{ $fakultas->jenjang }} |
+                                {{ $fakultas->deskripsi }}
+                            </h3>
+                            <h3 class="font-medium text-sm">Tahun Akademik : {{ $tahunAkademik->tahunakademik }}</h3>
                         </th>
                         <th class="border px-4 py-2" colspan="4">
                             <h3 class="font-medium text-sm">KODE DOKUMEN</h3>
@@ -62,7 +64,7 @@
                             Nama Matakuliah
                         </td>
                         <td class="border px-4 py-2" colspan="9">
-                            Alokasi Waktu (Menit)
+                            Bobot (SKS)
                         </td>
                         <td class="border px-4 py-2" colspan="2">
                             Semester
@@ -126,31 +128,31 @@
 
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['kuliah'] }}
+                            {{ number_format($waktu['kuliah'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['tutorial'] }}
+                            {{ number_format($waktu['tutorial'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['seminar'] }}
+                            {{ number_format($waktu['seminar'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['praktikum'] }}
+                            {{ number_format($waktu['praktikum'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['skill_lab'] }}
+                            {{ number_format($waktu['skill_lab'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['field_lab'] }}
+                            {{ number_format($waktu['field_lab'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['praktik'] }}
+                            {{ number_format($waktu['praktik'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['penugasan'] }}
+                            {{ number_format($waktu['penugasan'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2">
-                            {{ $waktu['belajar_mandiri'] }}
+                            {{ number_format($waktu['belajar_mandiri'] / 2700, 1, ',') }}
                         </td>
                         <td class="border px-4 py-2" colspan="2">
                         </td>
@@ -302,33 +304,56 @@
                         <td colspan="3" class=" border px-4 py-2">Blended : {{ $aksesmedia->blended ?? '' }}%
                         </td>
                     </tr>
+                    <!-- Header Row -->
                     <tr>
                         <td class="border px-4 py-2 font-bold">
-                            Metode Penilaian
-                            dan Keselarasan
-                            dengan CPMK
+                            Metode Penilaian dan Keselarasan dengan CPMK
                         </td>
-                        <td colspan="5" class="border px-4 py-2 font-bold">Metode Penilaian</td>
-                        <td colspan="5" class="border px-4 py-2 font-bold">Bobot Penilaian (%)</td>
-                        <td colspan="5" class="border px-4 py-2 font-bold">Komponen Evaluasi (kriteria/Indikator)
+                        <td colspan="1" class="border px-4 py-2 font-bold">Metode Penilaian</td>
+                        <td colspan="1" class="border px-4 py-2 font-bold">Bobot Penilaian (%)</td>
+                        <td colspan="1" class="border px-4 py-2 font-bold">Komponen Evaluasi (kriteria/Indikator)
                         </td>
+
+                        <!-- Loop through the CPMK for the header -->
+                        @foreach ($cpmk as $cpmks)
+                            <td colspan="4" class="relative w-auto border px-4 py-2 font-bold">
+                                {{ $cpmks->kode_cpmk }}
+                            </td>
+                        @endforeach
                     </tr>
-                    @foreach ($metodebobot as $mb)
+
+                    <!-- Data Rows -->
+                    @foreach ($metodebobot as $metode => $bobotCpmk)
                         <tr>
-                            <td>
-
+                            <td></td>
+                            <td colspan="1" class="border px-4 py-2 ">
+                                {{ $metode ?? '' }}
                             </td>
 
-                            <td colspan="5" class="border px-4 py-2 ">
-                                {{ $mb->metode_penilaian ?? '' }}
+                            <td colspan="1" class="border px-4 py-2 ">
+                                {{ $bobotCpmk->sum('bobot') ?? '' }} <!-- Total bobot dari metode_penilaian -->
                             </td>
 
-                            <td colspan="5" class="border px-4 py-2 ">
-                                {{ $mb->bobot ?? '' }}
-                            </td>
-                            <td colspan="5" class="border px-4 py-2 ">
+                            <td colspan="1" class="border px-4 py-2 ">
                                 -
                             </td>
+
+                            <!-- Loop through the CPMK for the data row -->
+                            @foreach ($cpmk as $cpmks)
+                                <!-- Pastikan loop sesuai dengan header -->
+                                @php
+                                    // Cari CPMK yang sesuai dengan kode_cpmk di bobotCpmk
+                                    $currentCpmk = $bobotCpmk->firstWhere('kode_cpmk', $cpmks->kode_cpmk);
+                                @endphp
+
+                                <td colspan="4" class="border px-4 py-2">
+                                    @if ($currentCpmk)
+                                        {{ $currentCpmk->bobot ?? '-' }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                            @endforeach
                         </tr>
                     @endforeach
                     <tr>
@@ -350,6 +375,45 @@
                                 {{ $loop->iteration ?? '' }}. {{ $luaran->referensi ?? '' }} <br />
                             @endforeach
                             <br />
+                        </td>
+                    </tr>
+                    <tr class="text-center">
+                        <td class=" border px-4 py-2">
+
+                        </td>
+                        <td colspan="2" class="font-bold border px-4 py-2">
+                            Tanggal Penyusunan
+                        </td>
+                        <td colspan="4" class="font-bold border px-4 py-2">
+                            Penanggung-jawab Mata Kuliah
+                        </td>
+                        <td colspan="4" class="font-bold border px-4 py-2">
+                            Koordinator Kurikulum
+                        </td>
+                        <td colspan="6" class="font-bold border px-4 py-2">
+                            Ketua Prodi
+                        </td>
+                    </tr>
+                    <tr class="text-center">
+                        <td class=" border px-4 py-2">
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                        </td>
+                        <td colspan="2" class="font-bold border px-4 py-2">
+
+                        </td>
+                        <td colspan="4" class="font-bold border px-4 py-2">
+
+                        </td>
+                        <td colspan="4" class="font-bold border px-4 py-2">
+
+                        </td>
+                        <td colspan="6" class="font-bold border px-4 py-2">
+
                         </td>
                     </tr>
                 </tbody>
@@ -378,8 +442,11 @@
                         <th scope="col" class="px-6 py-3 ">
                             CPMK
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            Sub CPMK
+                        </th>
                         <th scope="col" class="px-6 py-3 ">
-                            Materi
+                            Bahan Kajian da Materi
                         </th>
                         <th scope="col" class="px-6 py-3 ">
                             Metode Pembelajaran
@@ -408,7 +475,10 @@
                                     {{ $t->kode_cpmk ?? '' }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $t->kode_subbk ?? '' }} {{ $t->materi_pembelajaran ?? '' }}
+                                    {{ $t->kode_subcpmk ?? '' }} {{ $t->sub_cpmk ?? '' }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $t->kode_subbk ?? '' }}, {{ $t->materi_pembelajaran ?? '' }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $t->metodepembelajaran ?? '' }}

@@ -18,7 +18,7 @@ class strukturProgram_controller extends Controller
     public function strukturProgramIndex(Request $request)
     {
 
-        $kurikulum = DB::table("ak_kurikulum")
+        $kurikulum = DB::table("simptt.ak_kurikulum")
             ->where("isObe", "=", 1)
             ->get();
 
@@ -38,8 +38,8 @@ class strukturProgram_controller extends Controller
         if (auth()->user()->kdunit == 42) {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
-                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
+                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
                     $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
@@ -51,7 +51,7 @@ class strukturProgram_controller extends Controller
             // ->get();
             // ->first();
 
-            $kurikulum = DB::table("ak_kurikulum")
+            $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
 
@@ -62,8 +62,8 @@ class strukturProgram_controller extends Controller
         } elseif (auth()->user()->leveling == 2) {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
-                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
+                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->where("kur.kdkurikulum", 67)
                 ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
@@ -76,7 +76,7 @@ class strukturProgram_controller extends Controller
             // ->get();
             // ->first();
 
-            $kurikulum = DB::table("ak_kurikulum")
+            $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->where("ak_kurikulum.kdkurikulum", 67)
                 ->get();
@@ -88,8 +88,8 @@ class strukturProgram_controller extends Controller
         } else {
             $strukturprogram = ak_strukturprogram::with('struktur_utama.person_utama.utama_dosen', 'struktur_pelaporan.person_pelaporan.pelaporan_dosen')
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
-                ->join('ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
-                ->join('ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
+                ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
+                ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
                 ->where("kur.kdunitkerja", Auth::user()->kdunit)
                 ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
@@ -103,7 +103,7 @@ class strukturProgram_controller extends Controller
             // ->first();
 
 
-            $kurikulum = DB::table("ak_kurikulum")
+            $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -123,7 +123,7 @@ class strukturProgram_controller extends Controller
     public function strukturProgramCreate()
     {
 
-        $kurikulum = DB::table("ak_kurikulum")
+        $kurikulum = DB::table("simptt.ak_kurikulum")
             ->where("isObe", "=", 1)
             ->where("kdunitkerja", Auth::user()->kdunit)
             ->get();
@@ -134,7 +134,7 @@ class strukturProgram_controller extends Controller
             ->where("isAktif", "=", 1)
             ->get();
 
-        $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
+        $matakuliah = ak_matakuliah::join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("kdunitkerja", Auth::user()->kdunit)->get();
 
         $dosen1 = DB::table('simptt.ak_dosen as ad')
@@ -229,7 +229,7 @@ class strukturProgram_controller extends Controller
 
         $strukturProgram = ak_strukturprogram::where('kdstrukturprogram', $id)->first();
 
-        $kurikulum = DB::table("ak_kurikulum")
+        $kurikulum = DB::table("simptt.ak_kurikulum")
             ->where("isObe", "=", 1)
             ->where("kdunitkerja", Auth::user()->kdunit)
             ->get();
@@ -240,7 +240,7 @@ class strukturProgram_controller extends Controller
             ->where("isAktif", "=", 1)
             ->get();
 
-        $matakuliah = ak_matakuliah::join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_matakuliah.kdkurikulum')
+        $matakuliah = ak_matakuliah::join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("kdunitkerja", Auth::user()->kdunit)->get();
 
         $dosen1 = DB::table('simptt.ak_dosen as ad')

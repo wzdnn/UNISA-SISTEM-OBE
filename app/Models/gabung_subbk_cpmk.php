@@ -23,8 +23,13 @@ class gabung_subbk_cpmk extends Model
 
     public function pembelajaran()
     {
-        return $this->belongsToMany(ak_metodepembelajaran::class, 'gabung_cpmk_pembelajarans', 'id_gabung_cpmk', 'id_pembelajaran')->withPivot('id');
+        return $this->belongsToMany(ak_metodepembelajaran::class, 'gabung_cpmk_pembelajarans', 'id_gabung_cpmk', 'id_pembelajaran');
         // return $this->hasMany(ak_metodepembelajaran::class, 'id', 'id_pembelajaran');
         // return $this->hasOne(ak_metodepembelajaran::class, 'id', 'id_pembelajaran');
+    }
+
+    public function subCpmk()
+    {
+        return $this->belongsToMany(ak_kurikulum_sub_cpmk::class, 'gabung_cpmk_subcpmk', 'id_gabung_cpmk', 'id_subcpmk');
     }
 }

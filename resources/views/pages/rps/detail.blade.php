@@ -70,8 +70,8 @@
 
     <div class="relative">
         <div class="px-5 ">
-            <a
-                href="{{ route('rps.preview', ['id' => $matakuliah->kdmatakuliah, 'semester' => $tahunAkademik->kdtahunakademik]) }}">
+            <a href="{{ route('rps.preview', ['id' => $matakuliah->kdmatakuliah, 'semester' => $tahunAkademik->kdtahunakademik]) }}"
+                target="_blank">
                 <button
                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Preview
                     RPS <i class="fa fa-eye ml-2" aria-hidden="true"></i></button>
@@ -115,9 +115,7 @@
             @foreach ($rubik as $item)
                 <tr class="text-left">
                     <td class="pl-4">{{ $item->file }}</td>
-                    <td class="pl-2"><a
-                            href="{{ asset('storage/rps-rubrik') . '/' . $item->folder . '/' . $item->file }}"
-                            target="__blank">
+                    <td class="pl-2"><a href="{{ asset('storage/rps-rubrik') . '/' . $item->file }}" target="_blank">
                             <button type="submit"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center">View</button></a>
 

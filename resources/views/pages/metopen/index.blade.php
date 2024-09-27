@@ -109,10 +109,15 @@
                                     {{ $value->kodematakuliah }} | {{ $value->matakuliah }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="{{ route('metopen.cpmk', ['id' => $value->amcid]) }}"
+                                    {{-- <a href="{{ route('metopen.cpmk', ['id' => $value->amcid]) }}"
                                         class="hover:text-blue-600">
                                         {{ $value->kode_cpmk }}
-                                    </a> <br />
+                                    </a> --}}
+                                    <a href="{{ route('metopen.cpmk', ['id' => $value->amcid, 'redirect_url' => request()->fullUrl()]) }}"
+                                        class="hover:text-blue-600">
+                                        {{ $value->kode_cpmk }}
+                                    </a>
+                                    <br />
                                 </td>
                                 <td class="px-6 py-4 ">
                                     {{ $value->metode_penilaian }}
@@ -332,6 +337,7 @@
         //on load
         $(function() {
             // MergeGridCells('#mytable', 1, false);
+            MergeGridCells('#mytable', 3, false);
             MergeGridCells('#mytable', 2, false);
             MergeGridCells('#mytable', 1, false);
 
@@ -431,7 +437,8 @@
                         if (!data.exists) {
                             event.preventDefault(); // Stop navigation
                             alert(
-                                'Peringatan !! belum ada data keterangan, silahkan input data terlebih dahulu !!');
+                                'Peringatan !! belum ada data keterangan, silahkan input data terlebih dahulu !!'
+                            );
                         }
                     })
                     .catch(error => {

@@ -93,6 +93,21 @@
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="metode_pembelajaran" class="text-sm text-gray-500">Metode Pembelajaran</label>
+                        <select id="kdmetopem" name="kdmetopem" class="form-control">
+                            <!-- Options will be dynamically loaded here -->
+                        </select>
+                    </div>
+                    <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="sub_cpmk" class="text-sm text-gray-500">Sub CPMK</label>
+                        <select id="kdsubcpmk" name="kdsubcpmk" class="form-control">
+                            <!-- Options will be dynamically loaded here -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="flex flex-col z-0 w-full mb-6 group">
                         <label for="materi" class="text-sm text-gray-500">Materi</label>
                         <select id="kdmateri" name="kdmateri" class="form-control">
                             @foreach ($materi as $m)
@@ -101,16 +116,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="metode_pembelajaran" class="text-sm text-gray-500">Metode Pembelajaran</label>
-                        <select id="kdmetopem" name="kdmetopem" class="form-control">
-                            <!-- Options will be dynamically loaded here -->
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-2 md:gap-6">
-
 
                     <div class=" flex flex-col z-0 w-full mb-6 group">
                         <label for="tahunakademik" class="text-sm text-gray-500">
@@ -124,17 +129,7 @@
                         </select>
                     </div>
 
-                    <div class="flex flex-col z-0 w-full mb-6 group">
-                        <label for="jeniskuliah" class="text-sm text-gray-500">
-                            Bentuk Pembelajaran
-                        </label>
-                        <select id="kdjeniskuliah" name="kdjeniskuliah" class="form-control">
-                            @foreach ($jeniskuliah as $jeniskuliahs)
-                                <option value="{{ $jeniskuliahs->kdjeniskuliah }}"> {{ $jeniskuliahs->jeniskuliah }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
                 </div>
 
                 <div class="grid md:grid-cols-2 md:gap-6">
@@ -145,6 +140,18 @@
                             placeholder=" " value="{{ old('keterangan') }}" />
                         <label for="keterangan"
                             class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
+                    </div>
+
+                    <div class="flex flex-col z-0 w-full mb-6 group">
+                        <label for="jeniskuliah" class="text-sm text-gray-500">
+                            Bentuk Pembelajaran
+                        </label>
+                        <select id="kdjeniskuliah" name="kdjeniskuliah" class="form-control">
+                            @foreach ($jeniskuliah as $jeniskuliahs)
+                                <option value="{{ $jeniskuliahs->kdjeniskuliah }}"> {{ $jeniskuliahs->jeniskuliah }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <input type="text" hidden value="{{ $matakuliah->kdmatakuliah }}" name="kdmatakuliah"
@@ -317,6 +324,7 @@
             $('#kdjeniskuliah').select2();
             $('#kdperson').select2();
             $('#kdmetopem').select2();
+            $('#kdsubcpmk').select2();
             $('#tahunakademik').select2();
 
             $('#kdcpmk').on("select2:select", function() {
@@ -335,13 +343,42 @@
 
                         $.each(data, function(key, value) {
                             if (!uniqueOptions.has(value
-                                    .id)) { // Check if option is unique
+                                    .kdmetodepembelajaran
+                                )) { // Check if option is unique
                                 metodePembelajaranDropdown.append(
                                     '<option value="' +
-                                    value.id + '">' +
+                                    value.kdmetodepembelajaran + '">' +
                                     value.metodepembelajaran +
                                     '</option>');
-                                uniqueOptions.add(value.id); // Mark option as added
+                                uniqueOptions.add(value
+                                    .kdmetodepembelajaran); // Mark option as added
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error: ', status, error);
+                    }
+                });
+
+                $.ajax({
+                    url: '{{ url('/get-subcpmk') }}/' + cpmk_id,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data); // For debugging
+
+                        var subCpmkDropodown = $('#kdsubcpmk');
+                        subCpmkDropodown.empty(); // Clear existing options
+
+                        var uniqueOptions = new Set(); // To track unique options
+
+                        $.each(data, function(key, value) {
+                            if (!uniqueOptions.has(value
+                                    .kdsubcpmk)) { // Check if option is unique
+                                subCpmkDropodown.append(
+                                    '<option value="' + value.kdsubcpmk + '">' +
+                                    value.sub_cpmk + '</option>');
+                                uniqueOptions.add(value
+                                    .kdsubcpmk); // Mark option as added
                             }
                         });
                     },

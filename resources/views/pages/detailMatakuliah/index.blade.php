@@ -65,8 +65,9 @@
                         @csrf
                         <select name="filter" id="">
                             @foreach ($filter['filter'] as $item)
-                                <option value="{{ $item }}" {{ $item == $selectedFilter ? 'selected' : '' }}>
-                                    {{ $item }}
+                                <option value="{{ $item->kdtahunakademik }}"
+                                    {{ $item->kdtahunakademik == $selectedFilter ? 'selected' : '' }}>
+                                    {{ $item->tahunakademik }}
                                 </option>
                             @endforeach
                         </select>

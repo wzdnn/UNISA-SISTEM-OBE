@@ -30,21 +30,15 @@ class metodePenilaianController extends Controller
     public function index(Request $request)
     {
 
-
-
         if (auth()->user()->kdunit == 42) {
-            // $matakuliah = ak_matakuliah::with("GetAllidSubBK.cpmks.metopens.CPMKtoMTP")
-            //     ->where("isObe", '=', 1)
-            //     ->orderBy('kdmatakuliah', 'asc')
-            //     ->paginate(10);
 
-            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
-                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            $matakuliah = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
+                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
                 ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
                 ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
                 ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
-                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
                 ->distinct();
 
             $tahunAkademik = DB::table('ak_tahunakademik')
@@ -57,13 +51,13 @@ class metodePenilaianController extends Controller
                 ->where("isObe", "=", 1)
                 ->get();
         } elseif (auth()->user()->leveling == 3) {
-            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
-                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            $matakuliah = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
+                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
                 ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
                 ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
                 ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
-                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->distinct();
@@ -74,19 +68,19 @@ class metodePenilaianController extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
                 ->get();
         } elseif (auth()->user()->leveling == 2) {
-            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
-                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            $matakuliah = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
+                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
                 ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
                 ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
                 ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
-                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where('ak_kurikulum.kdkurikulum', 67)
                 ->distinct();
@@ -97,7 +91,7 @@ class metodePenilaianController extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where('ak_kurikulum.kdkurikulum', 67)
                 ->where("isObe", "=", 1)
@@ -107,13 +101,13 @@ class metodePenilaianController extends Controller
             $mk = ak_matakuliah::toSql();
             // dd($mk);
 
-            $matakuliah = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
-                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            $matakuliah = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
+                ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
                 ->leftJoin("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
                 ->leftJoin("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
                 ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
-                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
                 ->distinct()
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -127,7 +121,7 @@ class metodePenilaianController extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -142,7 +136,7 @@ class metodePenilaianController extends Controller
                 $query->where('matakuliah', 'like', "%" . $request->input("filter-matakuliah") . "%");
             })
             ->when($request->input('filter-kurikulum') != null || $request->input('filter-kurikulum') != '', function ($query) use ($request) {
-                $query->where("ak_matakuliah.kdkurikulum", $request->input('filter-kurikulum'));
+                $query->where("simptt.ak_matakuliah.kdkurikulum", $request->input('filter-kurikulum'));
             })
             ->paginate(10);
 
@@ -218,8 +212,11 @@ class metodePenilaianController extends Controller
     }
 
 
-    public function kelolaMetopen(int $id)
+    public function kelolaMetopen(int $id, Request $request)
     {
+
+        $redirect_url = $request->input('redirect_url', route('index.metopen')); // Default to index if not provided
+
 
         // metode penilaian
         $metopen = metode_penilaian::with('MTPtoCPMK')->get();
@@ -230,12 +227,14 @@ class metodePenilaianController extends Controller
             $id_metopen[] = $data->id;
         }
 
-        return view('pages.metopen.metopen', compact('id_metopen', 'metopen'));
+        return view('pages.metopen.metopen', compact('id_metopen', 'metopen', 'redirect_url'));
     }
 
     public function postKelolaMetopen(int $id, Request $request)
     {
         // dd($id);
+
+        $redirect_url = $request->input('redirect_url', route('index.metopen'));
 
         $metopenSelect = [];
         if ($request->has('metopenSelect')) {
@@ -265,7 +264,8 @@ class metodePenilaianController extends Controller
 
             DB::commit();
             // return dd($metopenCPMK, "success");
-            return redirect()->back()->with("success", "berhasil update Metode Penilaian pada CPMK");
+            // return redirect()->back()->with("success", "berhasil update Metode Penilaian pada CPMK");
+            return redirect($redirect_url)->with("success", "berhasil update Metode Penilaian pada CPMK");
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with("failed", "gagal update" . $th->getMessage());
@@ -322,7 +322,7 @@ class metodePenilaianController extends Controller
 
         // dd($test->id);
 
-        return redirect()->route('index.metopen')->with('success', 'keterangan metode penilaian berhasil ditambah');
+        return redirect()->back()->with('success', 'keterangan metode penilaian berhasil ditambah');
     }
 
     public function checkData($gmcId)
@@ -339,7 +339,7 @@ class metodePenilaianController extends Controller
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
@@ -350,7 +350,7 @@ class metodePenilaianController extends Controller
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->leftJoin("tipelensa as tl", "tl.id", "=", "gabung_nilai_metopen.idtipelensa")
@@ -375,7 +375,7 @@ class metodePenilaianController extends Controller
                     ->where("id_gabung_metopen", '=', $id)
                     ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
                     ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
-                    ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
+                    ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
                     ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
                     ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
                     ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
@@ -442,7 +442,7 @@ class metodePenilaianController extends Controller
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
             ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
@@ -469,7 +469,7 @@ class metodePenilaianController extends Controller
 
         $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
-        // dd($kelas);
+        // dd($penilaian);
 
         return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }
@@ -493,7 +493,7 @@ class metodePenilaianController extends Controller
                 'tahunAkademik_id' => $tahun
             ]);
 
-            Storage::putFileAs("public/rubik/$folder", $request->file('file'), $file);
+            Storage::putFileAs("public/rubik/", $request->file('file'), $file);
 
             return redirect(url()->previous())->with('success', 'rubik berhasil di up');
         } catch (Throwable $th) {
@@ -540,42 +540,42 @@ class metodePenilaianController extends Controller
         // dd($request->filter);
 
         $matakuliah = ak_matakuliah::select("matakuliah", "batasNilai", "namalengkap", "gelarbelakang")
-            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
-            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
+            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
             ->join("ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
             ->join("pt_person as per", "per.kdperson", "=", "att.kdperson")
-            ->where('ak_matakuliah.kdmatakuliah', "=", $id)
+            ->where('simptt.ak_matakuliah.kdmatakuliah', "=", $id)
             ->first();
 
         $cpl = ak_matakuliah::select("kode_cpl")
-            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
             ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "amc.id_cpmk")
             ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
             ->join("ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
             ->join("pt_person as per", "per.kdperson", "=", "att.kdperson")
-            ->where('ak_matakuliah.kdmatakuliah', "=", $id)
+            ->where('simptt.ak_matakuliah.kdmatakuliah', "=", $id)
             ->where('pmk.kdtahunakademik', "=", 20231)
             ->distinct()
             ->get();
 
-        $test = ak_matakuliah::select("ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian")
-            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "ak_matakuliah.kdmatakuliah")
+        $test = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian")
+            ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
             ->join("ak_kurikulum_cpmks as kc", "kc.id", "=", "amc.id_cpmk")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "amc.id")
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
             ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
             ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
-            ->where("ak_matakuliah.kdmatakuliah", "=", $id)
+            ->where("simptt.ak_matakuliah.kdmatakuliah", "=", $id)
             ->where("ak_kurikulum.isObe", '=', 1)
             ->distinct()
             ->get();
 
 
         $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl")
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
             ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
             ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
@@ -661,7 +661,7 @@ class metodePenilaianController extends Controller
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
             ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
-            ->join("ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
             ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
             ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")

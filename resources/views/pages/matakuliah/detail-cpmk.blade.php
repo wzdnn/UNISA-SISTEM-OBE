@@ -73,22 +73,42 @@
     <br />
     <hr />
 
+
+
     <div class="py-2">
         <div class="my-3 mr-3">
             <div class="w-auto px-3 bg-white border border-gray-200 rounded shadow-lg justify-between">
                 <div class="px-3 py-3">
-                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Kelola Metode Pembelajaran</h1>
+                    <h1 class="font-bold text-2xl mb-4 text-blue-800 uppercase">Kelola Metode Pembelajaran dan Sub-CPMK</h1>
                     @include('include.flash-massage')
 
                     <form action="" method="post">
                         @csrf
-                        <select class="w-auto" id="pembelajaranSelect" name="pembelajaranSelect[]" multiple="multiple">
-                            @foreach ($pembelajaran as $item)
-                                <option value="{{ $item->id }}" @selected(in_array($item->id, $id_pembelajaran))>
-                                    {{ $item->metodepembelajaran }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+
+                            <div class="flex flex-col w-auto">
+                                <label class="font-medium text-xl uppercase text-blue-800">Metode Pembelajaran</label>
+                                <select class="w-auto" id="pembelajaranSelect" name="pembelajaranSelect[]"
+                                    multiple="multiple">
+                                    @foreach ($pembelajaran as $item)
+                                        <option value="{{ $item->kdmetodepembelajaran }}" @selected(in_array($item->kdmetodepembelajaran, $id_pembelajaran))>
+                                            {{ $item->metodepembelajaran }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col w-auto">
+                                <label class="font-medium text-xl uppercase text-blue-800">Sub CPMK</label>
+                                <select class="w-auto" id="subCpmkSelect" name="subCpmkSelect[]" multiple="multiple">
+                                    @foreach ($subCpmk as $item)
+                                        <option value="{{ $item->kdsubcpmk }}" @selected(in_array($item->kdsubcpmk, $id_subCpmk))>
+                                            {{ $item->kode_subcpmk }} - {{ $item->sub_cpmk }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 my-3"
                             type="submit">UPDATE</button>
                     </form>
@@ -132,6 +152,7 @@
     <script>
         $(document).ready(function() {
             $('#pembelajaranSelect').select2();
+            $('#subCpmkSelect').select2();
         });
     </script>
 @endpush

@@ -68,50 +68,69 @@
     </div>
     <div class="w-auto px-3 bg-white border border-gray-200 rounded shadow-sm justify-between mb-3">
         @include('include.flash-massage')
-        <div class="my-3 mr-3">
-            <button data-modal-target="authentic-modal" id="materiTambah" data-id-target="{{ $subbk->id }}"
-                data-modal-toggle="{{ $subbk->id }}"
-                class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold" type="button">
-                {{-- <i class="fa fa-plus" aria-hidden="true"></i> --}}
-                Tambah Materi
-            </button>
+        <div class="">
 
-            <!-- Main modal -->
-            <div id="{{ $subbk->id }}" tabindex="-1" aria-hidden="true"
-                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative px-2 py-4 w-full max-w-md max-h-full">
-                    <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <form method="GET" class="rounded mt-2"> <!-- Sesuaikan dengan route -->
+                <label for="tahunakademik" class="font-semibold">Tahun Akademik :</label>
+                <select name="tahunakademik" id="tahunakademik" class="border rounded px-2 py-1">
+                    @foreach ($tahunAkademik as $ta)
+                        <option value="{{ $ta->kdtahunakademik }}"
+                            {{ $selectedTahunAkademik == $ta->kdtahunakademik ? 'selected' : '' }}>
+                            {{ $ta->tahunakademik }}
+                        </option>
+                    @endforeach
+                </select>
 
-                        <!-- Modal body -->
-                        <div class="p-4 md:p-5">
+                <button type="submit" class="bg-blue-600 text-white rounded px-4 py-2">Filter</button>
+            </form>
 
-                            <form class="space-y-4" action="{{ route('store.materi') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="materi_input_id" id="materi_input_id"
-                                    value="{{ $subbk->id }}">
-                                <div>
-                                    <label for="materi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">materi</label>
-                                    <input type="text" name="materi" id="materi"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                                </div>
-                                <div>
-                                    <label for="keterangan"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun
-                                        Akademik</label>
-                                    <select id="tahunakademik" name="tahunakademik" class="form-control">
-                                        @foreach ($tahunAkademik as $tahunakademik)
-                                            <option value="{{ $tahunakademik->kdtahunakademik }}">
-                                                {{ $tahunakademik->tahunakademik }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+            <hr />
 
-                                <button type="submit"
-                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+            <div class="my-3 mr-3">
+                <button data-modal-target="authentic-modal" id="materiTambah" data-id-target="{{ $subbk->id }}"
+                    data-modal-toggle="{{ $subbk->id }}"
+                    class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold" type="button">
+                    {{-- <i class="fa fa-plus" aria-hidden="true"></i> --}}
+                    Tambah Materi
+                </button>
 
-                            </form>
+                <!-- Main modal -->
+                <div id="{{ $subbk->id }}" tabindex="-1" aria-hidden="true"
+                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative px-2 py-4 w-full max-w-md max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+
+                            <!-- Modal body -->
+                            <div class="p-4 md:p-5">
+
+                                <form class="space-y-4" action="{{ route('store.materi') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="materi_input_id" id="materi_input_id"
+                                        value="{{ $subbk->id }}">
+                                    <div>
+                                        <label for="materi"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">materi</label>
+                                        <input type="text" name="materi" id="materi"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                    </div>
+                                    <div>
+                                        <label for="keterangan"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun
+                                            Akademik</label>
+                                        <select id="tahunakademik" name="tahunakademik" class="form-control">
+                                            @foreach ($tahunAkademik as $tahunakademik)
+                                                <option value="{{ $tahunakademik->kdtahunakademik }}">
+                                                    {{ $tahunakademik->tahunakademik }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <button type="submit"
+                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,7 +163,8 @@
             <hr />
             <br />
             <a href="{{ route('subbk.cpmk.kelola', ['id' => $id, 'sub' => $sub]) }}" class="mb-5"><button
-                    class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola CPMK
+                    class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1 mb-3">Kelola
+                    CPMK
                 </button>
             </a>
             <hr />

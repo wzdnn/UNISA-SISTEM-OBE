@@ -35,10 +35,10 @@ class organisasiMkController extends Controller
         // return dd($semester_2_sks);
 
         //matakuliah
-        $matakuliah = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $matakuliah = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where('ak_matakuliah.semester', '=', 0)
+            ->where('simptt.ak_matakuliah.semester', '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -65,7 +65,7 @@ class organisasiMkController extends Controller
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayKurikulum)) {
                 $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK')
-                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+                    ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
                     ->where("ak_kurikulum.isObe", '=', 1)
                     ->where("kurikulum", "=", $request->filter)
                     ->orderBy('kdmatakuliah', 'asc')
@@ -82,7 +82,7 @@ class organisasiMkController extends Controller
         // return dd($matakuliah);
 
         //kurikulum univ
-        $kurikulumUniv = DB::table('ak_kurikulum')
+        $kurikulumUniv = DB::table('simptt.ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->where('kdunitkerja', '=', 100)
             ->orwhere('kdunitkerja', '=', 0)
@@ -91,14 +91,14 @@ class organisasiMkController extends Controller
             ->get();
 
         //kurikulum
-        $ak_kurikulum = DB::table('ak_kurikulum')
+        $ak_kurikulum = DB::table('simptt.ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->where("isObe", '=', 1)
             ->get();
 
         $tema8 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 8)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -106,7 +106,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema7 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 7)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -114,7 +114,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema6 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 6)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -122,7 +122,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema5 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 5)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -130,7 +130,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema4 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 4)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -138,7 +138,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema3 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 3)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -146,7 +146,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema2 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -154,7 +154,7 @@ class organisasiMkController extends Controller
             })
             ->get();
         $tema1 = DB::table('temas')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'temas.kdkurikulum')
             ->where("temas.semester", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
@@ -163,33 +163,33 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 8
-        $semester8_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester8_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 8)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 8)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester8_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester8_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 8)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 8)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester8_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester8_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 8)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 8)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -199,33 +199,33 @@ class organisasiMkController extends Controller
 
 
         // Semester 7
-        $semester7_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester7_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 7)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 7)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester7_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester7_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 7)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 7)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester7_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester7_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 7)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 7)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -234,33 +234,33 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 6
-        $semester6_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester6_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 6)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 6)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester6_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester6_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 6)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 6)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester6_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester6_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 6)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 6)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -269,33 +269,33 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 5
-        $semester5_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester5_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 5)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 5)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester5_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester5_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 5)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 5)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester5_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester5_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 5)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 5)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -304,33 +304,33 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 4
-        $semester4_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester4_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 4)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 4)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester4_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester4_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 4)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 4)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester4_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester4_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 4)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 4)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -340,33 +340,33 @@ class organisasiMkController extends Controller
 
 
         // Semester 3
-        $semester3_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester3_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 3)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 3)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester3_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester3_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 3)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 3)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester3_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester3_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 3)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 3)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -375,33 +375,33 @@ class organisasiMkController extends Controller
             ->get();
 
         // Semester 2
-        $semester2_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester2_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 2)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 2)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester2_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester2_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 2)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 2)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester2_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester2_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 2)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 2)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -411,33 +411,33 @@ class organisasiMkController extends Controller
 
 
         // Semester 1
-        $semester1_0 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester1_0 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 1)
-            ->where("ak_matakuliah.ispilihan", '=', 0)
+            ->where("simptt.ak_matakuliah.semester", '=', 1)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 0)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester1_1 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester1_1 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 1)
-            ->where("ak_matakuliah.ispilihan", '=', 1)
+            ->where("simptt.ak_matakuliah.semester", '=', 1)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 1)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
             })
             ->orderBy('kdmatakuliah', 'asc')
             ->get();
-        $semester1_2 = DB::table('ak_matakuliah')
-            ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'ak_matakuliah.kdkurikulum')
+        $semester1_2 = DB::table('simptt.ak_matakuliah')
+            ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
             ->where("ak_kurikulum.isObe", '=', 1)
-            ->where("ak_matakuliah.semester", '=', 1)
-            ->where("ak_matakuliah.ispilihan", '=', 2)
+            ->where("simptt.ak_matakuliah.semester", '=', 1)
+            ->where("simptt.ak_matakuliah.ispilihan", '=', 2)
             ->where(function ($query) {
                 $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                     ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);

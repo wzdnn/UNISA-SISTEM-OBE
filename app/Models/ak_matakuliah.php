@@ -22,7 +22,7 @@ class ak_matakuliah extends Model
 
     protected $guarded = ['kdmatakuliah'];
 
-    protected $table = 'ak_matakuliah';
+    protected $table = 'simptt.ak_matakuliah';
     protected $primaryKey = "kdmatakuliah";
 
     public function MKtoSBKread()

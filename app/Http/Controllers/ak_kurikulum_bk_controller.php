@@ -35,7 +35,7 @@ class ak_kurikulum_bk_controller extends Controller
                     "ak_kurikulum_bks.kdbidil"
                 )
                 ->join(
-                    "ak_kurikulum",
+                    "simptt.ak_kurikulum",
                     "ak_kurikulum.kdkurikulum",
                     "=",
                     "ak_kurikulum_bks.kdkurikulum"
@@ -44,7 +44,7 @@ class ak_kurikulum_bk_controller extends Controller
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->paginate(10);
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
         } elseif (auth()->user()->leveling == 3) {
@@ -69,14 +69,14 @@ class ak_kurikulum_bk_controller extends Controller
                     "ak_kurikulum_bks.kdbidil"
                 )
                 ->join(
-                    "ak_kurikulum",
+                    "simptt.ak_kurikulum",
                     "ak_kurikulum.kdkurikulum",
                     "=",
                     "ak_kurikulum_bks.kdkurikulum"
                 )
                 ->paginate(10);
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
                 ->where("isObe", "=", 1)
@@ -103,7 +103,7 @@ class ak_kurikulum_bk_controller extends Controller
                     "ak_kurikulum_bks.kdbidil"
                 )
                 ->join(
-                    "ak_kurikulum",
+                    "simptt.ak_kurikulum",
                     "ak_kurikulum.kdkurikulum",
                     "=",
                     "ak_kurikulum_bks.kdkurikulum"
@@ -111,7 +111,7 @@ class ak_kurikulum_bk_controller extends Controller
                 ->where('ak_kurikulum.kdkurikulum', 67)
                 ->paginate(10);
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->where('kdkurikulum', 67)
                 ->get();
@@ -137,7 +137,7 @@ class ak_kurikulum_bk_controller extends Controller
                     "ak_kurikulum_bks.kdbidil"
                 )
                 ->join(
-                    "ak_kurikulum",
+                    "simptt.ak_kurikulum",
                     "ak_kurikulum.kdkurikulum",
                     "=",
                     "ak_kurikulum_bks.kdkurikulum"
@@ -148,7 +148,7 @@ class ak_kurikulum_bk_controller extends Controller
                 })
                 ->paginate(10);
 
-            $kdkurikulum = DB::table("ak_kurikulum")
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -188,7 +188,7 @@ class ak_kurikulum_bk_controller extends Controller
                         "ak_kurikulum_bks.kdbidil"
                     )
                     ->join(
-                        "ak_kurikulum",
+                        "simptt.ak_kurikulum",
                         "ak_kurikulum.kdkurikulum",
                         "=",
                         "ak_kurikulum_bks.kdkurikulum"
@@ -212,7 +212,7 @@ class ak_kurikulum_bk_controller extends Controller
         $akKurikulumBidil = DB::table('ak_kurikulum_bidang_ilmus')
             ->select(['id', 'bidang_ilmu'])
             ->get();
-        $akKurikulum = DB::table('ak_kurikulum')
+        $akKurikulum = DB::table('simptt.ak_kurikulum')
             ->select(['kdkurikulum', 'kurikulum', 'tahun'])
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->where("isObe", '=', 1)
