@@ -30,12 +30,12 @@
                         </th>
                         <th class="border px-4 py-2" colspan="7">
                             <h2 class="font-bold">Universitas 'Aisyiyah Yogyakarta</h2>
-                            <h3 class="font-medium ">{{ $fakultas->ukfakultas }}</h3>
+                            <h3 class="font-medium ">{{ $fakultas->ukfakultas ?? '' }}</h3>
                             <h3 class="font-medium ">
                                 {{ auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja }}
                             </h3>
-                            <h3 class="font-medium text-sm">Program: {{ $fakultas->jenjang }} |
-                                {{ $fakultas->deskripsi }}
+                            <h3 class="font-medium text-sm">Program: {{ $fakultas->jenjang ?? '' }} |
+                                {{ $fakultas->deskripsi ?? '' }}
                             </h3>
                             <h3 class="font-medium text-sm">Tahun Akademik : {{ $tahunAkademik->tahunakademik }}</h3>
                         </th>

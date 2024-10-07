@@ -30,7 +30,7 @@ class metodePenilaianController extends Controller
     public function index(Request $request)
     {
 
-        if (auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 100) {
 
             $matakuliah = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
                 ->leftJoin("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
@@ -652,8 +652,6 @@ class metodePenilaianController extends Controller
 
         return view('pages.metopen.final', compact('tahunAkademik', 'mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'persenplo', 'kelulusanpermahasiswa', 'cpmkfinal'));
     }
-
-
 
     public function exportNilai($id, $kdtahunakademik)
     {

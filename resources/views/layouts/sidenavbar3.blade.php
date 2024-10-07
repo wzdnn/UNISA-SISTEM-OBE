@@ -116,7 +116,7 @@
                             </path>
                         </svg>
                     </div>
-                    <a href="{{ route('cpl.index') }}"
+                    <a href="{{ route('cpl.index', ['filter' => request()->input('filter')]) }}"
                         class="inline-block w-full py-2 pl-8 pr-4 text-md rounded hover:bg-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-300">Capaian
                         Pembelajaran Lulusan</a>
                 </li>

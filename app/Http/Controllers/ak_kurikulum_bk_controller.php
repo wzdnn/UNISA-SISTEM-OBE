@@ -13,7 +13,7 @@ class ak_kurikulum_bk_controller extends Controller
     public function index(Request $request)
     {
         // $akKurikulumBk = ak_kurikulum_bk::all();
-        if (auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 100) {
             $akKurikulumBk = DB::table('ak_kurikulum_bks')
                 ->select(
                     "ak_kurikulum_bks.*",

@@ -20,7 +20,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
                 ->paginate(10);
 
-            $kurikulum = DB::table("ak_kurikulum")
+            $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
         } else {
@@ -32,7 +32,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
                 })
                 ->paginate(10);
 
-            $kurikulum = DB::table("ak_kurikulum")
+            $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
@@ -63,7 +63,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
     {
 
         $cpmk = DB::table('ak_kurikulum_cpmks')
-            ->join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "ak_kurikulum_cpmks.kdkurikulum")
+            ->join("simptt.ak_kurikulum", "ak_kurikulum.kdkurikulum", "ak_kurikulum_cpmks.kdkurikulum")
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
@@ -99,7 +99,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
         $sub_cpmk = ak_kurikulum_sub_cpmk::findOrFail($id);
 
         $cpmk = DB::table('ak_kurikulum_cpmks')
-            ->join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "ak_kurikulum_cpmks.kdkurikulum")
+            ->join("simptt.ak_kurikulum", "ak_kurikulum.kdkurikulum", "ak_kurikulum_cpmks.kdkurikulum")
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 

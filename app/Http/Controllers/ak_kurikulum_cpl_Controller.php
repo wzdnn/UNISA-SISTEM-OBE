@@ -14,7 +14,7 @@ class ak_kurikulum_cpl_Controller extends Controller
     public function index(Request $request)
     {
 
-        if (auth()->user()->kdunit == 42) {
+        if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 100) {
             $akKurikulumCpl = ak_kurikulum_cpl::with(['CpltoPl', 'CpltoCplr', 'CpltoCpmk'])
                 ->select("ak_kurikulum_cpls.*", "ak_kurikulum_aspeks.aspek", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
                 ->join(

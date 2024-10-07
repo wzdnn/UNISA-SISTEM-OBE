@@ -156,7 +156,7 @@ class ak_kurikulum_cpmk_controller extends Controller
                     "=",
                     "ak_kurikulum_cpmks.kdkurikulum"
                 )
-                ->orderBy('ak_kurikulum_cpls.id')
+                // ->orderBy('ak_kurikulum_cpls.id')
                 ->paginate(10);
 
             $kdkurikulum = DB::table("ak_kurikulum")
