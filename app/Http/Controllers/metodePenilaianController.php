@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ExportNilai;
+use App\Exports\ExportNilaiMbkm;
 use App\Imports\ImportNilai;
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_penilaian;
 use App\Models\exportNilaiModel;
+use App\Models\exportNilaiModelMBKM;
 use App\Models\gabung_metopen_cpmk;
 use App\Models\gabung_mk_cpmk;
 use App\Models\gabung_nilai_metopen;
@@ -47,6 +49,8 @@ class metodePenilaianController extends Controller
 
             $tipeLensa = DB::table('tipelensa')->get();
 
+            $jenisProgram = DB::table('jenisprogram')->get();
+
             $kdkurikulum = DB::table("ak_kurikulum")
                 ->where("isObe", "=", 1)
                 ->get();
@@ -63,6 +67,8 @@ class metodePenilaianController extends Controller
                 ->distinct();
 
             $tipeLensa = DB::table('tipelensa')->get();
+
+            $jenisProgram = DB::table('jenisprogram')->get();
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -81,11 +87,13 @@ class metodePenilaianController extends Controller
                 ->leftJoin("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
                 ->where("ak_kurikulum.isObe", '=', 1)
                 ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
-                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->join("simptt.pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
                 ->where('ak_kurikulum.kdkurikulum', 67)
                 ->distinct();
 
             $tipeLensa = DB::table('tipelensa')->get();
+
+            $jenisProgram = DB::table('jenisprogram')->get();
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -98,7 +106,7 @@ class metodePenilaianController extends Controller
                 ->get();
         } else {
 
-            $mk = ak_matakuliah::toSql();
+            // $mk = ak_matakuliah::toSql();
             // dd($mk);
 
             $matakuliah = ak_matakuliah::select("simptt.ak_matakuliah.kdmatakuliah", "kodematakuliah", "matakuliah", "kc.kode_cpmk", "cpmk", "metode_penilaian", "bobot", "amc.id as amcid", "gmc.id as gmcid")
@@ -116,6 +124,8 @@ class metodePenilaianController extends Controller
                 ->orderBy("kdmatakuliah");
 
             $tipeLensa = DB::table('tipelensa')->get();
+
+            $jenisProgram = DB::table('jenisprogram')->get();
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -148,7 +158,7 @@ class metodePenilaianController extends Controller
         }
 
 
-        return view('pages.metopen.index', compact('matakuliah', 'kdkurikulum', 'tahunAkademik', 'tipeLensa'));
+        return view('pages.metopen.index', compact('matakuliah', 'kdkurikulum', 'tahunAkademik', 'tipeLensa', 'jenisProgram'));
     }
 
     public function postIndex(Request $request)
@@ -306,7 +316,8 @@ class metodePenilaianController extends Controller
             'keterangan' => $request->keterangan,
             'kdtahunakademik' => $request->tahunakademik,
             'idlensa' => $request->idlensa,
-            'idtipelensa' => $request->idtipelensa
+            'idtipelensa' => $request->idtipelensa,
+            'idjenisprogram' => $request->idjenisprogram
 
         ]);
 
@@ -335,7 +346,15 @@ class metodePenilaianController extends Controller
     public function listNilai(int $id, Request $request)
     {
 
-        $list = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "mk.matakuliah", "gabung_nilai_metopen.kdtahunakademik")
+        $insert = gabung_metopen_cpmk::select('gabung_metopen_cpmks.id as gmcid', 'metode_penilaian', 'bobot', 'kode_cpmk', 'matakuliah')
+            ->join('ak_matakuliah_cpmk as amc', 'amc.id', 'gabung_metopen_cpmks.id_gabung_cpmk')
+            ->join('metode_penilaians as mp', 'mp.id', 'gabung_metopen_cpmks.id_metopen')
+            ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
+            ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', 'amc.id_cpmk')
+            ->where('gabung_metopen_cpmks.id', $id)
+            ->first();
+
+        $list = gabung_nilai_metopen::select("kode_cpmk", "cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "mk.matakuliah", "gabung_nilai_metopen.kdtahunakademik", "gmc.id as gmcid")
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -343,10 +362,11 @@ class metodePenilaianController extends Controller
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
-            ->first();
+            // ->first();
+            ->toSql();
 
 
-        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "gabung_nilai_metopen.kdtahunakademik", "tahunakademik", "idlensa", "tl.tipelensa", "url")
+        $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "gabung_nilai_metopen.kdtahunakademik", "tahunakademik", "idlensa", "idtipelensa", "idjenisprogram", "tl.tipelensa", "url")
             ->where("id_gabung_metopen", '=', $id)
             ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -354,11 +374,14 @@ class metodePenilaianController extends Controller
             ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
             ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
             ->leftJoin("tipelensa as tl", "tl.id", "=", "gabung_nilai_metopen.idtipelensa")
+            ->leftJoin("jenisprogram as jp", "jp.kdjenisprogram", "=", "gabung_nilai_metopen.idjenisprogram")
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
             ->paginate(15);
         // ->first();
 
         $tipeLensa = DB::table('tipelensa')->get();
+
+        $jenisProgram = DB::table('jenisprogram')->get();
 
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
@@ -371,13 +394,15 @@ class metodePenilaianController extends Controller
 
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayTahun)) {
-                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik", "gabung_nilai_metopen.kdtahunakademik")
+                $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "tahunakademik", "gabung_nilai_metopen.kdtahunakademik", "tahunakademik", "idlensa", "idtipelensa", "idjenisprogram", "tl.tipelensa", "url")
                     ->where("id_gabung_metopen", '=', $id)
                     ->join('gabung_metopen_cpmks as gmc', 'gmc.id', '=', 'gabung_nilai_metopen.id_gabung_metopen')
                     ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
                     ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "amc.kdmatakuliah")
                     ->join("ak_kurikulum_cpmks as akc", "akc.id", "=", "amc.id_cpmk")
                     ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
+                    ->leftJoin("tipelensa as tl", "tl.id", "=", "gabung_nilai_metopen.idtipelensa")
+                    ->leftJoin("jenisprogram as jp", "jp.kdjenisprogram", "=", "gabung_nilai_metopen.idjenisprogram")
                     ->join('metode_penilaians as mp', 'mp.id', '=', 'gmc.id_metopen')
                     ->where("gabung_nilai_metopen.kdtahunakademik", "=", $request->filter)
                     ->paginate(15);
@@ -385,8 +410,8 @@ class metodePenilaianController extends Controller
         }
 
 
-        // dd($listNilai);
-        return view('pages.metopen.list', compact('listNilai', 'tahunAkademik', 'list', 'tipeLensa'));
+        // dd($list);
+        return view('pages.metopen.list', compact('listNilai', 'tahunAkademik', 'list', 'tipeLensa', 'jenisProgram', 'insert'));
     }
 
     public function listNilaiUpdate(Request $request)
@@ -394,13 +419,14 @@ class metodePenilaianController extends Controller
 
         try {
 
-            $listUpdate = gabung_nilai_metopen::findOrFail($request->input("kdjenisnilai_"));
+            $listUpdate = gabung_nilai_metopen::findOrFail($request->input("kdjenisnilai_edit"));
 
             $listUpdate->update([
                 "keterangan" => $request->keterangan,
                 "kdtahunakademik" => $request->tahunakademik,
                 "idlensa" => $request->idlensa,
-                "idtipelensa" => $request->idtipelensa
+                "idtipelensa" => $request->idtipelensa,
+                "idjenisprogram" => $request->idjenisprogram
             ]);
 
 
@@ -427,6 +453,12 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', 'Mahasiswa berhasil ditambah');
     }
 
+    public function copyMhsMBKM(Request $request)
+    {
+        DB::select('call sistem_obe.kopi_mhs_mbkm(?,?,?)', [$request->kdmatakuliah_, $request->kdtahunakademik_, $request->kdjenisnilai_Mbkm]);
+        return redirect()->back()->with('success', 'Mahassiwa Berhasil Ditambah');
+    }
+
     public function ambilNilai(Request $request, int $id)
     {
         DB::select('call sistem_obe.isinilai_dari_lensa(?)', [$id]);
@@ -439,12 +471,12 @@ class metodePenilaianController extends Controller
 
         // dd('test');
 
-        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
-            ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
-            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
+        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
+            ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
             ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
-            ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
-            ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -453,11 +485,18 @@ class metodePenilaianController extends Controller
             ->where("krs.kdtahunakademik", "=", $kdtahunakademik)
             ->where("gnm.kdjenisnilai", "=", $id)
             ->first();
+        // ->toSql();
 
-        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai", "path_laporan", "path_foto")
-            ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
-            ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
-            ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+        // $kelas = ak_penilaian::select("matakuliah","gnm.id_gabung_metopen as gmcid")
+        //     ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "ak_penilaian.kdjenisnilai")
+        //     ->join("gabung_metopen_cpmks as gmc", "gmc.id","gnm.id_gabung_metopen")
+        //     ->join("ak_matakuliah_cpmk as amc", "amc.id","gmc.id_gabung_cpmk")
+        //     ->
+
+        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai", "path_laporan", "path_foto", "idjenisprogram")
+            ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
             ->where("gnm.kdjenisnilai", "=", $id)
             ->where("krs.kdtahunakademik", "=", $kdtahunakademik)
@@ -469,7 +508,47 @@ class metodePenilaianController extends Controller
 
         $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
-        // dd($penilaian);
+        // dd($kelas);
+
+        return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
+    }
+
+    public function penilaianMBKM(int $id, string $kdtahunakademik)
+    {
+
+        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
+            ->join("simptt.ak_krsnilai_equivalensi as mbkm", "mbkm.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "mbkm.kdpenawaran")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "mbkm.kdmahasiswa")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
+            ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
+            ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+            ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
+            ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->where("mbkm.kdtahunakademik", "=", $kdtahunakademik)
+            ->where("gnm.kdjenisnilai", "=", $id)
+            ->first();
+        // ->toSql();
+
+
+        $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai", "path_laporan", "path_foto", "idjenisprogram")
+            ->join("simptt.ak_krsnilai_equivalensi as mbkm", "mbkm.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "mbkm.kdmahasiswa")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
+            ->where("gnm.kdjenisnilai", "=", $id)
+            ->where("mbkm.kdtahunakademik", "=", $kdtahunakademik)
+            ->orderby('nim')
+            ->get();
+        // ->toSql();
+
+        $viewnilai = exportNilaiModelMBKM::where("kdjenisnilai", "=", $id);
+
+        $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
+
+        // dd($kelas);
 
         return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }
@@ -586,7 +665,10 @@ class metodePenilaianController extends Controller
             ->where("mk.kdmatakuliah", "=", $id)
             ->orderBy('gmc.id')
             ->distinct()
+            // ->toSql();
             ->get();
+
+        // dd($tabel);
 
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
@@ -656,12 +738,12 @@ class metodePenilaianController extends Controller
     public function exportNilai($id, $kdtahunakademik)
     {
 
-        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai")
-            ->join("ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
-            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
+        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
+            ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
             ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
-            ->join("ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
-            ->join("pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "mhs.kdperson")
             ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
             ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
             ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
@@ -672,7 +754,33 @@ class metodePenilaianController extends Controller
             ->first();
         // return Excel::download(new ExportNilai, "nilai.xlsx");
 
+        // dd($kelas);
+
         return (new ExportNilai($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
+    }
+
+    public function exportNilaiMbkm($id, $kdtahunakademik)
+    {
+
+        $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
+            ->join("simptt.ak_krsnilai_equivalensi as mbkm", "mbkm.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
+            ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "mbkm.kdpenawaran")
+            ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "pmk.kdmatakuliah")
+            ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "mbkm.kdmahasiswa")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "mhs.kdperson")
+            ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "=", "ak_penilaian.kdjenisnilai")
+            ->join("gabung_metopen_cpmks as gmc", "gmc.id", "=", "gnm.id_gabung_metopen")
+            ->join("ak_matakuliah_cpmk as amc", "amc.id", "=", "gmc.id_gabung_cpmk")
+            ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "amc.id_cpmk")
+            ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            ->where("gnm.kdjenisnilai", "=", $id)
+            ->where("gnm.kdtahunakademik", "=", $kdtahunakademik)
+            ->first();
+        // return Excel::download(new ExportNilai, "nilai.xlsx");
+
+        // dd($kelas);
+
+        return (new ExportNilaiMbkm($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
     }
 
     public function importNilai(Request $request, $id)

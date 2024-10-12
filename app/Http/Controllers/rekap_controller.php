@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ak_matakuliah;
 use App\Models\ak_matakuliah_cpmk;
+use App\Models\ak_penilaian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -279,22 +280,45 @@ class rekap_controller extends Controller
                 ->where("isObe", "=", 1)
                 ->get();
         } else {
-            $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
-                ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
-                ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
-                ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
-                ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
-                ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
-                ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
-                ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
-                ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
-                ->where("ak.kdunitkerja", Auth::user()->kdunit)
-                ->whereRaw("(kdtahunakademik = concat($id, '1') or kdtahunakademik = concat($id, '2'))")
-                ->orderBy("gmc.id", "asc")
-                ->orderBy("ak_matakuliah_cpmk.id", "asc")
-                ->distinct()
-                ->get();
+            // $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
+            //     ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
+            //     ->join("gabung_metopen_cpmks as gmc", "gmc.id_gabung_cpmk", "=", "ak_matakuliah_cpmk.id")
+            //     ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
+            //     ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
+            //     ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
+            //     ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
+            //     ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "ak_matakuliah_cpmk.id_cpmk")
+            //     ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
+            //     ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "mk.kdkurikulum")
+            //     ->where("ak.kdunitkerja", Auth::user()->kdunit)
+            //     ->whereRaw("(kdtahunakademik = concat($id, '1') or kdtahunakademik = concat($id, '2'))")
+            //     ->orderBy("gmc.id", "asc")
+            //     ->orderBy("ak_matakuliah_cpmk.id", "asc")
+            //     ->distinct()
+            //     ->get();
+
+            // $tabel = ak_penilaian::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "krs.kdtahunakademik", "amc.id", "matakuliah")
+            //     ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "ak_penilaian.kdjenisnilai")
+            //     ->join("gabung_metopen_cpmks as gmc", "gmc.id", "gnm.id_gabung_metopen")
+            //     ->join("metode_penilaians as mp", "mp.id", "gmc.id_metopen")
+            //     ->join("ak_matakuliah_cpmk as amc", "amc.id", "gmc.id_gabung_cpmk")
+            //     ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "ak_penilaian.kdkrsnilai")
+            //     ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "krs.kdmahasiswa")
+            //     ->join("simptt.pt_person as pp", "pp.kdperson", "mhs.kdperson")
+            //     ->join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "amc.id_cpmk")
+            //     ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "amc.kdmatakuliah")
+            //     ->join("simptt.ak_kurikulum as kur", "kur.kdkurikulum", "mk.kdkurikulum")
+            //     ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "amc.id_cpmk")
+            //     ->join("ak_kurikulum_cpls as cpl", "cpl.id", "cplcpmk.ak_kurikulum_cpl_id")
+            //     ->where("kur.kdunitkerja", Auth::user()->kdunit)
+            //     ->whereRaw("(mhs.kdtamasuk = concat($id, '1') or mhs.kdtamasuk = concat($id, '2'))")
+            //     ->orderBy("amc.kdmatakuliah", "asc")
+            //     ->orderBy("gmc.id", "asc")
+            //     ->orderBy("cpmk.id", "asc")
+            //     ->distinct()
+            //     ->get();
+
+            $tabel = DB::select('call sistem_obe.rekap_tahun_header(?,?)', [$id, Auth::user()->kdunit]);
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -308,6 +332,7 @@ class rekap_controller extends Controller
                 ->get();
         }
 
+        // dd($tabel);
 
         $arrayTahun = [];
         foreach ($tahunAkademik as $data) {

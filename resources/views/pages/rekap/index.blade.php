@@ -25,13 +25,6 @@
         </ol>
     </nav>
 
-    <div class="flex items-center justify-between py-5 px-5">
-        <div class="flex items-center">
-            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
-                Rekap Semester</h1>
-        </div>
-    </div>
-
     <div class="flex flex-col">
         <form method="GET" class="rounded">
             {{-- @csrf --}}
@@ -52,6 +45,15 @@
             </div>
         @endif
     </div>
+
+    <div class="flex items-center justify-between py-5 px-5">
+        <div class="flex items-center">
+            <h1 class="font-bold text-2xl mb-0 text-gray-700 text-center">
+                Rekap Semester</h1>
+        </div>
+    </div>
+
+
 
     <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

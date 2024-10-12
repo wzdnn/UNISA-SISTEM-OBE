@@ -64,11 +64,21 @@
 
         <div class="flex justify-between space-x-1">
             <div class="flex space-x-1">
-                <a href="{{ route('export.nilai', ['id' => $id, 'kdtahunakademik' => $kdtahunakademik]) }}">
-                    <button
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center ">Cetak
-                        Excel</button>
-                </a>
+
+                @if ($kelas->idjenisprogram == 1)
+                    <a href="{{ route('export.nilai', ['id' => $id, 'kdtahunakademik' => $kdtahunakademik]) }}">
+                        <button
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center ">Cetak
+                            Excel</button>
+                    </a>
+                @elseif ($kelas->idjenisprogram == 2)
+                    <a href="{{ route('export.nilai.mbkm', ['id' => $id, 'kdtahunakademik' => $kdtahunakademik]) }}">
+                        <button
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center ml-3 px-2 py-2 text-center ">Cetak
+                            Excel</button>
+                    </a>
+                @endif
+
 
                 <div>
                     <form action="{{ route('import.nilai', ['id' => $id, 'kdtahunakademik' => $kdtahunakademik]) }}"

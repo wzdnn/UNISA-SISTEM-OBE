@@ -40,7 +40,7 @@
     </div>
 
     <div class="w-full">
-        <table name="mytable" id="mytable" class="overflow-x-scroll w-full text-sm text-center  text-gray-500">
+        <table name="mytable" id="mytable" class="overflow-x-scroll w-full text-sm text-center text-gray-500">
             <thead class="w-full text-xs text-gray-700 uppercase bg-white">
                 <tr class="w-full text-left over">
                     <th scope="col" class="px-6 py-3 w-[50px]">
@@ -173,7 +173,7 @@
                     </td>
                     @foreach ($value[6] as $nilai)
                         <td class="px-6 py-4">
-                            {{ $nilai }}
+                            {{ number_format($nilai, 2) }}
                         </td>
                     @endforeach
                 </tr>

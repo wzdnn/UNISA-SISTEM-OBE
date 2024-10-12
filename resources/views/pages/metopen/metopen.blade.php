@@ -11,7 +11,7 @@
     <nav class="flex px-5 py-3 bg-white border shadow-md rounded-lg mb-3" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="{{ route('index.metopen') }}"
+                <a href="{{ request()->query('redirect_url') ?? route('index.metopen') }}"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 ">
                     <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                         viewBox="0 0 20 20">
