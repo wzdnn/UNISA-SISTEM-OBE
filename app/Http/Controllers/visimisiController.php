@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class visimisiController extends Controller
 {
-    //
-
+    // method Visi Misi index
     public function vmIndex()
     {
         $visiU = DB::select('call simaku.visi_misi_tujuan(?,1,1)', [Auth::user()->kdunit]);
@@ -24,9 +23,10 @@ class visimisiController extends Controller
         $tujuanF = DB::select('call simaku.visi_misi_tujuan(?,2,3)', [Auth::user()->kdunit]);
         $tujuanP = DB::select('call simaku.visi_misi_tujuan(?,3,3)', [Auth::user()->kdunit]);
 
-        // dd($tujuanU);
         return view('pages.visidanmisi.index', compact('tujuanU', 'tujuanF', 'tujuanP', 'visiU', 'visiF', 'visiP', 'misiU', 'misiF', 'misiP'));
     }
+
+    // method visi misi user
     public function vmIndexUser()
     {
         $vm = DB::table('_visi')

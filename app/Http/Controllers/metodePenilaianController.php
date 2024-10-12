@@ -27,8 +27,7 @@ use Throwable;
 
 class metodePenilaianController extends Controller
 {
-    // index 
-
+    // method penilaian index 
     public function index(Request $request)
     {
 
@@ -161,14 +160,13 @@ class metodePenilaianController extends Controller
         return view('pages.metopen.index', compact('matakuliah', 'kdkurikulum', 'tahunAkademik', 'tipeLensa', 'jenisProgram'));
     }
 
+    // method post index
     public function postIndex(Request $request)
     {
         $request->validate([
             'id_gabung' => ['required', 'numeric'],
             'bobot' => ['nullable', 'numeric']
         ]);
-
-        // return dd($request->all());
 
         try {
             $mtp = gabung_metopen_cpmk::findOrFail($request->input("id_gabung"));
@@ -187,6 +185,7 @@ class metodePenilaianController extends Controller
         }
     }
 
+    // method metode penilaian index
     public function metodePenilaian()
     {
         $metopen = DB::table('metode_penilaians')
@@ -196,6 +195,7 @@ class metodePenilaianController extends Controller
         return view('pages.metopen.metodePenilaian', compact('metopen'));
     }
 
+    // method metode penilaian store
     public function store(Request $request)
     {
         $request->validate([
@@ -209,24 +209,19 @@ class metodePenilaianController extends Controller
         return redirect()->route('metopen')->with('success', 'Metode Penilaian Berhasil ditambah');
     }
 
+    // method metode penilaian delete
     public function delete(int $id)
     {
         $metopen = metode_penilaian::findOrFail($id);
-
-
-
-        // return dd($pl);
-
         $metopen->delete();
         return redirect(url()->previous())->with('success', 'Metode Penilaian berhasil dihapus');
     }
 
-
+    // method kelola metode penilaian index
     public function kelolaMetopen(int $id, Request $request)
     {
 
         $redirect_url = $request->input('redirect_url', route('index.metopen')); // Default to index if not provided
-
 
         // metode penilaian
         $metopen = metode_penilaian::with('MTPtoCPMK')->get();
@@ -240,10 +235,9 @@ class metodePenilaianController extends Controller
         return view('pages.metopen.metopen', compact('id_metopen', 'metopen', 'redirect_url'));
     }
 
+    // method kelola metode penilaian post
     public function postKelolaMetopen(int $id, Request $request)
     {
-        // dd($id);
-
         $redirect_url = $request->input('redirect_url', route('index.metopen'));
 
         $metopenSelect = [];
@@ -257,11 +251,7 @@ class metodePenilaianController extends Controller
             }
         }
 
-        // return dd($metopenSelect);
-
         try {
-            // $metopenCPMK = gabung_subbk_cpmk::where('id_cpmk', '=', $id)->with('CPMKtoMTP')->first();
-
             $gabung_mk_cpmk = gabung_mk_cpmk::with('CPMKtoMTP')->findOrFail($id);
             DB::beginTransaction();
 
@@ -273,8 +263,6 @@ class metodePenilaianController extends Controller
             }
 
             DB::commit();
-            // return dd($metopenCPMK, "success");
-            // return redirect()->back()->with("success", "berhasil update Metode Penilaian pada CPMK");
             return redirect($redirect_url)->with("success", "berhasil update Metode Penilaian pada CPMK");
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -282,9 +270,9 @@ class metodePenilaianController extends Controller
         }
     }
 
+    // method tugas Index
     public function tugasIndex(int $id)
     {
-
         $gmc = gabung_metopen_cpmk::select("kode_cpmk", "cpmk", "metode_penilaian", "bobot")
             ->join("gabung_subbk_cpmks as gsc", "gsc.id", "=", "gabung_metopen_cpmks.id_gabung_cpmk")
             ->join("ak_kurikulum_cpmks as kc", "kc.id", "=", "gsc.id_cpmk")
@@ -298,18 +286,15 @@ class metodePenilaianController extends Controller
             ->join("metode_penilaians as mp", "mp.id", "=", "gmc.id_metopen")
             ->get();
 
-
-
         return view('pages.metopen.tugas', compact('gmc', 'gsc'));
     }
 
+    // method tugas post
     public function tugasPost(Request $request)
     {
         $request->validate([
             'keterangan'
         ]);
-
-        // DB::select('call sistem_obe.copy_mhs(?,?)', [$request->kdmatakuliah, $request->gnmid]);
 
         gabung_nilai_metopen::create([
             'id_gabung_metopen' => $request->tgsinput_id,
@@ -321,28 +306,17 @@ class metodePenilaianController extends Controller
 
         ]);
 
-
-        // $test = gabung_nilai_metopen::create([
-        //     'id_gabung_metopen' => $request->tgsinput_id,
-        //     'keterangan' => $request->keterangan,
-        //     'kdtahunakademik' => $request->tahunakademik
-
-        // ]);
-
-        // $test->id;
-
-        // dd($test->id);
-
         return redirect()->back()->with('success', 'keterangan metode penilaian berhasil ditambah');
     }
 
+    // method untuk check data
     public function checkData($gmcId)
     {
         $exists = gabung_nilai_metopen::where('id_gabung_metopen', $gmcId)->exists();
         return response()->json(['exists' => $exists]);
     }
 
-
+    // method list nilai index
     public function listNilai(int $id, Request $request)
     {
 
@@ -364,7 +338,6 @@ class metodePenilaianController extends Controller
             ->join("ak_tahunakademik as ata", "ata.kdtahunakademik", "=", "gabung_nilai_metopen.kdtahunakademik")
             // ->first();
             ->toSql();
-
 
         $listNilai = gabung_nilai_metopen::select("kode_cpmk", "metode_penilaian", "gabung_nilai_metopen.keterangan", "bobot", "gabung_nilai_metopen.kdjenisnilai as kjn", "mk.kdmatakuliah as mkd", "gabung_nilai_metopen.kdtahunakademik", "tahunakademik", "idlensa", "idtipelensa", "idjenisprogram", "tl.tipelensa", "url")
             ->where("id_gabung_metopen", '=', $id)
@@ -409,16 +382,13 @@ class metodePenilaianController extends Controller
             }
         }
 
-
-        // dd($list);
         return view('pages.metopen.list', compact('listNilai', 'tahunAkademik', 'list', 'tipeLensa', 'jenisProgram', 'insert'));
     }
 
+    // method list nilai update
     public function listNilaiUpdate(Request $request)
     {
-
         try {
-
             $listUpdate = gabung_nilai_metopen::findOrFail($request->input("kdjenisnilai_edit"));
 
             $listUpdate->update([
@@ -428,17 +398,14 @@ class metodePenilaianController extends Controller
                 "idtipelensa" => $request->idtipelensa,
                 "idjenisprogram" => $request->idjenisprogram
             ]);
-
-
             return redirect()->back();
         } catch (Throwable $th) {
             DB::rollBack();
-            // dd($th->getMessage());
-
             return redirect()->back();
         }
     }
 
+    // method list nilai delete
     public function listNilaiDelete(int $kdjenisnilai)
     {
         DB::table('gabung_nilai_metopen')->where("kdjenisnilai", $kdjenisnilai)->delete();
@@ -446,6 +413,7 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', 'berhasil hapus list');
     }
 
+    // method untuk melakukan copy mahasiswa program reguler 
     public function listNilaiPost(Request $request)
     {
         DB::select('call sistem_obe.kopi_mhs(?,?,?,?)', [$request->kdmatakuliah_, $request->kdtahunakademik_, $request->kelas_, $request->kdjenisnilai_]);
@@ -453,12 +421,14 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', 'Mahasiswa berhasil ditambah');
     }
 
+    // method untuk melakukan copy mahasiswa program MBKM
     public function copyMhsMBKM(Request $request)
     {
         DB::select('call sistem_obe.kopi_mhs_mbkm(?,?,?)', [$request->kdmatakuliah_, $request->kdtahunakademik_, $request->kdjenisnilai_Mbkm]);
         return redirect()->back()->with('success', 'Mahassiwa Berhasil Ditambah');
     }
 
+    // method untuk mengambil nilai dari lensa
     public function ambilNilai(Request $request, int $id)
     {
         DB::select('call sistem_obe.isinilai_dari_lensa(?)', [$id]);
@@ -466,10 +436,9 @@ class metodePenilaianController extends Controller
         return redirect()->back()->with('success', "Nilai Berhasil Di-Ambil");
     }
 
+    // method penilaian program reguler
     public function penilaian(int $id, string $kdtahunakademik)
     {
-
-        // dd('test');
 
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
             ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
@@ -487,12 +456,6 @@ class metodePenilaianController extends Controller
             ->first();
         // ->toSql();
 
-        // $kelas = ak_penilaian::select("matakuliah","gnm.id_gabung_metopen as gmcid")
-        //     ->join("gabung_nilai_metopen as gnm", "gnm.kdjenisnilai", "ak_penilaian.kdjenisnilai")
-        //     ->join("gabung_metopen_cpmks as gmc", "gmc.id","gnm.id_gabung_metopen")
-        //     ->join("ak_matakuliah_cpmk as amc", "amc.id","gmc.id_gabung_cpmk")
-        //     ->
-
         $penilaian = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "ak_penilaian.kdkrsnilai", "path_laporan", "path_foto", "idjenisprogram")
             ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("simptt.ak_mahasiswa as mhs", "mhs.kdmahasiswa", "=", "krs.kdmahasiswa")
@@ -508,11 +471,10 @@ class metodePenilaianController extends Controller
 
         $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
-        // dd($kelas);
-
         return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }
 
+    // method penilaian program MBKM
     public function penilaianMBKM(int $id, string $kdtahunakademik)
     {
 
@@ -548,11 +510,10 @@ class metodePenilaianController extends Controller
 
         $rubik = PenilaianFileUpload::where(["jenisNilai_id" => $id, 'tahunAkademik_id' => $kdtahunakademik])->get();
 
-        // dd($kelas);
-
         return view('pages.metopen.tugas', compact('penilaian', 'kelas', 'id', 'kdtahunakademik', 'rubik'));
     }
 
+    // method untuk upload file pendukung penilaian
     public function penilaianUploadPost(Request $request, $id, $tahun)
     {
         $request->validate([
@@ -581,6 +542,7 @@ class metodePenilaianController extends Controller
         return dd($request->all(), $id, $tahun);
     }
 
+    // method untuk delete file pendukung penilaian
     public function penilaianUploadDelete($id, $tahun, $id_file)
     {
         $file = PenilaianFileUpload::findOrFail($id_file);
@@ -592,6 +554,7 @@ class metodePenilaianController extends Controller
         return redirect(url()->previous())->with('success', 'berhasil hapus');
     }
 
+    // method upload/ubah nilai per mahasiswa pada penilaian
     public function postPenilaian(Request $request)
     {
         $request->validate([
@@ -613,10 +576,9 @@ class metodePenilaianController extends Controller
         }
     }
 
+    // method rekap nilai per matakuliah
     public function finalNilai(int $id, Request $request)
     {
-
-        // dd($request->filter);
 
         $matakuliah = ak_matakuliah::select("matakuliah", "batasNilai", "namalengkap", "gelarbelakang")
             ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
@@ -668,8 +630,6 @@ class metodePenilaianController extends Controller
             // ->toSql();
             ->get();
 
-        // dd($tabel);
-
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
             ->get();
@@ -679,8 +639,6 @@ class metodePenilaianController extends Controller
         foreach ($tahunAkademik as $data) {
             array_push($arrayTahun, $data->kdtahunakademik);
         }
-
-
 
         $tabularNilai = DB::select('call sistem_obe.nilai_tabular(?,?)', [$id, $request->filter]);
         $nilai = json_decode(json_encode($tabularNilai), true);
@@ -722,7 +680,6 @@ class metodePenilaianController extends Controller
 
         // dd($cpmkfinal);
 
-
         $persenplo = DB::table('v_persenplo')->where("kdmatakuliah", "=", $id)->get();
 
         $kelulusanpermahasiswa = [];
@@ -730,14 +687,12 @@ class metodePenilaianController extends Controller
             $kelulusanpermahasiswa[$value->kdkrsnilai] = (array_key_exists($value->kdkrsnilai, $kelulusanpermahasiswa) ? $kelulusanpermahasiswa[$value->kdkrsnilai] : 1) && $value->statuslulus;
         }
 
-
-
         return view('pages.metopen.final', compact('tahunAkademik', 'mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'persenplo', 'kelulusanpermahasiswa', 'cpmkfinal'));
     }
 
+    // method export nilai menjadi excel khusus program reguler
     public function exportNilai($id, $kdtahunakademik)
     {
-
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
             ->join("simptt.ak_krsnilai as krs", "krs.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "krs.kdpenawaran")
@@ -752,16 +707,13 @@ class metodePenilaianController extends Controller
             ->where("gnm.kdjenisnilai", "=", $id)
             ->where("gnm.kdtahunakademik", "=", $kdtahunakademik)
             ->first();
-        // return Excel::download(new ExportNilai, "nilai.xlsx");
-
-        // dd($kelas);
 
         return (new ExportNilai($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
     }
 
+    // method export nilai menjadi excel khusus program MBKM
     public function exportNilaiMbkm($id, $kdtahunakademik)
     {
-
         $kelas = ak_penilaian::select("ak_penilaian.nilai as apnilai", "ak_penilaian.id as kdpen", "gnm.kdjenisnilai as kdjn", "nim", "namalengkap", "matakuliah", "gnm.keterangan as keterangan", "kode_cpmk", "cpmk", "pmk.kelas as kelas", "gmc.bobot as bobot", "gmc.id as gmcid", "metode_penilaian", "mk.batasNilai as batas_nilai", "idjenisprogram")
             ->join("simptt.ak_krsnilai_equivalensi as mbkm", "mbkm.kdkrsnilai", "=", "ak_penilaian.kdkrsnilai")
             ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdpenawaran", "=", "mbkm.kdpenawaran")
@@ -776,17 +728,14 @@ class metodePenilaianController extends Controller
             ->where("gnm.kdjenisnilai", "=", $id)
             ->where("gnm.kdtahunakademik", "=", $kdtahunakademik)
             ->first();
-        // return Excel::download(new ExportNilai, "nilai.xlsx");
 
-        // dd($kelas);
 
         return (new ExportNilaiMbkm($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
     }
 
+    // method import nilai dari excel ke MySQL
     public function importNilai(Request $request, $id)
     {
-        // dd($request->file('file'));
-
         Excel::import(new ImportNilai, $request->file('file'));
 
         return redirect()->back();

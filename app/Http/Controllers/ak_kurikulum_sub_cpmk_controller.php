@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_sub_cpmk_controller extends Controller
 {
-    //
-
+    // method sub cpmk index
     public function index(Request $request)
     {
-
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
                 ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
@@ -55,13 +53,12 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
             }
         }
 
-        // dd($sub_cpmk);
         return view('pages.subCpmk.index', compact('sub_cpmk', 'kurikulum'));
     }
 
+    // method sub cpmk create
     public function create()
     {
-
         $cpmk = DB::table('ak_kurikulum_cpmks')
             ->join("simptt.ak_kurikulum", "ak_kurikulum.kdkurikulum", "ak_kurikulum_cpmks.kdkurikulum")
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
@@ -75,6 +72,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
         return view('pages.subCpmk.create', compact('cpmk', 'kurikulum'));
     }
 
+    // method sub cpmk store
     public function store(Request $request)
     {
         $request->validate([
@@ -93,6 +91,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
         return redirect()->back()->with('success', 'berhasil menambah data');
     }
 
+    // method sub cpmk edit
     public function edit(int $id)
     {
 
@@ -111,6 +110,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
         return view('pages.subCpmk.edit', compact('sub_cpmk', 'cpmk', 'kurikulum'));
     }
 
+    // method sub cpmk update
     public function update(Request $request, int $id)
     {
         $subCpmkEdit = ak_kurikulum_sub_cpmk::findOrFail($id);
@@ -125,6 +125,7 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
         return redirect()->route('subcpmk.index');
     }
 
+    // method sub cpmk delete
     public function delete(int $id)
     {
         $subcpmk = ak_kurikulum_sub_cpmk::findOrFail($id);

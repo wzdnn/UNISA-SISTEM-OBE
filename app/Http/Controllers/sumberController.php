@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class sumberController extends Controller
 {
-    //
+    // method sumber index
     public function indexSumber()
     {
         $sumber = DB::table('ak_kurikulum_sumbers')
@@ -18,6 +18,7 @@ class sumberController extends Controller
         return view('pages.sumber.index', compact('sumber'));
     }
 
+    // method sumber store
     public function storeSumber(Request $request)
     {
         $request->validate([
@@ -31,6 +32,7 @@ class sumberController extends Controller
         return redirect()->route('index.sumber')->with('success', 'sumber Berhasil di Tambah');
     }
 
+    // method sumber delete
     public function delete(int $id)
     {
         $sumber = ak_kurikulum_sumber::findOrFail($id);

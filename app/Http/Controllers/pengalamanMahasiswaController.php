@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class pengalamanMahasiswaController extends Controller
 {
-    //
+    // method pengelaman mahasiswa index
     public function indexPengalamanMahasiswa()
     {
         $pengalamanMahasiswa = DB::table('ak_pengalamanmahasiswa')
@@ -18,6 +18,7 @@ class pengalamanMahasiswaController extends Controller
         return view('pages.pengalamanMahasiswa.index', compact('pengalamanMahasiswa'));
     }
 
+    // method pengelaman mahasiswa store
     public function storePengalamanMahasiswa(Request $request)
     {
         $request->validate([
@@ -30,6 +31,8 @@ class pengalamanMahasiswaController extends Controller
 
         return redirect()->route('index.pengalaman')->with('success', 'Pengalaman Mahasiswa Berhasil di Tambah');
     }
+
+    // method pengelaman mahasiswa delete
     public function delete(int $id)
     {
         $pengalamanMahasiswa = ak_pengalamanmahasiswa::findOrFail($id);

@@ -101,11 +101,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sub-bk-edit/{id}', [ak_kurikulum_sub_bk_controller::class, 'edit'])->name('edit.subbk');
     Route::post('/sub-bk-edit/{id}', [ak_kurikulum_sub_bk_controller::class, 'update'])->name('update.subbk');
 
-    // Bagian SBK cuman belum digunakan
-    // Route::get('/peta-sub-bk', [ak_kurikulum_sub_bk_controller::class, "listSubBK"])->name('list.subbk');
-    // Route::get('/peta-cpmk-show/{id}', [ak_kurikulum_sub_bk_controller::class, 'MapCPMKShow'])->name('MapCPMKShow');
-    // Route::post('/peta-cpmk-show/{id}', [ak_kurikulum_sub_bk_controller::class, 'MappingCPMK'])->name('MapCPMKShow.post');
-
     // CPL Controller
     Route::resource('/cpl', ak_kurikulum_cpl_Controller::class);
     Route::middleware(['role:user,admin'])->group(function () {

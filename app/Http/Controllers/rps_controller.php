@@ -22,6 +22,8 @@ use Throwable;
 
 class rps_controller extends Controller
 {
+
+    // method untuk javascript mengambil total akumulasi waktu materi berdasarkan matakuliah
     public function getTotalAccumulatedTimeByMatakuliah($kdmatakuliah)
     {
         // Cari gabungan matakuliah berdasarkan kdmatakuliah
@@ -58,11 +60,10 @@ class rps_controller extends Controller
             }
         }
 
-        // dd($totalTimes); // Menampilkan akumulasi waktu per field
-
         return $totalTimes;
     }
 
+    // method RPS
     public function rps(int $id, int $semester)
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
@@ -78,9 +79,6 @@ class rps_controller extends Controller
         $tahunAkademik = ak_tahunakademik::where("isAktif", "=", 1)
             ->where('kdtahunakademik', $semester)
             ->first();
-
-        // dd($tahunAkademik);
-
 
         $cpl = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as amsb')
             ->select('kode_cpl', 'deskripsi_cpl')
@@ -100,8 +98,6 @@ class rps_controller extends Controller
             ->where('kdmatakuliah', $id)
             ->distinct()
             ->get();
-
-        // dd($tabel);
 
         $asinkron = gabung_matakuliah_pengalaman_asinkron::select('pengalaman_mahasiswa')
             ->join('ak_pengalamanmahasiswa as apm', 'apm.id', '=', "gabung_matakuliah_pengalaman_asinkron.id_pengalaman")
@@ -139,7 +135,6 @@ class rps_controller extends Controller
             ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_referensi_luaran.kdmatakuliah")
             ->join("ak_referensi as ref", "ref.kdreferensi", "=", "ak_matakuliah_referensi_luaran.id_referensi")
             ->where('kdtahunakademik', $semester)
-            // ->toSql();
             ->get();
 
         // Timeline section
@@ -155,7 +150,6 @@ class rps_controller extends Controller
             ->where('ak_timeline.kdtahunakademik', $semester)
             ->orderBy('mingguke', 'asc')
             ->get();
-        // ->toSql();
 
         $strukturProgram = ak_strukturprogram::where('ak_strukturprogram.kdmatakuliah', $id)->where('ak_strukturprogram.kdtahunakademik', $semester)->first();
 
@@ -165,8 +159,6 @@ class rps_controller extends Controller
             ->join('ak_kelas as kelas', 'kelas.kdkelas', '=', 'gtd.kdkelas')
             ->where('ak_timeline.kdmatakuliah', $id)
             ->get();
-
-        // dd($timeline);
 
         $relation = DB::table('ak_matakuliah_ak_kurikulum_sub_bk as mksbk')
             ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'mksbk.kdmatakuliah')
@@ -178,11 +170,6 @@ class rps_controller extends Controller
             ->where('mk.kdmatakuliah', $id)
             ->get();
 
-        // dd($referensiLuaran);
-
-        // dd('test');
-
-        // ver 3
         $metodebobot = DB::table('ak_matakuliah_cpmk as amc')
             ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'amc.kdmatakuliah')
             ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'mk.kdkurikulum')
@@ -211,15 +198,12 @@ class rps_controller extends Controller
             ->where('mk.kdmatakuliah', $id)
             ->get();
 
-        // dd($metodebobot);
-
         $waktu = $this->getTotalAccumulatedTimeByMatakuliah($id);
-
-        // dd($waktu);
 
         return view('pages.matakuliah.rps', compact('waktu', 'bobot', 'tahunAkademik', 'fakultas', 'strukturProgram', 'matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
     }
 
+    // method index halaman sebelum preview
     public function index(Request $request, int $id)
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
@@ -231,6 +215,7 @@ class rps_controller extends Controller
         return view('pages.rps.index', compact('tahunAkademik', 'matakuliah'));
     }
 
+    // method preview halaman sebelum rps
     public function detail(Request $request, int $id, int $semester)
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
@@ -242,11 +227,10 @@ class rps_controller extends Controller
 
         $rubik = RpsFileUpload::where(["kdmatakuliah" => $id, 'kdtahunakademik' => $semester])->get();
 
-        // dd($tahunAkademik);
-
         return view('pages.rps.detail', compact('matakuliah', 'tahunAkademik', 'rubik'));
     }
 
+    // method untuk upload file
     public function fileUploadPost(Request $request, int $id, $tahun)
     {
         $request->validate([
@@ -275,6 +259,7 @@ class rps_controller extends Controller
         return dd($request->all(), $id, $tahun);
     }
 
+    // method untuk delete file
     public function delete(int $id, int $semester, $kdfile)
     {
         $file = RpsFileUpload::findOrFail($kdfile);

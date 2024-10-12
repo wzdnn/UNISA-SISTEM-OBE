@@ -9,11 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_cplr_Controller extends Controller
 {
-    //
+    // method cplr index
     public function index(Request $request)
     {
-        // $akKurikulumCplr = ak_kurikulum_cplr::all();
-
         if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 100) {
             $akKurikulumCplr = DB::table('ak_kurikulum_cplrs')
                 ->select("ak_kurikulum_cplrs.*", "ak_kurikulum_aspeks.aspek as ak_aspek", "ak_kurikulum_sumbers.sumber as ak_sumber", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
@@ -175,6 +173,7 @@ class ak_kurikulum_cplr_Controller extends Controller
         return view('pages.cplr.index', compact('akKurikulumCplr', 'kdkurikulum'));
     }
 
+    // method cplr create
     public function create()
     {
         $akKurikulumAspek = DB::table('ak_kurikulum_aspeks')
@@ -193,6 +192,7 @@ class ak_kurikulum_cplr_Controller extends Controller
         return view('pages.cplr.create', compact('akKurikulumAspek', 'akKurikulumSumber', 'akKurikulum'));
     }
 
+    // method cplr store
     public function store(Request $request)
     {
         $request->validate([
@@ -212,6 +212,7 @@ class ak_kurikulum_cplr_Controller extends Controller
         return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Ditambahkan');
     }
 
+    // method cplr edit
     public function edit(int $id)
     {
         $akKurikulumAspek = DB::table('ak_kurikulum_aspeks')
@@ -225,6 +226,7 @@ class ak_kurikulum_cplr_Controller extends Controller
         return view('pages.cplr.edit', compact('cplrEdit', 'akKurikulumAspek', 'akKurikulumSumber'));
     }
 
+    // method cplr update
     public function update(Request $request, int $id)
     {
 
@@ -238,6 +240,8 @@ class ak_kurikulum_cplr_Controller extends Controller
         ]);
         return redirect()->route('cplr.index')->with('success', 'Sumber Referensi Berhasil Disunting');
     }
+
+    // method cplr delete
     public function delete(int $id)
     {
         $cplr = ak_kurikulum_cplr::findOrFail($id);

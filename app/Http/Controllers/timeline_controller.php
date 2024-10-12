@@ -17,8 +17,7 @@ use Illuminate\Support\Facades\Log;
 
 class timeline_controller extends Controller
 {
-    //Timeline matakuliah
-
+    // method timeline index
     public function timeline(int $id)
     {
 
@@ -46,7 +45,6 @@ class timeline_controller extends Controller
             ->join('ak_jeniskuliah as ajk', 'ajk.kdjeniskuliah', '=', 'ak_timeline.kdjeniskuliah')
             ->where('ak_timeline.kdmatakuliah', $id)
             ->orderBy('mingguke', 'asc')
-            // ->toSql();
             ->get();
 
 
@@ -55,15 +53,12 @@ class timeline_controller extends Controller
             ->join('simptt.pt_person as pp', 'pp.kdperson', '=', 'dosen.kdperson')
             ->join('ak_kelas as kelas', 'kelas.kdkelas', '=', 'gtd.kdkelas')
             ->where('ak_timeline.kdmatakuliah', $id)
-            // ->toSql();
             ->get();
-
-        // dd($timelineWithDosenKelas);
-
 
         return view('pages.detailMatakuliah.timeline', compact('matakuliah', 'timeline', 'timelineWithDosenKelas'));
     }
 
+    // method timeline create
     public function createTimeline(int $id)
     {
 
@@ -73,12 +68,7 @@ class timeline_controller extends Controller
 
         $cpmk = ak_matakuliah_cpmk::join("ak_kurikulum_cpmks as cpmk", "cpmk.id", "=", "ak_matakuliah_cpmk.id_cpmk")
             ->where('kdmatakuliah', $id)
-            // ->toSql();
             ->get();
-
-        // $materi = ak_kurikulum_sub_bk::join("ak_kurikulum", "ak_kurikulum.kdkurikulum", "=", "ak_kurikulum_sub_bks.kdkurikulum")
-        //     ->where("ak_kurikulum.kdunitkerja", Auth::user()->kdunit)
-        //     ->get();
 
         $materi = ak_kurikulum_sub_bk_materi::join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'ak_kurikulum_sub_bk_materi.id_gabung')
             ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
@@ -113,9 +103,10 @@ class timeline_controller extends Controller
         return view('pages.detailMatakuliah.createTimeline', compact('matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'kelas'));
     }
 
+    // method untuk javascript mengambil metode pembelajaran sesuai cpmk yang dipilih
     public function getMetodePembelajaranByCpmk($cpmk_id)
     {
-        \Log::info('CPMK ID: ' . $cpmk_id);
+        // \Log::info('CPMK ID: ' . $cpmk_id);
 
         $metopem = DB::table('simptt.ak_metodepembelajaran as mp')
             ->join("gabung_cpmk_pembelajarans as gcp", "gcp.id_pembelajaran", "mp.kdmetodepembelajaran")
@@ -124,11 +115,12 @@ class timeline_controller extends Controller
             ->select('mp.kdmetodepembelajaran', 'metodepembelajaran')
             ->get();
 
-        \Log::info('Metode Pembelajaran: ' . $metopem->toJson());
+        // \Log::info('Metode Pembelajaran: ' . $metopem->toJson());
 
         return response()->json($metopem);
     }
 
+    // method untuk javascript mengambil sub cpmk sesuai cpmk yang dipilih
     public function getSubCpmkByCpmk($cpmk_id)
     {
         $subCpmk = DB::table('ak_kurikulum_sub_cpmk as subcpmk')
@@ -141,6 +133,7 @@ class timeline_controller extends Controller
         return response()->json($subCpmk);
     }
 
+    // method timeline store
     public function storeTimeline(Request $request, int $id)
     {
         $request->validate([
@@ -175,10 +168,10 @@ class timeline_controller extends Controller
             }
         }
 
-        // Redirect back with success message
         return redirect()->back()->with('success', 'Timeline berhasil ditambahkan');
     }
 
+    // method timeline delete
     public function deleteTimeline(int $id)
     {
         $timeline = ak_timeline::where('kdtimeline', $id);
@@ -192,6 +185,7 @@ class timeline_controller extends Controller
         return redirect()->back()->with('success', 'Berhasil menghapus data');
     }
 
+    // method untuk javascript mengambil metode pembelajaran sesuai cpmk yang dipilh
     public function getMetodePembelajaran($cpmk_id)
     {
         // Fetch `metode_pembelajaran` related to the selected `CPMK`
@@ -206,6 +200,7 @@ class timeline_controller extends Controller
         dd($metodePembelajaran);
     }
 
+    // method timeline edit
     public function editTimeline(int $id, int $kdtimeline)
     {
         $matakuliah = ak_matakuliah::findOrFail($id);
@@ -220,9 +215,6 @@ class timeline_controller extends Controller
             ->join('ak_kurikulum_sub_bks as sbk', 'sbk.id', 'mksbk.ak_kurikulum_sub_bk_id')
             ->where('mksbk.kdmatakuliah', $id)
             ->get();
-        // ->toSql();
-
-        // dd($materi);
 
         $jeniskuliah = DB::table('ak_jeniskuliah')
             ->get();
@@ -234,11 +226,6 @@ class timeline_controller extends Controller
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
             ->get();
 
-        $dosen = DB::table('simptt.ak_dosen as ad')
-            ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
-            // ->where('kdunitkerja', Auth::user()->kdunit)
-            ->get();
-
         $tahunAkademik = DB::table('ak_tahunakademik')
             ->where("isAktif", "=", 1)
             ->get();
@@ -246,7 +233,6 @@ class timeline_controller extends Controller
         $dosen = DB::table('simptt.ak_dosen as ad')
             ->join('simptt.pt_person as pp', "pp.kdperson", "=", "ad.kdperson")
             ->select('namalengkap', 'pp.kdperson as kdper', 'gelardepan', 'gelarbelakang')
-            // ->where('kdunitkerja', Auth::user()->kdunit)
             ->get();
 
         $kelas = DB::table('ak_kelas')
@@ -283,11 +269,10 @@ class timeline_controller extends Controller
             $id_mk[] = $matakuliah->kdmatakuliah;
         }
 
-        // dd($timeline_gabung);
-
-        return view('pages.detailMatakuliah.editTimeline', compact('subCpmk', 'matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'dosen', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk', 'dosen', 'kelas', 'timeline_gabung', 'kdtimeline'));
+        return view('pages.detailMatakuliah.editTimeline', compact('subCpmk', 'matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk', 'dosen', 'kelas', 'timeline_gabung', 'kdtimeline'));
     }
 
+    // method delete dosen pada edit
     public function deleteDosen($id, $kdtimeline, $kdperson)
     {
         // Delete the dosen associated with the timeline
@@ -302,6 +287,7 @@ class timeline_controller extends Controller
         return response()->json(['success' => false, 'message' => 'Failed to delete dosen'], 500);
     }
 
+    // method timeline update
     public function updateTimeline(Request $request, int $id)
     {
         // Update the ak_timeline record

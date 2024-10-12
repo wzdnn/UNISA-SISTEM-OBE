@@ -12,6 +12,7 @@ use Throwable;
 class ak_kurikulum_cpmk_controller extends Controller
 {
 
+    // method peta-cpmk
     public function cpmkIndex(Request $request)
     {
 
@@ -122,13 +123,12 @@ class ak_kurikulum_cpmk_controller extends Controller
             }
         }
 
-        // return dd($CPMK);
         return view('pages.cpmk.home', compact('CPMK', 'cpm', 'kdkurikulum'));
     }
 
+    // method list-cpmk
     public function cpmkList(Request $request)
     {
-
         $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
 
         $akKurikulum = DB::table('ak_kurikulum')
@@ -156,7 +156,6 @@ class ak_kurikulum_cpmk_controller extends Controller
                     "=",
                     "ak_kurikulum_cpmks.kdkurikulum"
                 )
-                // ->orderBy('ak_kurikulum_cpls.id')
                 ->paginate(10);
 
             $kdkurikulum = DB::table("ak_kurikulum")
@@ -243,7 +242,7 @@ class ak_kurikulum_cpmk_controller extends Controller
         return view('pages.cpmk.list', compact('listCPMK', 'ak_kurikulum_cpl', 'sub_bk', 'akKurikulum', 'kdkurikulum'));
     }
 
-
+    // method delete cpmk
     public function delete(int $id)
     {
         $cpmk = ak_kurikulum_cpmk::where('id', '=', $id)->with('CPMKtoCPL')->first();
@@ -260,13 +259,9 @@ class ak_kurikulum_cpmk_controller extends Controller
         }
     }
 
+    // method insert cpmk
     public function cpmkStore(Request $request)
     {
-        // $request->validate([
-        //     'kode_cpmk',
-        //     'cpmk'
-        // ]);
-
         $cpmk = ak_kurikulum_cpmk::create([
             'kode_cpmk' => $request->kode_cpmk,
             'cpmk' => $request->cpmk,
@@ -279,6 +274,7 @@ class ak_kurikulum_cpmk_controller extends Controller
         return redirect()->route('list.cpmk')->with('success', 'CPMK Berhasil Ditambahkan');
     }
 
+    // method edit cpmk
     public function cpmkEdit(int $id)
     {
         $sub_bk = DB::table('ak_kurikulum_sub_bks')->get();
@@ -305,6 +301,7 @@ class ak_kurikulum_cpmk_controller extends Controller
         return view('pages.cpmk.edit', compact('sub_bk', 'akKurikulum', 'ak_kurikulum_cpl', 'cpmkEdit'));
     }
 
+    // method update cpmk
     public function cpmkUpdate(Request $request, int $id)
     {
         $cplSelect = [];

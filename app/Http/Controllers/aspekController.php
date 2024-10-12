@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class aspekController extends Controller
 {
-    //index aspek
+    // method aspek index
     public function indexAspek()
     {
         $aspek = DB::table('ak_kurikulum_aspeks')
@@ -18,6 +18,7 @@ class aspekController extends Controller
         return view('pages.aspek.index', compact('aspek'));
     }
 
+    // method aspek store
     public function storeAspek(Request $request)
     {
         $request->validate([
@@ -30,14 +31,14 @@ class aspekController extends Controller
 
         return redirect()->route('index.aspek')->with('success', 'Aspek Berhasil di Tambah');
     }
+
+    // method aspek delete
     public function delete(int $id)
     {
         $aspek = ak_kurikulum_aspek::findOrFail($id);
         if (!$aspek) {
             return abort(404);
         }
-
-        // return dd($pl);
 
         $aspek->delete();
         return redirect(url()->previous())->with('success', 'sukses hapus');

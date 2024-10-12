@@ -40,6 +40,7 @@ use function Laravel\Prompts\select;
 class ak_matakuliah_controller extends Controller
 {
 
+    // method matakuliah index
     public function mkIndex(Request $request)
     {
 
@@ -102,7 +103,7 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.index', compact('matakuliah', 'kdkurikulum'));
     }
 
-    // tambah data
+    // method matakuliah create
     public function mkCreate()
     {
         $ak_kurikulum = DB::table('simptt.ak_kurikulum')
@@ -125,7 +126,7 @@ class ak_matakuliah_controller extends Controller
         return view('pages.matakuliah.create', compact('ak_kurikulum', 'SBK'));
     }
 
-    // method post tambah data
+    // method matakuliah store
     public function mkStore(Request $request)
     {
         $request->validate([
@@ -141,9 +142,6 @@ class ak_matakuliah_controller extends Controller
         ]);
 
         $matakuliah->MKtoSBKinput()->attach($request->input('kdsubbk'));
-
-        // return dd($matakuliah);
-
 
         return redirect()->route('index.mk')->with('success', 'Matakuliah berhasih ditambahkan');
     }

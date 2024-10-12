@@ -10,7 +10,7 @@ use Throwable;
 
 class ak_kurikulum_cpl_Controller extends Controller
 {
-    //
+    // method cpl index
     public function index(Request $request)
     {
 
@@ -148,6 +148,7 @@ class ak_kurikulum_cpl_Controller extends Controller
         return view('pages.cpl.index', compact('akKurikulumCpl', 'kdkurikulum'));
     }
 
+    // method cpl delete
     public function delete(int $id)
     {
         $cpl = ak_kurikulum_cpl::where('id', '=', $id)->with('CpltoPl', 'CpltoCplr')->first();
@@ -165,6 +166,7 @@ class ak_kurikulum_cpl_Controller extends Controller
         }
     }
 
+    // method cpl create
     public function create()
     {
         $ak_kurikulum_pl = DB::table('ak_kurikulum_pls')
@@ -202,6 +204,7 @@ class ak_kurikulum_cpl_Controller extends Controller
         return view('pages.cpl.create', compact('ak_kurikulum_pl', 'ak_kurikulum_cplr', 'ak_kurikulum_aspek', 'ak_kurikulum'));
     }
 
+    // method cpl store
     public function store(Request $request)
     {
         $request->validate([
@@ -225,6 +228,7 @@ class ak_kurikulum_cpl_Controller extends Controller
         return redirect()->route('cpl.index')->with('success', 'CPL berhasil ditambahkan');
     }
 
+    // method cpl edit
     public function edit(int $id)
     {
 
@@ -259,15 +263,9 @@ class ak_kurikulum_cpl_Controller extends Controller
         return view('pages.cpl.edit', compact('cplEdit', 'ak_kurikulum_aspek', 'ak_kurikulum_pl', 'ak_kurikulum_cplr'));
     }
 
+    // method cpl update
     public function update(Request $request, int $id)
     {
-
-        // $cplEdit->update([
-        //     'kode_cpl' => $request->kode_cpl,
-        //     'cpl' => $request->cpl,
-        //     'deskripsi_cpl' => $request->deskripsi_cpl,
-        //     'id' => $request->aspek,
-        // ]);
 
         $plSelect = [];
         $cplrSelect = [];
@@ -303,11 +301,6 @@ class ak_kurikulum_cpl_Controller extends Controller
                 'deskripsi_cpl' => $request->deskripsi_cpl,
                 'kdaspek' => $request->aspek,
             ]);
-
-            // $cplEdit->kode_cpl = $request->input('kode_cpl');
-            // $cplEdit->cpl = $request->input('cpl');
-            // $cplEdit->deskripsi_cpl = $request->input('deskripsi_cpl');
-            // $cplEdit->id = $request->input('aspek');
 
             if (count($plSelect) > 0) {
                 $cplEdit->CpltoPl()->sync($plSelect);

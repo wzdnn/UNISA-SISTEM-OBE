@@ -14,15 +14,12 @@ use Throwable;
 
 class strukturProgram_controller extends Controller
 {
-    // Struktur Program MK
+    // method struktur program index
     public function strukturProgramIndex(Request $request)
     {
-
         $kurikulum = DB::table("simptt.ak_kurikulum")
             ->where("isObe", "=", 1)
             ->get();
-
-        // $strukturProgram = ak_strukturprogram::all();
 
         $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "asc")->get();
         $filterLatest = $filter->last();
@@ -120,9 +117,9 @@ class strukturProgram_controller extends Controller
         return view('pages.detailMatakuliah.strukturProgramIndex', compact('filter', 'kurikulum', 'strukturprogram', 'tahunAkademik', 'kurikulum'));
     }
 
+    // method struktur program create
     public function strukturProgramCreate()
     {
-
         $kurikulum = DB::table("simptt.ak_kurikulum")
             ->where("isObe", "=", 1)
             ->where("kdunitkerja", Auth::user()->kdunit)
@@ -147,15 +144,12 @@ class strukturProgram_controller extends Controller
             ->orderBy('namalengkap', 'asc')
             ->get();
 
-        // return dd($tahunAkademik);
-
         return view('pages.detailMatakuliah.createStrukturProgram', compact('filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2'));
     }
 
-
+    // method struktur program store
     public function strukturProgramStore(Request $request)
     {
-
         $request->validate([
             'teori'
         ]);
@@ -201,6 +195,7 @@ class strukturProgram_controller extends Controller
         return redirect()->back()->with('success', 'berhasil menambahkan struktur Program');
     }
 
+    // method struktur program delete
     public function strukturProgramDelete(int $id)
     {
         $struktur = ak_strukturprogram::findOrFail($id);
@@ -212,18 +207,17 @@ class strukturProgram_controller extends Controller
         $struktur->delete();
 
         foreach ($dosenUtama as $du) {
-
             $du->delete();
         }
 
         foreach ($dosenPelaporan as $dp) {
-
             $dp->delete();
         }
 
         return redirect()->back()->with('success', 'Berhasil menghapus struktur program');
     }
 
+    // method struktur program edit
     public function strukturProgramEdit(int $id)
     {
 
@@ -279,12 +273,10 @@ class strukturProgram_controller extends Controller
             $id_kurikulum[] = $sp->kdkurikulum;
         }
 
-
-        // dd($dosenUtama);
-
         return view('pages.detailMatakuliah.EditStrukturProgram', compact('strukturProgram', 'filter', 'tahunAkademik', 'kurikulum', 'matakuliah', 'dosen1', 'dosen2', 'dosenUtama', 'dosenPelaporan', 'id_DUtama', 'id_DPelaporan', 'id_Mk', 'id_tahunAkademik', 'id_kurikulum'));
     }
 
+    // method struktur program update
     public function strukturProgramUpdate(Request $request, int $id)
     {
         $struktur = ak_strukturprogram::where('kdstrukturprogram', $id)->first();
@@ -363,8 +355,6 @@ class strukturProgram_controller extends Controller
                 ]);
             }
         }
-
-        // dd($request->input('dosen1'), $request->input('dosen2'));
 
         return redirect()->back()->with('success', 'Data Berhasil di-Update');
     }

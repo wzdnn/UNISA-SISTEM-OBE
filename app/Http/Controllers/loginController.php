@@ -7,43 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class loginController extends Controller
 {
+    // method login index
     public function index()
     {
         return view("login.index");
     }
 
-    // function login(Request $request)
-    // {
-    //     // proses validasi
-    //     $request->validate([
-    //         'email'=>'required',
-    //         'password'=>'required',
-    //     ]);
-
-
-    //     $infologin = [
-    //         'email'=> $request->email,
-    //         'password'=> $request->password,
-    //     ];
-
-
-    //     if(Auth::attempt($infologin)){
-    //         if(Auth::user()->role == 'admin'){
-    //             return redirect('dashboard');
-    //             // echo "sukses";
-    //             // exit();
-    //         } elseif (Auth::user()->role == 'universitas'){
-    //             return redirect('universitas');
-    //         } elseif (Auth::user()->role == 'prodi'){
-    //             return redirect('prodi');
-    //         }
-
-
-    //     } else {
-    //         return redirect('')->withErrors('Username dan password yang dimasukkan tidak sesuai')->withInput();
-    //     }
-
-    // }
+    // method login page
     function login(Request $request)
     {
         // Validation: Ensure both email and password are entered
@@ -74,6 +44,7 @@ class loginController extends Controller
         }
     }
 
+    //method login logout
     function logout()
     {
         Auth::logout();

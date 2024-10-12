@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    // method login
     public function login()
     {
         return view('pages.login');
     }
 
-
+    // method Post Login
     public function postLogin(Request $request)
     {
         // Validasi input
@@ -32,16 +34,7 @@ class UserController extends Controller
         }
     }
 
-    public function test()
-    {
-        // return dd(gabung_user::findOrFail(1));
-        // $user = User::where('id', '=', Auth::id())->with('namaKdUnit')->get();
-        // return dd($user, Auth::user()->unitkerja);
-        // return dd(User::where('id', '=', Auth::id())->namaKdUnit());
-        // return dd(auth()->user()->load('namaKdUnit')->namaKdUnit->unitkerja);
-    }
-
-
+    // method logout
     public function logout()
     {
         Auth::logout();

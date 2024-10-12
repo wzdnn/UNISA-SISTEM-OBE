@@ -11,6 +11,82 @@ use Illuminate\Support\Facades\DB;
 
 class rekap_controller extends Controller
 {
+
+    // method rekap index
+    public function rekap(Request $request)
+    {
+        $rekap = DB::table('ak_tahunakademik as ata')
+            ->where("isAktif", 1)
+            ->get();
+
+
+        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
+                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->where("isObe", 1)
+                ->orderBy('kdtamasuk', 'asc')
+                ->get();
+        } else {
+            $kdkurikulum = DB::table("simptt.ak_kurikulum")
+                ->where(function ($query) {
+                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
+                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
+                })
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
+                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->where("ak.kdunitkerja", Auth::user()->kdunit)
+                ->where("isObe", 1)
+                ->orderBy('kdtamasuk', 'asc')
+                ->get();
+        }
+
+        $arrayKurikulum = [];
+        foreach ($kdkurikulum as $data) {
+            array_push($arrayKurikulum, $data->kurikulum);
+        }
+
+        if ($request->has("filter")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $rekap = DB::table('ak_tahunakademik as ata')
+                    ->where("isAktif", 1)
+                    ->get();
+
+                $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
+                    ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                    ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                    ->where("ak.kurikulum", $request->filter)
+                    ->where("isObe", 1)
+                    ->get();
+            }
+        }
+
+        return view('pages.rekap.index', compact('rekap', 'rekapTahunanIndex', 'kdkurikulum'));
+    }
+
+    // method rekap semester index
+    public function indexSemester(int $id)
+    {
+        $tahunAkademik = DB::table('ak_tahunakademik as ata')
+            ->where("isAktif", 1)
+            ->where('kdtahunakademik', $id)
+            ->first();
+
+        $semester = ak_matakuliah::select('semester')->distinct()->get();
+
+        return view("pages.rekap.index-semester", compact('semester', 'tahunAkademik'));
+    }
+
+    // method rekap semester
     public function rekapSemester(int $id, Request $request, int $semester)
     {
 
@@ -136,123 +212,7 @@ class rekap_controller extends Controller
         ], compact('tahunAkademik', 'rekapSemester', 'tabel', 'mahasiswa', 'kdkurikulum', 'cpmk', 'statistik'));
     }
 
-    public function rekapMahasiswaGet(Request $request)
-    {
-        $rekapMahasiswa = DB::select('call sistem_obe.rekap_cpl_mahasiswa(?,?)', [$request->nim, null]);
-        $rekap = json_decode(json_encode($rekapMahasiswa), true);
-
-        $statistik = [];
-        foreach ($rekap[0] as $key => $item) {
-            if (substr($key, 0, 15) == 'ketercapaiancpl') {
-                // Extract just the CPMK part, e.g., ketercapaiancpl => CPMK 1
-                $label = substr($key, 16);
-                $statistik[] = [
-                    'label' => $label,
-                    'score' => number_format((float)$item, 2) // Format the score to 2 decimal places
-                ];
-            }
-        }
-
-        // Sort the $statistik array by the 'label' key in ascending order
-        usort($statistik, function ($a, $b) {
-            // Extract the numeric part from the labels to sort numerically (CPMK 1, CPMK 2, etc.)
-            return intval(substr($a['label'], 5)) <=> intval(substr($b['label'], 5));
-        });
-
-        // Separate the sorted labels and scores into separate arrays
-        $sortedLabels = array_column($statistik, 'label');
-        $sortedScores = array_column($statistik, 'score');
-
-        // dd($statistik);
-
-        // dd($rekap);
-
-        return view("pages.rekap.rekapMahasiswa", [
-            'statistik' => [
-                'label' => $sortedLabels,
-                'score' => $sortedScores
-            ]
-        ], compact('rekap', 'statistik'));
-    }
-
-    public function rekap(Request $request)
-    {
-
-
-        $rekap = DB::table('ak_tahunakademik as ata')
-            ->where("isAktif", 1)
-            ->get();
-
-
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
-
-            $kdkurikulum = DB::table("simptt.ak_kurikulum")
-                ->where("isObe", "=", 1)
-                ->get();
-
-            $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
-                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
-                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
-                ->where("isObe", 1)
-                ->orderBy('kdtamasuk', 'asc')
-                ->get();
-        } else {
-            $kdkurikulum = DB::table("simptt.ak_kurikulum")
-                ->where(function ($query) {
-                    $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
-                        ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-                })
-                ->where("isObe", "=", 1)
-                ->get();
-
-            $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
-                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
-                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
-                ->where("ak.kdunitkerja", Auth::user()->kdunit)
-                ->where("isObe", 1)
-                ->orderBy('kdtamasuk', 'asc')
-                ->get();
-        }
-
-
-        $arrayKurikulum = [];
-        foreach ($kdkurikulum as $data) {
-            array_push($arrayKurikulum, $data->kurikulum);
-        }
-
-
-
-        if ($request->has("filter")) {
-            if (in_array($request->filter, $arrayKurikulum)) {
-                $rekap = DB::table('ak_tahunakademik as ata')
-                    ->where("isAktif", 1)
-                    ->get();
-
-                $rekapTahunanIndex = DB::table("ak_mahasiswa as am")
-                    ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
-                    ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
-                    ->where("ak.kurikulum", $request->filter)
-                    ->where("isObe", 1)
-                    ->get();
-            }
-        }
-
-        // dd($rekapTahunanIndex);
-        return view('pages.rekap.index', compact('rekap', 'rekapTahunanIndex', 'kdkurikulum'));
-    }
-
-    public function indexSemester(int $id)
-    {
-        $tahunAkademik = DB::table('ak_tahunakademik as ata')
-            ->where("isAktif", 1)
-            ->where('kdtahunakademik', $id)
-            ->first();
-
-        $semester = ak_matakuliah::select('semester')->distinct()->get();
-
-        return view("pages.rekap.index-semester", compact('semester', 'tahunAkademik'));
-    }
-
+    // method rekap tahunan
     public function rekapTahunan(Request $request, int $id)
     {
 
@@ -332,8 +292,6 @@ class rekap_controller extends Controller
                 ->get();
         }
 
-        // dd($tabel);
-
         $arrayTahun = [];
         foreach ($tahunAkademik as $data) {
             array_push($arrayTahun, $data->kdtahunakademik);
@@ -389,14 +347,47 @@ class rekap_controller extends Controller
         $sortedLabels = array_column($statistik, 'label');
         $sortedScores = array_column($statistik, 'score');
 
-        // dd($statistik);
-
-
         return view('pages.rekap.rekapTahunan', [
             'statistik' => [
                 'label' => $sortedLabels,
                 'score' => $sortedScores
             ]
         ], compact('rekapTahunan', 'tabel', 'tahunAkademik', 'mahasiswa', 'kdkurikulum', 'statistik', 'cpl'));
+    }
+
+    // method rekap mahasiswa (get)
+    public function rekapMahasiswaGet(Request $request)
+    {
+        $rekapMahasiswa = DB::select('call sistem_obe.rekap_cpl_mahasiswa(?,?)', [$request->nim, null]);
+        $rekap = json_decode(json_encode($rekapMahasiswa), true);
+
+        $statistik = [];
+        foreach ($rekap[0] as $key => $item) {
+            if (substr($key, 0, 15) == 'ketercapaiancpl') {
+                // Extract just the CPMK part, e.g., ketercapaiancpl => CPMK 1
+                $label = substr($key, 16);
+                $statistik[] = [
+                    'label' => $label,
+                    'score' => number_format((float)$item, 2) // Format the score to 2 decimal places
+                ];
+            }
+        }
+
+        // Sort the $statistik array by the 'label' key in ascending order
+        usort($statistik, function ($a, $b) {
+            // Extract the numeric part from the labels to sort numerically (CPMK 1, CPMK 2, etc.)
+            return intval(substr($a['label'], 5)) <=> intval(substr($b['label'], 5));
+        });
+
+        // Separate the sorted labels and scores into separate arrays
+        $sortedLabels = array_column($statistik, 'label');
+        $sortedScores = array_column($statistik, 'score');
+
+        return view("pages.rekap.rekapMahasiswa", [
+            'statistik' => [
+                'label' => $sortedLabels,
+                'score' => $sortedScores
+            ]
+        ], compact('rekap', 'statistik'));
     }
 }

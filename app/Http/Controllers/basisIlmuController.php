@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class basisIlmuController extends Controller
 {
-    //
+    // method basis ilmu index
     public function indexBasisIlmu()
     {
         $basil = DB::table('ak_kurikulum_basis_ilmus')
@@ -18,6 +18,7 @@ class basisIlmuController extends Controller
         return view('pages.basisIlmu.index', compact('basil'));
     }
 
+    // method basis ilmu store
     public function storeBasisIlmu(Request $request)
     {
         $request->validate([
@@ -30,6 +31,8 @@ class basisIlmuController extends Controller
 
         return redirect()->route('index.basil')->with('success', 'Basis Ilmu Berhasil di Tambah');
     }
+
+    // method basis ilmu delete
     public function delete(int $id)
     {
         $basil = ak_kurikulum_basis_ilmu::findOrFail($id);

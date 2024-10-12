@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_pl_Controller extends Controller
 {
-    //
-
+    // method pl index
     public function index(Request $request)
     {
-        // $akKurikulumPl = ak_kurikulum_pl::all();
-
         if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 100) {
             $akKurikulumPl = DB::table('ak_kurikulum_pls')
                 ->select("ak_kurikulum_pls.*", "ak_kurikulum.kdkurikulum", "ak_kurikulum.kurikulum", "ak_kurikulum.tahun")
@@ -73,16 +70,10 @@ class ak_kurikulum_pl_Controller extends Controller
                 ->get();
         }
 
-        // $kdkurikulum = DB::table("ak_kurikulum")
-        //     ->where("isObe", "=", 1)
-        //     ->get();
-
         $arrayKurikulum = [];
         foreach ($kdkurikulum as $data) {
             array_push($arrayKurikulum, $data->kurikulum);
         }
-
-
 
         if ($request->has("filter")) {
             if (in_array($request->filter, $arrayKurikulum)) {
@@ -99,6 +90,7 @@ class ak_kurikulum_pl_Controller extends Controller
         return view('pages.profileLulusan.index', compact('akKurikulumPl', 'kdkurikulum'));
     }
 
+    // method pl create
     public function create()
     {
         $unit = DB::table('ak_kurikulum')
@@ -109,9 +101,9 @@ class ak_kurikulum_pl_Controller extends Controller
         return view('pages.profileLulusan.create', compact('unit'));
     }
 
+    // method pl store
     public function store(Request $request)
     {
-
         $request->validate([
             'kode_pl',
             'profile_lulusan'
@@ -127,12 +119,14 @@ class ak_kurikulum_pl_Controller extends Controller
         return redirect()->route('pl.index')->with('success', 'Profile Lulusan Berhasil Ditambahkan');
     }
 
+    // method pl edit
     public function edit(int $id)
     {
         $plEdit = ak_kurikulum_pl::findOrFail($id);
         return view('pages.profileLulusan.edit', compact('plEdit'));
     }
 
+    // method pl update
     public function update(Request $request, int $id)
     {
         $plEdit = ak_kurikulum_pl::findOrFail($id);
@@ -145,14 +139,13 @@ class ak_kurikulum_pl_Controller extends Controller
         return redirect()->route('pl.index')->with('success', 'Profile Lulusan Berhasil Diedit');
     }
 
+    // method pl delete
     public function delete(int $id)
     {
         $pl = ak_kurikulum_pl::findOrFail($id);
         if (!$pl) {
             return abort(404);
         }
-
-        // return dd($pl);
 
         $pl->delete();
         return redirect(url()->previous())->with('success', 'sukses hapus');

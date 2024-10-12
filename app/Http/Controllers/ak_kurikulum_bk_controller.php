@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class ak_kurikulum_bk_controller extends Controller
 {
-    //
+    // method bk index
     public function index(Request $request)
     {
         // $akKurikulumBk = ak_kurikulum_bk::all();
@@ -204,6 +204,7 @@ class ak_kurikulum_bk_controller extends Controller
         return view('pages.bahanKajian.index', compact('akKurikulumBk', 'kdkurikulum'));
     }
 
+    // method bk create
     public function create()
     {
         $akKurikulumBasil = DB::table('ak_kurikulum_basis_ilmus')
@@ -220,6 +221,7 @@ class ak_kurikulum_bk_controller extends Controller
         return view('pages.bahanKajian.create', compact('akKurikulumBasil', 'akKurikulumBidil', 'akKurikulum'));
     }
 
+    // method bk store
     public function store(Request $request)
     {
         $request->validate([
@@ -235,10 +237,10 @@ class ak_kurikulum_bk_controller extends Controller
             'kdkurikulum' => $request->unit
         ]);
 
-
         return redirect()->route('bk.index')->with('success', 'Bahan Kajian berhasil ditambah');
     }
 
+    // method bk delete
     public function delete(int $id)
     {
         $bk = ak_kurikulum_bk::findOrFail($id);
@@ -252,6 +254,7 @@ class ak_kurikulum_bk_controller extends Controller
         return redirect(url()->previous())->with('success', 'sukses hapus');
     }
 
+    // method bk edit
     public function edit(int $id)
     {
         $akKurikulumBasil = DB::table('ak_kurikulum_basis_ilmus')
@@ -266,6 +269,7 @@ class ak_kurikulum_bk_controller extends Controller
         return view('pages.bahanKajian.edit', compact('bkEdit', 'akKurikulumBasil', 'akKurikulumBidil'));
     }
 
+    // method bk update
     public function update(Request $request, int $id)
     {
         $bkEdit = ak_kurikulum_bk::findOrFail($id);
@@ -278,14 +282,4 @@ class ak_kurikulum_bk_controller extends Controller
 
         return redirect()->route('bk.index')->with('success', 'Bahan Kajian Berhasil Disunting');
     }
-
-    // public function showBKSBK()
-    // {
-    //     $akKurikulumBk = DB::table('ak_kurikulum_bks')
-    //         ->select('ak_kurikulum_bks.*', 'ak_kurikulum_sub_bks.*')
-    //         ->join('ak_kurikulum_sub_bks', 'ak_kurikulum_sub_bks.kdbk', '=', 'ak_kurikulum_bks.kdbk')
-    //         ->get();
-
-    //     return view('pages.bahanKajian.showBKSBK', compact('akKurikulumBk'));
-    // }
 }
