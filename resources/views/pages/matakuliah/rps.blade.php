@@ -40,10 +40,11 @@
                             <h3 class="font-medium text-sm">Tahun Akademik : {{ $tahunAkademik->tahunakademik }}</h3>
                         </th>
                         <th class="border px-4 py-2" colspan="4">
-                            <h3 class="font-medium text-sm">KODE DOKUMEN</h3>
+                            <h3 class="font-medium text-sm">KODE DOKUMEN : <br /> FM-UNISA-AK-PBM-02-15/R0</h3>
                         </th>
                         <th class="border px-4 py-2" colspan="4">
-                            <h3 class="font-medium text-sm">KODE MATA KULIAH : {{ $matakuliah->kodematakuliah }}</h3>
+                            <h3 class="font-medium text-sm">KODE MATA KULIAH : <br /> {{ $matakuliah->kodematakuliah }}
+                            </h3>
                         </th>
                     </tr>
                 </thead>

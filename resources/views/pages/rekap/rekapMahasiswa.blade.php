@@ -70,6 +70,77 @@
                     </tr>
                 </tbody>
             </table>
+            <br />
+
+            <div class="w-full">
+                @foreach ($fix as $grubCpl => $grubCpmk)
+                    <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center ">
+                        <th class="px-6 py-3 border whitespace-nowrap text-left"
+                            style="background-color: rgb(57, 146, 223)">
+                            {{ $grubCpl }}</th>
+                        <th class="px-6 py-3 border text-left">{{ $grubCpmk['cpl_desk'] }}</th>
+                    </table>
+
+                    @foreach ($grubCpmk['cpmk'] as $cpmk => $items)
+                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center">
+                            <th class="px-6 py-3 border" style="background-color: rgb(108, 244, 139)">
+                                {{ $cpmk }}
+                            </th>
+                            <th class="px-6 py-3 border text-left">{{ $items['cpmk_desk'] }}</th>
+                        </table>
+
+                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center"
+                            style="margin-bottom: 1rem">
+                            <thead class="w-full text-xs text-gray-700 uppercase bg-white">
+                                <tr class="bg-white border rounded text-center">
+                                    <th class="px-6 py-3 border">No</th>
+                                    <th class="px-6 py-3 border">Kode Mata Kuliah</th>
+                                    <th class="px-6 py-3 border">Nama Mata kuliah</th>
+                                    <th class="px-6 py-3 border">Nilai Cpmk</th>
+                                    <th class="px-6 py-3 border">Bobot</th>
+                                    <th class="px-6 py-3 border">Skor (Nilai * Bobot)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($items['data'] as $key => $value)
+                                    <tr class="text-center">
+                                        <td class="px-6 py-3 border">{{ $key + 1 }}</td>
+                                        <td class="px-6 py-3 border">{{ $value['kodematakuliah'] }}</td>
+                                        <td class="px-6 py-3 border">{{ $value['matakuliah'] }}</td>
+                                        <td class="px-6 py-3 border">{{ $value['nilai'] }}</td>
+                                        <td class="px-6 py-3 border">{{ $value['total_bobot'] }}</td>
+                                        <td class="px-6 py-3 border">{{ round($value['skor_nilaixbobot']) }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td class="text-white" colspan="5" style="background-color: rgb(57, 146, 223)">Total
+                                        {{ $cpmk }}</td>
+                                    <td>{{ $items['total_cpmk'] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    @endforeach
+                    {{-- @foreach ($totalCpmkFix as $cplTotal => $cpmkTotal)
+                        @foreach ($cpmkTotal as $key => $item)
+                            @foreach ($item['data'] as $cpmks)
+                                <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center">
+                                    <th class="px-6 py-3 border" style="background-color: rgb(57, 146, 223)">
+                                        {{ $cpmks['kode_cpmk'] }}</th>
+                                    <th class="px-6 py-3 border">{{ $cpmks['total_cpmk'] }}</th>
+                                </table>
+                            @endforeach
+                        @endforeach
+                    @endforeach --}}
+
+                    <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center ">
+                        <th class="px-6 py-3 border whitespace-nowrap" style="background-color: rgb(247, 222, 59)">
+                            Total Skor {{ $grubCpl }}</th>
+                        <th class="px-6 py-3 border">{{ $grubCpmk['total_score_cpl'] }}</th>
+                    </table>
+                    <div class="mb-10" style="margin-bottom: 5rem"></div>
+                @endforeach
+            </div>
+
         </div>
         <div class="max-w-md items-center" id="chart">
         </div>

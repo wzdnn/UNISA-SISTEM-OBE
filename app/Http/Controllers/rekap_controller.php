@@ -361,6 +361,16 @@ class rekap_controller extends Controller
         $rekapMahasiswa = DB::select('call sistem_obe.rekap_cpl_mahasiswa(?,?)', [$request->nim, null]);
         $rekap = json_decode(json_encode($rekapMahasiswa), true);
 
+        $cpmk = DB::select('call sistem_obe.mahasiswa_cpmk(?)', [$request->nim]);
+        $mahasiswaCpmk = json_decode(json_encode($cpmk), true);
+
+        $totalCpmk = DB::select('call sistem_obe.mahasiswa_total_cpmk(?)', [$request->nim]);
+        $total_cpmk = json_decode(json_encode($totalCpmk), true);
+
+
+        $total_skor_cpl = DB::select('call sistem_obe.mahasiswa_total_skor_cpl(?)', [$request->nim]);
+        $skor_cpl = json_decode(json_encode($total_skor_cpl), true);
+
         $statistik = [];
         foreach ($rekap[0] as $key => $item) {
             if (substr($key, 0, 15) == 'ketercapaiancpl') {
@@ -372,6 +382,103 @@ class rekap_controller extends Controller
                 ];
             }
         }
+
+
+
+        $fix = [];
+
+        foreach ($mahasiswaCpmk as $items) {
+            if (!isset($fix[$items['cpl']]['cpl_desk'])) {
+                $fix[$items['cpl']]['cpl_desk'] = $items['cpl_desk'];
+            }
+
+            if (!isset($fix[$items['cpl']]['cpmk'][$items['kode_cpmk']]['cpmk_desk'])) {
+                $fix[$items['cpl']]['cpmk'][$items['kode_cpmk']]['cpmk_desk'] = $items['cpmk_desk'];
+            }
+
+            if (!isset($fix[$items['cpl']]['cpmk'][$items['kode_cpmk']])) {
+
+                // append cpl cpmk
+                $fix[$items['cpl']]['cpmk'][$items['kode_cpmk']]['data'][] = [
+                    'kodematakuliah' => $items['kodematakuliah'],
+                    'matakuliah' => $items['matakuliah'],
+                    'nilai' => $items['nilai'],
+                    'total_bobot' => $items['total_bobot'],
+                    'skor_nilaixbobot' => $items['skor_nilaixbobot']
+                ];
+            } else {
+                $fix[$items['cpl']]['cpmk'][$items['kode_cpmk']]['data'][] = [
+                    'kodematakuliah' => $items['kodematakuliah'],
+                    'matakuliah' => $items['matakuliah'],
+                    'nilai' => $items['nilai'],
+                    'total_bobot' => $items['total_bobot'],
+                    'skor_nilaixbobot' => $items['skor_nilaixbobot']
+                ];
+            }
+        }
+
+        // mapping score cpl
+        foreach ($skor_cpl as $key => $item) {
+            if (isset($fix[$item['cpl']])) {
+                $fix[$item['cpl']]['total_score_cpl'] = $item['total_skor_cpl'];
+            }
+        }
+
+        $hitung = [];
+
+        foreach ($fix as $cpl => $cpmk) {
+            foreach ($cpmk['cpmk'] as $cpmkKey => $datas) {
+                foreach ($datas['data'] as $data) {
+                    if (!isset($hitung[$cpmkKey]['nilaixbobot'])) {
+                        $hitung[$cpmkKey]['nilaixbobot'] = $data['skor_nilaixbobot'];
+                    } else {
+                        // tambah dari value sebelumnya
+                        $hitung[$cpmkKey]['nilaixbobot'] += $data['skor_nilaixbobot'];
+                    }
+
+                    if (!isset($hitung[$cpmkKey]['sumBobot'])) {
+                        $hitung[$cpmkKey]['sumBobot'] = (int)$data['total_bobot'];
+                    } else {
+                        // tambah dari value sebelumnya
+                        $hitung[$cpmkKey]['sumBobot'] += (int)$data['total_bobot'];
+                    }
+                }
+            }
+        }
+
+        $final = [];
+        foreach ($hitung as $key => $item) {
+            $final[$key] = round($item['nilaixbobot'] / $item['sumBobot'], 2);
+        }
+
+        foreach ($fix as $cpl => $items) {
+            foreach ($items['cpmk'] as $cpmk => $item) {
+                if (isset($final[$cpmk])) {
+                    $fix[$cpl]['cpmk'][$cpmk]['total_cpmk'] = $final[$cpmk];
+                }
+            }
+        }
+
+        // dd($fix, $skor_cpl);
+
+        // $totalCpmkFix = [];
+
+        // foreach ($total_cpmk as $cpmkTotal) {
+        //     if (!isset($totalCpmkFix[$cpmkTotal['cpl']][$cpmkTotal['kode_cpmk']])) {
+
+        //         $totalCpmkFix[$cpmkTotal['cpl']][$cpmkTotal['kode_cpmk']]['data'][] = [
+        //             'kode_cpmk' => $cpmkTotal['kode_cpmk'],
+        //             'total_cpmk' => $cpmkTotal['total_cpmk']
+        //         ];
+        //     } else {
+        //         $totalCpmkFix[$cpmkTotal['cpl']][$cpmkTotal['kode_cpmk']]['data'][] = [
+        //             'kode_cpmk' => $cpmkTotal['kode_cpmk'],
+        //             'total_cpmk' => $cpmkTotal['total_cpmk']
+        //         ];
+        //     }
+        // }
+
+        // dd($totalCpmkFix);
 
         // Sort the $statistik array by the 'label' key in ascending order
         usort($statistik, function ($a, $b) {
@@ -388,6 +495,6 @@ class rekap_controller extends Controller
                 'label' => $sortedLabels,
                 'score' => $sortedScores
             ]
-        ], compact('rekap', 'statistik'));
+        ], compact('rekap', 'statistik', 'fix', 'mahasiswaCpmk', 'total_cpmk', 'skor_cpl'));
     }
 }

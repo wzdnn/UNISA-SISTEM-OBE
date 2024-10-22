@@ -582,9 +582,9 @@ class metodePenilaianController extends Controller
 
         $matakuliah = ak_matakuliah::select("matakuliah", "batasNilai", "namalengkap", "gelarbelakang")
             ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
-            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
-            ->join("ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
-            ->join("pt_person as per", "per.kdperson", "=", "att.kdperson")
+            ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
+            ->join("simptt.ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "att.kdperson")
             ->where('simptt.ak_matakuliah.kdmatakuliah', "=", $id)
             ->first();
 
@@ -592,9 +592,9 @@ class metodePenilaianController extends Controller
             ->join("ak_matakuliah_cpmk as amc", "amc.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
             ->join("ak_kurikulum_cpl_ak_kurikulum_cpmk as cplcpmk", "cplcpmk.ak_kurikulum_cpmk_id", "=", "amc.id_cpmk")
             ->join("ak_kurikulum_cpls as akc", "akc.id", "=", "cplcpmk.ak_kurikulum_cpl_id")
-            ->join("ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
-            ->join("ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
-            ->join("pt_person as per", "per.kdperson", "=", "att.kdperson")
+            ->join("simptt.ak_penawaranmatakuliah as pmk", "pmk.kdmatakuliah", "=", "simptt.ak_matakuliah.kdmatakuliah")
+            ->join("simptt.ak_timteaching as att", "att.kdpenawaran", "=", "pmk.kdpenawaran")
+            ->join("simptt.pt_person as per", "per.kdperson", "=", "att.kdperson")
             ->where('simptt.ak_matakuliah.kdmatakuliah', "=", $id)
             ->where('pmk.kdtahunakademik', "=", 20231)
             ->distinct()
@@ -608,7 +608,7 @@ class metodePenilaianController extends Controller
             ->join("gabung_nilai_metopen as gnm", "gnm.id_gabung_metopen", "=", "gmc.id")
             ->join("ak_penilaian as ap", "ap.kdjenisnilai", "=", "gnm.kdjenisnilai")
             ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
-            ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+            ->join("simptt.pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
             ->where("simptt.ak_matakuliah.kdmatakuliah", "=", $id)
             ->where("ak_kurikulum.isObe", '=', 1)
             ->distinct()
@@ -686,6 +686,7 @@ class metodePenilaianController extends Controller
         foreach ($persenplo as $key => $value) {
             $kelulusanpermahasiswa[$value->kdkrsnilai] = (array_key_exists($value->kdkrsnilai, $kelulusanpermahasiswa) ? $kelulusanpermahasiswa[$value->kdkrsnilai] : 1) && $value->statuslulus;
         }
+
 
         return view('pages.metopen.final', compact('tahunAkademik', 'mahasiswa', 'tabel', 'matakuliah', 'cpl', 'persentaseLulus', 'persenplo', 'kelulusanpermahasiswa', 'cpmkfinal'));
     }

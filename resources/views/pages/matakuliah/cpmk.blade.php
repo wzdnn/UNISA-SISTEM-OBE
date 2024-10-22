@@ -64,7 +64,8 @@
         @csrf
         <select class="w-full" id="cpmk" name="cpmk[]" multiple="multiple">
             @foreach ($cpmk as $item)
-                <option value="{{ $item->id }}" @selected(in_array($item->id, $cpmkSelected))>{{ $item->kode_cpmk }} {{ $item->cpmk }}
+                <option value="{{ $item->id }}" @selected(in_array($item->id, $cpmkSelected))>{{ $item->tahun }} -
+                    {{ $item->kode_cpmk }} {{ $item->cpmk }}
                 </option>
             @endforeach
         </select>
