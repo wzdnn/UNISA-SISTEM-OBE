@@ -50,105 +50,138 @@
             <h1 class="text-lg font-medium">Rekap Ketercapaian CPL Mahasiswa</h1>
         </div>
 
-        <div class="px-3 py-5">
-            <table name="mytable" id="mytable"
-                class="overflow-x-scroll border rounded-lg w-auto text-sm text-center text-gray-500">
-                <thead class="w-full text-xs text-gray-700 uppercase bg-white">
-                    <tr class="w-full border rounded text-center">
-                        <th>Nim</th>
-                        <th>Nama</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="bg-white border rounded text-left">
-                        <td class="px-6 py-3 border">
-                            {{ $rekap[0]['nim'] }}
-                        </td>
-                        <td class="px-6 py-3 border rounded">
-                            {{ $rekap[0]['namalengkap'] }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br />
-
-            <div class="w-full">
-                @foreach ($fix as $grubCpl => $grubCpmk)
-                    <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center ">
-                        <th class="px-6 py-3 border whitespace-nowrap text-left"
-                            style="background-color: rgb(57, 146, 223)">
-                            {{ $grubCpl }}</th>
-                        <th class="px-6 py-3 border text-left">{{ $grubCpmk['cpl_desk'] }}</th>
+        <div style="background-color: rgb(243, 243, 243)">
+            <div class="px-3 py-5 ">
+                <div class="flex justify-center">
+                    <table name="mytable" id="mytable"
+                        class="overflow-x-scroll rounded-lg w-auto justify-center text-sm text-center font-bold">
+                        {{-- <thead class="w-full text-xs text-gray-700 uppercase bg-white">
+                            <tr class="w-full border rounded text-center">
+                                <th>Nim</th>
+                                <th>Nama</th>
+                            </tr>
+                        </thead> --}}
+                        <tbody>
+                            <tr class="bg-white  rounded-lg text-left">
+                                <td class="px-6 py-3 ">
+                                    {{ $rekap[0]['nim'] }}
+                                </td>
+                                <td class="px-6 py-3  rounded-lg">
+                                    {{ $rekap[0]['namalengkap'] }}
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
+                    <a href="{{ route('transkrip.cpl', ['filter' => request()->input('nim')]) }}" class="ml-3"
+                        target="_blank">
+                        <button type="submit" id="printButton" name="printButton"
+                            class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <span>Cetak</span>
+                        </button>
+                    </a>
 
-                    @foreach ($grubCpmk['cpmk'] as $cpmk => $items)
-                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center">
-                            <th class="px-6 py-3 border" style="background-color: rgb(108, 244, 139)">
-                                {{ $cpmk }}
-                            </th>
-                            <th class="px-6 py-3 border text-left">{{ $items['cpmk_desk'] }}</th>
+                </div>
+                <br />
+
+                <div class="w-full">
+                    @foreach ($fix as $grubCpl => $grubCpmk)
+                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center "
+                            style="background-color: rgb(248, 93, 51)">
+                            <th class="px-6 py-3 border whitespace-nowrap text-left w-5">
+                                {{ $grubCpl }}</th>
+                            <th class="px-6 py-3 border text-left">{{ $grubCpmk['cpl_desk'] }}</th>
                         </table>
 
-                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center"
-                            style="margin-bottom: 1rem">
-                            <thead class="w-full text-xs text-gray-700 uppercase bg-white">
-                                <tr class="bg-white border rounded text-center">
-                                    <th class="px-6 py-3 border">No</th>
-                                    <th class="px-6 py-3 border">Kode Mata Kuliah</th>
-                                    <th class="px-6 py-3 border">Nama Mata kuliah</th>
-                                    <th class="px-6 py-3 border">Nilai Cpmk</th>
-                                    <th class="px-6 py-3 border">Bobot</th>
-                                    <th class="px-6 py-3 border">Skor (Nilai * Bobot)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($items['data'] as $key => $value)
-                                    <tr class="text-center">
-                                        <td class="px-6 py-3 border">{{ $key + 1 }}</td>
-                                        <td class="px-6 py-3 border">{{ $value['kodematakuliah'] }}</td>
-                                        <td class="px-6 py-3 border">{{ $value['matakuliah'] }}</td>
-                                        <td class="px-6 py-3 border">{{ $value['nilai'] }}</td>
-                                        <td class="px-6 py-3 border">{{ $value['total_bobot'] }}</td>
-                                        <td class="px-6 py-3 border">{{ round($value['skor_nilaixbobot']) }}</td>
+                        @foreach ($grubCpmk['cpmk'] as $cpmk => $items)
+                            <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center"
+                                style="background-color: rgb(108, 244, 139)">
+                                <th class="px-6 py-3 border whitespace-nowrap w-5">
+                                    {{ $cpmk }}
+                                </th>
+                                <th class="px-6 py-3 border text-left">{{ $items['cpmk_desk'] }}</th>
+                            </table>
+
+                            <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center"
+                                style="margin-bottom: 1rem">
+                                <thead class="w-full text-xs text-gray-700 uppercase bg-white">
+                                    <tr class="border rounded text-center">
+                                        <th class="px-6 py-3 border">No</th>
+                                        <th class="px-6 py-3 border">Kode Mata Kuliah</th>
+                                        <th class="px-6 py-3 border">Nama Mata kuliah</th>
+                                        <th class="px-6 py-3 border">Nilai Cpmk</th>
+                                        <th class="px-6 py-3 border">Bobot</th>
+                                        <th class="px-6 py-3 border">Skor (Nilai * Bobot)</th>
                                     </tr>
-                                @endforeach
-                                <tr>
-                                    <td class="text-white" colspan="5" style="background-color: rgb(57, 146, 223)">Total
-                                        {{ $cpmk }}</td>
-                                    <td>{{ $items['total_cpmk'] }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    @endforeach
-                    {{-- @foreach ($totalCpmkFix as $cplTotal => $cpmkTotal)
-                        @foreach ($cpmkTotal as $key => $item)
-                            @foreach ($item['data'] as $cpmks)
-                                <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center">
-                                    <th class="px-6 py-3 border" style="background-color: rgb(57, 146, 223)">
-                                        {{ $cpmks['kode_cpmk'] }}</th>
-                                    <th class="px-6 py-3 border">{{ $cpmks['total_cpmk'] }}</th>
-                                </table>
-                            @endforeach
+                                </thead>
+                                <tbody class="bg-white">
+                                    @foreach ($items['data'] as $key => $value)
+                                        <tr class="text-center">
+                                            <td class="px-6 py-3 border">{{ $key + 1 }}</td>
+                                            <td class="px-6 py-3 border">{{ $value['kodematakuliah'] }}</td>
+                                            <td class="px-6 py-3 border">{{ $value['matakuliah'] }}</td>
+                                            <td class="px-6 py-3 border">{{ $value['nilai'] }}</td>
+                                            <td class="px-6 py-3 border">{{ $value['total_bobot'] }}</td>
+                                            <td class="px-6 py-3 border">{{ round($value['skor_nilaixbobot']) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr class="rounded-lg font-bold" style="background-color: rgb(92, 170, 238)">
+                                        <td class="" colspan="5">
+                                            Total
+                                            {{ $cpmk }}</td>
+                                        <td>{{ $items['total_cpmk'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         @endforeach
-                    @endforeach --}}
+                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center "
+                            style="background-color: rgb(247, 222, 59)">
+                            <th class="px-6 py-3 border whitespace-nowrap">
+                                Total Skor {{ $grubCpl }}</th>
+                            <th class="px-6 py-3 border">{{ $grubCpmk['total_score_cpl'] }}</th>
+                        </table>
+                        <div class="mb-10" style="margin-bottom: 5rem"></div>
+                    @endforeach
+                </div>
 
-                    <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center ">
-                        <th class="px-6 py-3 border whitespace-nowrap" style="background-color: rgb(247, 222, 59)">
-                            Total Skor {{ $grubCpl }}</th>
-                        <th class="px-6 py-3 border">{{ $grubCpmk['total_score_cpl'] }}</th>
-                    </table>
-                    <div class="mb-10" style="margin-bottom: 5rem"></div>
-                @endforeach
             </div>
-
-        </div>
-        <div class="max-w-md items-center" id="chart">
+            <div>
+                <div class="flex left px-3">
+                    <h1 class="text-lg font-medium">Grafik CPL {{ $rekap[0]['namalengkap'] }} </h1>
+                </div>
+                <div class="max-w-md items-center" id="chart">
+                </div>
+            </div>
         </div>
     </div>
 @endsection
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.getElementById('printButton').addEventListener('click', function() {
+            // Get the URL to redirect to
+            var url = "{{ route('transkrip.cpl', ['filter' => request()->input('nim')]) }}";
+
+            // Open the URL in a new tab
+            var printWindow = window.open(url, '_blank');
+
+            // Check if the window was opened successfully
+            if (printWindow) {
+                // Wait for the new tab to load
+                printWindow.onload = function() {
+                    // Delay the print function by 3 seconds (3000 milliseconds)
+                    setTimeout(function() {
+                        printWindow.print();
+                        // Optional: Close the window after printing
+                        // printWindow.close();
+                    }, 500); // 3000 milliseconds = 3 seconds
+                };
+            } else {
+                // Alert if the window didn't open (possibly blocked)
+                alert('Please allow popups for this website to print.');
+            }
+        });
+    </script>
     <script>
         var options = {
             series: [{
@@ -172,11 +205,19 @@
                             to: 100,
                             color: '#00E396'
                         }]
+                    },
+                    dataLabels: {
+                        position: 'top' // Menampilkan angka di atas bar
                     }
                 }
             },
             dataLabels: {
-                enabled: false
+                enabled: true, // Aktifkan data label
+                offsetY: -15, // Mengatur jarak label dari bar
+                style: {
+                    fontSize: '12px',
+                    colors: ["#000"] // Warna teks label
+                }
             },
             xaxis: {
                 categories: @json($statistik['label'] ?? null),

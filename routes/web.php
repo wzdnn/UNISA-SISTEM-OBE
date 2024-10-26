@@ -267,5 +267,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/rekap-semester/{id}/result/{semester}', [rekap_controller::class, 'rekapSemester'])->name('rekap.semester');
     Route::get('/rekap-tahunan/{id}', [rekap_controller::class, 'rekapTahunan'])->name('rekap.tahunan');
     Route::get('/rekap-mahasiswa', [rekap_controller::class, 'rekapMahasiswaGet'])->name('rekap.mahasiswa.get');
+    Route::get('/transkrip-cpl', [rekap_controller::class, 'transkripCPL'])->name('transkrip.cpl');
     // Route::post('/rekap-mahasiswa/{nim}', [rekap_controller::class, 'rekapMahasiswaPost'])->name('rekap.mahasiswa.post');
 });

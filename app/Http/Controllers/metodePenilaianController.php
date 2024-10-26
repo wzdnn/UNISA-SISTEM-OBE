@@ -709,7 +709,7 @@ class metodePenilaianController extends Controller
             ->where("gnm.kdtahunakademik", "=", $kdtahunakademik)
             ->first();
 
-        return (new ExportNilai($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
+        return (new ExportNilai($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . '.xlsx');
     }
 
     // method export nilai menjadi excel khusus program MBKM
@@ -731,13 +731,13 @@ class metodePenilaianController extends Controller
             ->first();
 
 
-        return (new ExportNilaiMbkm($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . Carbon::now()->timestamp . '.xlsx');
+        return (new ExportNilaiMbkm($id))->download($kelas->matakuliah . " " . $kelas->keterangan . " " . '.xlsx');
     }
 
     // method import nilai dari excel ke MySQL
     public function importNilai(Request $request, $id)
     {
-        Excel::import(new ImportNilai, $request->file('file'));
+        Excel::import(new ImportNilai, $request->file('file')->store('temp'));
 
         return redirect()->back();
     }

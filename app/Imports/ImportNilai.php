@@ -7,8 +7,9 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class ImportNilai implements ToCollection, WithHeadingRow
+class ImportNilai implements ToCollection, WithHeadingRow, WithChunkReading
 {
     /**
      * @param array $row
@@ -33,5 +34,10 @@ class ImportNilai implements ToCollection, WithHeadingRow
                 $nilai->update(['nilai' => $row['nilai']]);
             }
         }
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }
