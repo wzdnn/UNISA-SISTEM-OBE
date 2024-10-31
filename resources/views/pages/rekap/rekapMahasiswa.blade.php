@@ -174,7 +174,7 @@
                         printWindow.print();
                         // Optional: Close the window after printing
                         // printWindow.close();
-                    }, 500); // 3000 milliseconds = 3 seconds
+                    }, 2000); // 3000 milliseconds = 3 seconds
                 };
             } else {
                 // Alert if the window didn't open (possibly blocked)

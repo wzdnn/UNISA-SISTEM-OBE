@@ -28,7 +28,7 @@ class gabung_subbk_cpmk extends Model
         // return $this->hasOne(ak_metodepembelajaran::class, 'id', 'id_pembelajaran');
     }
 
-    public function subCpmk()
+    public function sub_cpmk()
     {
         return $this->belongsToMany(ak_kurikulum_sub_cpmk::class, 'gabung_cpmk_subcpmk', 'id_gabung_cpmk', 'id_subcpmk');
     }

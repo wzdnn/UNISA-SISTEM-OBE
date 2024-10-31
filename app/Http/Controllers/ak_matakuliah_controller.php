@@ -609,6 +609,10 @@ class ak_matakuliah_controller extends Controller
             // ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'gabung_subbk_cpmks.id_cpmk')
             ->first();
 
+        $scpmk = gabung_subbk_cpmk::with('sub_cpmk')
+            ->where('gabung_subbk_cpmks.id', '=', $id_cpmk)
+            ->first();
+
         $subCpmk = ak_kurikulum_sub_cpmk::with('subcpmk_get') // Load the relation directly
             ->join("simptt.ak_kurikulum", "ak_kurikulum_sub_cpmk.kdkurikulum", "=", "simptt.ak_kurikulum.kdkurikulum")
             ->where('kdunitkerja', '=', auth()->user()->kdunit)
@@ -621,15 +625,18 @@ class ak_matakuliah_controller extends Controller
         }
 
         $id_subCpmk = [];
-        foreach ($subCpmk as $data) {
-            foreach ($data->subcpmk_get as $sub_data) {
-                array_push($id_subCpmk, $sub_data->id_subcpmk);
-            }
+        // foreach ($subCpmk as $data) {
+        //     foreach ($data->subcpmk_get as $sub_data) {
+        //         array_push($id_subCpmk, $sub_data->id_subcpmk);
+        //     }
+        // }
+        foreach ($scpmk->sub_cpmk as $data) {
+            $id_subCpmk[] = $data->kdsubcpmk;
         }
 
-        // dd($id_pembelajaran, $id_subCpmk);
+        // dd($id_subCpmk);
 
-        return view('pages.matakuliah.detail-cpmk', compact('id', 'sub', 'cpmk', 'subbk', 'mkSubBk', 'id_pembelajaran', 'pembelajaran', 'detailCpmk', 'id_subCpmk', 'subCpmk'));
+        return view('pages.matakuliah.detail-cpmk', compact('id', 'sub', 'cpmk', 'subbk', 'mkSubBk', 'id_pembelajaran', 'pembelajaran', 'scpmk', 'detailCpmk', 'id_subCpmk', 'subCpmk'));
     }
 
     public function postCpmkPembelajaran(int $id, int $sub, int $id_cpmk, Request $request)
@@ -658,7 +665,7 @@ class ak_matakuliah_controller extends Controller
 
 
         $cpmkPembelajaran = gabung_subbk_cpmk::with('pembelajaran')->findOrFail($id_cpmk);
-        $cpmkSubCpmk = gabung_subbk_cpmk::with("subCpmk")->findOrFail($id_cpmk);
+        $cpmkSubCpmk = gabung_subbk_cpmk::with("sub_cpmk")->findOrFail($id_cpmk);
 
         if (count($pembelajaranSelect) > 0) {
             $cpmkPembelajaran->pembelajaran()->sync($pembelajaranSelect);
@@ -667,9 +674,9 @@ class ak_matakuliah_controller extends Controller
         }
 
         if (count($subCpmkSelect) > 0) {
-            $cpmkSubCpmk->subCpmk()->sync($subCpmkSelect);
+            $cpmkSubCpmk->sub_cpmk()->sync($subCpmkSelect);
         } else {
-            $cpmkSubCpmk->subCpmk()->detach();
+            $cpmkSubCpmk->sub_cpmk()->detach();
         }
         return redirect()->back()->with("success", "berhasil update Metode Pembelajaran dan Sub CPMK pada CPMK");
     }

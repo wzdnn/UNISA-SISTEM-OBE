@@ -11,12 +11,12 @@
 </head>
 
 <body class="">
+
     <div class="min-h-screen bg-gray-100 flex flex-col justify sm:py-12">
         <div class="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
             <h1 class="font-bold text-center text-2xl mb-5"
                 src="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png">SISTEM OBE
                 UNISA
-
             </h1>
 
             <div class="bg-white shadow w-full rounded-lg divide-y divide-gray-200">

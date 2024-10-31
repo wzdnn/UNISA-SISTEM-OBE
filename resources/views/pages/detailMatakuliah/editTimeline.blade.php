@@ -109,11 +109,10 @@
 
                     <div class="flex flex-col z-0 w-full mb-6 group">
                         <label for="sub_cpmk" class="text-sm text-gray-500">Sub CPMK</label>
-                        <select id="kdsubcpmk" name="kdsubcpmk" class="form-control">
+                        <select id="kdsubcpmk" name="kdsubcpmk[]" class="form-control" multiple>
                             <!-- Options will be dynamically loaded here -->
                             @foreach ($subCpmk as $sbc)
-                                <option value="{{ $sbc->kdsubcpmk }}"
-                                    {{ $timeline->kdsubcpmk == $sbc->kdsubcpmk ? 'selected' : '' }}>
+                                <option value="{{ $sbc->kdsubcpmk }}" @selected(in_array($sbc->kdsubcpmk, $id_subcpmk))>
                                     {{ $sbc->kode_subcpmk }}-{{ $sbc->sub_cpmk }}
                                 </option>
                             @endforeach

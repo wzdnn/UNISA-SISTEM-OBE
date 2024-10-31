@@ -20,12 +20,20 @@
     <div class="flex flex-col">
         <form method="GET" class="rounded">
             {{-- @csrf --}}
-            <select name="filter" id="" class="rounded">
+            <select name="filter_kurikulum" id="" class="rounded">
                 <option value="null">Kurikulum</option>
                 @foreach ($kdkurikulum as $item)
                     <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>{{ $item->kurikulum }}
                         {{ $item->tahun }}</option>
                 @endforeach
+            </select>
+
+            <select name="filter_tahun" id="" class="rounded">
+                <option selected value="null">Tahun Ke-</option>
+                <option value="1">Tahun ke-1</option>
+                <option value="2">Tahun ke-2</option>
+                <option value="3">Tahun ke-3</option>
+                <option value="4">Tahun ke-4</option>
             </select>
             {{-- <input type="text" name="search" class=" rounded"> --}}
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
@@ -220,11 +228,19 @@
                         to: 100,
                         color: '#00E396'
                     }]
+                },
+                dataLabels: {
+                    position: 'top' // Menampilkan angka di atas bar
                 }
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: true, // Aktifkan data label
+            offsetY: -15, // Mengatur jarak label dari bar
+            style: {
+                fontSize: '12px',
+                colors: ["#000"] // Warna teks label
+            }
         },
         xaxis: {
             categories: @json($statistik['label'] ?? null),

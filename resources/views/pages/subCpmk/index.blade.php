@@ -42,14 +42,19 @@
     <div class="flex flex-col">
         <form method="GET" class="rounded">
             {{-- @csrf --}}
-            <select name="filter" id="" class="rounded">
-                <option value="null">Kurikulum</option>
+            <select name="filter-kurikulum" id="" class="rounded">
+                <option value="">Kurikulum</option>
                 @foreach ($kurikulum as $item)
-                    <option value="{{ $item->kurikulum }}" @selected(request()->filter == $item->kurikulum)>{{ $item->kurikulum }}
-                        {{ $item->tahun }}</option>
+                    <option value="{{ $item->kdkurikulum }}" @selected(request()->input('filter-kurikulum') == $item->kdkurikulum)>{{ $item->kurikulum }}
+                        {{ $item->tahun }}
+                    </option>
                 @endforeach
             </select>
-            </select>
+
+            <input type="search" name="filter-subcpmk"
+                class="w-full p-3 text-sm text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Search Sub CPMK" value="{{ request()->input('filter-subcpmk') }}" />
+
             {{-- <input type="text" name="search" class=" rounded"> --}}
             <button class="bg-blue-600 hover:bg-blue-800 text-white rounded px-2 text-md font-semibold p-1"
                 type="submit">Filter</button>

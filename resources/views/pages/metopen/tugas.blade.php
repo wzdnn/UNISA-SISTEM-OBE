@@ -168,13 +168,10 @@
                         {{ $value->namalengkap }}
                     </td>
                     <td class="px-6 py-4 flex flex-row">
-
-                        <input type="hidden" name="kdpenilaian" id="input-id" value="{{ $value->kdpen }}">
-
-                        <input type="text" id="nilai" name="nilai"
-                            class="block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
-                            value="{{ $value->apnilai }}">
-
+                        <input type="hidden" name="kdpenilaian" class="input-id" value="{{ $value->kdpen }}">
+                        <input type="text"
+                            class="nilai-input block w-10 p-2 text-center text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500"
+                            name="nilai" value="{{ $value->apnilai }}">
                     </td>
                     <td>
                         @if (!($value->path_foto == null))
@@ -208,9 +205,10 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#nilai').on('input', function() {
+            $('.nilai-input').on('input', function() {
                 const nilai = $(this).val();
-                const kdpenilaian = $('#input-id').val(); // Get the correct kdpenilaian
+                const kdpenilaian = $(this).siblings('.input-id')
+            .val(); // Ambil nilai dari sibling input-id yang terkait
 
                 $.ajax({
                     url: '', // Update this route as needed

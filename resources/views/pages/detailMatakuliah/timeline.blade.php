@@ -111,7 +111,9 @@
                             {{ $t->kode_cpmk }}
                         </td>
                         <td class="px-6 py-4 text-left whitespace-nowrap">
-                            {{ $t->kode_subcpmk ?? '' }} {{ $t->sub_cpmk ?? '' }}
+                            @foreach ($timelineWithSubCpmk->where('kdtimeline', $t->kdtimeline) as $subcpmk)
+                                {{ $subcpmk->kode_subcpmk }} <br />
+                            @endforeach
                         </td>
                         <td class="px-6 py-4 text-left">
                             {{ $t->kode_subbk }} {{ $t->materi_pembelajaran }}

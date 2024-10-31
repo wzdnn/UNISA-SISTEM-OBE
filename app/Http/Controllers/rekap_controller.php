@@ -216,6 +216,10 @@ class rekap_controller extends Controller
     public function rekapTahunan(Request $request, int $id)
     {
 
+        $filter_tahun = $request->input("filter_tahun") ?: null;
+        $filter_kurikulum = $request->input("filter_kurikulum") ?: null;
+        $mahasiswa = []; // Initialize mahasiswa as an empty array
+
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
             $tabel = ak_matakuliah_cpmk::select("gmc.id", "metode_penilaian", "bobot", "kode_cpmk", "kode_cpl", "kdtahunakademik", "ak_matakuliah_cpmk.id", "matakuliah")
                 ->join("simptt.ak_matakuliah as mk", "mk.kdmatakuliah", "=", "ak_matakuliah_cpmk.kdmatakuliah")
@@ -242,7 +246,18 @@ class rekap_controller extends Controller
         } else {
 
 
-            $tabel = DB::select('call sistem_obe.rekap_tahun_header(?,?)', [$id, Auth::user()->kdunit]);
+            // $tabel = DB::select('call sistem_obe.rekap_tahun_header(?,?)', [$id, Auth::user()->kdunit]);
+
+            // Check if filters are provided; set default values if not
+
+
+            if (!empty($filter_tahun) && !empty($filter_kurikulum)) {
+                $tabel = DB::select('call sistem_obe.test_tist(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+            } else {
+                $tabel = [];
+            }
+
+            // dd($tabel);
 
             $tahunAkademik = DB::table('ak_tahunakademik')
                 ->where("isAktif", "=", 1)
@@ -266,40 +281,60 @@ class rekap_controller extends Controller
             array_push($arrayKurikulum, $data->kurikulum);
         }
 
-        if ($request->has("filter")) {
-            if (in_array($request->filter, $arrayKurikulum)) {
-                $rekapTahunan = DB::select('call sistem_obe.rekap_tahunan(?,?)', [$id, $request->filter]);
-            }
-        }
-
-        $rekapTahunan = DB::select('call sistem_obe.rekap_tahunan(?,?)', [$id, $request->filter]);
-        $rekap = json_decode(json_encode($rekapTahunan), true);
-        foreach ($rekap as $key => $value) {
-            $loop = 1;
-            foreach ($value as $urutanData => $data) {
-                if ($loop <= 6) {
-                    $mahasiswa[$key][] = $data;
-                } else {
-                    $mahasiswa[$key][6][$urutanData] = $data;
-                }
-                $loop++;
-            }
-        }
-
-        $rekapCpl = DB::select('call sistem_obe.rekap_tahunan_cpl(?,?)', [$id, $request->filter]);
-        $cpl = json_decode(json_encode($rekapCpl), true);
-
-        // $statistik = [];
-        // foreach ($cpl[0] as $key => $item) {
-        //     if (substr($key, 0, 15) == 'ketercapaiancpl') {
-        //         // Extract just the CPMK part, e.g., ketercapaiancpl => CPMK 1
-        //         $label = substr($key, 16);
-        //         $statistik[] = [
-        //             'label' => $label,
-        //             'score' => number_format((float)$item, 2) // Format the score to 2 decimal places
-        //         ];
+        // if ($request->has("filter")) {
+        //     if (in_array($request->filter, $arrayKurikulum)) {
+        //         $rekapTahunan = DB::select('call sistem_obe.rekap_tahunan(?,?)', [$id, $request->filter]);
         //     }
         // }
+
+        // $rekapTahunan = DB::select('call sistem_obe.rekap_tahunan(?,?)', [$id, $request->filter]);
+        // $rekap = json_decode(json_encode($rekapTahunan), true);
+        // foreach ($rekap as $key => $value) {
+        //     $loop = 1;
+        //     foreach ($value as $urutanData => $data) {
+        //         if ($loop <= 6) {
+        //             $mahasiswa[$key][] = $data;
+        //         } else {
+        //             $mahasiswa[$key][6][$urutanData] = $data;
+        //         }
+        //         $loop++;
+        //     }
+        // }
+
+        // $rekapCpl = DB::select('call sistem_obe.rekap_tahunan_cpl(?,?)', [$id, $request->filter]);
+        // $cpl = json_decode(json_encode($rekapCpl), true);
+
+        if ($request->has("filter_kurikulum") || $request->has("filter_tahun")) {
+            if (in_array($request->filter, $arrayKurikulum)) {
+                $rekapTahunan = DB::select('call sistem_obe.test_tust(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+            }
+        }
+
+        if (!empty($filter_tahun) && !empty($filter_kurikulum)) {
+            $rekapTahunan = DB::select('call sistem_obe.test_tust(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+            $rekap = json_decode(json_encode($rekapTahunan), true);
+            foreach ($rekap as $key => $value) {
+                $loop = 1;
+                foreach ($value as $urutanData => $data) {
+                    if ($loop <= 6) {
+                        $mahasiswa[$key][] = $data;
+                    } else {
+                        $mahasiswa[$key][6][$urutanData] = $data;
+                    }
+                    $loop++;
+                }
+            }
+        } else {
+            $rekapTahunan = [];
+        }
+
+        if (!empty($filter_tahun) && !empty($filter_kurikulum)) {
+
+            $rekapCpl = DB::select('call sistem_obe.test_tast(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+            $cpl = json_decode(json_encode($rekapCpl), true);
+        } else {
+            $cpl = [];
+        }
 
         $statistik = [];
         foreach ($cpl as $item) {
@@ -308,6 +343,8 @@ class rekap_controller extends Controller
                 'score' => number_format((float)$item['total_skor_cpl'], 2)
             ];
         }
+
+        // dd($statistik);
 
         // Sort the $statistik array by the 'label' key in ascending order
         usort($statistik, function ($a, $b) {

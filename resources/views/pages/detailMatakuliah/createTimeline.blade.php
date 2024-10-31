@@ -100,7 +100,7 @@
                     </div>
                     <div class="flex flex-col z-0 w-full mb-6 group">
                         <label for="sub_cpmk" class="text-sm text-gray-500">Sub CPMK</label>
-                        <select id="kdsubcpmk" name="kdsubcpmk" class="form-control">
+                        <select id="kdsubcpmk" name="kdsubcpmk[]" class="form-control" multiple>
                             <!-- Options will be dynamically loaded here -->
                         </select>
                     </div>
@@ -364,21 +364,20 @@
                     url: '{{ url('/get-subcpmk') }}/' + cpmk_id,
                     type: 'GET',
                     success: function(data) {
-                        console.log(data); // For debugging
+                        console.log(data); // Debugging
 
-                        var subCpmkDropodown = $('#kdsubcpmk');
-                        subCpmkDropodown.empty(); // Clear existing options
+                        var subCpmkDropdown = $('#kdsubcpmk');
+                        subCpmkDropdown.empty(); // Hapus opsi lama
 
-                        var uniqueOptions = new Set(); // To track unique options
+                        var uniqueOptions = new Set(); // Melacak opsi unik
 
                         $.each(data, function(key, value) {
-                            if (!uniqueOptions.has(value
-                                    .kdsubcpmk)) { // Check if option is unique
-                                subCpmkDropodown.append(
+                            if (!uniqueOptions.has(value.kdsubcpmk)) {
+                                subCpmkDropdown.append(
                                     '<option value="' + value.kdsubcpmk + '">' +
-                                    value.sub_cpmk + '</option>');
-                                uniqueOptions.add(value
-                                    .kdsubcpmk); // Mark option as added
+                                    value.sub_cpmk + '</option>'
+                                );
+                                uniqueOptions.add(value.kdsubcpmk);
                             }
                         });
                     },

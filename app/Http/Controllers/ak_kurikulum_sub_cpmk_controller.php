@@ -15,8 +15,8 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
     {
         if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0 || auth()->user()->kdunit == 42) {
             $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
-                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
-                ->paginate(10);
+                ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum');
+
 
             $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
@@ -27,8 +27,8 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
                 ->where(function ($query) {
                     $query->where("ak_kurikulum.kdunitkerja", '=', Auth::user()->kdunit)
                         ->orWhere("ak_kurikulum.kdunitkerja", '=', 0);
-                })
-                ->paginate(10);
+                });
+
 
             $kurikulum = DB::table("simptt.ak_kurikulum")
                 ->where(function ($query) {
@@ -39,18 +39,19 @@ class ak_kurikulum_sub_cpmk_controller extends Controller
                 ->get();
         }
 
+        $sub_cpmk = $sub_cpmk->when($request->input('filter-subcpmk'), function ($query) use ($request) {
+            $query->where('kode_subcpmk', 'like', "%" . $request->input("filter-subcpmk") . "%");
+        })
+            ->when($request->input('filter-kurikulum'), function ($query) use ($request) {
+                $query->where("ak_kurikulum_sub_cpmk.kdkurikulum", $request->input('filter-kurikulum'));
+            })
+            ->paginate(10);
+
+        // dd($request->all());
+
         $arrayKurikulum = [];
         foreach ($kurikulum as $data) {
             array_push($arrayKurikulum, $data->kurikulum);
-        }
-
-        if ($request->has("filter")) {
-            if (in_array($request->filter, $arrayKurikulum)) {
-                $sub_cpmk = ak_kurikulum_sub_cpmk::join('ak_kurikulum_cpmks', 'ak_kurikulum_cpmks.id', 'ak_kurikulum_sub_cpmk.kdcpmk')
-                    ->join('ak_kurikulum', 'ak_kurikulum.kdkurikulum', 'ak_kurikulum_sub_cpmk.kdkurikulum')
-                    ->where('kurikulum', $request->filter)
-                    ->paginate(10);
-            }
         }
 
         return view('pages.subCpmk.index', compact('sub_cpmk', 'kurikulum'));

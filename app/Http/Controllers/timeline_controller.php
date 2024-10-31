@@ -10,6 +10,7 @@ use App\Models\ak_matakuliah_cpmk;
 use App\Models\ak_tahunakademik;
 use App\Models\ak_timeline;
 use App\Models\gabung_timeline_dosen;
+use App\Models\gabung_timeline_subcpmk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +28,6 @@ class timeline_controller extends Controller
             'ak_timeline.keterangan',
             'mingguke',
             'kode_cpmk',
-            'kode_subcpmk',
-            'sub_cpmk',
             'kode_subbk',
             'materi_pembelajaran',
             'jeniskuliah',
@@ -36,7 +35,6 @@ class timeline_controller extends Controller
             'metodepembelajaran'
         )
             ->join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
-            ->leftJoin('ak_kurikulum_sub_cpmk as subcpmk', 'subcpmk.kdsubcpmk', 'ak_timeline.kdsubcpmk')
             ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
             ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', 'ak_timeline.kdmateri')
             ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
@@ -55,7 +53,12 @@ class timeline_controller extends Controller
             ->where('ak_timeline.kdmatakuliah', $id)
             ->get();
 
-        return view('pages.detailMatakuliah.timeline', compact('matakuliah', 'timeline', 'timelineWithDosenKelas'));
+        $timelineWithSubCpmk = ak_timeline::join('gabung_timeline_subcpmk as gts', 'gts.kdtimeline', '=', 'ak_timeline.kdtimeline')
+            ->leftJoin('ak_kurikulum_sub_cpmk as aksc', 'aksc.kdsubcpmk', '=', 'gts.kdsubcpmk')
+            ->where('ak_timeline.kdmatakuliah', $id)
+            ->get();
+
+        return view('pages.detailMatakuliah.timeline', compact('matakuliah', 'timeline', 'timelineWithDosenKelas', 'timelineWithSubCpmk'));
     }
 
     // method timeline create
@@ -148,9 +151,19 @@ class timeline_controller extends Controller
             'kdmatakuliah' => $request->kdmatakuliah,
             'kdjeniskuliah' => $request->kdjeniskuliah,
             'kdmateri' => $request->kdmateri,
-            'kdsubcpmk' => $request->kdsubcpmk,
             'keterangan' => $request->keterangan
         ]);
+
+        if ($request->has('kdsubcpmk')) {
+            $kdtimeline = $timeline->kdtimeline;
+
+            foreach ($request->input('kdsubcpmk') as $key => $kdsubcpmk) {
+                DB::table('gabung_timeline_subcpmk')->insert([
+                    'kdtimeline' => $kdtimeline,
+                    'kdsubcpmk' => $kdsubcpmk
+                ]);
+            }
+        }
 
         if ($request->has('dosen') && $request->has('kelas')) {
 
@@ -167,7 +180,6 @@ class timeline_controller extends Controller
                 ]);
             }
         }
-
         return redirect()->back()->with('success', 'Timeline berhasil ditambahkan');
     }
 
@@ -244,6 +256,9 @@ class timeline_controller extends Controller
         $timeline_gabung = gabung_timeline_dosen::where('kdtimeline', $kdtimeline)
             ->get(['kdperson', 'kdkelas']);
 
+        $timeline_subcpmk = gabung_timeline_subcpmk::where('kdtimeline', $kdtimeline)
+            ->get(['kdsubcpmk']);
+
         $id_cpmk = [];
         $id_jeniskuliah = [];
         $id_materi = [];
@@ -254,6 +269,10 @@ class timeline_controller extends Controller
 
         $id_mk = [];
 
+        foreach ($timeline_subcpmk as $ts) {
+            $id_subcpmk[] = $ts->kdsubcpmk;
+        }
+
 
         if ($timeline) {
             $id_cpmk[] = $timeline->kdcpmk;
@@ -262,14 +281,13 @@ class timeline_controller extends Controller
             $id_metopem[] = $timeline->kdmetopem;
             $id_tahunakademik[] = $timeline->kdtahunakademik;
             $id_dosen[] = $timeline->kdperson;
-            $id_subcpmk[] = $timeline->kdsubcpmk;
         }
 
         if ($matakuliah) {
             $id_mk[] = $matakuliah->kdmatakuliah;
         }
 
-        return view('pages.detailMatakuliah.editTimeline', compact('subCpmk', 'matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk', 'dosen', 'kelas', 'timeline_gabung', 'kdtimeline'));
+        return view('pages.detailMatakuliah.editTimeline', compact('subCpmk', 'matakuliah', 'cpmk', 'materi', 'jeniskuliah', 'metopem', 'tahunAkademik', 'timeline', 'id_cpmk', 'id_jeniskuliah', 'id_materi', 'id_metopem', 'id_tahunakademik', 'id_dosen', 'id_mk', 'dosen', 'kelas', 'timeline_gabung', 'kdtimeline', 'id_subcpmk', 'timeline_subcpmk'));
     }
 
     // method delete dosen pada edit
@@ -290,8 +308,13 @@ class timeline_controller extends Controller
     // method timeline update
     public function updateTimeline(Request $request, int $id)
     {
+
+        // dd($request->all());
         // Update the ak_timeline record
         $timeline = ak_timeline::where('kdtimeline', $id)->first();
+
+        // $timeline_subcpmk = gabung_timeline_subcpmk::where('kdtimeline', $id)
+        //     ->get();
 
         if (!$timeline) {
             return redirect()->back()->withErrors(['message' => 'Timeline not found.']);
@@ -301,13 +324,32 @@ class timeline_controller extends Controller
             'mingguke' => $request->mingguke,
             'kdcpmk' => $request->kdcpmk,
             'kdmetopem' => $request->kdmetopem,
-            'kdsubcpmk' => $request->kdsubcpmk,
             'kdtahunakademik' => $request->tahunakademik,
             'kdmatakuliah' => $request->kdmatakuliah,
             'kdjeniskuliah' => $request->kdjeniskuliah,
             'kdmateri' => $request->kdmateri,
             'keterangan' => $request->keterangan
         ]);
+
+        // Pembaruan sub CPMK
+        $existingSubCpmk = gabung_timeline_subcpmk::where('kdtimeline', $id)->pluck('kdsubcpmk')->toArray();
+        $inputSubCpmk = $request->input('kdsubcpmk', []);
+
+        // Hapus yang tidak ada di input baru
+        foreach ($existingSubCpmk as $subCpmk) {
+            if (!in_array($subCpmk, $inputSubCpmk)) {
+                gabung_timeline_subcpmk::where('kdtimeline', $id)->where('kdsubcpmk', $subCpmk)->delete();
+            }
+        }
+
+        // Tambah atau update yang baru
+        foreach ($inputSubCpmk as $kdsubcpmk) {
+            gabung_timeline_subcpmk::updateOrCreate(
+                ['kdtimeline' => $id, 'kdsubcpmk' => $kdsubcpmk],
+                ['kdsubcpmk' => $kdsubcpmk]
+            );
+        }
+
 
         // Handle updates for `dosen` and `kelas` relationships
         // Assuming that `dosen[]` and `kelas[]` are arrays of IDs from the form
