@@ -12,24 +12,311 @@
 
     <link rel="icon" type="image/x-icon"
         href="https://ppb.unisayogya.ac.id/wp-content/uploads/2017/08/cropped-logo-unisa-crop.png" />
-
+    <style>
+        /* CSS untuk page break saat print */
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
     @stack('style')
-
     <title>Cetak Transkrip Nilai {{ $rekap[0]['nim'] }} - {{ $rekap[0]['namalengkap'] }}</title>
 </head>
 
 
 <body>
-    <div class="flex justify-center px-3 py-4">
-        <h1 class="text-lg font-medium">Transkrip CPL Mahasiswa </h1>
-    </div>
-    <div class="flex justify-center px-3 py-4">
-        <h1 class="text-lg font-medium">{{ $rekap[0]['nim'] }} - {{ $rekap[0]['namalengkap'] }} </h1>
+    <div name="page1" class="flex justify-between">
+        <div class="">
+
+        </div>
+        <div name="informasi-awal" class="grid grid-cols-2 gap-4 text-sm px-3">
+            {{-- data diri --}}
+            <div class="">
+                <div class="">
+                    <div>
+                        <table class="w-full border border-black" style="border-width: medium">
+                            <tr class="">
+                                <td>
+                                    <p class="font-bold">I. INFORMASI TENTANG IDENTITAS DIRI PEMEGANG SKPI</p>
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td>
+                                    <i class="font-bold ml-3">INFORMATION of PERSONAL INFORMATION DIPLOMA SUPPLEMENT
+                                        HOLDER</i>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="">
+                    <table class="w-full border">
+                        <tr>
+                            <td class="border w-10">
+                                I.1
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Nama Lengkap dan Gelar</p>
+                                <i class="">Full Name and title</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $rekap[0]['namalengkap'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                I.2
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Tempat dan Tanggal Lahir</p>
+                                <i class="">Place and Date of Birth</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $rekap[0]['tempatlahir'] }}, {{ $rekap[0]['tanggallahir'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                I.3
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Nomor Induk Mahasiswa</p>
+                                <i class="">Student Identification Number</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $rekap[0]['nim'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                I.4
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Tahun Masuk</p>
+                                <i class="">Year of Admission</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $rekap[0]['kdtamasuk'] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                I.5
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Tahun Lulus</p>
+                                <i class="">Year of Graduation</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                -
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                I.6
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Nomor Ijazah Nasional</p>
+                                <i class="">Number of National Certification</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                -
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                I.7
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Gelar</p>
+                                <i class="">title</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $yudisium->gelar }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            {{-- data univ --}}
+            <div class="">
+                <div class="">
+                    <div>
+                        <table class="w-full border border-black" style="border-width: medium">
+                            <tr class="">
+                                <td>
+                                    <p class="font-bold">II. INFORMASI TENTANG IDENTITAS PENYELENGGARA PROGRAM</p>
+
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td>
+                                    <i class="font-bold ml-3">INFORMATION of IDENTITY HIGHER EDUCATION INSTITUTION</i>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="">
+                    <table class="w-full border">
+                        <tr>
+                            <td class="border w-10">
+                                II.1
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>SK Pendirian Perguruan Tinggi</p>
+                                <i class="">Full Name and title</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                -
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.2
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Nama Perguruan Tinggi</p>
+                                <i class="">Name of University</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                Universitas 'Aisyiyah Yogyakarta
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.3
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Nama Program Studi</p>
+                                <i class="">Study Program</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $programStudi->namaprodi }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.4
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Jenis Pendidikan</p>
+                                <i class="">Classification Study</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                Universitas
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.5
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Jenjang Pendidikan</p>
+                                <i class="">Level of Education</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $yudisium->jenjang }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.6
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Jenjang Kualifikasi Sesuai KKNI</p>
+                                <i class="">Level of Qualification in the National Qualification
+                                    Framework(KKNI)</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                Level {{ $programStudi->levelkkni }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.7
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Persyaratan Penerimaan</p>
+                                <i class="">Entry Requirement</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $programStudi->persyaratanpenerimaan }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.8
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Bahasa Pengantar Kuliah</p>
+                                <i class="">Language Study</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $programStudi->bahasapengantar }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.9
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Sistem Penilaian</p>
+                                <i class="">Grading System</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $programStudi->sistempenilaian }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.10
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Lama Studi Reguler</p>
+                                <i class="">Reguler Study Period</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                4 Tahun
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.11
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Pendidikan Lanjutan</p>
+                                <i class="">Access to Further Study</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                {{ $programStudi->pendidikanlanjutan }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                II.12
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Status Profesi</p>
+                                <i class="">Professional Status</i>
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                -
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <div name="cpl-mahasiswa">
         <div class="px-3 py-5 ">
-
             <div class="w-full">
                 @foreach ($fix as $grubCpl => $grubCpmk)
                     <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center "
@@ -48,8 +335,7 @@
                             <th class="px-6 py-3 border text-left">{{ $items['cpmk_desk'] }}</th>
                         </table>
 
-                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center"
-                            style="margin-bottom: 1rem">
+                        <table class="w-full overflow-x-scroll border rounded-lg text-sm text-center">
                             <thead class="w-full text-xs text-gray-700 uppercase bg-white">
                                 <tr class="border rounded text-center">
                                     <th class="px-6 py-3 border">No</th>
@@ -62,7 +348,7 @@
                             </thead>
                             <tbody class="bg-white">
                                 @foreach ($items['data'] as $key => $value)
-                                    <tr class="text-center">
+                                    <tr class="text-center ">
                                         <td class="px-6 py-3 border">{{ $key + 1 }}</td>
                                         <td class="px-6 py-3 border">{{ $value['kodematakuliah'] }}</td>
                                         <td class="px-6 py-3 border">{{ $value['matakuliah'] }}</td>
@@ -86,23 +372,10 @@
                             Total Skor {{ $grubCpl }}</th>
                         <th class="px-6 py-3 border">{{ $grubCpmk['total_score_cpl'] }}</th>
                     </table>
-                    <div class="mb-10" style="margin-bottom: 3rem"></div>
+                    {{-- <div class="mb-10" style="margin-bottom: 3rem"></div> --}}
                 @endforeach
             </div>
         </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
         <div>
             <div class="flex left px-3">
                 <h1 class="text-lg font-medium">Grafik CPL {{ $rekap[0]['namalengkap'] }} </h1>
@@ -110,18 +383,123 @@
             <div class="max-w-md items-center" id="chart">
             </div>
         </div>
+    </div>
 
-        <div class="flex justify-start px-5 py-5 mx-10" style="margin-left: 3rem">
-            <h1>Yogyakarta, {{ \Carbon\Carbon::now()->format('d') }}
-                {{ \Carbon\Carbon::now()->translatedFormat('F') }} {{ \Carbon\Carbon::now()->format('Y') }}</h1>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <div name="page2" class="flex justify-between px-3">
+        <div name="informasi-cpl-ttd" class="grid grid-cols-2 gap-4 text-sm">
+            <div class="">
+                <div class="">
+                    <div>
+                        <table class="w-full border border-black" style="border-width: medium">
+                            <tr class="">
+                                <td>
+                                    <p class="font-bold">III. INFORMASI TENTANG KUALIFIKASI DAN HASIL YANG DICAPAI</p>
+
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td>
+                                    <i class="font-bold ml-3">INFORMATION of QUALIFICATION AND LEARNING OUTCOME</i>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="">
+                    <table class="w-full border">
+                        <tr>
+                            <td class="border w-10 ">
+                                1.
+                            </td>
+                            <td class="">
+                                <p>Kepemimpinan (Dari Unversitas)</p>
+                                <i class="">Leadership (From University)</i>
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td>
+
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>- Pespama</p>
+                                <p>- BAP</p>
+                                <p>- OSCIE</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border w-10 ">
+                                2.
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>Pengembangan Diri</p>
+                                <i class="">Personal Development</i>
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="border w-10 ">
+
+                            </td>
+                            <td class="border" style="width: 25rem">
+                                <p>- Himpunan Mahasiswa Teknologi Informasi</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <br />
+            <br />
+
+
+            <div class="text-sm">
+                <table class="w-full border-collapse">
+                    <tr class="w-full">
+                        <td class="text-left w-1/2"></td>
+                        <td class="text-right px-5 w-1/2">
+                            <h1 id="indo">Diterbitkan di Yogyakarta, {{ \Carbon\Carbon::now()->format('d') }}
+                                {{ \Carbon\Carbon::now()->translatedFormat('F') }}
+                                {{ \Carbon\Carbon::now()->format('Y') }}
+                            </h1>
+                        </td>
+                    </tr>
+                    <tr class="w-full">
+                        <td class="px-5 text-left w-1/2">
+                            <h1 id="indo">{{ $yudisium->jabatanttd1transkrip }}</h1>
+                        </td>
+                        <td class="px-5 text-right w-1/2">
+                            <h1 id="indo">{{ $yudisium->jabatanttd2transkrip }}</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                        </td>
+                    </tr>
+                    <tr class="w-full">
+                        <td class="px-5 text-left w-1/2">
+                            {{ $yudisium->namattd1transkrip }}
+                        </td>
+                        <td class="px-5 text-right w-1/2">
+                            {{ $yudisium->namattd2transkrip }}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
         </div>
-        <br />
-        <br />
-        <br />
-        <div class="flex justify-start px-5 py-5" style="margin-bottom: 5rem">
-            <h1>Pengesahan dari Pimpinan Perguruan Tinggi</h1>
+        <div>
+
         </div>
     </div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

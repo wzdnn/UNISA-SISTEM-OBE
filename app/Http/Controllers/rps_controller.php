@@ -139,7 +139,6 @@ class rps_controller extends Controller
 
         // Timeline section
         $timeline = ak_timeline::join('ak_kurikulum_cpmks as cpmk', 'cpmk.id', '=', 'ak_timeline.kdcpmk')
-            ->leftJoin('ak_kurikulum_sub_cpmk as subcpmk', 'subcpmk.kdsubcpmk', 'ak_timeline.kdsubcpmk')
             ->join('ak_tahunakademik as ata', 'ata.kdtahunakademik', '=', 'ak_timeline.kdtahunakademik')
             ->join('ak_kurikulum_sub_bk_materi as materi', 'materi.kdmateri', '=', 'ak_timeline.kdmateri')
             ->join('ak_matakuliah_ak_kurikulum_sub_bk as mksbk', 'mksbk.id', 'materi.id_gabung')
@@ -157,6 +156,11 @@ class rps_controller extends Controller
             ->join('simptt.ak_dosen as dosen', 'dosen.kdperson', '=', 'gtd.kdperson')
             ->join('simptt.pt_person as pp', 'pp.kdperson', '=', 'dosen.kdperson')
             ->join('ak_kelas as kelas', 'kelas.kdkelas', '=', 'gtd.kdkelas')
+            ->where('ak_timeline.kdmatakuliah', $id)
+            ->get();
+
+        $timelineWithSubCpmk = ak_timeline::join('gabung_timeline_subcpmk as gts', 'gts.kdtimeline', '=', 'ak_timeline.kdtimeline')
+            ->leftJoin('ak_kurikulum_sub_cpmk as aksc', 'aksc.kdsubcpmk', '=', 'gts.kdsubcpmk')
             ->where('ak_timeline.kdmatakuliah', $id)
             ->get();
 
@@ -200,7 +204,7 @@ class rps_controller extends Controller
 
         $waktu = $this->getTotalAccumulatedTimeByMatakuliah($id);
 
-        return view('pages.matakuliah.rps', compact('waktu', 'bobot', 'tahunAkademik', 'fakultas', 'strukturProgram', 'matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas'));
+        return view('pages.matakuliah.rps', compact('waktu', 'bobot', 'tahunAkademik', 'fakultas', 'strukturProgram', 'matakuliah', 'cpl', 'cpmk', 'asinkron', 'sinkron', 'aksesmedia', 'referensiUtama', 'referensiTambahan', 'referensiLuaran', 'timeline', 'relation', 'metodebobot', 'timelineWithDosenKelas', 'timelineWithSubCpmk'));
     }
 
     // method index halaman sebelum preview

@@ -252,7 +252,7 @@ class rekap_controller extends Controller
 
 
             if (!empty($filter_tahun) && !empty($filter_kurikulum)) {
-                $tabel = DB::select('call sistem_obe.test_tist(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+                $tabel = DB::select('call sistem_obe.new_rekap_tahunan_header(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
             } else {
                 $tabel = [];
             }
@@ -306,12 +306,12 @@ class rekap_controller extends Controller
 
         if ($request->has("filter_kurikulum") || $request->has("filter_tahun")) {
             if (in_array($request->filter, $arrayKurikulum)) {
-                $rekapTahunan = DB::select('call sistem_obe.test_tust(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+                $rekapTahunan = DB::select('call sistem_obe.new_rekap_tahunan(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
             }
         }
 
         if (!empty($filter_tahun) && !empty($filter_kurikulum)) {
-            $rekapTahunan = DB::select('call sistem_obe.test_tust(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+            $rekapTahunan = DB::select('call sistem_obe.new_rekap_tahunan(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
             $rekap = json_decode(json_encode($rekapTahunan), true);
             foreach ($rekap as $key => $value) {
                 $loop = 1;
@@ -330,7 +330,7 @@ class rekap_controller extends Controller
 
         if (!empty($filter_tahun) && !empty($filter_kurikulum)) {
 
-            $rekapCpl = DB::select('call sistem_obe.test_tast(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
+            $rekapCpl = DB::select('call sistem_obe.new_rekap_tahunan_cpl(?,?,?)', [$id, $filter_tahun, $filter_kurikulum]);
             $cpl = json_decode(json_encode($rekapCpl), true);
         } else {
             $cpl = [];
@@ -493,9 +493,17 @@ class rekap_controller extends Controller
 
     public function transkripCPL(Request $request)
     {
+
+        $programStudi = DB::table('simptt.ak_programstudi')->where('kdunitkerja', '=', '41')->first();
+        $yudisium = DB::table('simptt.ak_v_infoyudisium')->where('kdyudisium', '=', '1305')->first();
+
+        // dd($yudisium);
+
+
         $rekapMahasiswa = DB::select('call sistem_obe.rekap_cpl_mahasiswa(?,?)', [$request->nim, null]);
         $rekap = json_decode(json_encode($rekapMahasiswa), true);
 
+        // dd($rekap);
         $cpmk = DB::select('call sistem_obe.mahasiswa_cpmk(?)', [$request->nim]);
         $mahasiswaCpmk = json_decode(json_encode($cpmk), true);
 
@@ -615,6 +623,6 @@ class rekap_controller extends Controller
             'fix' => $fix,
             'mahasiswaCpmk' => $mahasiswaCpmk,
             'skor_cpl' => $skor_cpl,
-        ], compact('rekap', 'statistik', 'fix', 'mahasiswaCpmk', 'skor_cpl'));
+        ], compact('rekap', 'statistik', 'fix', 'mahasiswaCpmk', 'skor_cpl', 'programStudi', 'yudisium'));
     }
 }
