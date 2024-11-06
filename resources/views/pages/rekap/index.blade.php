@@ -25,6 +25,8 @@
         </ol>
     </nav>
 
+
+
     <div class="flex flex-col">
         <form method="GET" class="rounded">
             {{-- @csrf --}}
