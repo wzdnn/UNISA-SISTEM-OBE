@@ -272,9 +272,9 @@
                                                         method="POST">
                                                         @csrf
                                                         <div class="flex flex-col py-2">
-                                                            <input name="kdmatakuliah_" id="kdmatakuliah_"
+                                                            <input hidden name="kdmatakuliah_" id="kdmatakuliah_"
                                                                 value="{{ $value->mkd }}">
-                                                            <input name="kdjenisnilai_" id="kdjenisnilai_"
+                                                            <input hidden name="kdjenisnilai_" id="kdjenisnilai_"
                                                                 value="{{ $value->kjn }}">
                                                         </div>
                                                         <div class="flex flex-col z-0 w-full mb-6 group">

@@ -459,8 +459,9 @@
             <div class="text-sm">
                 <table class="w-full border-collapse">
                     <tr class="w-full">
-                        <td class="text-left w-1/2"></td>
-                        <td class="text-right px-5 w-1/2">
+                        <td class="text-left "></td>
+                        <td></td>
+                        <td class="text-right px-5 ">
                             <h1 id="indo">Diterbitkan di Yogyakarta, {{ \Carbon\Carbon::now()->format('d') }}
                                 {{ \Carbon\Carbon::now()->translatedFormat('F') }}
                                 {{ \Carbon\Carbon::now()->format('Y') }}
@@ -468,10 +469,11 @@
                         </td>
                     </tr>
                     <tr class="w-full">
-                        <td class="px-5 text-left w-1/2">
+                        <td class="px-5 text-left ">
                             <h1 id="indo">{{ $yudisium->jabatanttd1transkrip }}</h1>
                         </td>
-                        <td class="px-5 text-right w-1/2">
+                        <td></td>
+                        <td class="px-5 text-right ">
                             <h1 id="indo">{{ $yudisium->jabatanttd2transkrip }}</h1>
                         </td>
                     </tr>
@@ -484,10 +486,11 @@
                         </td>
                     </tr>
                     <tr class="w-full">
-                        <td class="px-5 text-left w-1/2">
+                        <td class="px-5 text-left ">
                             {{ $yudisium->namattd1transkrip }}
                         </td>
-                        <td class="px-5 text-right w-1/2">
+                        <td></td>
+                        <td class="px-5 text-right ">
                             {{ $yudisium->namattd2transkrip }}
                         </td>
                     </tr>

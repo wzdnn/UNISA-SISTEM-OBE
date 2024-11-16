@@ -17,19 +17,19 @@ class strukturProgram_controller extends Controller
     // method struktur program index
     public function strukturProgramIndex(Request $request)
     {
-        $kurikulum = DB::table("simptt.ak_kurikulum")
-            ->where("isObe", "=", 1)
-            ->get();
+        // $kurikulum = DB::table("simptt.ak_kurikulum")
+        //     ->where("isObe", "=", 1)
+        //     ->get();
 
-        $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "asc")->get();
-        $filterLatest = $filter->last();
-        $kelompok = $filter->groupBy("kdtahunakademik")->toArray();
+        // $filter = ak_tahunakademik::where("isaktif", 1)->orderBy("kdtahunakademik", "asc")->get();
+        // $filterLatest = $filter->last();
+        // $kelompok = $filter->groupBy("kdtahunakademik")->toArray();
 
-        $filter = [
-            "latest" => $filterLatest->kdtahunakademik,
-            "filter" => array_keys($kelompok)
+        // $filter = [
+        //     "latest" => $filterLatest->kdtahunakademik,
+        //     "filter" => array_keys($kelompok)
 
-        ];
+        // ];
 
 
         if (auth()->user()->kdunit == 42) {
@@ -37,14 +37,7 @@ class strukturProgram_controller extends Controller
                 ->select("ak_strukturprogram.*", "ak_strukturprogram.keterangan as ket", "kodematakuliah", "matakuliah", "tahunakademik", "kurikulum")
                 ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
-                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
-                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
-                })
-                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
-                })
-                ->paginate(10);
+                ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik');
             // ->get();
             // ->first();
 
@@ -62,14 +55,8 @@ class strukturProgram_controller extends Controller
                 ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
-                ->where("kur.kdkurikulum", 67)
-                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
-                })
-                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
-                })
-                ->paginate(10);
+                ->where("kur.kdkurikulum", 67);
+
             // ->get();
             // ->first();
 
@@ -88,16 +75,7 @@ class strukturProgram_controller extends Controller
                 ->join('simptt.ak_matakuliah as mk', 'mk.kdmatakuliah', 'ak_strukturprogram.kdmatakuliah')
                 ->join('simptt.ak_kurikulum as kur', 'kur.kdkurikulum', 'ak_strukturprogram.kdkurikulum')
                 ->join('ak_tahunakademik as tahunakademik', 'tahunakademik.kdtahunakademik', 'ak_strukturprogram.kdtahunakademik')
-                ->where("kur.kdunitkerja", Auth::user()->kdunit)
-                ->when($request->input('filter-tahun') != null or $request->input('filter-tahun') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
-                })
-                ->when($request->input('filter-kurikulum') != null or $request->input('filter-kurikulum') != null, function ($query) use ($request) {
-                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
-                })
-                ->paginate(10);
-            // ->get();
-            // ->first();
+                ->where("kur.kdunitkerja", Auth::user()->kdunit);
 
 
             $kurikulum = DB::table("simptt.ak_kurikulum")
@@ -112,9 +90,27 @@ class strukturProgram_controller extends Controller
                 ->where("isAktif", "=", 1)
                 ->get();
         }
+
+
+        $strukturprogram = $strukturprogram
+            ->when(
+                $request->input('filter-tahun') != '' && $request->input('filter-kurikulum') != null,
+                function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdtahunakademik", $request->input('filter-tahun'));
+                }
+            )
+            ->when(
+                $request->input('filter-kurikulum') != '' && $request->input('filter-kurikulum') != null,
+                function ($query) use ($request) {
+                    $query->where("ak_strukturprogram.kdkurikulum", $request->input('filter-kurikulum'));
+                }
+            )
+            ->paginate(10);
+
+
         // dd($strukturprogram);
 
-        return view('pages.detailMatakuliah.strukturProgramIndex', compact('filter', 'kurikulum', 'strukturprogram', 'tahunAkademik', 'kurikulum'));
+        return view('pages.detailMatakuliah.strukturProgramIndex', compact('strukturprogram', 'tahunAkademik', 'kurikulum'));
     }
 
     // method struktur program create

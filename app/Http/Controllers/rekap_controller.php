@@ -20,7 +20,7 @@ class rekap_controller extends Controller
             ->get();
 
 
-        if (auth()->user()->kdunit == 100 || auth()->user()->kdunit == 0) {
+        if (auth()->user()->kdunit == 42 || auth()->user()->kdunit == 100) {
 
             $kdkurikulum = DB::table("simptt.ak_kurikulum")
                 ->where("isObe", "=", 1)
@@ -29,6 +29,21 @@ class rekap_controller extends Controller
             $rekapTahunanIndex = DB::table("simptt.ak_mahasiswa as am")
                 ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
                 ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->where("isObe", 1)
+                ->orderBy('kdtamasuk', 'asc')
+                ->get();
+        } elseif (auth()->user()->leveling == 3) {
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->where("isObe", "=", 1)
+                ->get();
+
+            $rekapTahunanIndex = DB::table("simptt.ak_mahasiswa as am")
+                ->select(DB::raw('distinct left(kdtamasuk,4) as tahun'))
+                ->join("simptt.ak_kurikulum as ak", "ak.kdkurikulum", "am.kdkurikulum")
+                ->join("simptt.pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak.kdunitkerja")
+                ->where('puk.kdunitkerjapj', '=', Auth::user()->kdunit)
                 ->where("isObe", 1)
                 ->orderBy('kdtamasuk', 'asc')
                 ->get();

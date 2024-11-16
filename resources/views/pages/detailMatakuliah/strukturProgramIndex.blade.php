@@ -34,7 +34,7 @@
             <div class="flex flex-col">
                 <form method="GET" class="rounded">
                     <select name="filter-tahun" id="" class="rounded">
-                        <option value="null">Tahun Akademik</option>
+                        <option value="">Tahun Akademik</option>
                         @foreach ($tahunAkademik as $item)
                             <option value="{{ $item->kdtahunakademik }}" @selected(request()->filter == $item->kdtahunakademik)>
                                 {{ $item->tahunakademik }}
@@ -43,7 +43,7 @@
                     </select>
 
                     <select name="filter-kurikulum" id="" class="rounded">
-                        <option value="null">Kurikulum</option>
+                        <option value="">Kurikulum</option>
                         @foreach ($kurikulum as $item)
                             <option value="{{ $item->kdkurikulum }}" @selected(request()->filter == $item->kdkurikulum)>
                                 {{ $item->kurikulum }} {{ $item->tahun }}

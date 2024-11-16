@@ -64,6 +64,21 @@ class ak_matakuliah_controller extends Controller
                 ->where("isObe", "=", 1)
                 ->where('ak_kurikulum.kdkurikulum', 67)
                 ->get();
+        } elseif (auth()->user()->leveling == 3) {
+            $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK.subbkMateri')
+                ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
+                ->join("simptt.pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("ak_kurikulum.isObe", '=', 1)
+                ->where(function ($query) {
+                    $query->where('puk.kdunitkerjapj', '=', Auth::user()->kdunit);
+                })
+                ->orderBy('kdmatakuliah', 'asc');
+
+            $kdkurikulum = DB::table("ak_kurikulum")
+                ->join("pt_unitkerja as puk", "puk.kdunitkerja", "=", "ak_kurikulum.kdunitkerja")
+                ->where("puk.kdunitkerjapj", "=", Auth::user()->kdunit)
+                ->where("isObe", "=", 1)
+                ->get();
         } else {
             $matakuliah = ak_matakuliah::with('MKtoSub_bk.SBKtoidCPMK', 'MKtoSub_bk.getSBKtoidCPMK', 'GetAllidSubBK.subbkMateri')
                 ->join('simptt.ak_kurikulum', 'ak_kurikulum.kdkurikulum', '=', 'simptt.ak_matakuliah.kdkurikulum')
