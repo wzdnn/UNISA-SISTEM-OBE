@@ -11,4 +11,5 @@ class get_mahasiswa extends Model
 
     protected $table = 'get_mahasiswa';
     //
+    //test
 }
