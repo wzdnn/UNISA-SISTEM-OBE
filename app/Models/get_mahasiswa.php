@@ -10,4 +10,5 @@ class get_mahasiswa extends Model
     use HasFactory;
 
     protected $table = 'get_mahasiswa';
+    //
 }
